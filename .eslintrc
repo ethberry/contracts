@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "@gemunion/eslint-config/presets/ts",
+    "@gemunion/eslint-config/rules/mocha"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.test.json"
+  },
+  "root": true,
+  "rules": {
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/test/**/*.{ts,tsx,js,jsx}",
+          "hardhat.config.{js,ts}"
+        ]
+      }
+    ]
+  }
+}

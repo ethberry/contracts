@@ -22,10 +22,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC20__factory>;
     getContractFactory(
-      name: "Greeter",
-      signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.Greeter__factory>;
-    getContractFactory(
       name: "MindToken",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.MindToken__factory>;

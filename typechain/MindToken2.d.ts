@@ -19,7 +19,7 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface MindTokenInterface extends ethers.utils.Interface {
+interface MindToken2Interface extends ethers.utils.Interface {
   functions: {
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
@@ -83,7 +83,7 @@ export type ApprovalEvent = TypedEvent<
 
 export type TransferEvent = TypedEvent<[string, string, BigNumber] & { from: string; to: string; value: BigNumber }>;
 
-export class MindToken extends BaseContract {
+export class MindToken2 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -124,7 +124,7 @@ export class MindToken extends BaseContract {
     toBlock?: string | number | undefined,
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: MindTokenInterface;
+  interface: MindToken2Interface;
 
   functions: {
     allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<[BigNumber]>;

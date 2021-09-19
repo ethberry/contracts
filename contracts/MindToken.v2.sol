@@ -4,7 +4,7 @@ pragma solidity ^0.8.3;
 // https://docs.openzeppelin.com/contracts/2.x/api/token/erc20
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
-contract MindToken is ERC20Upgradeable {
+contract MindToken2 is ERC20Upgradeable {
     address public owner;
 
     function initialize(string memory name, string memory symbol) initializer public {

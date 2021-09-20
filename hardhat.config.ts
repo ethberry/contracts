@@ -3,6 +3,7 @@ import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
 import "@openzeppelin/hardhat-upgrades";
 import "@typechain/hardhat";
+import "hardhat-deploy";
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -19,4 +20,7 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 
 export default {
   solidity: "0.8.4",
+  etherscan: {
+    apiKey: "MQAWY8NT687R7Z9QBXMZ6HHBG6JUIU143T",
+  },
 };

@@ -13,3 +13,8 @@ npx hardhat node
 node scripts/sample-script.ts
 npx hardhat help
 ```
+
+
+https://docs.openzeppelin.com/contracts/4.x/wizard
+https://docs.matic.network/docs/develop/ethereum-matic/mintable-assets/#contract-to-be-deployed-on-ethereum
+https://github.com/wighawag/hardhat-deploy

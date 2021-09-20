@@ -10,7 +10,6 @@ import "@openzeppelin/contracts-upgradeable/metatx/MinimalForwarderUpgradeable.s
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 
-import "./IERC721VerifiableUpgradeable.sol";
 import "./MarketplaceStorage.sol";
 
 contract Marketplace is OwnableUpgradeable, PausableUpgradeable, MinimalForwarderUpgradeable, MarketplaceStorage {
@@ -21,26 +20,22 @@ contract Marketplace is OwnableUpgradeable, PausableUpgradeable, MinimalForwarde
       * @dev Initialize this contract. Acts as a constructor
       * @param _acceptedToken - Address of the ERC20 accepted for this marketplace
       * @param _ownerCutPerMillion - owner cut per million
-
       */
-    constructor (
+    function initialize(
         address _acceptedToken,
         uint256 _ownerCutPerMillion,
         address _owner
-    )
-    {
+    ) initializer public {
+        __Pausable_init();
+        __Ownable_init();
         __MinimalForwarder_init();
 
         // Fee init
         setOwnerCutPerMillion(_ownerCutPerMillion);
 
-        require(_owner != address(0), "Invalid owner");
-        transferOwnership(_owner);
-
         require(_acceptedToken.isContract(), "The accepted token address must be a deployed contract");
         acceptedToken = IERC20Upgradeable(_acceptedToken);
     }
-
 
     /**
       * @dev Sets the publication fee that's charged to users to publish items
@@ -98,30 +93,6 @@ contract Marketplace is OwnableUpgradeable, PausableUpgradeable, MinimalForwarde
     }
 
     /**
-      * @dev Executes the sale for a published NFT and checks for the asset fingerprint
-      * @param nftAddress - Address of the NFT registry
-      * @param assetId - ID of the published NFT
-      * @param price - Order price
-      * @param fingerprint - Verification info for the asset
-      */
-    function safeExecuteOrder(
-        address nftAddress,
-        uint256 assetId,
-        uint256 price,
-        bytes memory fingerprint
-    )
-    public
-    whenNotPaused
-    {
-        _executeOrder(
-            nftAddress,
-            assetId,
-            price,
-            fingerprint
-        );
-    }
-
-    /**
       * @dev Executes the sale for a published NFT
       * @param nftAddress - Address of the NFT registry
       * @param assetId - ID of the published NFT
@@ -138,8 +109,7 @@ contract Marketplace is OwnableUpgradeable, PausableUpgradeable, MinimalForwarde
         _executeOrder(
             nftAddress,
             assetId,
-            price,
-            ""
+            price
         );
     }
 
@@ -243,13 +213,11 @@ contract Marketplace is OwnableUpgradeable, PausableUpgradeable, MinimalForwarde
       * @param nftAddress - Address of the NFT registry
       * @param assetId - ID of the published NFT
       * @param price - Order price
-      * @param fingerprint - Verification info for the asset
       */
     function _executeOrder(
         address nftAddress,
         uint256 assetId,
-        uint256 price,
-        bytes memory fingerprint
+        uint256 price
     )
     internal returns (Order memory)
     {
@@ -257,14 +225,7 @@ contract Marketplace is OwnableUpgradeable, PausableUpgradeable, MinimalForwarde
 
         address sender = _msgSender();
 
-        IERC721VerifiableUpgradeable nftRegistry = IERC721VerifiableUpgradeable(nftAddress);
-
-        if (nftRegistry.supportsInterface(InterfaceId_ValidateFingerprint)) {
-            require(
-                nftRegistry.verifyFingerprint(assetId, fingerprint),
-                "The asset fingerprint is not valid"
-            );
-        }
+        IERC721Upgradeable nftRegistry = IERC721Upgradeable(nftAddress);
 
         Order memory order = orderByAssetId[nftAddress][assetId];
 

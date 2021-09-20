@@ -25,10 +25,6 @@ contract MarketplaceStorage {
     uint256 public ownerCutPerMillion;
     uint256 public publicationFeeInWei;
 
-    bytes4 public constant InterfaceId_ValidateFingerprint = bytes4(
-        keccak256("verifyFingerprint(uint256,bytes)")
-    );
-
     bytes4 public constant ERC721_Interface = bytes4(0x80ac58cd);
 
     // EVENTS

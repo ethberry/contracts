@@ -10,9 +10,29 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "AccessControlUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.AccessControlUpgradeable__factory>;
+    getContractFactory(
+      name: "IAccessControlUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.IAccessControlUpgradeable__factory>;
+    getContractFactory(
+      name: "OwnableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.OwnableUpgradeable__factory>;
+    getContractFactory(
+      name: "PausableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.PausableUpgradeable__factory>;
+    getContractFactory(
       name: "ERC20Upgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC20Upgradeable__factory>;
+    getContractFactory(
+      name: "ERC20BurnableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.ERC20BurnableUpgradeable__factory>;
     getContractFactory(
       name: "IERC20MetadataUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
@@ -22,25 +42,57 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC20Upgradeable__factory>;
     getContractFactory(
-      name: "ERC20",
+      name: "ERC721Upgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.ERC20__factory>;
+    ): Promise<Contracts.ERC721Upgradeable__factory>;
     getContractFactory(
-      name: "IERC20Metadata",
+      name: "ERC721BurnableUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.IERC20Metadata__factory>;
+    ): Promise<Contracts.ERC721BurnableUpgradeable__factory>;
     getContractFactory(
-      name: "IERC20",
+      name: "ERC721EnumerableUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.IERC20__factory>;
+    ): Promise<Contracts.ERC721EnumerableUpgradeable__factory>;
     getContractFactory(
-      name: "MindToken",
+      name: "ERC721URIStorageUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.MindToken__factory>;
+    ): Promise<Contracts.ERC721URIStorageUpgradeable__factory>;
     getContractFactory(
-      name: "MindToken2",
+      name: "IERC721EnumerableUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.MindToken2__factory>;
+    ): Promise<Contracts.IERC721EnumerableUpgradeable__factory>;
+    getContractFactory(
+      name: "IERC721MetadataUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.IERC721MetadataUpgradeable__factory>;
+    getContractFactory(
+      name: "IERC721ReceiverUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.IERC721ReceiverUpgradeable__factory>;
+    getContractFactory(
+      name: "IERC721Upgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.IERC721Upgradeable__factory>;
+    getContractFactory(
+      name: "ERC165Upgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.ERC165Upgradeable__factory>;
+    getContractFactory(
+      name: "IERC165Upgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.IERC165Upgradeable__factory>;
+    getContractFactory(
+      name: "MindCoin",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.MindCoin__factory>;
+    getContractFactory(
+      name: "MindCoin2",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.MindCoin2__factory>;
+    getContractFactory(
+      name: "MindNFT",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.MindNFT__factory>;
 
     // default types
     getContractFactory(name: string, signerOrOptions?: ethers.Signer | FactoryOptions): Promise<ethers.ContractFactory>;

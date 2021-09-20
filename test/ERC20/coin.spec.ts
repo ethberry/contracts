@@ -2,30 +2,35 @@ import { expect } from "chai";
 import { ethers, upgrades } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { MindToken } from "../typechain";
 
-describe("ERC20 Token contract", function () {
+import { MindCoin } from "../../typechain";
+import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../constants";
+
+describe("ERC20 basic", function () {
   let token: ContractFactory;
-  let instance: MindToken;
+  let instance: MindCoin;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
   let addr2: SignerWithAddress;
 
   beforeEach(async function () {
-    token = await ethers.getContractFactory("MindToken");
+    token = await ethers.getContractFactory("MindCoin");
     [owner, addr1, addr2] = await ethers.getSigners();
 
-    instance = (await upgrades.deployProxy(token, ["memoryOS main token", "MIND"])) as MindToken;
+    instance = (await upgrades.deployProxy(token, ["memoryOS COIN token", "MIND"])) as MindCoin;
   });
 
   describe("Deployment", function () {
-    it("Should set the right owner", async function () {
-      expect(await instance.owner()).to.equal(owner.address);
+    it("Should set the right roles to deployer", async function () {
+      expect(await instance.hasRole(DEFAULT_ADMIN_ROLE, owner.address)).to.equal(true);
+      expect(await instance.hasRole(MINTER_ROLE, owner.address)).to.equal(true);
+      expect(await instance.hasRole(PAUSER_ROLE, owner.address)).to.equal(true);
     });
 
     it("Should assign the total supply of tokens to the owner", async function () {
+      const totalSupply = await instance.totalSupply();
       const ownerBalance = await instance.balanceOf(owner.address);
-      expect(await instance.totalSupply()).to.equal(ownerBalance);
+      expect(ownerBalance).to.equal(totalSupply);
     });
   });
 

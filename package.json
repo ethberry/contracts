@@ -9,6 +9,7 @@
     "hardhat-deploy": "0.9.1"
   },
   "devDependencies": {
+    "meta-transaction": "",
     "@gemunion/eslint-config": "0.1.10",
     "@nomiclabs/hardhat-ethers": "2.0.2",
     "@nomiclabs/hardhat-waffle": "2.0.1",

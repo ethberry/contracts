@@ -4,6 +4,7 @@
 export type { AccessControlUpgradeable } from "./AccessControlUpgradeable";
 export type { IAccessControlUpgradeable } from "./IAccessControlUpgradeable";
 export type { OwnableUpgradeable } from "./OwnableUpgradeable";
+export type { MinimalForwarderUpgradeable } from "./MinimalForwarderUpgradeable";
 export type { PausableUpgradeable } from "./PausableUpgradeable";
 export type { ERC20Upgradeable } from "./ERC20Upgradeable";
 export type { ERC20BurnableUpgradeable } from "./ERC20BurnableUpgradeable";
@@ -22,10 +23,14 @@ export type { IERC165Upgradeable } from "./IERC165Upgradeable";
 export type { MindCoin } from "./MindCoin";
 export type { MindCoin2 } from "./MindCoin2";
 export type { MindNFT } from "./MindNFT";
+export type { IERC721VerifiableUpgradeable } from "./IERC721VerifiableUpgradeable";
+export type { Marketplace } from "./Marketplace";
+export type { MarketplaceStorage } from "./MarketplaceStorage";
 
 export { AccessControlUpgradeable__factory } from "./factories/AccessControlUpgradeable__factory";
 export { IAccessControlUpgradeable__factory } from "./factories/IAccessControlUpgradeable__factory";
 export { OwnableUpgradeable__factory } from "./factories/OwnableUpgradeable__factory";
+export { MinimalForwarderUpgradeable__factory } from "./factories/MinimalForwarderUpgradeable__factory";
 export { PausableUpgradeable__factory } from "./factories/PausableUpgradeable__factory";
 export { ERC20Upgradeable__factory } from "./factories/ERC20Upgradeable__factory";
 export { ERC20BurnableUpgradeable__factory } from "./factories/ERC20BurnableUpgradeable__factory";
@@ -44,3 +49,6 @@ export { IERC165Upgradeable__factory } from "./factories/IERC165Upgradeable__fac
 export { MindCoin__factory } from "./factories/MindCoin__factory";
 export { MindCoin2__factory } from "./factories/MindCoin2__factory";
 export { MindNFT__factory } from "./factories/MindNFT__factory";
+export { IERC721VerifiableUpgradeable__factory } from "./factories/IERC721VerifiableUpgradeable__factory";
+export { Marketplace__factory } from "./factories/Marketplace__factory";
+export { MarketplaceStorage__factory } from "./factories/MarketplaceStorage__factory";

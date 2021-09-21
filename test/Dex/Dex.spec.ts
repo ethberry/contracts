@@ -131,4 +131,22 @@ describe("ERC20 DEX", function () {
       expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
     });
   });
+
+  describe("Withdraw", function () {
+    it("should withdraw ETH", async function () {
+      // contract should has eth
+      await owner.sendTransaction({
+        to: marketInstance.address,
+        value: parseEther("1"),
+      });
+
+      const balanceBefore = await ethers.provider.getBalance(marketInstance.address);
+      expect(balanceBefore).to.equal(parseEther("1"));
+
+      await marketInstance.withdraw();
+
+      const balanceAfter = await ethers.provider.getBalance(marketInstance.address);
+      expect(balanceAfter).to.equal(0);
+    });
+  });
 });

@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { MindCoin } from "../../typechain";
-import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../constants";
+import { DEFAULT_ADMIN_ROLE, initialTokenAmount, MINTER_ROLE, PAUSER_ROLE } from "../constants";
 
 describe("ERC20 basic", function () {
   let token: ContractFactory;
@@ -17,7 +17,11 @@ describe("ERC20 basic", function () {
     token = await ethers.getContractFactory("MindCoin");
     [owner, addr1, addr2] = await ethers.getSigners();
 
-    tokenInstance = (await upgrades.deployProxy(token, ["memoryOS COIN token", "MIND"])) as MindCoin;
+    tokenInstance = (await upgrades.deployProxy(token, [
+      "memoryOS COIN token",
+      "MIND",
+      initialTokenAmount,
+    ])) as MindCoin;
   });
 
   describe("Deployment", function () {

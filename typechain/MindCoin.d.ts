@@ -35,7 +35,7 @@ interface MindCoinInterface extends ethers.utils.Interface {
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "initialize(string,string)": FunctionFragment;
+    "initialize(string,string,uint256)": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "pause()": FunctionFragment;
@@ -64,7 +64,7 @@ interface MindCoinInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "grantRole", values: [BytesLike, string]): string;
   encodeFunctionData(functionFragment: "hasRole", values: [BytesLike, string]): string;
   encodeFunctionData(functionFragment: "increaseAllowance", values: [string, BigNumberish]): string;
-  encodeFunctionData(functionFragment: "initialize", values: [string, string]): string;
+  encodeFunctionData(functionFragment: "initialize", values: [string, string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "mint", values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
@@ -249,6 +249,7 @@ export class MindCoin extends BaseContract {
     initialize(
       name: string,
       symbol: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
@@ -349,6 +350,7 @@ export class MindCoin extends BaseContract {
   initialize(
     name: string,
     symbol: string,
+    amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
@@ -426,7 +428,7 @@ export class MindCoin extends BaseContract {
 
     increaseAllowance(spender: string, addedValue: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
-    initialize(name: string, symbol: string, overrides?: CallOverrides): Promise<void>;
+    initialize(name: string, symbol: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     mint(to: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -575,6 +577,7 @@ export class MindCoin extends BaseContract {
     initialize(
       name: string,
       symbol: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
@@ -679,6 +682,7 @@ export class MindCoin extends BaseContract {
     initialize(
       name: string,
       symbol: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 

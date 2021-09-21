@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { MindNFT } from "../../typechain";
-import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../constants";
+import { DEFAULT_ADMIN_ROLE, initialTokenAmount, MINTER_ROLE, PAUSER_ROLE } from "../constants";
 
 describe("ERC721 basic", function () {
   let token: ContractFactory;
@@ -15,7 +15,7 @@ describe("ERC721 basic", function () {
     token = await ethers.getContractFactory("MindNFT");
     [owner] = await ethers.getSigners();
 
-    nftInstance = (await upgrades.deployProxy(token, ["memoryOS NFT token", "MIND"])) as MindNFT;
+    nftInstance = (await upgrades.deployProxy(token, ["memoryOS NFT token", "MIND", initialTokenAmount])) as MindNFT;
   });
 
   describe("Deployment", function () {

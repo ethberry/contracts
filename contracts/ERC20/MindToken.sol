@@ -14,7 +14,7 @@ contract MindCoin is Initializable, ERC20Upgradeable, ERC20BurnableUpgradeable, 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() initializer {}
 
-    function initialize(string memory name, string memory symbol) initializer public {
+    function initialize(string memory name, string memory symbol, uint256 amount) initializer public {
         __ERC20_init(name, symbol);
         __ERC20Burnable_init();
         __Pausable_init();
@@ -24,7 +24,7 @@ contract MindCoin is Initializable, ERC20Upgradeable, ERC20BurnableUpgradeable, 
         _setupRole(PAUSER_ROLE, msg.sender);
         _setupRole(MINTER_ROLE, msg.sender);
 
-        _mint(msg.sender, 1000 * 10 ** decimals());
+        _mint(msg.sender, amount * 10 ** decimals());
     }
 
     function pause() public onlyRole(PAUSER_ROLE) {

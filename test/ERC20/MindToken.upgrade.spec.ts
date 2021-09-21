@@ -3,7 +3,7 @@ import { ethers, upgrades } from "hardhat";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { MindCoin, MindCoin2 } from "../../typechain";
-import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../constants";
+import { DEFAULT_ADMIN_ROLE, initialTokenAmount, MINTER_ROLE, PAUSER_ROLE } from "../constants";
 
 describe("ERC20 upgrade", function () {
   let tokenInstance: MindCoin2;
@@ -13,7 +13,11 @@ describe("ERC20 upgrade", function () {
   beforeEach(async function () {
     [owner, addr1] = await ethers.getSigners();
     const tmpToken = await ethers.getContractFactory("MindCoin");
-    const tmpInstance = (await upgrades.deployProxy(tmpToken, ["memoryOS COIN token", "MIND"])) as MindCoin;
+    const tmpInstance = (await upgrades.deployProxy(tmpToken, [
+      "memoryOS COIN token",
+      "MIND",
+      initialTokenAmount,
+    ])) as MindCoin;
     await tmpInstance.transfer(addr1.address, 50);
     const token = await ethers.getContractFactory("MindCoin2");
     tokenInstance = (await upgrades.upgradeProxy(tmpInstance.address, token)) as MindCoin2;

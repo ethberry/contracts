@@ -20,14 +20,14 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface DEXInterface extends ethers.utils.Interface {
+interface DexWithOracleInterface extends ethers.utils.Interface {
   functions: {
     "acceptedToken()": FunctionFragment;
     "buy()": FunctionFragment;
-    "initialize(address)": FunctionFragment;
+    "initialize(address,address)": FunctionFragment;
     "owner()": FunctionFragment;
     "paused()": FunctionFragment;
-    "receive()": FunctionFragment;
+    "priceOracle()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "sell(uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
@@ -36,10 +36,10 @@ interface DEXInterface extends ethers.utils.Interface {
 
   encodeFunctionData(functionFragment: "acceptedToken", values?: undefined): string;
   encodeFunctionData(functionFragment: "buy", values?: undefined): string;
-  encodeFunctionData(functionFragment: "initialize", values: [string]): string;
+  encodeFunctionData(functionFragment: "initialize", values: [string, string]): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
-  encodeFunctionData(functionFragment: "receive", values?: undefined): string;
+  encodeFunctionData(functionFragment: "priceOracle", values?: undefined): string;
   encodeFunctionData(functionFragment: "renounceOwnership", values?: undefined): string;
   encodeFunctionData(functionFragment: "sell", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "transferOwnership", values: [string]): string;
@@ -50,7 +50,7 @@ interface DEXInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "receive", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "priceOracle", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "renounceOwnership", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "sell", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "transferOwnership", data: BytesLike): Result;
@@ -85,7 +85,7 @@ export type SoldEvent = TypedEvent<[BigNumber] & { amount: BigNumber }>;
 
 export type UnpausedEvent = TypedEvent<[string] & { account: string }>;
 
-export class DEX extends BaseContract {
+export class DexWithOracle extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -126,7 +126,7 @@ export class DEX extends BaseContract {
     toBlock?: string | number | undefined,
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: DEXInterface;
+  interface: DexWithOracleInterface;
 
   functions: {
     acceptedToken(overrides?: CallOverrides): Promise<[string]>;
@@ -135,6 +135,7 @@ export class DEX extends BaseContract {
 
     initialize(
       _acceptedToken: string,
+      _priceOracle: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
@@ -142,7 +143,7 @@ export class DEX extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<[boolean]>;
 
-    receive(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+    priceOracle(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
@@ -165,6 +166,7 @@ export class DEX extends BaseContract {
 
   initialize(
     _acceptedToken: string,
+    _priceOracle: string,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
@@ -172,7 +174,7 @@ export class DEX extends BaseContract {
 
   paused(overrides?: CallOverrides): Promise<boolean>;
 
-  receive(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+  priceOracle(overrides?: CallOverrides): Promise<string>;
 
   renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
@@ -190,13 +192,13 @@ export class DEX extends BaseContract {
 
     buy(overrides?: CallOverrides): Promise<void>;
 
-    initialize(_acceptedToken: string, overrides?: CallOverrides): Promise<void>;
+    initialize(_acceptedToken: string, _priceOracle: string, overrides?: CallOverrides): Promise<void>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
     paused(overrides?: CallOverrides): Promise<boolean>;
 
-    receive(overrides?: CallOverrides): Promise<void>;
+    priceOracle(overrides?: CallOverrides): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -244,13 +246,17 @@ export class DEX extends BaseContract {
 
     buy(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<BigNumber>;
 
-    initialize(_acceptedToken: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
+    initialize(
+      _acceptedToken: string,
+      _priceOracle: string,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     paused(overrides?: CallOverrides): Promise<BigNumber>;
 
-    receive(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<BigNumber>;
+    priceOracle(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
 
@@ -271,6 +277,7 @@ export class DEX extends BaseContract {
 
     initialize(
       _acceptedToken: string,
+      _priceOracle: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
@@ -278,7 +285,7 @@ export class DEX extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    receive(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
+    priceOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
 

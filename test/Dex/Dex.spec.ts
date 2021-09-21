@@ -1,17 +1,17 @@
 import { expect } from "chai";
 import { ethers, upgrades } from "hardhat";
 import { ContractFactory } from "ethers";
-
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { DEX, MindCoin } from "../../typechain";
-import { initialTokenAmount, initialTokenAmountInWei } from "../constants";
 import { parseEther } from "ethers/lib/utils";
+
+import { Dex, MindCoin } from "../../typechain";
+import { initialTokenAmount, initialTokenAmountInWei } from "../constants";
 
 describe("ERC20 DEX", function () {
   let token: ContractFactory;
   let market: ContractFactory;
   let tokenInstance: MindCoin;
-  let marketInstance: DEX;
+  let marketInstance: Dex;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
 
@@ -19,7 +19,7 @@ describe("ERC20 DEX", function () {
 
   beforeEach(async function () {
     token = await ethers.getContractFactory("MindCoin");
-    market = await ethers.getContractFactory("DEX");
+    market = await ethers.getContractFactory("Dex");
     [owner, addr1] = await ethers.getSigners();
 
     tokenInstance = (await upgrades.deployProxy(token, [
@@ -27,7 +27,7 @@ describe("ERC20 DEX", function () {
       "MIND",
       initialTokenAmount,
     ])) as MindCoin;
-    marketInstance = (await upgrades.deployProxy(market, [tokenInstance.address])) as DEX;
+    marketInstance = (await upgrades.deployProxy(market, [tokenInstance.address])) as Dex;
   });
 
   describe("Deployment", function () {

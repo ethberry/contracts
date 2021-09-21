@@ -8,8 +8,12 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 
-contract DEX is PausableUpgradeable, OwnableUpgradeable {
+import "../PriceOracle/IPriceOracle.sol";
+
+contract DexWithOracle is PausableUpgradeable, OwnableUpgradeable {
+    using SafeMathUpgradeable for uint256;
     using SafeERC20Upgradeable for IERC20Upgradeable;
     using AddressUpgradeable for address;
 
@@ -18,18 +22,23 @@ contract DEX is PausableUpgradeable, OwnableUpgradeable {
     event Received(uint amount);
 
     IERC20Upgradeable public acceptedToken;
+    IPriceOracle public priceOracle;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() initializer {}
 
     function initialize(
-        address _acceptedToken
+        address _acceptedToken,
+        address _priceOracle
     ) initializer public {
         __Pausable_init();
         __Ownable_init();
 
         require(_acceptedToken.isContract(), "The accepted token address must be a deployed contract");
         acceptedToken = IERC20Upgradeable(_acceptedToken);
+
+        require(_priceOracle.isContract(), "The Oracle must be a deployed contract");
+        priceOracle = IPriceOracle(_priceOracle);
     }
 
     function buy() payable public {
@@ -56,8 +65,12 @@ contract DEX is PausableUpgradeable, OwnableUpgradeable {
 
     function withdraw() public onlyOwner {
         uint256 amount = address(this).balance;
-        require(amount > 0, "Owner has not balance to withdraw");
+        require(amount > 0, "Owner has no balance to withdraw");
         payable(msg.sender).transfer(amount);
     }
 
+    function getTokenAmount(uint256 weiAmount, uint256 price) internal pure returns (uint256) {
+        uint256 tokens = weiAmount.mul(price).div(1 ether);
+        return tokens;
+    }
 }

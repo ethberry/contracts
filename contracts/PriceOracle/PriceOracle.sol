@@ -3,16 +3,17 @@ pragma solidity ^0.8.2;
 
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract MindPriceOracle is OwnableUpgradeable {
+contract PriceOracle is OwnableUpgradeable {
+  // How much PLAT you get for 1 ETH, multiplied by 10^18
+  uint256 public price;
 
   /// @custom:oz-upgrades-unsafe-allow constructor
   constructor() initializer {}
 
   function initialize() initializer public {
     __Ownable_init();
+    price = 1000 * 1e18;
   }
-
-  uint256 public price = 1;
 
   event PriceChanged(uint256 newPrice);
 

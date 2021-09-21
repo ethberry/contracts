@@ -23,9 +23,9 @@ export type { IERC165Upgradeable } from "./IERC165Upgradeable";
 export type { MindCoin } from "./MindCoin";
 export type { MindCoin2 } from "./MindCoin2";
 export type { MindNFT } from "./MindNFT";
-export type { IERC721VerifiableUpgradeable } from "./IERC721VerifiableUpgradeable";
 export type { Marketplace } from "./Marketplace";
 export type { MarketplaceStorage } from "./MarketplaceStorage";
+export type { StakingRewards } from "./StakingRewards";
 
 export { AccessControlUpgradeable__factory } from "./factories/AccessControlUpgradeable__factory";
 export { IAccessControlUpgradeable__factory } from "./factories/IAccessControlUpgradeable__factory";
@@ -49,6 +49,6 @@ export { IERC165Upgradeable__factory } from "./factories/IERC165Upgradeable__fac
 export { MindCoin__factory } from "./factories/MindCoin__factory";
 export { MindCoin2__factory } from "./factories/MindCoin2__factory";
 export { MindNFT__factory } from "./factories/MindNFT__factory";
-export { IERC721VerifiableUpgradeable__factory } from "./factories/IERC721VerifiableUpgradeable__factory";
 export { Marketplace__factory } from "./factories/Marketplace__factory";
 export { MarketplaceStorage__factory } from "./factories/MarketplaceStorage__factory";
+export { StakingRewards__factory } from "./factories/StakingRewards__factory";

@@ -23,20 +23,19 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface MarketplaceInterface extends ethers.utils.Interface {
   functions: {
     "ERC721_Interface()": FunctionFragment;
-    "InterfaceId_ValidateFingerprint()": FunctionFragment;
     "acceptedToken()": FunctionFragment;
     "cancelOrder(address,uint256)": FunctionFragment;
     "createOrder(address,uint256,uint256,uint256)": FunctionFragment;
     "execute(tuple,bytes)": FunctionFragment;
     "executeOrder(address,uint256,uint256)": FunctionFragment;
     "getNonce(address)": FunctionFragment;
+    "initialize(address,uint256,address)": FunctionFragment;
     "orderByAssetId(address,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerCutPerMillion()": FunctionFragment;
     "paused()": FunctionFragment;
     "publicationFeeInWei()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "safeExecuteOrder(address,uint256,uint256,bytes)": FunctionFragment;
     "setOwnerCutPerMillion(uint256)": FunctionFragment;
     "setPublicationFee(uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
@@ -44,7 +43,6 @@ interface MarketplaceInterface extends ethers.utils.Interface {
   };
 
   encodeFunctionData(functionFragment: "ERC721_Interface", values?: undefined): string;
-  encodeFunctionData(functionFragment: "InterfaceId_ValidateFingerprint", values?: undefined): string;
   encodeFunctionData(functionFragment: "acceptedToken", values?: undefined): string;
   encodeFunctionData(functionFragment: "cancelOrder", values: [string, BigNumberish]): string;
   encodeFunctionData(
@@ -67,16 +65,13 @@ interface MarketplaceInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "executeOrder", values: [string, BigNumberish, BigNumberish]): string;
   encodeFunctionData(functionFragment: "getNonce", values: [string]): string;
+  encodeFunctionData(functionFragment: "initialize", values: [string, BigNumberish, string]): string;
   encodeFunctionData(functionFragment: "orderByAssetId", values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "ownerCutPerMillion", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(functionFragment: "publicationFeeInWei", values?: undefined): string;
   encodeFunctionData(functionFragment: "renounceOwnership", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "safeExecuteOrder",
-    values: [string, BigNumberish, BigNumberish, BytesLike],
-  ): string;
   encodeFunctionData(functionFragment: "setOwnerCutPerMillion", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "setPublicationFee", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "transferOwnership", values: [string]): string;
@@ -96,20 +91,19 @@ interface MarketplaceInterface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "ERC721_Interface", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "InterfaceId_ValidateFingerprint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "acceptedToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "cancelOrder", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "createOrder", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "execute", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "executeOrder", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getNonce", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "orderByAssetId", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerCutPerMillion", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "publicationFeeInWei", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "renounceOwnership", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "safeExecuteOrder", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setOwnerCutPerMillion", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setPublicationFee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "transferOwnership", data: BytesLike): Result;
@@ -223,8 +217,6 @@ export class Marketplace extends BaseContract {
   functions: {
     ERC721_Interface(overrides?: CallOverrides): Promise<[string]>;
 
-    InterfaceId_ValidateFingerprint(overrides?: CallOverrides): Promise<[string]>;
-
     acceptedToken(overrides?: CallOverrides): Promise<[string]>;
 
     cancelOrder(
@@ -263,6 +255,13 @@ export class Marketplace extends BaseContract {
 
     getNonce(from: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    initialize(
+      _acceptedToken: string,
+      _ownerCutPerMillion: BigNumberish,
+      _owner: string,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<ContractTransaction>;
+
     orderByAssetId(
       arg0: string,
       arg1: BigNumberish,
@@ -286,14 +285,6 @@ export class Marketplace extends BaseContract {
     publicationFeeInWei(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
-
-    safeExecuteOrder(
-      nftAddress: string,
-      assetId: BigNumberish,
-      price: BigNumberish,
-      fingerprint: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>;
 
     setOwnerCutPerMillion(
       _ownerCutPerMillion: BigNumberish,
@@ -325,8 +316,6 @@ export class Marketplace extends BaseContract {
   };
 
   ERC721_Interface(overrides?: CallOverrides): Promise<string>;
-
-  InterfaceId_ValidateFingerprint(overrides?: CallOverrides): Promise<string>;
 
   acceptedToken(overrides?: CallOverrides): Promise<string>;
 
@@ -366,6 +355,13 @@ export class Marketplace extends BaseContract {
 
   getNonce(from: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+  initialize(
+    _acceptedToken: string,
+    _ownerCutPerMillion: BigNumberish,
+    _owner: string,
+    overrides?: Overrides & { from?: string | Promise<string> },
+  ): Promise<ContractTransaction>;
+
   orderByAssetId(
     arg0: string,
     arg1: BigNumberish,
@@ -389,14 +385,6 @@ export class Marketplace extends BaseContract {
   publicationFeeInWei(overrides?: CallOverrides): Promise<BigNumber>;
 
   renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
-
-  safeExecuteOrder(
-    nftAddress: string,
-    assetId: BigNumberish,
-    price: BigNumberish,
-    fingerprint: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> },
-  ): Promise<ContractTransaction>;
 
   setOwnerCutPerMillion(
     _ownerCutPerMillion: BigNumberish,
@@ -428,8 +416,6 @@ export class Marketplace extends BaseContract {
 
   callStatic: {
     ERC721_Interface(overrides?: CallOverrides): Promise<string>;
-
-    InterfaceId_ValidateFingerprint(overrides?: CallOverrides): Promise<string>;
 
     acceptedToken(overrides?: CallOverrides): Promise<string>;
 
@@ -465,6 +451,13 @@ export class Marketplace extends BaseContract {
 
     getNonce(from: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    initialize(
+      _acceptedToken: string,
+      _ownerCutPerMillion: BigNumberish,
+      _owner: string,
+      overrides?: CallOverrides,
+    ): Promise<void>;
+
     orderByAssetId(
       arg0: string,
       arg1: BigNumberish,
@@ -488,14 +481,6 @@ export class Marketplace extends BaseContract {
     publicationFeeInWei(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
-
-    safeExecuteOrder(
-      nftAddress: string,
-      assetId: BigNumberish,
-      price: BigNumberish,
-      fingerprint: BytesLike,
-      overrides?: CallOverrides,
-    ): Promise<void>;
 
     setOwnerCutPerMillion(_ownerCutPerMillion: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -650,8 +635,6 @@ export class Marketplace extends BaseContract {
   estimateGas: {
     ERC721_Interface(overrides?: CallOverrides): Promise<BigNumber>;
 
-    InterfaceId_ValidateFingerprint(overrides?: CallOverrides): Promise<BigNumber>;
-
     acceptedToken(overrides?: CallOverrides): Promise<BigNumber>;
 
     cancelOrder(
@@ -690,6 +673,13 @@ export class Marketplace extends BaseContract {
 
     getNonce(from: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    initialize(
+      _acceptedToken: string,
+      _ownerCutPerMillion: BigNumberish,
+      _owner: string,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<BigNumber>;
+
     orderByAssetId(arg0: string, arg1: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
@@ -701,14 +691,6 @@ export class Marketplace extends BaseContract {
     publicationFeeInWei(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
-
-    safeExecuteOrder(
-      nftAddress: string,
-      assetId: BigNumberish,
-      price: BigNumberish,
-      fingerprint: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<BigNumber>;
 
     setOwnerCutPerMillion(
       _ownerCutPerMillion: BigNumberish,
@@ -741,8 +723,6 @@ export class Marketplace extends BaseContract {
 
   populateTransaction: {
     ERC721_Interface(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    InterfaceId_ValidateFingerprint(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     acceptedToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -782,6 +762,13 @@ export class Marketplace extends BaseContract {
 
     getNonce(from: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    initialize(
+      _acceptedToken: string,
+      _ownerCutPerMillion: BigNumberish,
+      _owner: string,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<PopulatedTransaction>;
+
     orderByAssetId(arg0: string, arg1: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -793,14 +780,6 @@ export class Marketplace extends BaseContract {
     publicationFeeInWei(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
-
-    safeExecuteOrder(
-      nftAddress: string,
-      assetId: BigNumberish,
-      price: BigNumberish,
-      fingerprint: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<PopulatedTransaction>;
 
     setOwnerCutPerMillion(
       _ownerCutPerMillion: BigNumberish,

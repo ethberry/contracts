@@ -98,10 +98,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.MindNFT__factory>;
     getContractFactory(
-      name: "IERC721VerifiableUpgradeable",
-      signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.IERC721VerifiableUpgradeable__factory>;
-    getContractFactory(
       name: "Marketplace",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.Marketplace__factory>;
@@ -109,6 +105,10 @@ declare module "hardhat/types/runtime" {
       name: "MarketplaceStorage",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.MarketplaceStorage__factory>;
+    getContractFactory(
+      name: "StakingRewards",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.StakingRewards__factory>;
 
     // default types
     getContractFactory(name: string, signerOrOptions?: ethers.Signer | FactoryOptions): Promise<ethers.ContractFactory>;

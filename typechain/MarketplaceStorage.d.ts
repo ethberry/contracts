@@ -21,7 +21,6 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface MarketplaceStorageInterface extends ethers.utils.Interface {
   functions: {
     "ERC721_Interface()": FunctionFragment;
-    "InterfaceId_ValidateFingerprint()": FunctionFragment;
     "acceptedToken()": FunctionFragment;
     "orderByAssetId(address,uint256)": FunctionFragment;
     "ownerCutPerMillion()": FunctionFragment;
@@ -29,14 +28,12 @@ interface MarketplaceStorageInterface extends ethers.utils.Interface {
   };
 
   encodeFunctionData(functionFragment: "ERC721_Interface", values?: undefined): string;
-  encodeFunctionData(functionFragment: "InterfaceId_ValidateFingerprint", values?: undefined): string;
   encodeFunctionData(functionFragment: "acceptedToken", values?: undefined): string;
   encodeFunctionData(functionFragment: "orderByAssetId", values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "ownerCutPerMillion", values?: undefined): string;
   encodeFunctionData(functionFragment: "publicationFeeInWei", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "ERC721_Interface", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "InterfaceId_ValidateFingerprint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "acceptedToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "orderByAssetId", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerCutPerMillion", data: BytesLike): Result;
@@ -138,8 +135,6 @@ export class MarketplaceStorage extends BaseContract {
   functions: {
     ERC721_Interface(overrides?: CallOverrides): Promise<[string]>;
 
-    InterfaceId_ValidateFingerprint(overrides?: CallOverrides): Promise<[string]>;
-
     acceptedToken(overrides?: CallOverrides): Promise<[string]>;
 
     orderByAssetId(
@@ -163,8 +158,6 @@ export class MarketplaceStorage extends BaseContract {
 
   ERC721_Interface(overrides?: CallOverrides): Promise<string>;
 
-  InterfaceId_ValidateFingerprint(overrides?: CallOverrides): Promise<string>;
-
   acceptedToken(overrides?: CallOverrides): Promise<string>;
 
   orderByAssetId(
@@ -187,8 +180,6 @@ export class MarketplaceStorage extends BaseContract {
 
   callStatic: {
     ERC721_Interface(overrides?: CallOverrides): Promise<string>;
-
-    InterfaceId_ValidateFingerprint(overrides?: CallOverrides): Promise<string>;
 
     acceptedToken(overrides?: CallOverrides): Promise<string>;
 
@@ -326,8 +317,6 @@ export class MarketplaceStorage extends BaseContract {
   estimateGas: {
     ERC721_Interface(overrides?: CallOverrides): Promise<BigNumber>;
 
-    InterfaceId_ValidateFingerprint(overrides?: CallOverrides): Promise<BigNumber>;
-
     acceptedToken(overrides?: CallOverrides): Promise<BigNumber>;
 
     orderByAssetId(arg0: string, arg1: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
@@ -339,8 +328,6 @@ export class MarketplaceStorage extends BaseContract {
 
   populateTransaction: {
     ERC721_Interface(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    InterfaceId_ValidateFingerprint(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     acceptedToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

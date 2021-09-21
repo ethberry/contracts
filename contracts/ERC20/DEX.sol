@@ -32,12 +32,12 @@ contract DEX is PausableUpgradeable, OwnableUpgradeable {
     }
 
     function buy() payable public {
-        uint256 amountTobuy = msg.value;
+        uint256 amountToBuy = msg.value;
         uint256 dexBalance = acceptedToken.balanceOf(address(this));
-        require(amountTobuy > 0, "You need to send some ether");
-        require(amountTobuy <= dexBalance, "Not enough tokens in the reserve");
-        acceptedToken.transfer(msg.sender, amountTobuy);
-        emit Bought(amountTobuy);
+        require(amountToBuy > 0, "You need to send some ether");
+        require(amountToBuy <= dexBalance, "Not enough tokens in the reserve");
+        acceptedToken.transfer(msg.sender, amountToBuy);
+        emit Bought(amountToBuy);
     }
 
     function sell(uint256 amount) public {

@@ -5,6 +5,7 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { DEX, MindCoin } from "../../typechain";
 import { initialTokenAmount, initialTokenAmountInWei } from "../constants";
+import { parseEther } from "ethers/lib/utils";
 
 describe("ERC20 DEX", function () {
   let token: ContractFactory;
@@ -31,8 +32,10 @@ describe("ERC20 DEX", function () {
 
   describe("Deployment", function () {
     it("DEX should has zero balance", async function () {
-      const balance = await tokenInstance.balanceOf(marketInstance.address);
-      expect(balance).to.equal(0);
+      const balanceOfDex = await tokenInstance.balanceOf(marketInstance.address);
+      expect(balanceOfDex).to.equal(0);
+      const balanceOfOwner = await tokenInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(initialTokenAmountInWei);
     });
   });
 
@@ -79,6 +82,7 @@ describe("ERC20 DEX", function () {
     it("should buy tokens", async function () {
       await tokenInstance.approve(owner.address, amount);
       await tokenInstance.transferFrom(owner.address, marketInstance.address, amount);
+
       await marketInstance.connect(addr1).buy({ value: amount });
       const balanceOfDex = await tokenInstance.balanceOf(marketInstance.address);
       expect(balanceOfDex).to.equal(0);
@@ -86,6 +90,45 @@ describe("ERC20 DEX", function () {
       expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
       const balanceOfBuyer = await tokenInstance.balanceOf(addr1.address);
       expect(balanceOfBuyer).to.equal(amount);
+    });
+  });
+
+  describe("Sell", function () {
+    it("should fail with tokens", async function () {
+      const transfer = marketInstance.connect(addr1).sell(0);
+      await expect(transfer).to.be.revertedWith("You need to sell at least some tokens");
+    });
+
+    it("should fail no allowance", async function () {
+      const transfer = marketInstance.connect(addr1).sell(amount);
+      await expect(transfer).to.be.revertedWith("Check the token allowance");
+    });
+
+    it("should fail with partial balance", async function () {
+      await tokenInstance.connect(addr1).approve(marketInstance.address, amount);
+      const transfer = marketInstance.connect(addr1).sell(amount);
+      await expect(transfer).to.be.revertedWith("ERC20: transfer amount exceeds balance");
+    });
+
+    it("should sell tokens", async function () {
+      // contract should has eth
+      await owner.sendTransaction({
+        to: marketInstance.address,
+        value: parseEther("1"),
+      });
+
+      await tokenInstance.approve(owner.address, amount);
+      await tokenInstance.transferFrom(owner.address, addr1.address, amount);
+
+      await tokenInstance.connect(addr1).approve(marketInstance.address, amount);
+      await marketInstance.connect(addr1).sell(amount);
+
+      const balanceOfSeller = await tokenInstance.balanceOf(addr1.address);
+      expect(balanceOfSeller).to.equal(0);
+      const balanceOfDex = await tokenInstance.balanceOf(marketInstance.address);
+      expect(balanceOfDex).to.equal(amount);
+      const balanceOfOwner = await tokenInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
     });
   });
 });

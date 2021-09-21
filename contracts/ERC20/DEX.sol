@@ -15,6 +15,7 @@ contract DEX is PausableUpgradeable, OwnableUpgradeable {
 
     event Bought(uint256 amount);
     event Sold(uint256 amount);
+    event Received(uint amount);
 
     IERC20Upgradeable public acceptedToken;
 
@@ -45,8 +46,12 @@ contract DEX is PausableUpgradeable, OwnableUpgradeable {
         uint256 allowance = acceptedToken.allowance(msg.sender, address(this));
         require(allowance >= amount, "Check the token allowance");
         acceptedToken.transferFrom(msg.sender, address(this), amount);
-        acceptedToken.safeTransfer(msg.sender, amount);
+        payable(msg.sender).transfer(amount);
         emit Sold(amount);
+    }
+
+    receive() external payable {
+        emit Received(msg.value);
     }
 
 }

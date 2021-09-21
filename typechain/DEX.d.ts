@@ -54,6 +54,7 @@ interface DEXInterface extends ethers.utils.Interface {
     "Bought(uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
+    "Received(uint256)": EventFragment;
     "Sold(uint256)": EventFragment;
     "Unpaused(address)": EventFragment;
   };
@@ -61,6 +62,7 @@ interface DEXInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Bought"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Received"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Sold"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
 }
@@ -70,6 +72,8 @@ export type BoughtEvent = TypedEvent<[BigNumber] & { amount: BigNumber }>;
 export type OwnershipTransferredEvent = TypedEvent<[string, string] & { previousOwner: string; newOwner: string }>;
 
 export type PausedEvent = TypedEvent<[string] & { account: string }>;
+
+export type ReceivedEvent = TypedEvent<[BigNumber] & { amount: BigNumber }>;
 
 export type SoldEvent = TypedEvent<[BigNumber] & { amount: BigNumber }>;
 
@@ -203,6 +207,10 @@ export class DEX extends BaseContract {
     "Paused(address)"(account?: null): TypedEventFilter<[string], { account: string }>;
 
     Paused(account?: null): TypedEventFilter<[string], { account: string }>;
+
+    "Received(uint256)"(amount?: null): TypedEventFilter<[BigNumber], { amount: BigNumber }>;
+
+    Received(amount?: null): TypedEventFilter<[BigNumber], { amount: BigNumber }>;
 
     "Sold(uint256)"(amount?: null): TypedEventFilter<[BigNumber], { amount: BigNumber }>;
 

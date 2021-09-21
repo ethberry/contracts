@@ -148,5 +148,20 @@ describe("ERC20 DEX", function () {
       const balanceAfter = await ethers.provider.getBalance(marketInstance.address);
       expect(balanceAfter).to.equal(0);
     });
+
+    it("should NOT withdraw ETH", async function () {
+      // contract should has eth
+      await owner.sendTransaction({
+        to: marketInstance.address,
+        value: parseEther("1"),
+      });
+
+      const balanceBefore = await ethers.provider.getBalance(marketInstance.address);
+      expect(balanceBefore).to.equal(parseEther("1"));
+
+      const tx = marketInstance.connect(addr1).withdraw();
+
+      await expect(tx).to.be.revertedWith("Ownable: caller is not the owner");
+    });
   });
 });

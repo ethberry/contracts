@@ -13,6 +13,8 @@ describe("ERC20 DEX", function () {
   let marketInstance: DEX;
   let owner: SignerWithAddress;
 
+  const amount = 100;
+
   beforeEach(async function () {
     token = await ethers.getContractFactory("MindCoin");
     market = await ethers.getContractFactory("DEX");
@@ -34,8 +36,18 @@ describe("ERC20 DEX", function () {
   });
 
   describe("Transfer", function () {
+    it("should transfer tokens to DEX without approve", async function () {
+      const transfer = tokenInstance.transferFrom(owner.address, marketInstance.address, amount);
+      await expect(transfer).to.be.revertedWith("ERC20: transfer amount exceeds allowance");
+    });
+
+    it("should transfer tokens to DEX with partial approve", async function () {
+      await tokenInstance.approve(owner.address, amount / 2);
+      const transfer = tokenInstance.transferFrom(owner.address, marketInstance.address, amount);
+      await expect(transfer).to.be.revertedWith("ERC20: transfer amount exceeds allowance");
+    });
+
     it("should transfer tokens to DEX", async function () {
-      const amount = 100;
       await tokenInstance.approve(owner.address, amount);
       await tokenInstance.transferFrom(owner.address, marketInstance.address, amount);
       const balanceOfDex = await tokenInstance.balanceOf(marketInstance.address);

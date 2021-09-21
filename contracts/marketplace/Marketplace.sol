@@ -16,6 +16,9 @@ contract Marketplace is OwnableUpgradeable, PausableUpgradeable, MinimalForwarde
     using SafeMathUpgradeable for uint256;
     using AddressUpgradeable for address;
 
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() initializer {}
+
     /**
       * @dev Initialize this contract. Acts as a constructor
       * @param _acceptedToken - Address of the ERC20 accepted for this marketplace

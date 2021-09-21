@@ -18,3 +18,5 @@ npx hardhat help
 https://docs.openzeppelin.com/contracts/4.x/wizard
 https://docs.matic.network/docs/develop/ethereum-matic/mintable-assets/#contract-to-be-deployed-on-ethereum
 https://github.com/wighawag/hardhat-deploy
+
+https://ethereum.stackexchange.com/questions/15641/how-does-a-contract-find-out-if-another-address-is-a-contract

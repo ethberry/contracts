@@ -14,7 +14,12 @@ contract StakingRewards is ReentrancyGuardUpgradeable, PausableUpgradeable, Owna
     using SafeMathUpgradeable for uint256;
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
-    /* ========== STATE VARIABLES ========== */
+    event RewardAdded(uint256 reward);
+    event Staked(address indexed user, uint256 amount);
+    event Withdrawn(address indexed user, uint256 amount);
+    event RewardPaid(address indexed user, uint256 reward);
+    event RewardsDurationUpdated(uint256 newDuration);
+    event Recovered(address token, uint256 amount);
 
     IERC20Upgradeable public rewardsToken;
     IERC20Upgradeable public stakingToken;
@@ -31,6 +36,9 @@ contract StakingRewards is ReentrancyGuardUpgradeable, PausableUpgradeable, Owna
     mapping(address => uint256) private _balances;
 
     /* ========== CONSTRUCTOR ========== */
+
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() initializer {}
 
     function initialize(
         address _rewardsToken,
@@ -130,13 +138,4 @@ contract StakingRewards is ReentrancyGuardUpgradeable, PausableUpgradeable, Owna
         }
         _;
     }
-
-    /* ========== EVENTS ========== */
-
-    event RewardAdded(uint256 reward);
-    event Staked(address indexed user, uint256 amount);
-    event Withdrawn(address indexed user, uint256 amount);
-    event RewardPaid(address indexed user, uint256 reward);
-    event RewardsDurationUpdated(uint256 newDuration);
-    event Recovered(address token, uint256 amount);
 }

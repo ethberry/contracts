@@ -85,6 +85,7 @@ declare module "hardhat/types/runtime" {
       name: "IERC165Upgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC165Upgradeable__factory>;
+    getContractFactory(name: "DEX", signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.DEX__factory>;
     getContractFactory(
       name: "MindCoin",
       signerOrOptions?: ethers.Signer | FactoryOptions,

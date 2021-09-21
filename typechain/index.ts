@@ -21,6 +21,7 @@ export type { IERC721Upgradeable } from "./IERC721Upgradeable";
 export type { ERC165Upgradeable } from "./ERC165Upgradeable";
 export type { IERC165Upgradeable } from "./IERC165Upgradeable";
 export type { DEX } from "./DEX";
+export type { MindPriceOracle } from "./MindPriceOracle";
 export type { MindCoin } from "./MindCoin";
 export type { MindCoin2 } from "./MindCoin2";
 export type { MindNFT } from "./MindNFT";
@@ -48,6 +49,7 @@ export { IERC721Upgradeable__factory } from "./factories/IERC721Upgradeable__fac
 export { ERC165Upgradeable__factory } from "./factories/ERC165Upgradeable__factory";
 export { IERC165Upgradeable__factory } from "./factories/IERC165Upgradeable__factory";
 export { DEX__factory } from "./factories/DEX__factory";
+export { MindPriceOracle__factory } from "./factories/MindPriceOracle__factory";
 export { MindCoin__factory } from "./factories/MindCoin__factory";
 export { MindCoin2__factory } from "./factories/MindCoin2__factory";
 export { MindNFT__factory } from "./factories/MindNFT__factory";

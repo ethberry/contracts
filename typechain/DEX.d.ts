@@ -27,9 +27,11 @@ interface DEXInterface extends ethers.utils.Interface {
     "initialize(address)": FunctionFragment;
     "owner()": FunctionFragment;
     "paused()": FunctionFragment;
+    "receive()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "sell(uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "withdraw()": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "acceptedToken", values?: undefined): string;
@@ -37,18 +39,22 @@ interface DEXInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "initialize", values: [string]): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
+  encodeFunctionData(functionFragment: "receive", values?: undefined): string;
   encodeFunctionData(functionFragment: "renounceOwnership", values?: undefined): string;
   encodeFunctionData(functionFragment: "sell", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "transferOwnership", values: [string]): string;
+  encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "acceptedToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "buy", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "receive", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "renounceOwnership", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "sell", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "transferOwnership", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
     "Bought(uint256)": EventFragment;
@@ -136,6 +142,8 @@ export class DEX extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<[boolean]>;
 
+    receive(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
     sell(
@@ -147,6 +155,8 @@ export class DEX extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
+
+    withdraw(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
   };
 
   acceptedToken(overrides?: CallOverrides): Promise<string>;
@@ -162,6 +172,8 @@ export class DEX extends BaseContract {
 
   paused(overrides?: CallOverrides): Promise<boolean>;
 
+  receive(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+
   renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
   sell(amount: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
@@ -170,6 +182,8 @@ export class DEX extends BaseContract {
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
+
+  withdraw(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
   callStatic: {
     acceptedToken(overrides?: CallOverrides): Promise<string>;
@@ -182,11 +196,15 @@ export class DEX extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<boolean>;
 
+    receive(overrides?: CallOverrides): Promise<void>;
+
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     sell(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     transferOwnership(newOwner: string, overrides?: CallOverrides): Promise<void>;
+
+    withdraw(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -232,6 +250,8 @@ export class DEX extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<BigNumber>;
 
+    receive(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<BigNumber>;
+
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
 
     sell(amount: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
@@ -240,6 +260,8 @@ export class DEX extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
+
+    withdraw(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -256,6 +278,8 @@ export class DEX extends BaseContract {
 
     paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    receive(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
+
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
 
     sell(
@@ -267,5 +291,7 @@ export class DEX extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
+
+    withdraw(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
   };
 }

@@ -54,4 +54,10 @@ contract DEX is PausableUpgradeable, OwnableUpgradeable {
         emit Received(msg.value);
     }
 
+    function withdraw() public onlyOwner {
+        uint256 amount = address(this).balance;
+        require(amount > 0, "Owner has not balance to withdraw");
+        payable(msg.sender).transfer(amount);
+    }
+
 }

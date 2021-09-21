@@ -87,6 +87,10 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.IERC165Upgradeable__factory>;
     getContractFactory(name: "DEX", signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.DEX__factory>;
     getContractFactory(
+      name: "MindPriceOracle",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.MindPriceOracle__factory>;
+    getContractFactory(
       name: "MindCoin",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.MindCoin__factory>;

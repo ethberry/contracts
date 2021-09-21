@@ -29,7 +29,7 @@ interface MarketplaceInterface extends ethers.utils.Interface {
     "execute(tuple,bytes)": FunctionFragment;
     "executeOrder(address,uint256,uint256)": FunctionFragment;
     "getNonce(address)": FunctionFragment;
-    "initialize(address,uint256,address)": FunctionFragment;
+    "initialize(address,uint256)": FunctionFragment;
     "orderByAssetId(address,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerCutPerMillion()": FunctionFragment;
@@ -65,7 +65,7 @@ interface MarketplaceInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "executeOrder", values: [string, BigNumberish, BigNumberish]): string;
   encodeFunctionData(functionFragment: "getNonce", values: [string]): string;
-  encodeFunctionData(functionFragment: "initialize", values: [string, BigNumberish, string]): string;
+  encodeFunctionData(functionFragment: "initialize", values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "orderByAssetId", values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "ownerCutPerMillion", values?: undefined): string;
@@ -258,7 +258,6 @@ export class Marketplace extends BaseContract {
     initialize(
       _acceptedToken: string,
       _ownerCutPerMillion: BigNumberish,
-      _owner: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
@@ -358,7 +357,6 @@ export class Marketplace extends BaseContract {
   initialize(
     _acceptedToken: string,
     _ownerCutPerMillion: BigNumberish,
-    _owner: string,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
@@ -451,12 +449,7 @@ export class Marketplace extends BaseContract {
 
     getNonce(from: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    initialize(
-      _acceptedToken: string,
-      _ownerCutPerMillion: BigNumberish,
-      _owner: string,
-      overrides?: CallOverrides,
-    ): Promise<void>;
+    initialize(_acceptedToken: string, _ownerCutPerMillion: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     orderByAssetId(
       arg0: string,
@@ -676,7 +669,6 @@ export class Marketplace extends BaseContract {
     initialize(
       _acceptedToken: string,
       _ownerCutPerMillion: BigNumberish,
-      _owner: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
@@ -765,7 +757,6 @@ export class Marketplace extends BaseContract {
     initialize(
       _acceptedToken: string,
       _ownerCutPerMillion: BigNumberish,
-      _owner: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 

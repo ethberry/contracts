@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.2;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
@@ -23,8 +23,7 @@ contract Marketplace is OwnableUpgradeable, PausableUpgradeable, MinimalForwarde
       */
     function initialize(
         address _acceptedToken,
-        uint256 _ownerCutPerMillion,
-        address _owner
+        uint256 _ownerCutPerMillion
     ) initializer public {
         __Pausable_init();
         __Ownable_init();

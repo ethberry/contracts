@@ -148,7 +148,7 @@ export class DexWithOracle extends BaseContract {
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
     sell(
-      amount: BigNumberish,
+      amountOfToken: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
@@ -178,7 +178,10 @@ export class DexWithOracle extends BaseContract {
 
   renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
-  sell(amount: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+  sell(
+    amountOfToken: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> },
+  ): Promise<ContractTransaction>;
 
   transferOwnership(
     newOwner: string,
@@ -202,7 +205,7 @@ export class DexWithOracle extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    sell(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    sell(amountOfToken: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     transferOwnership(newOwner: string, overrides?: CallOverrides): Promise<void>;
 
@@ -260,7 +263,7 @@ export class DexWithOracle extends BaseContract {
 
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
 
-    sell(amount: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
+    sell(amountOfToken: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
@@ -290,7 +293,7 @@ export class DexWithOracle extends BaseContract {
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
 
     sell(
-      amount: BigNumberish,
+      amountOfToken: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 

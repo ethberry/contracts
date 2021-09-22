@@ -94,6 +94,7 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.DexWithOracle__factory>;
     getContractFactory(name: "Dex", signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.Dex__factory>;
+    getContractFactory(name: "Dex", signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.Dex__factory>;
     getContractFactory(
       name: "MindCoin",
       signerOrOptions?: ethers.Signer | FactoryOptions,

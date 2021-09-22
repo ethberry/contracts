@@ -1,26 +1,31 @@
-import { task } from "hardhat/config";
+import { config } from "dotenv";
+import { HardhatUserConfig } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
-import "@nomiclabs/hardhat-ethers";
 import "@openzeppelin/hardhat-upgrades";
 import "@typechain/hardhat";
 import "hardhat-deploy";
+import "hardhat-gas-reporter";
 
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
-task("accounts", "Prints the list of accounts", async (args, hre) => {
-  const accounts = await hre.ethers.getSigners();
+import "./tasks";
 
-  for (const account of accounts) {
-    console.info(account.address);
-  }
-});
-
-// You need to export an object to set up your config
-// Go to https://hardhat.org/config/ to learn more
+config();
 
 export default {
-  solidity: "0.8.4",
-  etherscan: {
-    apiKey: "MQAWY8NT687R7Z9QBXMZ6HHBG6JUIU143T",
+  defaultNetwork: "hardhat",
+  networks: {
+    polygon: {
+      url: process.env.RPC_URL_POLYGON,
+    },
   },
-};
+  solidity: {
+    version: "0.8.4",
+  },
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY,
+  },
+  gasReporter: {
+    enabled: process.env.REPORT_GAS === "true",
+    currency: "USD",
+    gasPrice: 21,
+  },
+} as HardhatUserConfig;

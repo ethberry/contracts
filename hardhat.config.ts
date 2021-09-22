@@ -16,18 +16,15 @@ const ROPSTEN_PRIVATE_KEY = "";
 export default {
   defaultNetwork: "hardhat",
   networks: {
-    // hardhat: {
-    //   gasPrice: 0,
-    // },
-    mainnet: {
-      url: process.env.RPC_URL_POLYGON,
-    },
     polygon: {
       url: `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
     },
     ropsten: {
       url: `https://eth-ropsten.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
       accounts: [`0x${ROPSTEN_PRIVATE_KEY}`],
+    },
+    besu: {
+      url: `http://127.0.0.1:8545`,
     },
   },
   solidity: {

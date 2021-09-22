@@ -3,7 +3,13 @@ import { ethers, upgrades } from "hardhat";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { MindCoin, MindCoin2 } from "../../typechain";
-import { DEFAULT_ADMIN_ROLE, initialTokenAmount, MINTER_ROLE, PAUSER_ROLE } from "../constants";
+import {
+  DEFAULT_ADMIN_ROLE,
+  initialTokenAmount,
+  initialTokenAmountInWei,
+  MINTER_ROLE,
+  PAUSER_ROLE,
+} from "../constants";
 
 describe("ERC20 upgrade", function () {
   let tokenInstance: MindCoin2;
@@ -32,6 +38,7 @@ describe("ERC20 upgrade", function () {
 
     it("Should preserve token balance", async function () {
       const totalSupply = await tokenInstance.totalSupply();
+      expect(totalSupply).to.equal(initialTokenAmountInWei);
       const ownerBalance = await tokenInstance.balanceOf(owner.address);
       expect(ownerBalance).to.equal(totalSupply.sub(50));
     });

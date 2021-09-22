@@ -4,7 +4,13 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { MindCoin } from "../../typechain";
-import { DEFAULT_ADMIN_ROLE, initialTokenAmount, MINTER_ROLE, PAUSER_ROLE } from "../constants";
+import {
+  DEFAULT_ADMIN_ROLE,
+  initialTokenAmount,
+  initialTokenAmountInWei,
+  MINTER_ROLE,
+  PAUSER_ROLE,
+} from "../constants";
 
 describe("ERC20 basic", function () {
   let token: ContractFactory;
@@ -33,8 +39,9 @@ describe("ERC20 basic", function () {
 
     it("Should assign the total supply of tokens to the owner", async function () {
       const totalSupply = await tokenInstance.totalSupply();
+      expect(totalSupply).to.equal(initialTokenAmountInWei);
       const ownerBalance = await tokenInstance.balanceOf(owner.address);
-      expect(ownerBalance).to.equal(totalSupply);
+      expect(ownerBalance).to.equal(initialTokenAmountInWei);
     });
   });
 

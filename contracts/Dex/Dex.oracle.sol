@@ -10,6 +10,8 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeab
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 
+import "hardhat/console.sol";
+
 import "../PriceOracle/IPriceOracle.sol";
 
 contract DexWithOracle is PausableUpgradeable, OwnableUpgradeable {
@@ -42,9 +44,12 @@ contract DexWithOracle is PausableUpgradeable, OwnableUpgradeable {
     }
 
     function buy() payable public {
-        uint256 amountToBuy = msg.value;
+        console.log("msg.value %s", msg.value);
+        require(msg.value > 0, "You need to send some ether");
+        uint256 amountToBuy = getTokenAmount(msg.value, priceOracle.priceInWei());
+        console.log("amountToBuy %s", amountToBuy);
+        require(amountToBuy > 0, "Not enough to buy even one token");
         uint256 dexBalance = acceptedToken.balanceOf(address(this));
-        require(amountToBuy > 0, "You need to send some ether");
         require(amountToBuy <= dexBalance, "Not enough tokens in the reserve");
         acceptedToken.transfer(msg.sender, amountToBuy);
         emit Bought(amountToBuy);
@@ -69,8 +74,8 @@ contract DexWithOracle is PausableUpgradeable, OwnableUpgradeable {
         payable(msg.sender).transfer(amount);
     }
 
-    function getTokenAmount(uint256 weiAmount, uint256 price) internal pure returns (uint256) {
-        uint256 tokens = weiAmount.mul(price).div(1 ether);
+    function getTokenAmount(uint256 weiAmount, uint256 priceInWei) internal pure returns (uint256) {
+        uint256 tokens = weiAmount.div(priceInWei);
         return tokens;
     }
 }

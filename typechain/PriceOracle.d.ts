@@ -23,7 +23,7 @@ interface PriceOracleInterface extends ethers.utils.Interface {
   functions: {
     "initialize()": FunctionFragment;
     "owner()": FunctionFragment;
-    "price()": FunctionFragment;
+    "priceInWei()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "updatePrice(uint256)": FunctionFragment;
@@ -31,14 +31,14 @@ interface PriceOracleInterface extends ethers.utils.Interface {
 
   encodeFunctionData(functionFragment: "initialize", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(functionFragment: "price", values?: undefined): string;
+  encodeFunctionData(functionFragment: "priceInWei", values?: undefined): string;
   encodeFunctionData(functionFragment: "renounceOwnership", values?: undefined): string;
   encodeFunctionData(functionFragment: "transferOwnership", values: [string]): string;
   encodeFunctionData(functionFragment: "updatePrice", values: [BigNumberish]): string;
 
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "price", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "priceInWei", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "renounceOwnership", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "transferOwnership", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "updatePrice", data: BytesLike): Result;
@@ -104,7 +104,7 @@ export class PriceOracle extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
-    price(overrides?: CallOverrides): Promise<[BigNumber]>;
+    priceInWei(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
@@ -123,7 +123,7 @@ export class PriceOracle extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
-  price(overrides?: CallOverrides): Promise<BigNumber>;
+  priceInWei(overrides?: CallOverrides): Promise<BigNumber>;
 
   renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
@@ -142,7 +142,7 @@ export class PriceOracle extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
-    price(overrides?: CallOverrides): Promise<BigNumber>;
+    priceInWei(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -172,7 +172,7 @@ export class PriceOracle extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
-    price(overrides?: CallOverrides): Promise<BigNumber>;
+    priceInWei(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
 
@@ -192,7 +192,7 @@ export class PriceOracle extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    price(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    priceInWei(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
 

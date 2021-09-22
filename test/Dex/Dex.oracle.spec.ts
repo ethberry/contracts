@@ -14,12 +14,15 @@ describe("ERC20 DEX with Oracle", function () {
   let marketInstance: DexWithOracle;
   let oracleInstance: PriceOracle;
   let owner: SignerWithAddress;
+  let addr1: SignerWithAddress;
+
+  const amount = 100;
 
   beforeEach(async function () {
     token = await ethers.getContractFactory("MindCoin");
     oracle = await ethers.getContractFactory("PriceOracle");
     market = await ethers.getContractFactory("DexWithOracle");
-    [owner] = await ethers.getSigners();
+    [owner, addr1] = await ethers.getSigners();
 
     tokenInstance = (await upgrades.deployProxy(token, [
       "memoryOS COIN token",
@@ -39,6 +42,38 @@ describe("ERC20 DEX with Oracle", function () {
       expect(balanceOfDex).to.equal(0);
       const balanceOfOwner = await tokenInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(initialTokenAmountInWei);
+    });
+  });
+
+  describe("Buy", function () {
+    it("should buy tokens for initial price", async function () {
+      await tokenInstance.approve(owner.address, amount);
+      await tokenInstance.transferFrom(owner.address, marketInstance.address, amount);
+
+      await marketInstance.connect(addr1).buy({ value: amount });
+      const balanceOfDex = await tokenInstance.balanceOf(marketInstance.address);
+      expect(balanceOfDex).to.equal(0);
+      const balanceOfOwner = await tokenInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
+      const balanceOfBuyer = await tokenInstance.balanceOf(addr1.address);
+      expect(balanceOfBuyer).to.equal(amount);
+    });
+
+    it("should buy tokens for new price", async function () {
+      const multiplier = 5;
+
+      await tokenInstance.approve(owner.address, amount);
+      await tokenInstance.transferFrom(owner.address, marketInstance.address, amount);
+
+      await oracleInstance.updatePrice(multiplier);
+
+      await marketInstance.connect(addr1).buy({ value: amount });
+      const balanceOfDex = await tokenInstance.balanceOf(marketInstance.address);
+      expect(balanceOfDex).to.equal(amount - amount / multiplier);
+      const balanceOfOwner = await tokenInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
+      const balanceOfBuyer = await tokenInstance.balanceOf(addr1.address);
+      expect(balanceOfBuyer).to.equal(amount / multiplier);
     });
   });
 });

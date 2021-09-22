@@ -111,6 +111,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.MarketplaceStorage__factory>;
     getContractFactory(
+      name: "IPriceOracle",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.IPriceOracle__factory>;
+    getContractFactory(
       name: "PriceOracle",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.PriceOracle__factory>;

@@ -27,6 +27,7 @@ export type { MindCoin2 } from "./MindCoin2";
 export type { MindNFT } from "./MindNFT";
 export type { Marketplace } from "./Marketplace";
 export type { MarketplaceStorage } from "./MarketplaceStorage";
+export type { IPriceOracle } from "./IPriceOracle";
 export type { PriceOracle } from "./PriceOracle";
 export type { StakingRewards } from "./StakingRewards";
 
@@ -56,5 +57,6 @@ export { MindCoin2__factory } from "./factories/MindCoin2__factory";
 export { MindNFT__factory } from "./factories/MindNFT__factory";
 export { Marketplace__factory } from "./factories/Marketplace__factory";
 export { MarketplaceStorage__factory } from "./factories/MarketplaceStorage__factory";
+export { IPriceOracle__factory } from "./factories/IPriceOracle__factory";
 export { PriceOracle__factory } from "./factories/PriceOracle__factory";
 export { StakingRewards__factory } from "./factories/StakingRewards__factory";

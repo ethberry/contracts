@@ -10,19 +10,16 @@ import "./tasks";
 
 config();
 
-const ALCHEMY_API_KEY = "";
-const ROPSTEN_PRIVATE_KEY = "";
-
 export default {
   defaultNetwork: "hardhat",
   networks: {
     polygon: {
-      url: `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+      url: `https://polygon-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY as string}`,
     },
-    ropsten: {
-      url: `https://eth-ropsten.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
-      accounts: [`0x${ROPSTEN_PRIVATE_KEY}`],
-    },
+    // ropsten: {
+    //   url: `https://eth-ropsten.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
+    //   accounts: [`0x${process.env.ROPSTEN_PRIVATE_KEY as string}`],
+    // },
     besu: {
       url: `http://127.0.0.1:8545`,
     },

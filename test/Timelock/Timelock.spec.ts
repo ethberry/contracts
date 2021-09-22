@@ -14,7 +14,7 @@ describe("Time Lock", function () {
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
   let timestamp: number;
-  const releaseAfter = 5; // sec
+  const releaseAfter = 10; // sec
 
   beforeEach(async function () {
     token = await ethers.getContractFactory("MindCoin");
@@ -55,7 +55,7 @@ describe("Time Lock", function () {
     });
 
     it("should release tokens", async function () {
-      this.timeout(100000);
+      this.timeout(11000);
 
       await tokenInstance.approve(owner.address, amount);
       await tokenInstance.transferFrom(owner.address, timelockInstance.address, amount);

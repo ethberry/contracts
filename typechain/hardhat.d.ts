@@ -42,6 +42,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC20BurnableUpgradeable__factory>;
     getContractFactory(
+      name: "ERC20SnapshotUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.ERC20SnapshotUpgradeable__factory>;
+    getContractFactory(
       name: "IERC20MetadataUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC20MetadataUpgradeable__factory>;
@@ -102,6 +106,10 @@ declare module "hardhat/types/runtime" {
       name: "DexWithSplitter",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.DexWithSplitter__factory>;
+    getContractFactory(
+      name: "MindCoinSnapshot",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.MindCoinSnapshot__factory>;
     getContractFactory(
       name: "MindCoin",
       signerOrOptions?: ethers.Signer | FactoryOptions,

@@ -9,6 +9,7 @@ export type { MinimalForwarderUpgradeable } from "./MinimalForwarderUpgradeable"
 export type { PausableUpgradeable } from "./PausableUpgradeable";
 export type { ERC20Upgradeable } from "./ERC20Upgradeable";
 export type { ERC20BurnableUpgradeable } from "./ERC20BurnableUpgradeable";
+export type { ERC20SnapshotUpgradeable } from "./ERC20SnapshotUpgradeable";
 export type { IERC20MetadataUpgradeable } from "./IERC20MetadataUpgradeable";
 export type { IERC20Upgradeable } from "./IERC20Upgradeable";
 export type { TokenTimelockUpgradeable } from "./TokenTimelockUpgradeable";
@@ -25,6 +26,7 @@ export type { IERC165Upgradeable } from "./IERC165Upgradeable";
 export type { DexWithOracle } from "./DexWithOracle";
 export type { Dex } from "./Dex";
 export type { DexWithSplitter } from "./DexWithSplitter";
+export type { MindCoinSnapshot } from "./MindCoinSnapshot";
 export type { MindCoin } from "./MindCoin";
 export type { MindCoin2 } from "./MindCoin2";
 export type { MindNFT } from "./MindNFT";
@@ -43,6 +45,7 @@ export { MinimalForwarderUpgradeable__factory } from "./factories/MinimalForward
 export { PausableUpgradeable__factory } from "./factories/PausableUpgradeable__factory";
 export { ERC20Upgradeable__factory } from "./factories/ERC20Upgradeable__factory";
 export { ERC20BurnableUpgradeable__factory } from "./factories/ERC20BurnableUpgradeable__factory";
+export { ERC20SnapshotUpgradeable__factory } from "./factories/ERC20SnapshotUpgradeable__factory";
 export { IERC20MetadataUpgradeable__factory } from "./factories/IERC20MetadataUpgradeable__factory";
 export { IERC20Upgradeable__factory } from "./factories/IERC20Upgradeable__factory";
 export { TokenTimelockUpgradeable__factory } from "./factories/TokenTimelockUpgradeable__factory";
@@ -59,6 +62,7 @@ export { IERC165Upgradeable__factory } from "./factories/IERC165Upgradeable__fac
 export { DexWithOracle__factory } from "./factories/DexWithOracle__factory";
 export { Dex__factory } from "./factories/Dex__factory";
 export { DexWithSplitter__factory } from "./factories/DexWithSplitter__factory";
+export { MindCoinSnapshot__factory } from "./factories/MindCoinSnapshot__factory";
 export { MindCoin__factory } from "./factories/MindCoin__factory";
 export { MindCoin2__factory } from "./factories/MindCoin2__factory";
 export { MindNFT__factory } from "./factories/MindNFT__factory";

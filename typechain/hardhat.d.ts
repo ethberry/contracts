@@ -22,6 +22,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.OwnableUpgradeable__factory>;
     getContractFactory(
+      name: "PaymentSplitterUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.PaymentSplitterUpgradeable__factory>;
+    getContractFactory(
       name: "MinimalForwarderUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.MinimalForwarderUpgradeable__factory>;
@@ -94,7 +98,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.DexWithOracle__factory>;
     getContractFactory(name: "Dex", signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.Dex__factory>;
-    getContractFactory(name: "Dex", signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.Dex__factory>;
+    getContractFactory(
+      name: "DexWithSplitter",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.DexWithSplitter__factory>;
     getContractFactory(
       name: "MindCoin",
       signerOrOptions?: ethers.Signer | FactoryOptions,

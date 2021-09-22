@@ -32,22 +32,23 @@ contract Dex is PausableUpgradeable, OwnableUpgradeable {
         acceptedToken = IERC20Upgradeable(_acceptedToken);
     }
 
-    function buy() payable public {
-        uint256 amountToBuy = msg.value;
+    function buy() payable whenNotPaused public {
+        require(msg.value > 0, "You need to send some ether");
+        uint256 amountOfToken = msg.value;
         uint256 dexBalance = acceptedToken.balanceOf(address(this));
-        require(amountToBuy > 0, "You need to send some ether");
-        require(amountToBuy <= dexBalance, "Not enough tokens in the reserve");
-        acceptedToken.transfer(msg.sender, amountToBuy);
-        emit Bought(amountToBuy);
+        require(amountOfToken <= dexBalance, "Not enough tokens in the reserve");
+        acceptedToken.transfer(msg.sender, amountOfToken);
+        emit Bought(amountOfToken);
     }
 
-    function sell(uint256 amount) public {
-        require(amount > 0, "You need to sell at least some tokens");
+    function sell(uint256 amountOfToken) whenNotPaused public {
+        require(amountOfToken > 0, "You need to sell at least some tokens");
         uint256 allowance = acceptedToken.allowance(msg.sender, address(this));
-        require(allowance >= amount, "Check the token allowance");
-        acceptedToken.transferFrom(msg.sender, address(this), amount);
-        payable(msg.sender).transfer(amount);
-        emit Sold(amount);
+        require(allowance >= amountOfToken, "Check the token allowance");
+        uint256 amountOfWei = amountOfToken;
+        acceptedToken.transferFrom(msg.sender, address(this), amountOfToken);
+        payable(msg.sender).transfer(amountOfWei);
+        emit Sold(amountOfToken);
     }
 
     receive() external payable {
@@ -56,7 +57,7 @@ contract Dex is PausableUpgradeable, OwnableUpgradeable {
 
     function withdraw() public onlyOwner {
         uint256 amount = address(this).balance;
-        require(amount > 0, "Owner has not balance to withdraw");
+        require(amount > 0, "Owner has no balance to withdraw");
         payable(msg.sender).transfer(amount);
     }
 

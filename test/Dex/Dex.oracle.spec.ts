@@ -4,9 +4,9 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { DexWithOracle, MindCoin, PriceOracle } from "../../typechain";
-import { initialTokenAmount, initialTokenAmountInWei } from "../constants";
+import { amount, initialTokenAmount, initialTokenAmountInWei } from "../constants";
 
-describe("ERC20 DEX with Oracle", function () {
+describe("DEX with Oracle", function () {
   let token: ContractFactory;
   let oracle: ContractFactory;
   let market: ContractFactory;
@@ -15,8 +15,6 @@ describe("ERC20 DEX with Oracle", function () {
   let oracleInstance: PriceOracle;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
-
-  const amount = 100;
 
   beforeEach(async function () {
     token = await ethers.getContractFactory("MindCoin");

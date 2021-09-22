@@ -5,13 +5,10 @@ This project demonstrates a basic Hardhat use case. It comes with a sample contr
 Try running some of the following tasks:
 
 ```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
+hardhat accounts
+hardhat balance --account 0x
+
 node scripts/sample-script.ts
-npx hardhat help
 ```
 
 
@@ -20,3 +17,4 @@ https://docs.matic.network/docs/develop/ethereum-matic/mintable-assets/#contract
 https://github.com/wighawag/hardhat-deploy
 
 https://ethereum.stackexchange.com/questions/15641/how-does-a-contract-find-out-if-another-address-is-a-contract
+https://medium.com/coinmonks/hardhat-configuration-c96415d4fcba

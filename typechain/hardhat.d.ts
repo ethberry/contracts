@@ -46,6 +46,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC20Upgradeable__factory>;
     getContractFactory(
+      name: "TokenTimelockUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.TokenTimelockUpgradeable__factory>;
+    getContractFactory(
       name: "ERC721Upgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC721Upgradeable__factory>;
@@ -122,6 +126,10 @@ declare module "hardhat/types/runtime" {
       name: "StakingRewards",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.StakingRewards__factory>;
+    getContractFactory(
+      name: "MindTokenTimelock",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.MindTokenTimelock__factory>;
 
     // default types
     getContractFactory(name: string, signerOrOptions?: ethers.Signer | FactoryOptions): Promise<ethers.ContractFactory>;

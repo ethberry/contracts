@@ -13,6 +13,12 @@ config();
 export default {
   defaultNetwork: "hardhat",
   networks: {
+    // hardhat: {
+    //   gasPrice: 0,
+    // },
+    mainnet: {
+      url: process.env.RPC_URL_POLYGON,
+    },
     polygon: {
       url: process.env.RPC_URL_POLYGON,
     },

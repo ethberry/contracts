@@ -10,6 +10,7 @@ export type { ERC20Upgradeable } from "./ERC20Upgradeable";
 export type { ERC20BurnableUpgradeable } from "./ERC20BurnableUpgradeable";
 export type { IERC20MetadataUpgradeable } from "./IERC20MetadataUpgradeable";
 export type { IERC20Upgradeable } from "./IERC20Upgradeable";
+export type { TokenTimelockUpgradeable } from "./TokenTimelockUpgradeable";
 export type { ERC721Upgradeable } from "./ERC721Upgradeable";
 export type { ERC721BurnableUpgradeable } from "./ERC721BurnableUpgradeable";
 export type { ERC721EnumerableUpgradeable } from "./ERC721EnumerableUpgradeable";
@@ -30,6 +31,7 @@ export type { MarketplaceStorage } from "./MarketplaceStorage";
 export type { IPriceOracle } from "./IPriceOracle";
 export type { PriceOracle } from "./PriceOracle";
 export type { StakingRewards } from "./StakingRewards";
+export type { MindTokenTimelock } from "./MindTokenTimelock";
 
 export { AccessControlUpgradeable__factory } from "./factories/AccessControlUpgradeable__factory";
 export { IAccessControlUpgradeable__factory } from "./factories/IAccessControlUpgradeable__factory";
@@ -40,6 +42,7 @@ export { ERC20Upgradeable__factory } from "./factories/ERC20Upgradeable__factory
 export { ERC20BurnableUpgradeable__factory } from "./factories/ERC20BurnableUpgradeable__factory";
 export { IERC20MetadataUpgradeable__factory } from "./factories/IERC20MetadataUpgradeable__factory";
 export { IERC20Upgradeable__factory } from "./factories/IERC20Upgradeable__factory";
+export { TokenTimelockUpgradeable__factory } from "./factories/TokenTimelockUpgradeable__factory";
 export { ERC721Upgradeable__factory } from "./factories/ERC721Upgradeable__factory";
 export { ERC721BurnableUpgradeable__factory } from "./factories/ERC721BurnableUpgradeable__factory";
 export { ERC721EnumerableUpgradeable__factory } from "./factories/ERC721EnumerableUpgradeable__factory";
@@ -60,3 +63,4 @@ export { MarketplaceStorage__factory } from "./factories/MarketplaceStorage__fac
 export { IPriceOracle__factory } from "./factories/IPriceOracle__factory";
 export { PriceOracle__factory } from "./factories/PriceOracle__factory";
 export { StakingRewards__factory } from "./factories/StakingRewards__factory";
+export { MindTokenTimelock__factory } from "./factories/MindTokenTimelock__factory";

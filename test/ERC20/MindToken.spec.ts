@@ -59,11 +59,11 @@ describe("ERC20 basic", function () {
     it("Should fail if sender doesn’t have enough tokens", async function () {
       const initialOwnerBalance = await tokenInstance.balanceOf(owner.address);
 
-      await expect(tokenInstance.connect(addr1).transfer(owner.address, 1)).to.be.revertedWith(
-        "ERC20: transfer amount exceeds balance",
-      );
+      const tx = tokenInstance.connect(addr1).transfer(owner.address, 1);
+      await expect(tx).to.be.revertedWith("ERC20: transfer amount exceeds balance");
 
-      expect(await tokenInstance.balanceOf(owner.address)).to.equal(initialOwnerBalance);
+      const balance = await tokenInstance.balanceOf(owner.address);
+      expect(balance).to.equal(initialOwnerBalance);
     });
 
     it("Should update balances after transfers", async function () {

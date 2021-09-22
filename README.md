@@ -1,20 +1,51 @@
-# Basic Sample Hardhat Project
-
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
-
-Try running some of the following tasks:
-
+# Hardhat manual
+### Install Hardhat
 ```shell
-hardhat accounts
-hardhat balance --account 0x
-
-node scripts/sample-script.ts
+npm i
+```
+### Compile contracts
+```shell
+hardhat compile
+```
+### Run contracts tests
+```shell
+hardhat test
+```
+### Run Hardhat's test Node
+```shell
+hardhat test
 ```
 
+# Deploy to Test BlockChains
+Use appropriate deploy script for each contract
 
-https://docs.openzeppelin.com/contracts/4.x/wizard
-https://docs.matic.network/docs/develop/ethereum-matic/mintable-assets/#contract-to-be-deployed-on-ethereum
-https://github.com/wighawag/hardhat-deploy
+## HardHat Node
+```shell
+hardhat run --network localhost scripts/deploy_erc20.ts
+```
+## Besu Hyperledger
+1. Run besu network in docker
+(note: change absolute path to store local besu files)
+```shell
+docker run -p 8546:8546 --mount type=bind, \
+source=<absolute local path>,target=/var/lib/besu \ 
+hyperledger/besu:latest --miner-enabled --miner-coinbase \ 
+fe3b557e8fb62b89f4916b721be55ceb828dbd73 --rpc-ws-enabled --network=dev \
+--data-path=/var/lib/besu
+```
+2. Deploy contract to Besu node
+```shell
+hardhat run --network besu scripts/deploy_erc20.ts
+```
 
-https://ethereum.stackexchange.com/questions/15641/how-does-a-contract-find-out-if-another-address-is-a-contract
-https://medium.com/coinmonks/hardhat-configuration-c96415d4fcba
+## Ropsten test network
+1. Get a faucet ETH :
+ - Visit [https://faucet.ropsten.be/](https://faucet.ropsten.be/)
+ - Enter your metamask wallet address and wait for ETH airdrop
+2. Get an Alchemy API key (App's dashboard)
+3. Get yor Metamask private key
+4. Set both keys in hardhat.config.ts (as ALCHEMY_API_KEY and ROPSTEN_PRIVATE_KEY)
+5. Deploy contract to Ropsten
+```shell
+hardhat run --network ropsten scripts/deploy_erc20.ts
+```

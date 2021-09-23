@@ -10,9 +10,17 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "AccessControlEnumerableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.AccessControlEnumerableUpgradeable__factory>;
+    getContractFactory(
       name: "AccessControlUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.AccessControlUpgradeable__factory>;
+    getContractFactory(
+      name: "IAccessControlEnumerableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.IAccessControlEnumerableUpgradeable__factory>;
     getContractFactory(
       name: "IAccessControlUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
@@ -42,6 +50,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC20BurnableUpgradeable__factory>;
     getContractFactory(
+      name: "ERC20CappedUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.ERC20CappedUpgradeable__factory>;
+    getContractFactory(
+      name: "ERC20PausableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.ERC20PausableUpgradeable__factory>;
+    getContractFactory(
       name: "ERC20SnapshotUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC20SnapshotUpgradeable__factory>;
@@ -53,6 +69,14 @@ declare module "hardhat/types/runtime" {
       name: "IERC20Upgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC20Upgradeable__factory>;
+    getContractFactory(
+      name: "ERC20PresetFixedSupplyUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.ERC20PresetFixedSupplyUpgradeable__factory>;
+    getContractFactory(
+      name: "ERC20PresetMinterPauserUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.ERC20PresetMinterPauserUpgradeable__factory>;
     getContractFactory(
       name: "TokenTimelockUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
@@ -69,6 +93,10 @@ declare module "hardhat/types/runtime" {
       name: "ERC721EnumerableUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC721EnumerableUpgradeable__factory>;
+    getContractFactory(
+      name: "ERC721PausableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.ERC721PausableUpgradeable__factory>;
     getContractFactory(
       name: "ERC721URIStorageUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
@@ -90,6 +118,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC721Upgradeable__factory>;
     getContractFactory(
+      name: "ERC721PresetMinterPauserAutoIdUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.ERC721PresetMinterPauserAutoIdUpgradeable__factory>;
+    getContractFactory(
       name: "ERC165Upgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC165Upgradeable__factory>;
@@ -110,10 +142,6 @@ declare module "hardhat/types/runtime" {
       name: "Marketplace",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.Marketplace__factory>;
-    getContractFactory(
-      name: "MarketplaceStorage",
-      signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.MarketplaceStorage__factory>;
     getContractFactory(
       name: "IPriceOracle",
       signerOrOptions?: ethers.Signer | FactoryOptions,

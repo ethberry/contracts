@@ -29,10 +29,13 @@ interface MindNFTInterface extends ethers.utils.Interface {
     "burn(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
+    "getRoleMember(bytes32,uint256)": FunctionFragment;
+    "getRoleMemberCount(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(string,string)": FunctionFragment;
+    "initialize(string,string,string)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
+    "mint(address)": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "pause()": FunctionFragment;
@@ -60,10 +63,13 @@ interface MindNFTInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "getApproved", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "getRoleAdmin", values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: "getRoleMember", values: [BytesLike, BigNumberish]): string;
+  encodeFunctionData(functionFragment: "getRoleMemberCount", values: [BytesLike]): string;
   encodeFunctionData(functionFragment: "grantRole", values: [BytesLike, string]): string;
   encodeFunctionData(functionFragment: "hasRole", values: [BytesLike, string]): string;
-  encodeFunctionData(functionFragment: "initialize", values: [string, string]): string;
+  encodeFunctionData(functionFragment: "initialize", values: [string, string, string]): string;
   encodeFunctionData(functionFragment: "isApprovedForAll", values: [string, string]): string;
+  encodeFunctionData(functionFragment: "mint", values: [string]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "ownerOf", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
@@ -90,10 +96,13 @@ interface MindNFTInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getApproved", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getRoleAdmin", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getRoleMember", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getRoleMemberCount", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isApprovedForAll", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
@@ -234,6 +243,10 @@ export class MindNFT extends BaseContract {
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
+    getRoleMember(role: BytesLike, index: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+
+    getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<[BigNumber]>;
+
     grantRole(
       role: BytesLike,
       account: string,
@@ -245,10 +258,13 @@ export class MindNFT extends BaseContract {
     initialize(
       name: string,
       symbol: string,
+      baseTokenURI: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
     isApprovedForAll(owner: string, operator: string, overrides?: CallOverrides): Promise<[boolean]>;
+
+    mint(to: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
@@ -338,6 +354,10 @@ export class MindNFT extends BaseContract {
 
   getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
+  getRoleMember(role: BytesLike, index: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
   grantRole(
     role: BytesLike,
     account: string,
@@ -349,10 +369,13 @@ export class MindNFT extends BaseContract {
   initialize(
     name: string,
     symbol: string,
+    baseTokenURI: string,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
   isApprovedForAll(owner: string, operator: string, overrides?: CallOverrides): Promise<boolean>;
+
+  mint(to: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
   name(overrides?: CallOverrides): Promise<string>;
 
@@ -435,13 +458,19 @@ export class MindNFT extends BaseContract {
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
+    getRoleMember(role: BytesLike, index: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
     grantRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<void>;
 
     hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<boolean>;
 
-    initialize(name: string, symbol: string, overrides?: CallOverrides): Promise<void>;
+    initialize(name: string, symbol: string, baseTokenURI: string, overrides?: CallOverrides): Promise<void>;
 
     isApprovedForAll(owner: string, operator: string, overrides?: CallOverrides): Promise<boolean>;
+
+    mint(to: string, overrides?: CallOverrides): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -594,6 +623,10 @@ export class MindNFT extends BaseContract {
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
+    getRoleMember(role: BytesLike, index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
     grantRole(
       role: BytesLike,
       account: string,
@@ -605,10 +638,13 @@ export class MindNFT extends BaseContract {
     initialize(
       name: string,
       symbol: string,
+      baseTokenURI: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
     isApprovedForAll(owner: string, operator: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    mint(to: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -699,6 +735,10 @@ export class MindNFT extends BaseContract {
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    getRoleMember(role: BytesLike, index: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     grantRole(
       role: BytesLike,
       account: string,
@@ -710,10 +750,13 @@ export class MindNFT extends BaseContract {
     initialize(
       name: string,
       symbol: string,
+      baseTokenURI: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
     isApprovedForAll(owner: string, operator: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    mint(to: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

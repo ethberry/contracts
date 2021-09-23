@@ -16,3 +16,9 @@ https://medium.com/coinmonks/hardhat-configuration-c96415d4fcba
 meta transactions explained
 https://soliditydeveloper.com/meta-transactions
 https://soliditydeveloper.com/openzeppelin-contracts-v4
+
+Where to get InterfaceId
+https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified
+
+Warnings in ERC721PresetMinterPauserAutoIdUpgradeable and ERC20PresetFixedSupplyUpgradeable
+https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/issues/89

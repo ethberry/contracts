@@ -12,7 +12,6 @@ import {
   BaseContract,
   ContractTransaction,
   Overrides,
-  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -26,9 +25,7 @@ interface MarketplaceInterface extends ethers.utils.Interface {
     "acceptedToken()": FunctionFragment;
     "cancelOrder(address,uint256)": FunctionFragment;
     "createOrder(address,uint256,uint256,uint256)": FunctionFragment;
-    "execute(tuple,bytes)": FunctionFragment;
     "executeOrder(address,uint256,uint256)": FunctionFragment;
-    "getNonce(address)": FunctionFragment;
     "initialize(address,uint256)": FunctionFragment;
     "orderByAssetId(address,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
@@ -39,7 +36,6 @@ interface MarketplaceInterface extends ethers.utils.Interface {
     "setOwnerCutPerMillion(uint256)": FunctionFragment;
     "setPublicationFee(uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "verify(tuple,bytes)": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "ERC721_Interface", values?: undefined): string;
@@ -49,22 +45,7 @@ interface MarketplaceInterface extends ethers.utils.Interface {
     functionFragment: "createOrder",
     values: [string, BigNumberish, BigNumberish, BigNumberish],
   ): string;
-  encodeFunctionData(
-    functionFragment: "execute",
-    values: [
-      {
-        from: string;
-        to: string;
-        value: BigNumberish;
-        gas: BigNumberish;
-        nonce: BigNumberish;
-        data: BytesLike;
-      },
-      BytesLike,
-    ],
-  ): string;
   encodeFunctionData(functionFragment: "executeOrder", values: [string, BigNumberish, BigNumberish]): string;
-  encodeFunctionData(functionFragment: "getNonce", values: [string]): string;
   encodeFunctionData(functionFragment: "initialize", values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "orderByAssetId", values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -75,28 +56,12 @@ interface MarketplaceInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "setOwnerCutPerMillion", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "setPublicationFee", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "transferOwnership", values: [string]): string;
-  encodeFunctionData(
-    functionFragment: "verify",
-    values: [
-      {
-        from: string;
-        to: string;
-        value: BigNumberish;
-        gas: BigNumberish;
-        nonce: BigNumberish;
-        data: BytesLike;
-      },
-      BytesLike,
-    ],
-  ): string;
 
   decodeFunctionResult(functionFragment: "ERC721_Interface", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "acceptedToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "cancelOrder", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "createOrder", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "execute", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "executeOrder", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getNonce", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "orderByAssetId", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
@@ -107,7 +72,6 @@ interface MarketplaceInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "setOwnerCutPerMillion", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setPublicationFee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "transferOwnership", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "verify", data: BytesLike): Result;
 
   events: {
     "ChangedOwnerCutPerMillion(uint256)": EventFragment;
@@ -233,27 +197,12 @@ export class Marketplace extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
-    execute(
-      req: {
-        from: string;
-        to: string;
-        value: BigNumberish;
-        gas: BigNumberish;
-        nonce: BigNumberish;
-        data: BytesLike;
-      },
-      signature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>;
-
     executeOrder(
       nftAddress: string,
       assetId: BigNumberish,
       price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
-
-    getNonce(from: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     initialize(
       _acceptedToken: string,
@@ -299,19 +248,6 @@ export class Marketplace extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
-
-    verify(
-      req: {
-        from: string;
-        to: string;
-        value: BigNumberish;
-        gas: BigNumberish;
-        nonce: BigNumberish;
-        data: BytesLike;
-      },
-      signature: BytesLike,
-      overrides?: CallOverrides,
-    ): Promise<[boolean]>;
   };
 
   ERC721_Interface(overrides?: CallOverrides): Promise<string>;
@@ -332,27 +268,12 @@ export class Marketplace extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
-  execute(
-    req: {
-      from: string;
-      to: string;
-      value: BigNumberish;
-      gas: BigNumberish;
-      nonce: BigNumberish;
-      data: BytesLike;
-    },
-    signature: BytesLike,
-    overrides?: PayableOverrides & { from?: string | Promise<string> },
-  ): Promise<ContractTransaction>;
-
   executeOrder(
     nftAddress: string,
     assetId: BigNumberish,
     price: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
-
-  getNonce(from: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   initialize(
     _acceptedToken: string,
@@ -399,19 +320,6 @@ export class Marketplace extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
-  verify(
-    req: {
-      from: string;
-      to: string;
-      value: BigNumberish;
-      gas: BigNumberish;
-      nonce: BigNumberish;
-      data: BytesLike;
-    },
-    signature: BytesLike,
-    overrides?: CallOverrides,
-  ): Promise<boolean>;
-
   callStatic: {
     ERC721_Interface(overrides?: CallOverrides): Promise<string>;
 
@@ -427,27 +335,12 @@ export class Marketplace extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<void>;
 
-    execute(
-      req: {
-        from: string;
-        to: string;
-        value: BigNumberish;
-        gas: BigNumberish;
-        nonce: BigNumberish;
-        data: BytesLike;
-      },
-      signature: BytesLike,
-      overrides?: CallOverrides,
-    ): Promise<[boolean, string]>;
-
     executeOrder(
       nftAddress: string,
       assetId: BigNumberish,
       price: BigNumberish,
       overrides?: CallOverrides,
     ): Promise<void>;
-
-    getNonce(from: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(_acceptedToken: string, _ownerCutPerMillion: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -480,19 +373,6 @@ export class Marketplace extends BaseContract {
     setPublicationFee(_publicationFee: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     transferOwnership(newOwner: string, overrides?: CallOverrides): Promise<void>;
-
-    verify(
-      req: {
-        from: string;
-        to: string;
-        value: BigNumberish;
-        gas: BigNumberish;
-        nonce: BigNumberish;
-        data: BytesLike;
-      },
-      signature: BytesLike,
-      overrides?: CallOverrides,
-    ): Promise<boolean>;
   };
 
   filters: {
@@ -644,27 +524,12 @@ export class Marketplace extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
-    execute(
-      req: {
-        from: string;
-        to: string;
-        value: BigNumberish;
-        gas: BigNumberish;
-        nonce: BigNumberish;
-        data: BytesLike;
-      },
-      signature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> },
-    ): Promise<BigNumber>;
-
     executeOrder(
       nftAddress: string,
       assetId: BigNumberish,
       price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
-
-    getNonce(from: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
       _acceptedToken: string,
@@ -698,19 +563,6 @@ export class Marketplace extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
-
-    verify(
-      req: {
-        from: string;
-        to: string;
-        value: BigNumberish;
-        gas: BigNumberish;
-        nonce: BigNumberish;
-        data: BytesLike;
-      },
-      signature: BytesLike,
-      overrides?: CallOverrides,
-    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -732,27 +584,12 @@ export class Marketplace extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
-    execute(
-      req: {
-        from: string;
-        to: string;
-        value: BigNumberish;
-        gas: BigNumberish;
-        nonce: BigNumberish;
-        data: BytesLike;
-      },
-      signature: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> },
-    ): Promise<PopulatedTransaction>;
-
     executeOrder(
       nftAddress: string,
       assetId: BigNumberish,
       price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
-
-    getNonce(from: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     initialize(
       _acceptedToken: string,
@@ -785,19 +622,6 @@ export class Marketplace extends BaseContract {
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<PopulatedTransaction>;
-
-    verify(
-      req: {
-        from: string;
-        to: string;
-        value: BigNumberish;
-        gas: BigNumberish;
-        nonce: BigNumberish;
-        data: BytesLike;
-      },
-      signature: BytesLike,
-      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
   };
 }

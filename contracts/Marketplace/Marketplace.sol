@@ -1,19 +1,70 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.2;
 
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165CheckerUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/metatx/MinimalForwarderUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 
-import "./MarketplaceStorage.sol";
 
-contract Marketplace is Initializable, OwnableUpgradeable, PausableUpgradeable, MinimalForwarderUpgradeable, MarketplaceStorage {
+contract Marketplace is Initializable, OwnableUpgradeable, PausableUpgradeable {
     using SafeMathUpgradeable for uint256;
     using AddressUpgradeable for address;
+    using ERC165CheckerUpgradeable for address;
+
+    IERC20Upgradeable public acceptedToken;
+
+    struct Order {
+        // Order ID
+        bytes32 id;
+        // Owner of the NFT
+        address seller;
+        // NFT registry address
+        address nftAddress;
+        // Price (in wei) for the published item
+        uint256 price;
+        // Time when this sale ends
+        uint256 expiresAt;
+    }
+
+    mapping (address => mapping(uint256 => Order)) public orderByAssetId;
+
+    bytes4 public constant ERC721_Interface = bytes4(0x80ac58cd);
+
+    uint256 public ownerCutPerMillion;
+    uint256 public publicationFeeInWei;
+
+    event OrderCreated(
+        bytes32 id,
+        uint256 indexed assetId,
+        address indexed seller,
+        address nftAddress,
+        uint256 priceInWei,
+        uint256 expiresAt
+    );
+    event OrderSuccessful(
+        bytes32 id,
+        uint256 indexed assetId,
+        address indexed seller,
+        address nftAddress,
+        uint256 totalPrice,
+        address indexed buyer
+    );
+    event OrderCancelled(
+        bytes32 id,
+        uint256 indexed assetId,
+        address indexed seller,
+        address nftAddress
+    );
+
+    event ChangedPublicationFee(uint256 publicationFee);
+    event ChangedOwnerCutPerMillion(uint256 ownerCutPerMillion);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() initializer {}
@@ -29,7 +80,6 @@ contract Marketplace is Initializable, OwnableUpgradeable, PausableUpgradeable, 
     ) initializer public {
         __Pausable_init();
         __Ownable_init();
-        __MinimalForwarder_init();
 
         // Fee init
         setOwnerCutPerMillion(_ownerCutPerMillion);
@@ -284,9 +334,8 @@ contract Marketplace is Initializable, OwnableUpgradeable, PausableUpgradeable, 
     function _requireERC721(address nftAddress) internal view {
         require(nftAddress.isContract(), "The NFT Address should be a contract");
 
-        IERC721Upgradeable nftRegistry = IERC721Upgradeable(nftAddress);
         require(
-            nftRegistry.supportsInterface(ERC721_Interface),
+            nftAddress.supportsInterface(ERC721_Interface),
             "The NFT contract has an invalid ERC721 implementation"
         );
     }

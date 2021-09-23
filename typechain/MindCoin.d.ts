@@ -31,13 +31,16 @@ interface MindCoinInterface extends ethers.utils.Interface {
     "balanceOfAt(address,uint256)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
     "burnFrom(address,uint256)": FunctionFragment;
+    "cap()": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
+    "getRoleMember(bytes32,uint256)": FunctionFragment;
+    "getRoleMemberCount(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "initialize(string,string,uint256)": FunctionFragment;
+    "initialize(string,string)": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "pause()": FunctionFragment;
@@ -64,13 +67,16 @@ interface MindCoinInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "balanceOfAt", values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "burnFrom", values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: "cap", values?: undefined): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(functionFragment: "decreaseAllowance", values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "getRoleAdmin", values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: "getRoleMember", values: [BytesLike, BigNumberish]): string;
+  encodeFunctionData(functionFragment: "getRoleMemberCount", values: [BytesLike]): string;
   encodeFunctionData(functionFragment: "grantRole", values: [BytesLike, string]): string;
   encodeFunctionData(functionFragment: "hasRole", values: [BytesLike, string]): string;
   encodeFunctionData(functionFragment: "increaseAllowance", values: [string, BigNumberish]): string;
-  encodeFunctionData(functionFragment: "initialize", values: [string, string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: "initialize", values: [string, string]): string;
   encodeFunctionData(functionFragment: "mint", values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
@@ -96,9 +102,12 @@ interface MindCoinInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "balanceOfAt", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burnFrom", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "cap", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decreaseAllowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getRoleAdmin", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getRoleMember", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getRoleMemberCount", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "increaseAllowance", data: BytesLike): Result;
@@ -242,6 +251,8 @@ export class MindCoin extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
+    cap(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
     decreaseAllowance(
@@ -251,6 +262,10 @@ export class MindCoin extends BaseContract {
     ): Promise<ContractTransaction>;
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
+
+    getRoleMember(role: BytesLike, index: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+
+    getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     grantRole(
       role: BytesLike,
@@ -266,10 +281,17 @@ export class MindCoin extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
-    initialize(
+    "initialize(string,string)"(
       name: string,
       symbol: string,
-      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<ContractTransaction>;
+
+    "initialize(string,string,uint256,uint256)"(
+      name: string,
+      symbol: string,
+      initialSupply: BigNumberish,
+      cap: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
@@ -351,6 +373,8 @@ export class MindCoin extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
+  cap(overrides?: CallOverrides): Promise<BigNumber>;
+
   decimals(overrides?: CallOverrides): Promise<number>;
 
   decreaseAllowance(
@@ -360,6 +384,10 @@ export class MindCoin extends BaseContract {
   ): Promise<ContractTransaction>;
 
   getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
+
+  getRoleMember(role: BytesLike, index: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
   grantRole(
     role: BytesLike,
@@ -375,10 +403,17 @@ export class MindCoin extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
-  initialize(
+  "initialize(string,string)"(
     name: string,
     symbol: string,
-    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> },
+  ): Promise<ContractTransaction>;
+
+  "initialize(string,string,uint256,uint256)"(
+    name: string,
+    symbol: string,
+    initialSupply: BigNumberish,
+    cap: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
@@ -452,11 +487,17 @@ export class MindCoin extends BaseContract {
 
     burnFrom(account: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
+    cap(overrides?: CallOverrides): Promise<BigNumber>;
+
     decimals(overrides?: CallOverrides): Promise<number>;
 
     decreaseAllowance(spender: string, subtractedValue: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
+
+    getRoleMember(role: BytesLike, index: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     grantRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<void>;
 
@@ -464,7 +505,15 @@ export class MindCoin extends BaseContract {
 
     increaseAllowance(spender: string, addedValue: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
-    initialize(name: string, symbol: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    "initialize(string,string)"(name: string, symbol: string, overrides?: CallOverrides): Promise<void>;
+
+    "initialize(string,string,uint256,uint256)"(
+      name: string,
+      symbol: string,
+      initialSupply: BigNumberish,
+      cap: BigNumberish,
+      overrides?: CallOverrides,
+    ): Promise<void>;
 
     mint(to: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -598,6 +647,8 @@ export class MindCoin extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
+    cap(overrides?: CallOverrides): Promise<BigNumber>;
+
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
     decreaseAllowance(
@@ -607,6 +658,10 @@ export class MindCoin extends BaseContract {
     ): Promise<BigNumber>;
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    getRoleMember(role: BytesLike, index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     grantRole(
       role: BytesLike,
@@ -622,10 +677,17 @@ export class MindCoin extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
-    initialize(
+    "initialize(string,string)"(
       name: string,
       symbol: string,
-      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<BigNumber>;
+
+    "initialize(string,string,uint256,uint256)"(
+      name: string,
+      symbol: string,
+      initialSupply: BigNumberish,
+      cap: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
@@ -711,6 +773,8 @@ export class MindCoin extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
+    cap(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     decreaseAllowance(
@@ -720,6 +784,10 @@ export class MindCoin extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getRoleMember(role: BytesLike, index: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     grantRole(
       role: BytesLike,
@@ -735,10 +803,17 @@ export class MindCoin extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
-    initialize(
+    "initialize(string,string)"(
       name: string,
       symbol: string,
-      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<PopulatedTransaction>;
+
+    "initialize(string,string,uint256,uint256)"(
+      name: string,
+      symbol: string,
+      initialSupply: BigNumberish,
+      cap: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 

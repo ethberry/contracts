@@ -8,14 +8,13 @@ import {
   amount,
   decimals,
   DEFAULT_ADMIN_ROLE,
-  initialTokenAmount,
   initialTokenAmountInWei,
   MINTER_ROLE,
   PAUSER_ROLE,
   SNAPSHOT_ROLE,
 } from "../constants";
 
-describe("ERC20 snapshot", function () {
+describe("ERC20", function () {
   let token: ContractFactory;
   let tokenInstance: MindCoin;
   let owner: SignerWithAddress;
@@ -26,11 +25,11 @@ describe("ERC20 snapshot", function () {
     token = await ethers.getContractFactory("MindCoin");
     [owner, addr1, addr2] = await ethers.getSigners();
 
-    tokenInstance = (await upgrades.deployProxy(token, [
-      "memoryOS COIN token",
-      "MIND",
-      initialTokenAmount,
-    ])) as MindCoin;
+    tokenInstance = (await upgrades.deployProxy(
+      token,
+      ["memoryOS COIN token", "MIND", initialTokenAmountInWei, initialTokenAmountInWei.mul(5)],
+      { initializer: "initialize(string name, string symbol, uint256 initialSupply, uint256 cap)" },
+    )) as MindCoin;
   });
 
   describe("Deployment", function () {
@@ -79,6 +78,19 @@ describe("ERC20 snapshot", function () {
 
       const totalSupply = await tokenInstance.totalSupplyAt("1");
       expect(totalSupply).to.equal(decimals.mul(amount));
+    });
+  });
+
+  describe("Mint", function () {
+    it("should fail for wrong role", async function () {
+      const tx = tokenInstance.connect(addr1).mint(addr1.address, amount);
+      await expect(tx).to.be.revertedWith("ERC20PresetMinterPauser: must have minter role to mint");
+    });
+
+    it("should mint more tokens", async function () {
+      await tokenInstance.mint(owner.address, amount);
+      const balance = await tokenInstance.balanceOf(owner.address);
+      expect(balance).to.equal(initialTokenAmountInWei.add(amount));
     });
   });
 });

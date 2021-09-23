@@ -22,3 +22,6 @@ https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified
 
 Warnings in ERC721PresetMinterPauserAutoIdUpgradeable and ERC20PresetFixedSupplyUpgradeable
 https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/issues/89
+
+OpenSea and Upgradable contracts
+https://forum.openzeppelin.com/t/upgradeable-contracts-can-not-be-edited-on-opensea-platform/14725

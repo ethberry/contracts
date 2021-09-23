@@ -139,6 +139,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.MindNFT__factory>;
     getContractFactory(
+      name: "ProxyRegistry",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.ProxyRegistry__factory>;
+    getContractFactory(
       name: "Marketplace",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.Marketplace__factory>;

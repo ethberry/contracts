@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { MindNFT } from "../../typechain";
-import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../constants";
+import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../constants";
 
 describe("ERC721", function () {
   let nft: ContractFactory;
@@ -16,7 +16,7 @@ describe("ERC721", function () {
     nft = await ethers.getContractFactory("MindNFT");
     [owner, addr1] = await ethers.getSigners();
 
-    nftInstance = (await upgrades.deployProxy(nft, ["memoryOS NFT token", "MIND", "http://localhost/"])) as MindNFT;
+    nftInstance = (await upgrades.deployProxy(nft, ["memoryOS NFT token", "MIND", baseTokenURI])) as MindNFT;
   });
 
   describe("Deployment", function () {
@@ -58,6 +58,16 @@ describe("ERC721", function () {
 
       const item = await nftInstance.tokenOfOwnerByIndex(addr1.address, 0);
       expect(item).to.equal(0); // 0 is nft index
+    });
+  });
+
+  describe("baseTokenURI (OpenSea)", function () {
+    it("should return base token uri", async function () {
+      await nftInstance.mint(owner.address);
+      await nftInstance.transferFrom(owner.address, addr1.address, 0);
+
+      const uri = await nftInstance.baseTokenURI();
+      expect(uri).to.equal(baseTokenURI);
     });
   });
 });

@@ -90,9 +90,9 @@ export class MindTokenTimelock extends BaseContract {
     beneficiary(overrides?: CallOverrides): Promise<[string]>;
 
     initialize(
-      token_: string,
-      beneficiary_: string,
-      releaseTime_: BigNumberish,
+      _token: string,
+      _beneficiary: string,
+      _releaseTime: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
@@ -106,9 +106,9 @@ export class MindTokenTimelock extends BaseContract {
   beneficiary(overrides?: CallOverrides): Promise<string>;
 
   initialize(
-    token_: string,
-    beneficiary_: string,
-    releaseTime_: BigNumberish,
+    _token: string,
+    _beneficiary: string,
+    _releaseTime: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
@@ -122,9 +122,9 @@ export class MindTokenTimelock extends BaseContract {
     beneficiary(overrides?: CallOverrides): Promise<string>;
 
     initialize(
-      token_: string,
-      beneficiary_: string,
-      releaseTime_: BigNumberish,
+      _token: string,
+      _beneficiary: string,
+      _releaseTime: BigNumberish,
       overrides?: CallOverrides,
     ): Promise<void>;
 
@@ -141,9 +141,9 @@ export class MindTokenTimelock extends BaseContract {
     beneficiary(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
-      token_: string,
-      beneficiary_: string,
-      releaseTime_: BigNumberish,
+      _token: string,
+      _beneficiary: string,
+      _releaseTime: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
@@ -158,9 +158,9 @@ export class MindTokenTimelock extends BaseContract {
     beneficiary(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     initialize(
-      token_: string,
-      beneficiary_: string,
-      releaseTime_: BigNumberish,
+      _token: string,
+      _beneficiary: string,
+      _releaseTime: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 

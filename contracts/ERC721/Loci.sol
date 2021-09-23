@@ -8,7 +8,7 @@ import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
 import "./ProxyRegistry.sol";
 
-contract MindNFT is Initializable, ERC721PresetMinterPauserAutoIdUpgradeable, ERC721URIStorageUpgradeable {
+contract Loci is Initializable, ERC721PresetMinterPauserAutoIdUpgradeable, ERC721URIStorageUpgradeable {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using AddressUpgradeable for address;
 
@@ -20,12 +20,12 @@ contract MindNFT is Initializable, ERC721PresetMinterPauserAutoIdUpgradeable, ER
     constructor() initializer {}
 
     function initialize(
-        string memory name,
-        string memory symbol,
-        string memory baseURI,
+        string memory _name,
+        string memory _symbol,
+        string memory _baseURI,
         address _proxyRegistry
     ) initializer public {
-        __ERC721PresetMinterPauserAutoId_init(name, symbol, baseURI);
+        __ERC721PresetMinterPauserAutoId_init(_name, _symbol, _baseURI);
         __ERC721URIStorage_init();
 
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());

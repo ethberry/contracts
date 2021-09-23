@@ -9,10 +9,10 @@ contract MindTokenTimelock is Initializable, TokenTimelockUpgradeable {
     constructor() initializer {}
 
     function initialize(
-        IERC20Upgradeable token_,
-        address beneficiary_,
-        uint256 releaseTime_
+        IERC20Upgradeable _token,
+        address _beneficiary,
+        uint256 _releaseTime
     ) initializer public {
-        __TokenTimelock_init(token_, beneficiary_, releaseTime_);
+        __TokenTimelock_init(_token, _beneficiary, _releaseTime);
     }
 }

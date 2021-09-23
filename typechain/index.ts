@@ -33,7 +33,7 @@ export type { ERC165Upgradeable } from "./ERC165Upgradeable";
 export type { IERC165Upgradeable } from "./IERC165Upgradeable";
 export type { Dex } from "./Dex";
 export type { MindCoin } from "./MindCoin";
-export type { MindNFT } from "./MindNFT";
+export type { Loci } from "./Loci";
 export type { ProxyRegistry } from "./ProxyRegistry";
 export type { Marketplace } from "./Marketplace";
 export type { IPriceOracle } from "./IPriceOracle";
@@ -73,7 +73,7 @@ export { ERC165Upgradeable__factory } from "./factories/ERC165Upgradeable__facto
 export { IERC165Upgradeable__factory } from "./factories/IERC165Upgradeable__factory";
 export { Dex__factory } from "./factories/Dex__factory";
 export { MindCoin__factory } from "./factories/MindCoin__factory";
-export { MindNFT__factory } from "./factories/MindNFT__factory";
+export { Loci__factory } from "./factories/Loci__factory";
 export { ProxyRegistry__factory } from "./factories/ProxyRegistry__factory";
 export { Marketplace__factory } from "./factories/Marketplace__factory";
 export { IPriceOracle__factory } from "./factories/IPriceOracle__factory";

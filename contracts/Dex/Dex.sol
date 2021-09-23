@@ -30,11 +30,11 @@ contract Dex is Initializable, PausableUpgradeable, PaymentSplitterUpgradeable {
     function initialize(
         address _acceptedToken,
         address _priceOracle,
-        address[] memory payees,
-        uint256[] memory shares_
+        address[] memory _payees,
+        uint256[] memory _shares
     ) initializer public {
         __Pausable_init();
-        __PaymentSplitter_init(payees, shares_);
+        __PaymentSplitter_init(_payees, _shares);
 
         require(_acceptedToken.isContract(), "The accepted token address must be a deployed contract");
         acceptedToken = IERC20Upgradeable(_acceptedToken);

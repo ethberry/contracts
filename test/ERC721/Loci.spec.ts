@@ -3,19 +3,19 @@ import { ethers, upgrades } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { MindNFT, ProxyRegistry } from "../../typechain";
+import { Loci, ProxyRegistry } from "../../typechain";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../constants";
 
 describe("ERC721", function () {
   let nft: ContractFactory;
   let proxy: ContractFactory;
-  let nftInstance: MindNFT;
+  let nftInstance: Loci;
   let proxyInstance: ProxyRegistry;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
 
   beforeEach(async function () {
-    nft = await ethers.getContractFactory("MindNFT");
+    nft = await ethers.getContractFactory("Loci");
     proxy = await ethers.getContractFactory("ProxyRegistry");
     [owner, addr1] = await ethers.getSigners();
 
@@ -24,7 +24,7 @@ describe("ERC721", function () {
       nft,
       ["memoryOS NFT token", "MIND", baseTokenURI, proxyInstance.address],
       { initializer: "initialize(string name, string symbol, string baseURI, address proxyRegistry)" },
-    )) as MindNFT;
+    )) as Loci;
   });
 
   describe("Deployment", function () {

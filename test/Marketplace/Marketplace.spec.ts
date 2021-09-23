@@ -3,7 +3,7 @@ import { ethers, upgrades } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Marketplace, MindCoin, MindNFT, ProxyRegistry } from "../../typechain";
+import { Marketplace, MindCoin, Loci, ProxyRegistry } from "../../typechain";
 import { baseTokenURI, initialTokenAmountInWei } from "../constants";
 
 describe("Marketplace", function () {
@@ -13,13 +13,13 @@ describe("Marketplace", function () {
   let proxy: ContractFactory;
   let marketInstance: Marketplace;
   let coinInstance: MindCoin;
-  let nftInstance: MindNFT;
+  let nftInstance: Loci;
   let proxyInstance: ProxyRegistry;
   let owner: SignerWithAddress;
 
   beforeEach(async function () {
     coin = await ethers.getContractFactory("MindCoin");
-    nft = await ethers.getContractFactory("MindNFT");
+    nft = await ethers.getContractFactory("Loci");
     proxy = await ethers.getContractFactory("ProxyRegistry");
     market = await ethers.getContractFactory("Marketplace");
     [owner] = await ethers.getSigners();
@@ -35,7 +35,7 @@ describe("Marketplace", function () {
       nft,
       ["memoryOS NFT token", "MIND", baseTokenURI, proxyInstance.address],
       { initializer: "initialize(string name, string symbol, string baseURI, address proxyRegistry)" },
-    )) as MindNFT;
+    )) as Loci;
   });
 
   describe("Deployment", function () {

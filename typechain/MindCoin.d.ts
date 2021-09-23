@@ -288,10 +288,10 @@ export class MindCoin extends BaseContract {
     ): Promise<ContractTransaction>;
 
     "initialize(string,string,uint256,uint256)"(
-      name: string,
-      symbol: string,
-      initialSupply: BigNumberish,
-      cap: BigNumberish,
+      _name: string,
+      _symbol: string,
+      _initialSupply: BigNumberish,
+      _cap: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
@@ -410,10 +410,10 @@ export class MindCoin extends BaseContract {
   ): Promise<ContractTransaction>;
 
   "initialize(string,string,uint256,uint256)"(
-    name: string,
-    symbol: string,
-    initialSupply: BigNumberish,
-    cap: BigNumberish,
+    _name: string,
+    _symbol: string,
+    _initialSupply: BigNumberish,
+    _cap: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
@@ -508,10 +508,10 @@ export class MindCoin extends BaseContract {
     "initialize(string,string)"(name: string, symbol: string, overrides?: CallOverrides): Promise<void>;
 
     "initialize(string,string,uint256,uint256)"(
-      name: string,
-      symbol: string,
-      initialSupply: BigNumberish,
-      cap: BigNumberish,
+      _name: string,
+      _symbol: string,
+      _initialSupply: BigNumberish,
+      _cap: BigNumberish,
       overrides?: CallOverrides,
     ): Promise<void>;
 
@@ -684,10 +684,10 @@ export class MindCoin extends BaseContract {
     ): Promise<BigNumber>;
 
     "initialize(string,string,uint256,uint256)"(
-      name: string,
-      symbol: string,
-      initialSupply: BigNumberish,
-      cap: BigNumberish,
+      _name: string,
+      _symbol: string,
+      _initialSupply: BigNumberish,
+      _cap: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
@@ -810,10 +810,10 @@ export class MindCoin extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     "initialize(string,string,uint256,uint256)"(
-      name: string,
-      symbol: string,
-      initialSupply: BigNumberish,
-      cap: BigNumberish,
+      _name: string,
+      _symbol: string,
+      _initialSupply: BigNumberish,
+      _cap: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 

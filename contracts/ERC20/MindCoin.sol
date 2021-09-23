@@ -12,12 +12,12 @@ contract MindCoin is Initializable, ERC20PresetMinterPauserUpgradeable, ERC20Cap
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() initializer {}
 
-    function initialize(string memory name, string memory symbol, uint256 initialSupply, uint256 cap) public virtual initializer  {
-        require(cap >= initialSupply, "MindCoin: pre minted amount is greater than token cap");
+    function initialize(string memory _name, string memory _symbol, uint256 _initialSupply, uint256 _cap) public virtual initializer  {
+        require(_cap >= _initialSupply, "MindCoin: pre minted amount is greater than token cap");
 
-        __ERC20PresetMinterPauser_init(name, symbol);
+        __ERC20PresetMinterPauser_init(_name, _symbol);
 
-        __ERC20Capped_init_unchained(cap);
+        __ERC20Capped_init_unchained(_cap);
         __ERC20Snapshot_init_unchained();
 
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -25,7 +25,7 @@ contract MindCoin is Initializable, ERC20PresetMinterPauserUpgradeable, ERC20Cap
         _setupRole(PAUSER_ROLE, _msgSender());
         _setupRole(MINTER_ROLE, _msgSender());
 
-        _mint(_msgSender(), initialSupply);
+        _mint(_msgSender(), _initialSupply);
  }
 
     function snapshot() public onlyRole(SNAPSHOT_ROLE) {

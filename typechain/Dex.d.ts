@@ -146,8 +146,8 @@ export class Dex extends BaseContract {
     initialize(
       _acceptedToken: string,
       _priceOracle: string,
-      payees: string[],
-      shares_: BigNumberish[],
+      _payees: string[],
+      _shares: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
@@ -180,8 +180,8 @@ export class Dex extends BaseContract {
   initialize(
     _acceptedToken: string,
     _priceOracle: string,
-    payees: string[],
-    shares_: BigNumberish[],
+    _payees: string[],
+    _shares: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
@@ -214,8 +214,8 @@ export class Dex extends BaseContract {
     initialize(
       _acceptedToken: string,
       _priceOracle: string,
-      payees: string[],
-      shares_: BigNumberish[],
+      _payees: string[],
+      _shares: BigNumberish[],
       overrides?: CallOverrides,
     ): Promise<void>;
 
@@ -291,8 +291,8 @@ export class Dex extends BaseContract {
     initialize(
       _acceptedToken: string,
       _priceOracle: string,
-      payees: string[],
-      shares_: BigNumberish[],
+      _payees: string[],
+      _shares: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
@@ -323,8 +323,8 @@ export class Dex extends BaseContract {
     initialize(
       _acceptedToken: string,
       _priceOracle: string,
-      payees: string[],
-      shares_: BigNumberish[],
+      _payees: string[],
+      _shares: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 

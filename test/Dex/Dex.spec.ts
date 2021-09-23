@@ -2,21 +2,25 @@ import { expect } from "chai";
 import { ethers, upgrades } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+
+import { Dex, MindCoin, PriceOracle } from "../../typechain";
+import { amount, decimals, initialTokenAmount, initialTokenAmountInWei } from "../constants";
 import { parseEther } from "ethers/lib/utils";
 
-import { Dex, MindCoin } from "../../typechain";
-import { amount, initialTokenAmount, initialTokenAmountInWei } from "../constants";
-
-describe("Dex", function () {
+describe("DEX", function () {
   let token: ContractFactory;
+  let oracle: ContractFactory;
   let market: ContractFactory;
   let tokenInstance: MindCoin;
   let marketInstance: Dex;
+  let oracleInstance: PriceOracle;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
+  const multiplier = 5;
 
   beforeEach(async function () {
     token = await ethers.getContractFactory("MindCoin");
+    oracle = await ethers.getContractFactory("PriceOracle");
     market = await ethers.getContractFactory("Dex");
     [owner, addr1] = await ethers.getSigners();
 
@@ -25,7 +29,13 @@ describe("Dex", function () {
       "MIND",
       initialTokenAmount,
     ])) as MindCoin;
-    marketInstance = (await upgrades.deployProxy(market, [tokenInstance.address])) as Dex;
+    oracleInstance = (await upgrades.deployProxy(oracle)) as PriceOracle;
+    marketInstance = (await upgrades.deployProxy(market, [
+      tokenInstance.address,
+      oracleInstance.address,
+      [owner.address, addr1.address],
+      [1, 1],
+    ])) as Dex;
   });
 
   describe("Deployment", function () {
@@ -60,24 +70,7 @@ describe("Dex", function () {
   });
 
   describe("Buy", function () {
-    it("should fail with out ether", async function () {
-      const tx = marketInstance.connect(addr1).buy({ value: 0 });
-      await expect(tx).to.be.revertedWith("You need to send some ether");
-    });
-
-    it("should fail with no balance", async function () {
-      const tx = marketInstance.connect(addr1).buy({ value: amount });
-      await expect(tx).to.be.revertedWith("Not enough tokens in the reserve");
-    });
-
-    it("should fail with partial balance", async function () {
-      await tokenInstance.approve(owner.address, amount / 2);
-      await tokenInstance.transferFrom(owner.address, marketInstance.address, amount / 2);
-      const tx = marketInstance.connect(addr1).buy({ value: amount });
-      await expect(tx).to.be.revertedWith("Not enough tokens in the reserve");
-    });
-
-    it("should buy tokens", async function () {
+    it("should buy tokens for initial price", async function () {
       await tokenInstance.approve(owner.address, amount);
       await tokenInstance.transferFrom(owner.address, marketInstance.address, amount);
 
@@ -89,26 +82,25 @@ describe("Dex", function () {
       const balanceOfBuyer = await tokenInstance.balanceOf(addr1.address);
       expect(balanceOfBuyer).to.equal(amount);
     });
+
+    it("should buy tokens for new price", async function () {
+      await tokenInstance.approve(owner.address, amount);
+      await tokenInstance.transferFrom(owner.address, marketInstance.address, amount);
+
+      await oracleInstance.updatePrice(multiplier);
+
+      await marketInstance.connect(addr1).buy({ value: amount });
+      const balanceOfDex = await tokenInstance.balanceOf(marketInstance.address);
+      expect(balanceOfDex).to.equal(amount - amount / multiplier);
+      const balanceOfOwner = await tokenInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
+      const balanceOfBuyer = await tokenInstance.balanceOf(addr1.address);
+      expect(balanceOfBuyer).to.equal(amount / multiplier);
+    });
   });
 
   describe("Sell", function () {
-    it("should fail with tokens", async function () {
-      const tx = marketInstance.connect(addr1).sell(0);
-      await expect(tx).to.be.revertedWith("You need to sell at least some tokens");
-    });
-
-    it("should fail no allowance", async function () {
-      const tx = marketInstance.connect(addr1).sell(amount);
-      await expect(tx).to.be.revertedWith("Check the token allowance");
-    });
-
-    it("should fail with partial balance", async function () {
-      await tokenInstance.connect(addr1).approve(marketInstance.address, amount);
-      const tx = marketInstance.connect(addr1).sell(amount);
-      await expect(tx).to.be.revertedWith("ERC20: transfer amount exceeds balance");
-    });
-
-    it("should sell tokens", async function () {
+    it("should sell tokens for initial price", async function () {
       // contract should has eth
       await owner.sendTransaction({
         to: marketInstance.address,
@@ -117,6 +109,8 @@ describe("Dex", function () {
 
       await tokenInstance.approve(owner.address, amount);
       await tokenInstance.transferFrom(owner.address, addr1.address, amount);
+
+      await oracleInstance.updatePrice(multiplier);
 
       await tokenInstance.connect(addr1).approve(marketInstance.address, amount);
       await marketInstance.connect(addr1).sell(amount);
@@ -128,38 +122,50 @@ describe("Dex", function () {
       const balanceOfOwner = await tokenInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
     });
+
+    it("should sell tokens for new price", async function () {
+      // contract should has eth
+      await owner.sendTransaction({
+        to: marketInstance.address,
+        value: parseEther("1"),
+      });
+
+      await tokenInstance.approve(owner.address, amount);
+      await tokenInstance.transferFrom(owner.address, addr1.address, amount);
+
+      await oracleInstance.updatePrice(multiplier);
+
+      await tokenInstance.connect(addr1).approve(marketInstance.address, amount);
+      await marketInstance.connect(addr1).sell(amount);
+
+      const balanceOfSeller = await tokenInstance.balanceOf(addr1.address);
+      expect(balanceOfSeller).to.equal(0);
+      const balanceOfDex = await tokenInstance.balanceOf(marketInstance.address);
+      expect(balanceOfDex).to.equal(amount);
+      const balanceOfOwner = await tokenInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
+
+      const balance = await ethers.provider.getBalance(marketInstance.address);
+      expect(balance).to.equal(decimals.sub(amount * multiplier));
+    });
   });
 
-  describe("Withdraw", function () {
-    it("should withdraw ETH", async function () {
-      // contract should has eth
-      await owner.sendTransaction({
-        to: marketInstance.address,
-        value: parseEther("1"),
-      });
-
-      const balanceBefore = await ethers.provider.getBalance(marketInstance.address);
-      expect(balanceBefore).to.equal(parseEther("1"));
-
-      await marketInstance.withdraw();
-
-      const balanceAfter = await ethers.provider.getBalance(marketInstance.address);
-      expect(balanceAfter).to.equal(0);
+  describe("Release", function () {
+    it("DEX should NOT release, when no balance", async function () {
+      const tx = marketInstance.release(owner.address);
+      await expect(tx).to.be.revertedWith("PaymentSplitter: account is not due payment");
     });
 
-    it("should NOT withdraw ETH", async function () {
-      // contract should has eth
+    it("DEX should release", async function () {
       await owner.sendTransaction({
         to: marketInstance.address,
         value: parseEther("1"),
       });
 
-      const balanceBefore = await ethers.provider.getBalance(marketInstance.address);
-      expect(balanceBefore).to.equal(parseEther("1"));
+      await marketInstance.release(owner.address);
 
-      const tx = marketInstance.connect(addr1).withdraw();
-
-      await expect(tx).to.be.revertedWith("Ownable: caller is not the owner");
+      const balance = await ethers.provider.getBalance(marketInstance.address);
+      expect(balance).to.equal(decimals.div(2));
     });
   });
 });

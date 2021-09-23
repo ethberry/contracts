@@ -5,14 +5,13 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/metatx/MinimalForwarderUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 
 import "./MarketplaceStorage.sol";
 
-contract Marketplace is OwnableUpgradeable, PausableUpgradeable, MinimalForwarderUpgradeable, MarketplaceStorage {
+contract Marketplace is Initializable, OwnableUpgradeable, PausableUpgradeable, MinimalForwarderUpgradeable, MarketplaceStorage {
     using SafeMathUpgradeable for uint256;
     using AddressUpgradeable for address;
 

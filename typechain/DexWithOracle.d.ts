@@ -20,7 +20,7 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface DexWithOracleInterface extends ethers.utils.Interface {
+interface DexInterface extends ethers.utils.Interface {
   functions: {
     "acceptedToken()": FunctionFragment;
     "buy()": FunctionFragment;
@@ -85,7 +85,7 @@ export type SoldEvent = TypedEvent<[BigNumber] & { amount: BigNumber }>;
 
 export type UnpausedEvent = TypedEvent<[string] & { account: string }>;
 
-export class DexWithOracle extends BaseContract {
+export class Dex extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -126,7 +126,7 @@ export class DexWithOracle extends BaseContract {
     toBlock?: string | number | undefined,
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: DexWithOracleInterface;
+  interface: DexInterface;
 
   functions: {
     acceptedToken(overrides?: CallOverrides): Promise<[string]>;

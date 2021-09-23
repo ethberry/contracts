@@ -23,40 +23,25 @@ interface MindTokenTimelockInterface extends ethers.utils.Interface {
   functions: {
     "beneficiary()": FunctionFragment;
     "initialize(address,address,uint256)": FunctionFragment;
-    "owner()": FunctionFragment;
     "release()": FunctionFragment;
     "releaseTime()": FunctionFragment;
-    "renounceOwnership()": FunctionFragment;
     "token()": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "beneficiary", values?: undefined): string;
   encodeFunctionData(functionFragment: "initialize", values: [string, string, BigNumberish]): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "release", values?: undefined): string;
   encodeFunctionData(functionFragment: "releaseTime", values?: undefined): string;
-  encodeFunctionData(functionFragment: "renounceOwnership", values?: undefined): string;
   encodeFunctionData(functionFragment: "token", values?: undefined): string;
-  encodeFunctionData(functionFragment: "transferOwnership", values: [string]): string;
 
   decodeFunctionResult(functionFragment: "beneficiary", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "release", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "releaseTime", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "renounceOwnership", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "transferOwnership", data: BytesLike): Result;
 
-  events: {
-    "OwnershipTransferred(address,address)": EventFragment;
-  };
-
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  events: {};
 }
-
-export type OwnershipTransferredEvent = TypedEvent<[string, string] & { previousOwner: string; newOwner: string }>;
 
 export class MindTokenTimelock extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -111,20 +96,11 @@ export class MindTokenTimelock extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
-    owner(overrides?: CallOverrides): Promise<[string]>;
-
     release(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
     releaseTime(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
-
     token(overrides?: CallOverrides): Promise<[string]>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>;
   };
 
   beneficiary(overrides?: CallOverrides): Promise<string>;
@@ -136,20 +112,11 @@ export class MindTokenTimelock extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
-  owner(overrides?: CallOverrides): Promise<string>;
-
   release(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
   releaseTime(overrides?: CallOverrides): Promise<BigNumber>;
 
-  renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
-
   token(overrides?: CallOverrides): Promise<string>;
-
-  transferOwnership(
-    newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> },
-  ): Promise<ContractTransaction>;
 
   callStatic: {
     beneficiary(overrides?: CallOverrides): Promise<string>;
@@ -161,30 +128,14 @@ export class MindTokenTimelock extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<void>;
 
-    owner(overrides?: CallOverrides): Promise<string>;
-
     release(overrides?: CallOverrides): Promise<void>;
 
     releaseTime(overrides?: CallOverrides): Promise<BigNumber>;
 
-    renounceOwnership(overrides?: CallOverrides): Promise<void>;
-
     token(overrides?: CallOverrides): Promise<string>;
-
-    transferOwnership(newOwner: string, overrides?: CallOverrides): Promise<void>;
   };
 
-  filters: {
-    "OwnershipTransferred(address,address)"(
-      previousOwner?: string | null,
-      newOwner?: string | null,
-    ): TypedEventFilter<[string, string], { previousOwner: string; newOwner: string }>;
-
-    OwnershipTransferred(
-      previousOwner?: string | null,
-      newOwner?: string | null,
-    ): TypedEventFilter<[string, string], { previousOwner: string; newOwner: string }>;
-  };
+  filters: {};
 
   estimateGas: {
     beneficiary(overrides?: CallOverrides): Promise<BigNumber>;
@@ -196,20 +147,11 @@ export class MindTokenTimelock extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
-    owner(overrides?: CallOverrides): Promise<BigNumber>;
-
     release(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
 
     releaseTime(overrides?: CallOverrides): Promise<BigNumber>;
 
-    renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
-
     token(overrides?: CallOverrides): Promise<BigNumber>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -222,19 +164,10 @@ export class MindTokenTimelock extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     release(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
 
     releaseTime(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
-
     token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<PopulatedTransaction>;
   };
 }

@@ -24,59 +24,72 @@ interface DexInterface extends ethers.utils.Interface {
   functions: {
     "acceptedToken()": FunctionFragment;
     "buy()": FunctionFragment;
-    "initialize(address)": FunctionFragment;
-    "owner()": FunctionFragment;
+    "initialize(address,address,address[],uint256[])": FunctionFragment;
     "paused()": FunctionFragment;
-    "renounceOwnership()": FunctionFragment;
+    "payee(uint256)": FunctionFragment;
+    "priceOracle()": FunctionFragment;
+    "release(address)": FunctionFragment;
+    "released(address)": FunctionFragment;
     "sell(uint256)": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
-    "withdraw()": FunctionFragment;
+    "shares(address)": FunctionFragment;
+    "totalReleased()": FunctionFragment;
+    "totalShares()": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "acceptedToken", values?: undefined): string;
   encodeFunctionData(functionFragment: "buy", values?: undefined): string;
-  encodeFunctionData(functionFragment: "initialize", values: [string]): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: "initialize", values: [string, string, string[], BigNumberish[]]): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
-  encodeFunctionData(functionFragment: "renounceOwnership", values?: undefined): string;
+  encodeFunctionData(functionFragment: "payee", values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: "priceOracle", values?: undefined): string;
+  encodeFunctionData(functionFragment: "release", values: [string]): string;
+  encodeFunctionData(functionFragment: "released", values: [string]): string;
   encodeFunctionData(functionFragment: "sell", values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: "transferOwnership", values: [string]): string;
-  encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
+  encodeFunctionData(functionFragment: "shares", values: [string]): string;
+  encodeFunctionData(functionFragment: "totalReleased", values?: undefined): string;
+  encodeFunctionData(functionFragment: "totalShares", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "acceptedToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "buy", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "renounceOwnership", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "payee", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "priceOracle", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "release", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "released", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "sell", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "transferOwnership", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "shares", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "totalReleased", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "totalShares", data: BytesLike): Result;
 
   events: {
     "Bought(uint256)": EventFragment;
-    "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
-    "Received(uint256)": EventFragment;
+    "PayeeAdded(address,uint256)": EventFragment;
+    "PaymentReceived(address,uint256)": EventFragment;
+    "PaymentReleased(address,uint256)": EventFragment;
     "Sold(uint256)": EventFragment;
     "Unpaused(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Bought"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Received"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PayeeAdded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PaymentReceived"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PaymentReleased"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Sold"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
 }
 
 export type BoughtEvent = TypedEvent<[BigNumber] & { amount: BigNumber }>;
 
-export type OwnershipTransferredEvent = TypedEvent<[string, string] & { previousOwner: string; newOwner: string }>;
-
 export type PausedEvent = TypedEvent<[string] & { account: string }>;
 
-export type ReceivedEvent = TypedEvent<[BigNumber] & { amount: BigNumber }>;
+export type PayeeAddedEvent = TypedEvent<[string, BigNumber] & { account: string; shares: BigNumber }>;
+
+export type PaymentReceivedEvent = TypedEvent<[string, BigNumber] & { from: string; amount: BigNumber }>;
+
+export type PaymentReleasedEvent = TypedEvent<[string, BigNumber] & { to: string; amount: BigNumber }>;
 
 export type SoldEvent = TypedEvent<[BigNumber] & { amount: BigNumber }>;
 
@@ -132,26 +145,32 @@ export class Dex extends BaseContract {
 
     initialize(
       _acceptedToken: string,
+      _priceOracle: string,
+      payees: string[],
+      shares_: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
-    owner(overrides?: CallOverrides): Promise<[string]>;
-
     paused(overrides?: CallOverrides): Promise<[boolean]>;
 
-    renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+    payee(index: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+
+    priceOracle(overrides?: CallOverrides): Promise<[string]>;
+
+    release(account: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+
+    released(account: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     sell(
       amountOfToken: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>;
+    shares(account: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    withdraw(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+    totalReleased(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    totalShares(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
   acceptedToken(overrides?: CallOverrides): Promise<string>;
@@ -160,45 +179,63 @@ export class Dex extends BaseContract {
 
   initialize(
     _acceptedToken: string,
+    _priceOracle: string,
+    payees: string[],
+    shares_: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
-  owner(overrides?: CallOverrides): Promise<string>;
-
   paused(overrides?: CallOverrides): Promise<boolean>;
 
-  renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+  payee(index: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  priceOracle(overrides?: CallOverrides): Promise<string>;
+
+  release(account: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+
+  released(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   sell(
     amountOfToken: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
-  transferOwnership(
-    newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> },
-  ): Promise<ContractTransaction>;
+  shares(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  withdraw(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+  totalReleased(overrides?: CallOverrides): Promise<BigNumber>;
+
+  totalShares(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
     acceptedToken(overrides?: CallOverrides): Promise<string>;
 
     buy(overrides?: CallOverrides): Promise<void>;
 
-    initialize(_acceptedToken: string, overrides?: CallOverrides): Promise<void>;
-
-    owner(overrides?: CallOverrides): Promise<string>;
+    initialize(
+      _acceptedToken: string,
+      _priceOracle: string,
+      payees: string[],
+      shares_: BigNumberish[],
+      overrides?: CallOverrides,
+    ): Promise<void>;
 
     paused(overrides?: CallOverrides): Promise<boolean>;
 
-    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+    payee(index: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    priceOracle(overrides?: CallOverrides): Promise<string>;
+
+    release(account: string, overrides?: CallOverrides): Promise<void>;
+
+    released(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     sell(amountOfToken: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    transferOwnership(newOwner: string, overrides?: CallOverrides): Promise<void>;
+    shares(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    withdraw(overrides?: CallOverrides): Promise<void>;
+    totalReleased(overrides?: CallOverrides): Promise<BigNumber>;
+
+    totalShares(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {
@@ -206,23 +243,36 @@ export class Dex extends BaseContract {
 
     Bought(amount?: null): TypedEventFilter<[BigNumber], { amount: BigNumber }>;
 
-    "OwnershipTransferred(address,address)"(
-      previousOwner?: string | null,
-      newOwner?: string | null,
-    ): TypedEventFilter<[string, string], { previousOwner: string; newOwner: string }>;
-
-    OwnershipTransferred(
-      previousOwner?: string | null,
-      newOwner?: string | null,
-    ): TypedEventFilter<[string, string], { previousOwner: string; newOwner: string }>;
-
     "Paused(address)"(account?: null): TypedEventFilter<[string], { account: string }>;
 
     Paused(account?: null): TypedEventFilter<[string], { account: string }>;
 
-    "Received(uint256)"(amount?: null): TypedEventFilter<[BigNumber], { amount: BigNumber }>;
+    "PayeeAdded(address,uint256)"(
+      account?: null,
+      shares?: null,
+    ): TypedEventFilter<[string, BigNumber], { account: string; shares: BigNumber }>;
 
-    Received(amount?: null): TypedEventFilter<[BigNumber], { amount: BigNumber }>;
+    PayeeAdded(
+      account?: null,
+      shares?: null,
+    ): TypedEventFilter<[string, BigNumber], { account: string; shares: BigNumber }>;
+
+    "PaymentReceived(address,uint256)"(
+      from?: null,
+      amount?: null,
+    ): TypedEventFilter<[string, BigNumber], { from: string; amount: BigNumber }>;
+
+    PaymentReceived(
+      from?: null,
+      amount?: null,
+    ): TypedEventFilter<[string, BigNumber], { from: string; amount: BigNumber }>;
+
+    "PaymentReleased(address,uint256)"(
+      to?: null,
+      amount?: null,
+    ): TypedEventFilter<[string, BigNumber], { to: string; amount: BigNumber }>;
+
+    PaymentReleased(to?: null, amount?: null): TypedEventFilter<[string, BigNumber], { to: string; amount: BigNumber }>;
 
     "Sold(uint256)"(amount?: null): TypedEventFilter<[BigNumber], { amount: BigNumber }>;
 
@@ -238,22 +288,31 @@ export class Dex extends BaseContract {
 
     buy(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<BigNumber>;
 
-    initialize(_acceptedToken: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
-
-    owner(overrides?: CallOverrides): Promise<BigNumber>;
-
-    paused(overrides?: CallOverrides): Promise<BigNumber>;
-
-    renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
-
-    sell(amountOfToken: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
-
-    transferOwnership(
-      newOwner: string,
+    initialize(
+      _acceptedToken: string,
+      _priceOracle: string,
+      payees: string[],
+      shares_: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
-    withdraw(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
+    paused(overrides?: CallOverrides): Promise<BigNumber>;
+
+    payee(index: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    priceOracle(overrides?: CallOverrides): Promise<BigNumber>;
+
+    release(account: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
+
+    released(account: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    sell(amountOfToken: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
+
+    shares(account: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    totalReleased(overrides?: CallOverrides): Promise<BigNumber>;
+
+    totalShares(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -263,25 +322,34 @@ export class Dex extends BaseContract {
 
     initialize(
       _acceptedToken: string,
+      _priceOracle: string,
+      payees: string[],
+      shares_: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
+    payee(index: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    priceOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    release(
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<PopulatedTransaction>;
+
+    released(account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     sell(
       amountOfToken: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<PopulatedTransaction>;
+    shares(account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    withdraw(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
+    totalReleased(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    totalShares(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

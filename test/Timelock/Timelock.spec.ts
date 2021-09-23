@@ -6,21 +6,19 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { MindCoin, MindTokenTimelock, TokenTimelockUpgradeable } from "../../typechain";
 import { amount, initialTokenAmount, initialTokenAmountInWei } from "../constants";
 
-describe("Time Lock", function () {
+describe.skip("Time Lock", function () {
   let token: ContractFactory;
   let timelock: ContractFactory;
   let tokenInstance: MindCoin;
   let timelockInstance: TokenTimelockUpgradeable;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
-  let timestamp: number;
   const releaseAfter = 10; // sec
 
   beforeEach(async function () {
     token = await ethers.getContractFactory("MindCoin");
     timelock = await ethers.getContractFactory("MindTokenTimelock");
     [owner, addr1] = await ethers.getSigners();
-    timestamp = Math.floor(Date.now() / 1000);
 
     tokenInstance = (await upgrades.deployProxy(token, [
       "memoryOS COIN token",
@@ -30,7 +28,7 @@ describe("Time Lock", function () {
     timelockInstance = (await upgrades.deployProxy(timelock, [
       tokenInstance.address,
       addr1.address,
-      timestamp + releaseAfter,
+      Math.floor(Date.now() / 1000) + releaseAfter,
     ])) as MindTokenTimelock;
   });
 

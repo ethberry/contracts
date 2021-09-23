@@ -2,11 +2,8 @@
 pragma solidity ^0.8.2;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/TokenTimelockUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-import "hardhat/console.sol";
-
-contract MindTokenTimelock is TokenTimelockUpgradeable, OwnableUpgradeable {
+contract MindTokenTimelock is TokenTimelockUpgradeable {
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() initializer {}
 
@@ -15,7 +12,6 @@ contract MindTokenTimelock is TokenTimelockUpgradeable, OwnableUpgradeable {
         address beneficiary_,
         uint256 releaseTime_
     ) initializer public {
-        __Ownable_init();
         __TokenTimelock_init(token_, beneficiary_, releaseTime_);
     }
 }

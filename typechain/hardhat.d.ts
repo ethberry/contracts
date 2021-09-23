@@ -97,27 +97,11 @@ declare module "hardhat/types/runtime" {
       name: "IERC165Upgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC165Upgradeable__factory>;
-    getContractFactory(
-      name: "DexWithOracle",
-      signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.DexWithOracle__factory>;
     getContractFactory(name: "Dex", signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.Dex__factory>;
-    getContractFactory(
-      name: "DexWithSplitter",
-      signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.DexWithSplitter__factory>;
-    getContractFactory(
-      name: "MindCoinSnapshot",
-      signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.MindCoinSnapshot__factory>;
     getContractFactory(
       name: "MindCoin",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.MindCoin__factory>;
-    getContractFactory(
-      name: "MindCoin2",
-      signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.MindCoin2__factory>;
     getContractFactory(
       name: "MindNFT",
       signerOrOptions?: ethers.Signer | FactoryOptions,

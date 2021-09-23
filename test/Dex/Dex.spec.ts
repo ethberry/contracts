@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { Dex, MindCoin, PriceOracle } from "../../typechain";
-import { amount, decimals, initialTokenAmount, initialTokenAmountInWei } from "../constants";
+import { amount, decimals, initialTokenAmountInWei } from "../constants";
 import { parseEther } from "ethers/lib/utils";
 
 describe("DEX", function () {
@@ -24,7 +24,11 @@ describe("DEX", function () {
     market = await ethers.getContractFactory("Dex");
     [owner, addr1] = await ethers.getSigners();
 
-    coinInstance = (await upgrades.deployProxy(coin, ["memoryOS COIN token", "MIND", initialTokenAmount])) as MindCoin;
+    coinInstance = (await upgrades.deployProxy(
+      coin,
+      ["memoryOS COIN token", "MIND", initialTokenAmountInWei, initialTokenAmountInWei.add(amount)],
+      { initializer: "initialize(string name, string symbol, uint256 initialSupply, uint256 cap)" },
+    )) as MindCoin;
     oracleInstance = (await upgrades.deployProxy(oracle)) as PriceOracle;
     marketInstance = (await upgrades.deployProxy(market, [
       coinInstance.address,

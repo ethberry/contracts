@@ -44,4 +44,20 @@ describe("ERC721", function () {
       expect(item).to.equal(0); // 0 is nft index
     });
   });
+
+  describe("Transfer", function () {
+    it("should transfer tokens to DEX", async function () {
+      await nftInstance.mint(owner.address);
+      await nftInstance.transferFrom(owner.address, addr1.address, 0);
+
+      const balanceOfOwner = await nftInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(0);
+
+      const balanceOfReceiver = await nftInstance.balanceOf(addr1.address);
+      expect(balanceOfReceiver).to.equal(1);
+
+      const item = await nftInstance.tokenOfOwnerByIndex(addr1.address, 0);
+      expect(item).to.equal(0); // 0 is nft index
+    });
+  });
 });

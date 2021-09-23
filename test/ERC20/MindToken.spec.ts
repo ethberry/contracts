@@ -27,7 +27,7 @@ describe("ERC20", function () {
 
     coinInstance = (await upgrades.deployProxy(
       coin,
-      ["memoryOS COIN token", "MIND", initialTokenAmountInWei, initialTokenAmountInWei.mul(5)],
+      ["memoryOS COIN token", "MIND", initialTokenAmountInWei, initialTokenAmountInWei.add(amount)],
       { initializer: "initialize(string name, string symbol, uint256 initialSupply, uint256 cap)" },
     )) as MindCoin;
   });

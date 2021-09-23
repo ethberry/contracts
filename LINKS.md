@@ -25,3 +25,8 @@ https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/issues/89
 
 OpenSea and Upgradable contracts
 https://forum.openzeppelin.com/t/upgradeable-contracts-can-not-be-edited-on-opensea-platform/14725
+
+Polygon bridge
+https://docs.polygon.technology/docs/develop/ethereum-polygon/pos/calling-contracts/erc20/
+https://github.com/maticnetwork/pos-portal/tree/v1.1.0
+https://docs.polygon.technology/docs/develop/ethereum-polygon/pos/mapping-assets

@@ -38,40 +38,112 @@ interface MarketplaceInterface extends ethers.utils.Interface {
     "transferOwnership(address)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "ERC721_Interface", values?: undefined): string;
-  encodeFunctionData(functionFragment: "acceptedToken", values?: undefined): string;
-  encodeFunctionData(functionFragment: "cancelOrder", values: [string, BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: "ERC721_Interface",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "acceptedToken",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "cancelOrder",
+    values: [string, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "createOrder",
-    values: [string, BigNumberish, BigNumberish, BigNumberish],
+    values: [string, BigNumberish, BigNumberish, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "executeOrder", values: [string, BigNumberish, BigNumberish]): string;
-  encodeFunctionData(functionFragment: "initialize", values: [string, BigNumberish]): string;
-  encodeFunctionData(functionFragment: "orderByAssetId", values: [string, BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: "executeOrder",
+    values: [string, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "initialize",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "orderByAssetId",
+    values: [string, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(functionFragment: "ownerCutPerMillion", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "ownerCutPerMillion",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
-  encodeFunctionData(functionFragment: "publicationFeeInWei", values?: undefined): string;
-  encodeFunctionData(functionFragment: "renounceOwnership", values?: undefined): string;
-  encodeFunctionData(functionFragment: "setOwnerCutPerMillion", values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: "setPublicationFee", values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: "transferOwnership", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "publicationFeeInWei",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setOwnerCutPerMillion",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setPublicationFee",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
+  ): string;
 
-  decodeFunctionResult(functionFragment: "ERC721_Interface", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "acceptedToken", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "cancelOrder", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "createOrder", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "executeOrder", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "ERC721_Interface",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "acceptedToken",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "cancelOrder",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "createOrder",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "executeOrder",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "orderByAssetId", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "orderByAssetId",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "ownerCutPerMillion", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "ownerCutPerMillion",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "publicationFeeInWei", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "renounceOwnership", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setOwnerCutPerMillion", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setPublicationFee", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "transferOwnership", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "publicationFeeInWei",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setOwnerCutPerMillion",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setPublicationFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
 
   events: {
     "ChangedOwnerCutPerMillion(uint256)": EventFragment;
@@ -94,9 +166,13 @@ interface MarketplaceInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
 }
 
-export type ChangedOwnerCutPerMillionEvent = TypedEvent<[BigNumber] & { ownerCutPerMillion: BigNumber }>;
+export type ChangedOwnerCutPerMillionEvent = TypedEvent<
+  [BigNumber] & { ownerCutPerMillion: BigNumber }
+>;
 
-export type ChangedPublicationFeeEvent = TypedEvent<[BigNumber] & { publicationFee: BigNumber }>;
+export type ChangedPublicationFeeEvent = TypedEvent<
+  [BigNumber] & { publicationFee: BigNumber }
+>;
 
 export type OrderCancelledEvent = TypedEvent<
   [string, BigNumber, string, string] & {
@@ -129,7 +205,9 @@ export type OrderSuccessfulEvent = TypedEvent<
   }
 >;
 
-export type OwnershipTransferredEvent = TypedEvent<[string, string] & { previousOwner: string; newOwner: string }>;
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string] & { previousOwner: string; newOwner: string }
+>;
 
 export type PausedEvent = TypedEvent<[string] & { account: string }>;
 
@@ -141,26 +219,26 @@ export class Marketplace extends BaseContract {
   deployed(): Promise<this>;
 
   listeners<EventArgsArray extends Array<any>, EventArgsObject>(
-    eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    eventFilter?: TypedEventFilter<EventArgsArray, EventArgsObject>
   ): Array<TypedListener<EventArgsArray, EventArgsObject>>;
   off<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>,
+    listener: TypedListener<EventArgsArray, EventArgsObject>
   ): this;
   on<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>,
+    listener: TypedListener<EventArgsArray, EventArgsObject>
   ): this;
   once<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>,
+    listener: TypedListener<EventArgsArray, EventArgsObject>
   ): this;
   removeListener<EventArgsArray extends Array<any>, EventArgsObject>(
     eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
-    listener: TypedListener<EventArgsArray, EventArgsObject>,
+    listener: TypedListener<EventArgsArray, EventArgsObject>
   ): this;
   removeAllListeners<EventArgsArray extends Array<any>, EventArgsObject>(
-    eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>,
+    eventFilter: TypedEventFilter<EventArgsArray, EventArgsObject>
   ): this;
 
   listeners(eventName?: string): Array<Listener>;
@@ -173,7 +251,7 @@ export class Marketplace extends BaseContract {
   queryFilter<EventArgsArray extends Array<any>, EventArgsObject>(
     event: TypedEventFilter<EventArgsArray, EventArgsObject>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
   interface: MarketplaceInterface;
@@ -186,7 +264,7 @@ export class Marketplace extends BaseContract {
     cancelOrder(
       nftAddress: string,
       assetId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     createOrder(
@@ -194,26 +272,26 @@ export class Marketplace extends BaseContract {
       assetId: BigNumberish,
       priceInWei: BigNumberish,
       expiresAt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     executeOrder(
       nftAddress: string,
       assetId: BigNumberish,
       price: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     initialize(
       _acceptedToken: string,
       _ownerCutPerMillion: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     orderByAssetId(
       arg0: string,
       arg1: BigNumberish,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<
       [string, string, string, BigNumber, BigNumber] & {
         id: string;
@@ -232,21 +310,23 @@ export class Marketplace extends BaseContract {
 
     publicationFeeInWei(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     setOwnerCutPerMillion(
       _ownerCutPerMillion: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setPublicationFee(
       _publicationFee: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
@@ -257,7 +337,7 @@ export class Marketplace extends BaseContract {
   cancelOrder(
     nftAddress: string,
     assetId: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   createOrder(
@@ -265,26 +345,26 @@ export class Marketplace extends BaseContract {
     assetId: BigNumberish,
     priceInWei: BigNumberish,
     expiresAt: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   executeOrder(
     nftAddress: string,
     assetId: BigNumberish,
     price: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   initialize(
     _acceptedToken: string,
     _ownerCutPerMillion: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   orderByAssetId(
     arg0: string,
     arg1: BigNumberish,
-    overrides?: CallOverrides,
+    overrides?: CallOverrides
   ): Promise<
     [string, string, string, BigNumber, BigNumber] & {
       id: string;
@@ -303,21 +383,23 @@ export class Marketplace extends BaseContract {
 
   publicationFeeInWei(overrides?: CallOverrides): Promise<BigNumber>;
 
-  renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+  renounceOwnership(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   setOwnerCutPerMillion(
     _ownerCutPerMillion: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setPublicationFee(
     _publicationFee: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   transferOwnership(
     newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -325,29 +407,37 @@ export class Marketplace extends BaseContract {
 
     acceptedToken(overrides?: CallOverrides): Promise<string>;
 
-    cancelOrder(nftAddress: string, assetId: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    cancelOrder(
+      nftAddress: string,
+      assetId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     createOrder(
       nftAddress: string,
       assetId: BigNumberish,
       priceInWei: BigNumberish,
       expiresAt: BigNumberish,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     executeOrder(
       nftAddress: string,
       assetId: BigNumberish,
       price: BigNumberish,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
-    initialize(_acceptedToken: string, _ownerCutPerMillion: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    initialize(
+      _acceptedToken: string,
+      _ownerCutPerMillion: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     orderByAssetId(
       arg0: string,
       arg1: BigNumberish,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<
       [string, string, string, BigNumber, BigNumber] & {
         id: string;
@@ -368,33 +458,44 @@ export class Marketplace extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    setOwnerCutPerMillion(_ownerCutPerMillion: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    setOwnerCutPerMillion(
+      _ownerCutPerMillion: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
-    setPublicationFee(_publicationFee: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    setPublicationFee(
+      _publicationFee: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
-    transferOwnership(newOwner: string, overrides?: CallOverrides): Promise<void>;
+    transferOwnership(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
     "ChangedOwnerCutPerMillion(uint256)"(
-      ownerCutPerMillion?: null,
+      ownerCutPerMillion?: null
     ): TypedEventFilter<[BigNumber], { ownerCutPerMillion: BigNumber }>;
 
     ChangedOwnerCutPerMillion(
-      ownerCutPerMillion?: null,
+      ownerCutPerMillion?: null
     ): TypedEventFilter<[BigNumber], { ownerCutPerMillion: BigNumber }>;
 
     "ChangedPublicationFee(uint256)"(
-      publicationFee?: null,
+      publicationFee?: null
     ): TypedEventFilter<[BigNumber], { publicationFee: BigNumber }>;
 
-    ChangedPublicationFee(publicationFee?: null): TypedEventFilter<[BigNumber], { publicationFee: BigNumber }>;
+    ChangedPublicationFee(
+      publicationFee?: null
+    ): TypedEventFilter<[BigNumber], { publicationFee: BigNumber }>;
 
     "OrderCancelled(bytes32,uint256,address,address)"(
       id?: null,
       assetId?: BigNumberish | null,
       seller?: string | null,
-      nftAddress?: null,
+      nftAddress?: null
     ): TypedEventFilter<
       [string, BigNumber, string, string],
       { id: string; assetId: BigNumber; seller: string; nftAddress: string }
@@ -404,7 +505,7 @@ export class Marketplace extends BaseContract {
       id?: null,
       assetId?: BigNumberish | null,
       seller?: string | null,
-      nftAddress?: null,
+      nftAddress?: null
     ): TypedEventFilter<
       [string, BigNumber, string, string],
       { id: string; assetId: BigNumber; seller: string; nftAddress: string }
@@ -416,7 +517,7 @@ export class Marketplace extends BaseContract {
       seller?: string | null,
       nftAddress?: null,
       priceInWei?: null,
-      expiresAt?: null,
+      expiresAt?: null
     ): TypedEventFilter<
       [string, BigNumber, string, string, BigNumber, BigNumber],
       {
@@ -435,7 +536,7 @@ export class Marketplace extends BaseContract {
       seller?: string | null,
       nftAddress?: null,
       priceInWei?: null,
-      expiresAt?: null,
+      expiresAt?: null
     ): TypedEventFilter<
       [string, BigNumber, string, string, BigNumber, BigNumber],
       {
@@ -454,7 +555,7 @@ export class Marketplace extends BaseContract {
       seller?: string | null,
       nftAddress?: null,
       totalPrice?: null,
-      buyer?: string | null,
+      buyer?: string | null
     ): TypedEventFilter<
       [string, BigNumber, string, string, BigNumber, string],
       {
@@ -473,7 +574,7 @@ export class Marketplace extends BaseContract {
       seller?: string | null,
       nftAddress?: null,
       totalPrice?: null,
-      buyer?: string | null,
+      buyer?: string | null
     ): TypedEventFilter<
       [string, BigNumber, string, string, BigNumber, string],
       {
@@ -488,19 +589,29 @@ export class Marketplace extends BaseContract {
 
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
-      newOwner?: string | null,
-    ): TypedEventFilter<[string, string], { previousOwner: string; newOwner: string }>;
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
 
     OwnershipTransferred(
       previousOwner?: string | null,
-      newOwner?: string | null,
-    ): TypedEventFilter<[string, string], { previousOwner: string; newOwner: string }>;
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
 
-    "Paused(address)"(account?: null): TypedEventFilter<[string], { account: string }>;
+    "Paused(address)"(
+      account?: null
+    ): TypedEventFilter<[string], { account: string }>;
 
     Paused(account?: null): TypedEventFilter<[string], { account: string }>;
 
-    "Unpaused(address)"(account?: null): TypedEventFilter<[string], { account: string }>;
+    "Unpaused(address)"(
+      account?: null
+    ): TypedEventFilter<[string], { account: string }>;
 
     Unpaused(account?: null): TypedEventFilter<[string], { account: string }>;
   };
@@ -513,7 +624,7 @@ export class Marketplace extends BaseContract {
     cancelOrder(
       nftAddress: string,
       assetId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     createOrder(
@@ -521,23 +632,27 @@ export class Marketplace extends BaseContract {
       assetId: BigNumberish,
       priceInWei: BigNumberish,
       expiresAt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     executeOrder(
       nftAddress: string,
       assetId: BigNumberish,
       price: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     initialize(
       _acceptedToken: string,
       _ownerCutPerMillion: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    orderByAssetId(arg0: string, arg1: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    orderByAssetId(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -547,21 +662,23 @@ export class Marketplace extends BaseContract {
 
     publicationFeeInWei(overrides?: CallOverrides): Promise<BigNumber>;
 
-    renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     setOwnerCutPerMillion(
       _ownerCutPerMillion: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setPublicationFee(
       _publicationFee: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
@@ -573,7 +690,7 @@ export class Marketplace extends BaseContract {
     cancelOrder(
       nftAddress: string,
       assetId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     createOrder(
@@ -581,47 +698,57 @@ export class Marketplace extends BaseContract {
       assetId: BigNumberish,
       priceInWei: BigNumberish,
       expiresAt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     executeOrder(
       nftAddress: string,
       assetId: BigNumberish,
       price: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     initialize(
       _acceptedToken: string,
       _ownerCutPerMillion: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    orderByAssetId(arg0: string, arg1: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    orderByAssetId(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    ownerCutPerMillion(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    ownerCutPerMillion(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    publicationFeeInWei(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    publicationFeeInWei(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
-    renounceOwnership(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     setOwnerCutPerMillion(
       _ownerCutPerMillion: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setPublicationFee(
       _publicationFee: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

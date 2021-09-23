@@ -465,10 +465,14 @@ export class Marketplace__factory extends ContractFactory {
     super(_abi, _bytecode, signer);
   }
 
-  deploy(overrides?: Overrides & { from?: string | Promise<string> }): Promise<Marketplace> {
+  deploy(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<Marketplace> {
     return super.deploy(overrides || {}) as Promise<Marketplace>;
   }
-  getDeployTransaction(overrides?: Overrides & { from?: string | Promise<string> }): TransactionRequest {
+  getDeployTransaction(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
   attach(address: string): Marketplace {
@@ -482,7 +486,10 @@ export class Marketplace__factory extends ContractFactory {
   static createInterface(): MarketplaceInterface {
     return new utils.Interface(_abi) as MarketplaceInterface;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): Marketplace {
+  static connect(
+    address: string,
+    signerOrProvider: Signer | Provider
+  ): Marketplace {
     return new Contract(address, _abi, signerOrProvider) as Marketplace;
   }
 }

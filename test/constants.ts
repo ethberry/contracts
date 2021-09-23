@@ -11,5 +11,3 @@ export const amount = 100;
 export const initialTokenAmount = 100;
 export const decimals = ethers.BigNumber.from(10).pow(18);
 export const initialTokenAmountInWei = ethers.BigNumber.from(initialTokenAmount).mul(decimals);
-
-export const proxyRegistryAddress = "0xa5409ec958c83c3f309868babaca7c86dcb077c1";

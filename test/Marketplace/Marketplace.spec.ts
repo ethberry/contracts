@@ -3,21 +3,24 @@ import { ethers, upgrades } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Marketplace, MindCoin, MindNFT } from "../../typechain";
-import { initialTokenAmountInWei } from "../constants";
+import { Marketplace, MindCoin, MindNFT, ProxyRegistry } from "../../typechain";
+import { baseTokenURI, initialTokenAmountInWei } from "../constants";
 
 describe("Marketplace", function () {
   let market: ContractFactory;
   let coin: ContractFactory;
   let nft: ContractFactory;
+  let proxy: ContractFactory;
   let marketInstance: Marketplace;
   let coinInstance: MindCoin;
   let nftInstance: MindNFT;
+  let proxyInstance: ProxyRegistry;
   let owner: SignerWithAddress;
 
   beforeEach(async function () {
     coin = await ethers.getContractFactory("MindCoin");
     nft = await ethers.getContractFactory("MindNFT");
+    proxy = await ethers.getContractFactory("ProxyRegistry");
     market = await ethers.getContractFactory("Marketplace");
     [owner] = await ethers.getSigners();
 
@@ -27,7 +30,12 @@ describe("Marketplace", function () {
       { initializer: "initialize(string name, string symbol, uint256 initialSupply, uint256 cap)" },
     )) as MindCoin;
     marketInstance = (await upgrades.deployProxy(market, [coinInstance.address, 100])) as Marketplace;
-    nftInstance = (await upgrades.deployProxy(nft, ["memoryOS NFT token", "MIND", "http://localhost/"])) as MindNFT;
+    proxyInstance = (await upgrades.deployProxy(proxy)) as ProxyRegistry;
+    nftInstance = (await upgrades.deployProxy(
+      nft,
+      ["memoryOS NFT token", "MIND", baseTokenURI, proxyInstance.address],
+      { initializer: "initialize(string name, string symbol, string baseURI, address proxyRegistry)" },
+    )) as MindNFT;
   });
 
   describe("Deployment", function () {

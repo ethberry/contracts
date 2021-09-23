@@ -64,6 +64,10 @@ contract MindNFT is Initializable, ERC721PresetMinterPauserAutoIdUpgradeable, ER
         return super.isApprovedForAll(owner, operator);
     }
 
+    function owner() public view virtual returns (address) {
+        return getRoleMember(DEFAULT_ADMIN_ROLE, 0);
+    }
+
     // The following functions are overrides required by Solidity.
 
     function _baseURI() internal view override (ERC721Upgradeable, ERC721PresetMinterPauserAutoIdUpgradeable) returns (string memory) {

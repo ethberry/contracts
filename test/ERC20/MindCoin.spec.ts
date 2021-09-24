@@ -6,7 +6,7 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { MindCoin } from "../../typechain";
 import {
   amount,
-  decimals,
+  cap,
   DEFAULT_ADMIN_ROLE,
   initialTokenAmountInWei,
   MINTER_ROLE,
@@ -79,20 +79,42 @@ describe("MindToken", function () {
       expect(balance2).to.equal(0);
 
       const totalSupply = await coinInstance.totalSupplyAt("1");
-      expect(totalSupply).to.equal(decimals.mul(amount));
+      expect(totalSupply).to.equal(initialTokenAmountInWei);
     });
   });
 
   describe("Mint", function () {
-    it("should fail for wrong role", async function () {
+    it("should fail: wrong role", async function () {
       const tx = coinInstance.connect(addr1).mint(addr1.address, amount);
       await expect(tx).to.be.revertedWith("ERC20PresetMinterPauser: must have minter role to mint");
+    });
+
+    it("should fail: cap exceeded", async function () {
+      const tx = coinInstance.mint(addr1.address, cap);
+      await expect(tx).to.be.revertedWith("ERC20Capped: cap exceeded");
     });
 
     it("should mint more tokens", async function () {
       await coinInstance.mint(owner.address, amount);
       const balance = await coinInstance.balanceOf(owner.address);
       expect(balance).to.equal(initialTokenAmountInWei.add(amount));
+      const totalSupply = await coinInstance.totalSupply();
+      expect(totalSupply).to.equal(initialTokenAmountInWei.add(amount));
+    });
+  });
+
+  describe("Burn", function () {
+    it("should fail: exceeds balance", async function () {
+      const tx = coinInstance.burn(initialTokenAmountInWei.add(amount));
+      await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds balance");
+    });
+
+    it("should burn tokens", async function () {
+      await coinInstance.burn(amount);
+      const balance = await coinInstance.balanceOf(owner.address);
+      expect(balance).to.equal(initialTokenAmountInWei.sub(amount));
+      const totalSupply = await coinInstance.totalSupply();
+      expect(totalSupply).to.equal(initialTokenAmountInWei.sub(amount));
     });
   });
 });

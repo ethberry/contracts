@@ -14,7 +14,7 @@ import {
   SNAPSHOT_ROLE,
 } from "../constants";
 
-describe("ERC20", function () {
+describe("MindToken", function () {
   let coin: ContractFactory;
   let coinInstance: MindCoin;
   let owner: SignerWithAddress;
@@ -25,11 +25,9 @@ describe("ERC20", function () {
     coin = await ethers.getContractFactory("MindCoin");
     [owner, addr1, addr2] = await ethers.getSigners();
 
-    coinInstance = (await upgrades.deployProxy(
-      coin,
-      ["memoryOS COIN token", "MIND", initialTokenAmountInWei, initialTokenAmountInWei.add(amount)],
-      { initializer: "initialize(string name, string symbol, uint256 initialSupply, uint256 cap)" },
-    )) as MindCoin;
+    coinInstance = (await upgrades.deployProxy(coin, ["memoryOS COIN token", "MIND"])) as MindCoin;
+
+    await coinInstance.mint(owner.address, initialTokenAmountInWei);
   });
 
   describe("Deployment", function () {

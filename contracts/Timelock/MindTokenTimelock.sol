@@ -5,9 +5,6 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/TokenTimelockUpgradeable.sol";
 
 contract MindTokenTimelock is Initializable, TokenTimelockUpgradeable {
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() initializer {}
-
     function initialize(
         IERC20Upgradeable _token,
         address _beneficiary,

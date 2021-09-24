@@ -38,9 +38,6 @@ contract StakingRewards is Initializable, ReentrancyGuardUpgradeable, PausableUp
 
     /* ========== CONSTRUCTOR ========== */
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() initializer {}
-
     function initialize(
         address _rewardsToken,
         address _stakingToken

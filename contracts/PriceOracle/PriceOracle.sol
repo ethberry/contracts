@@ -7,9 +7,6 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 contract PriceOracle is Initializable, OwnableUpgradeable {
   uint256 public priceInWei;
 
-  /// @custom:oz-upgrades-unsafe-allow constructor
-  constructor() initializer {}
-
   function initialize() initializer public {
     __Ownable_init();
     priceInWei = 1; // initial price is 1 wei

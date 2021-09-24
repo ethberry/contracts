@@ -264,9 +264,9 @@ export class Loci extends BaseContract {
     hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<[boolean]>;
 
     "initialize(string,string,string,address)"(
-      name: string,
-      symbol: string,
-      baseURI: string,
+      _name: string,
+      _symbol: string,
+      _baseURI: string,
       _proxyRegistry: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
@@ -387,9 +387,9 @@ export class Loci extends BaseContract {
   hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<boolean>;
 
   "initialize(string,string,string,address)"(
-    name: string,
-    symbol: string,
-    baseURI: string,
+    _name: string,
+    _symbol: string,
+    _baseURI: string,
     _proxyRegistry: string,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
@@ -499,9 +499,9 @@ export class Loci extends BaseContract {
     hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<boolean>;
 
     "initialize(string,string,string,address)"(
-      name: string,
-      symbol: string,
-      baseURI: string,
+      _name: string,
+      _symbol: string,
+      _baseURI: string,
       _proxyRegistry: string,
       overrides?: CallOverrides,
     ): Promise<void>;
@@ -685,9 +685,9 @@ export class Loci extends BaseContract {
     hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     "initialize(string,string,string,address)"(
-      name: string,
-      symbol: string,
-      baseURI: string,
+      _name: string,
+      _symbol: string,
+      _baseURI: string,
       _proxyRegistry: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
@@ -809,9 +809,9 @@ export class Loci extends BaseContract {
     hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "initialize(string,string,string,address)"(
-      name: string,
-      symbol: string,
-      baseURI: string,
+      _name: string,
+      _symbol: string,
+      _baseURI: string,
       _proxyRegistry: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;

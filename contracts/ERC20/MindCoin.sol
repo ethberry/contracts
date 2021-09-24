@@ -9,24 +9,22 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20CappedUp
 contract MindCoin is Initializable, ERC20PresetMinterPauserUpgradeable, ERC20CappedUpgradeable, ERC20SnapshotUpgradeable {
     bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() initializer {}
+    function initialize(string memory _name, string memory _symbol) public override virtual initializer {
+        __MindCoin_init(_name, _symbol);
+    }
 
-    function initialize(string memory _name, string memory _symbol, uint256 _initialSupply, uint256 _cap) public virtual initializer  {
-        require(_cap >= _initialSupply, "MindCoin: pre minted amount is greater than token cap");
-
+    function __MindCoin_init(string memory _name, string memory _symbol) internal initializer {
         __ERC20PresetMinterPauser_init(_name, _symbol);
 
-        __ERC20Capped_init_unchained(_cap);
+        __ERC20Capped_init_unchained(2 * 1e9 * 1e18);
         __ERC20Snapshot_init_unchained();
 
-        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        _setupRole(SNAPSHOT_ROLE, _msgSender());
-        _setupRole(PAUSER_ROLE, _msgSender());
-        _setupRole(MINTER_ROLE, _msgSender());
+        __MindCoin_init_unchained();
+    }
 
-        _mint(_msgSender(), _initialSupply);
- }
+    function __MindCoin_init_unchained() internal initializer {
+        _setupRole(SNAPSHOT_ROLE, _msgSender());
+    }
 
     function snapshot() public onlyRole(SNAPSHOT_ROLE) {
         _snapshot();
@@ -37,10 +35,12 @@ contract MindCoin is Initializable, ERC20PresetMinterPauserUpgradeable, ERC20Cap
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 amount)
-        internal
-        whenNotPaused
-        override(ERC20Upgradeable, ERC20SnapshotUpgradeable, ERC20PresetMinterPauserUpgradeable)
+    internal
+    whenNotPaused
+    override(ERC20Upgradeable, ERC20SnapshotUpgradeable, ERC20PresetMinterPauserUpgradeable)
     {
         super._beforeTokenTransfer(from, to, amount);
     }
+
+    uint256[49] private __gap;
 }

@@ -6,7 +6,7 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { Loci, ProxyRegistry } from "../../typechain";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../constants";
 
-describe("ERC721", function () {
+describe("Loci", function () {
   let nft: ContractFactory;
   let proxy: ContractFactory;
   let nftInstance: Loci;

@@ -24,11 +24,7 @@ describe("DEX", function () {
     market = await ethers.getContractFactory("Dex");
     [owner, addr1] = await ethers.getSigners();
 
-    coinInstance = (await upgrades.deployProxy(
-      coin,
-      ["memoryOS COIN token", "MIND", initialTokenAmountInWei, initialTokenAmountInWei.add(amount)],
-      { initializer: "initialize(string name, string symbol, uint256 initialSupply, uint256 cap)" },
-    )) as MindCoin;
+    coinInstance = (await upgrades.deployProxy(coin, ["memoryOS COIN token", "MIND"])) as MindCoin;
     oracleInstance = (await upgrades.deployProxy(oracle)) as PriceOracle;
     marketInstance = (await upgrades.deployProxy(market, [
       coinInstance.address,
@@ -36,10 +32,12 @@ describe("DEX", function () {
       [owner.address, addr1.address],
       [1, 1],
     ])) as Dex;
+
+    await coinInstance.mint(owner.address, initialTokenAmountInWei);
   });
 
   describe("Deployment", function () {
-    it("DEX should has zero balance", async function () {
+    it("DEX should has initial balance", async function () {
       const balanceOfMarket = await coinInstance.balanceOf(marketInstance.address);
       expect(balanceOfMarket).to.equal(0);
       const balanceOfOwner = await coinInstance.balanceOf(owner.address);

@@ -66,9 +66,6 @@ contract Marketplace is Initializable, OwnableUpgradeable, PausableUpgradeable {
     event ChangedPublicationFee(uint256 publicationFee);
     event ChangedOwnerCutPerMillion(uint256 ownerCutPerMillion);
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() initializer {}
-
     /**
       * @dev Initialize this contract. Acts as a constructor
       * @param _acceptedToken - Address of the ERC20 accepted for this marketplace

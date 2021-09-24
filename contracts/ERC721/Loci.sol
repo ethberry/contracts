@@ -16,9 +16,6 @@ contract Loci is Initializable, ERC721PresetMinterPauserAutoIdUpgradeable, ERC72
 
     ProxyRegistry proxyRegistry;
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() initializer {}
-
     function initialize(
         string memory _name,
         string memory _symbol,

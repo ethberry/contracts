@@ -24,9 +24,6 @@ contract Dex is Initializable, PausableUpgradeable, PaymentSplitterUpgradeable {
     IERC20Upgradeable public acceptedToken;
     IPriceOracle public priceOracle;
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() initializer {}
-
     function initialize(
         address _acceptedToken,
         address _priceOracle,

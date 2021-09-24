@@ -19,9 +19,10 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface MindCoinInterface extends ethers.utils.Interface {
+interface MindCoinPolygonInterface extends ethers.utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
+    "DEPOSITOR_ROLE()": FunctionFragment;
     "MINTER_ROLE()": FunctionFragment;
     "PAUSER_ROLE()": FunctionFragment;
     "SNAPSHOT_ROLE()": FunctionFragment;
@@ -34,6 +35,7 @@ interface MindCoinInterface extends ethers.utils.Interface {
     "cap()": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
+    "deposit(address,bytes)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "getRoleMember(bytes32,uint256)": FunctionFragment;
     "getRoleMemberCount(bytes32)": FunctionFragment;
@@ -55,9 +57,11 @@ interface MindCoinInterface extends ethers.utils.Interface {
     "transfer(address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "unpause()": FunctionFragment;
+    "withdraw(uint256)": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "DEFAULT_ADMIN_ROLE", values?: undefined): string;
+  encodeFunctionData(functionFragment: "DEPOSITOR_ROLE", values?: undefined): string;
   encodeFunctionData(functionFragment: "MINTER_ROLE", values?: undefined): string;
   encodeFunctionData(functionFragment: "PAUSER_ROLE", values?: undefined): string;
   encodeFunctionData(functionFragment: "SNAPSHOT_ROLE", values?: undefined): string;
@@ -70,6 +74,7 @@ interface MindCoinInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "cap", values?: undefined): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(functionFragment: "decreaseAllowance", values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: "deposit", values: [string, BytesLike]): string;
   encodeFunctionData(functionFragment: "getRoleAdmin", values: [BytesLike]): string;
   encodeFunctionData(functionFragment: "getRoleMember", values: [BytesLike, BigNumberish]): string;
   encodeFunctionData(functionFragment: "getRoleMemberCount", values: [BytesLike]): string;
@@ -91,8 +96,10 @@ interface MindCoinInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "transfer", values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "transferFrom", values: [string, string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
+  encodeFunctionData(functionFragment: "withdraw", values: [BigNumberish]): string;
 
   decodeFunctionResult(functionFragment: "DEFAULT_ADMIN_ROLE", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "DEPOSITOR_ROLE", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "MINTER_ROLE", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "PAUSER_ROLE", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "SNAPSHOT_ROLE", data: BytesLike): Result;
@@ -105,6 +112,7 @@ interface MindCoinInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "cap", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decreaseAllowance", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getRoleAdmin", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getRoleMember", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getRoleMemberCount", data: BytesLike): Result;
@@ -126,6 +134,7 @@ interface MindCoinInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "transferFrom", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
@@ -176,7 +185,7 @@ export type TransferEvent = TypedEvent<[string, string, BigNumber] & { from: str
 
 export type UnpausedEvent = TypedEvent<[string] & { account: string }>;
 
-export class MindCoin extends BaseContract {
+export class MindCoinPolygon extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -217,10 +226,12 @@ export class MindCoin extends BaseContract {
     toBlock?: string | number | undefined,
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: MindCoinInterface;
+  interface: MindCoinPolygonInterface;
 
   functions: {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
+
+    DEPOSITOR_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
     MINTER_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
@@ -258,6 +269,12 @@ export class MindCoin extends BaseContract {
     decreaseAllowance(
       spender: string,
       subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<ContractTransaction>;
+
+    deposit(
+      user: string,
+      depositData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
@@ -335,9 +352,16 @@ export class MindCoin extends BaseContract {
     ): Promise<ContractTransaction>;
 
     unpause(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
+
+    withdraw(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<ContractTransaction>;
   };
 
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+
+  DEPOSITOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
   MINTER_ROLE(overrides?: CallOverrides): Promise<string>;
 
@@ -372,6 +396,12 @@ export class MindCoin extends BaseContract {
   decreaseAllowance(
     spender: string,
     subtractedValue: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> },
+  ): Promise<ContractTransaction>;
+
+  deposit(
+    user: string,
+    depositData: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
@@ -450,8 +480,15 @@ export class MindCoin extends BaseContract {
 
   unpause(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
+  withdraw(
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> },
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+
+    DEPOSITOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
     MINTER_ROLE(overrides?: CallOverrides): Promise<string>;
 
@@ -476,6 +513,8 @@ export class MindCoin extends BaseContract {
     decimals(overrides?: CallOverrides): Promise<number>;
 
     decreaseAllowance(spender: string, subtractedValue: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
+
+    deposit(user: string, depositData: BytesLike, overrides?: CallOverrides): Promise<void>;
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
@@ -518,6 +557,8 @@ export class MindCoin extends BaseContract {
     transferFrom(sender: string, recipient: string, amount: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
     unpause(overrides?: CallOverrides): Promise<void>;
+
+    withdraw(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -597,6 +638,8 @@ export class MindCoin extends BaseContract {
   estimateGas: {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
+    DEPOSITOR_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+
     MINTER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     PAUSER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
@@ -630,6 +673,12 @@ export class MindCoin extends BaseContract {
     decreaseAllowance(
       spender: string,
       subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<BigNumber>;
+
+    deposit(
+      user: string,
+      depositData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
@@ -707,10 +756,14 @@ export class MindCoin extends BaseContract {
     ): Promise<BigNumber>;
 
     unpause(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
+
+    withdraw(amount: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
   };
 
   populateTransaction: {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    DEPOSITOR_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     MINTER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -748,6 +801,12 @@ export class MindCoin extends BaseContract {
     decreaseAllowance(
       spender: string,
       subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<PopulatedTransaction>;
+
+    deposit(
+      user: string,
+      depositData: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
@@ -825,5 +884,10 @@ export class MindCoin extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     unpause(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
+
+    withdraw(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> },
+    ): Promise<PopulatedTransaction>;
   };
 }

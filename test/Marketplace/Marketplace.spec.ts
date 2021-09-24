@@ -24,11 +24,7 @@ describe("Marketplace", function () {
     market = await ethers.getContractFactory("Marketplace");
     [owner] = await ethers.getSigners();
 
-    coinInstance = (await upgrades.deployProxy(
-      coin,
-      ["memoryOS COIN token", "MIND", initialTokenAmountInWei, initialTokenAmountInWei.mul(5)],
-      { initializer: "initialize(string name, string symbol, uint256 initialSupply, uint256 cap)" },
-    )) as MindCoin;
+    coinInstance = (await upgrades.deployProxy(coin, ["memoryOS COIN token", "MIND"])) as MindCoin;
     marketInstance = (await upgrades.deployProxy(market, [coinInstance.address, 100])) as Marketplace;
     proxyInstance = (await upgrades.deployProxy(proxy)) as ProxyRegistry;
     nftInstance = (await upgrades.deployProxy(
@@ -36,6 +32,8 @@ describe("Marketplace", function () {
       ["memoryOS NFT token", "MIND", baseTokenURI, proxyInstance.address],
       { initializer: "initialize(string name, string symbol, string baseURI, address proxyRegistry)" },
     )) as Loci;
+
+    await coinInstance.mint(owner.address, initialTokenAmountInWei);
   });
 
   describe("Deployment", function () {

@@ -135,6 +135,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.MindCoin__factory>;
     getContractFactory(
+      name: "MindCoinPolygon",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.MindCoinPolygon__factory>;
+    getContractFactory(
       name: "Loci",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.Loci__factory>;

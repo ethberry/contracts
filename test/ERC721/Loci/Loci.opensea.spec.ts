@@ -3,28 +3,30 @@ import { ethers, upgrades } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Loci, ProxyRegistry } from "../../typechain";
-import { baseTokenURI } from "../constants";
+import { LociOpenSea, ProxyRegistry } from "../../../typechain";
+import { baseTokenURI } from "../../constants";
 
-describe("Loci (OpenSea)", function () {
+describe("Loci OpenSea", function () {
   let nft: ContractFactory;
   let proxy: ContractFactory;
-  let nftInstance: Loci;
+  let nftInstance: LociOpenSea;
   let proxyInstance: ProxyRegistry;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
 
   beforeEach(async function () {
-    nft = await ethers.getContractFactory("Loci");
+    nft = await ethers.getContractFactory("LociOpenSea");
     proxy = await ethers.getContractFactory("ProxyRegistry");
     [owner, addr1] = await ethers.getSigners();
 
     proxyInstance = (await upgrades.deployProxy(proxy)) as ProxyRegistry;
-    nftInstance = (await upgrades.deployProxy(
-      nft,
-      ["memoryOS NFT token", "MIND", baseTokenURI, proxyInstance.address],
-      { initializer: "initialize(string name, string symbol, string baseURI, address proxyRegistry)" },
-    )) as Loci;
+    nftInstance = (await upgrades.deployProxy(nft, [
+      "memoryOS NFT token",
+      "Loci (OpenSea)",
+      baseTokenURI,
+    ])) as LociOpenSea;
+
+    await nftInstance.setProxyRegistry(proxyInstance.address);
   });
 
   describe("Deployment", function () {

@@ -144,10 +144,10 @@ export class Dex extends BaseContract {
     buy(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
     initialize(
-      _acceptedToken: string,
-      _priceOracle: string,
-      _payees: string[],
-      _shares: BigNumberish[],
+      acceptedToken_: string,
+      priceOracle_: string,
+      payees_: string[],
+      shares_: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
@@ -178,10 +178,10 @@ export class Dex extends BaseContract {
   buy(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
   initialize(
-    _acceptedToken: string,
-    _priceOracle: string,
-    _payees: string[],
-    _shares: BigNumberish[],
+    acceptedToken_: string,
+    priceOracle_: string,
+    payees_: string[],
+    shares_: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
@@ -212,10 +212,10 @@ export class Dex extends BaseContract {
     buy(overrides?: CallOverrides): Promise<void>;
 
     initialize(
-      _acceptedToken: string,
-      _priceOracle: string,
-      _payees: string[],
-      _shares: BigNumberish[],
+      acceptedToken_: string,
+      priceOracle_: string,
+      payees_: string[],
+      shares_: BigNumberish[],
       overrides?: CallOverrides,
     ): Promise<void>;
 
@@ -289,10 +289,10 @@ export class Dex extends BaseContract {
     buy(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<BigNumber>;
 
     initialize(
-      _acceptedToken: string,
-      _priceOracle: string,
-      _payees: string[],
-      _shares: BigNumberish[],
+      acceptedToken_: string,
+      priceOracle_: string,
+      payees_: string[],
+      shares_: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
@@ -321,10 +321,10 @@ export class Dex extends BaseContract {
     buy(overrides?: PayableOverrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
 
     initialize(
-      _acceptedToken: string,
-      _priceOracle: string,
-      _payees: string[],
-      _shares: BigNumberish[],
+      acceptedToken_: string,
+      priceOracle_: string,
+      payees_: string[],
+      shares_: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 

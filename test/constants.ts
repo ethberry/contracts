@@ -15,5 +15,8 @@ export const initialTokenAmount = 2 * 1e3;
 export const initialTokenAmountInWei = ethers.BigNumber.from(initialTokenAmount).mul(decimals);
 export const cap = ethers.BigNumber.from("2000000000").mul(decimals);
 
+export const openSeaProxyRegistryRinkeby = "0xf57b2c51ded3a29e6891aba85459d600256cf317";
+export const openSeaProxyRegistryMainnet = "0xa5409ec958c83c3f309868babaca7c86dcb077c1";
+
 export const childProxyManagerMumbai = "0xb5505a6d998549090530911180f38aC5130101c6";
 export const childProxyManagerPolygon = "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa";

@@ -26,25 +26,23 @@ interface LociInterface extends ethers.utils.Interface {
     "PAUSER_ROLE()": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "baseTokenURI()": FunctionFragment;
     "burn(uint256)": FunctionFragment;
+    "cap()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "getRoleMember(bytes32,uint256)": FunctionFragment;
     "getRoleMemberCount(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(string,string,string,address)": FunctionFragment;
+    "initialize(string,string,string)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mint(address)": FunctionFragment;
     "name()": FunctionFragment;
-    "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "pause()": FunctionFragment;
     "paused()": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
-    "safeMint(address)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -62,25 +60,23 @@ interface LociInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "PAUSER_ROLE", values?: undefined): string;
   encodeFunctionData(functionFragment: "approve", values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
-  encodeFunctionData(functionFragment: "baseTokenURI", values?: undefined): string;
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: "cap", values?: undefined): string;
   encodeFunctionData(functionFragment: "getApproved", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "getRoleAdmin", values: [BytesLike]): string;
   encodeFunctionData(functionFragment: "getRoleMember", values: [BytesLike, BigNumberish]): string;
   encodeFunctionData(functionFragment: "getRoleMemberCount", values: [BytesLike]): string;
   encodeFunctionData(functionFragment: "grantRole", values: [BytesLike, string]): string;
   encodeFunctionData(functionFragment: "hasRole", values: [BytesLike, string]): string;
-  encodeFunctionData(functionFragment: "initialize", values: [string, string, string, string]): string;
+  encodeFunctionData(functionFragment: "initialize", values: [string, string, string]): string;
   encodeFunctionData(functionFragment: "isApprovedForAll", values: [string, string]): string;
   encodeFunctionData(functionFragment: "mint", values: [string]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "ownerOf", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(functionFragment: "renounceRole", values: [BytesLike, string]): string;
   encodeFunctionData(functionFragment: "revokeRole", values: [BytesLike, string]): string;
-  encodeFunctionData(functionFragment: "safeMint", values: [string]): string;
   encodeFunctionData(functionFragment: "safeTransferFrom", values: [string, string, BigNumberish]): string;
   encodeFunctionData(functionFragment: "setApprovalForAll", values: [string, boolean]): string;
   encodeFunctionData(functionFragment: "supportsInterface", values: [BytesLike]): string;
@@ -97,8 +93,8 @@ interface LociInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "PAUSER_ROLE", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "baseTokenURI", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "cap", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getApproved", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getRoleAdmin", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getRoleMember", data: BytesLike): Result;
@@ -109,13 +105,11 @@ interface LociInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "isApprovedForAll", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "renounceRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "safeMint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "safeTransferFrom", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setApprovalForAll", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "supportsInterface", data: BytesLike): Result;
@@ -240,12 +234,12 @@ export class Loci extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    baseTokenURI(overrides?: CallOverrides): Promise<[string]>;
-
     burn(
       tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
+
+    cap(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getApproved(tokenId: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
 
@@ -263,18 +257,10 @@ export class Loci extends BaseContract {
 
     hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<[boolean]>;
 
-    "initialize(string,string,string,address)"(
+    initialize(
       _name: string,
       _symbol: string,
       _baseURI: string,
-      _proxyRegistry: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<ContractTransaction>;
-
-    "initialize(string,string,string)"(
-      name: string,
-      symbol: string,
-      baseTokenURI: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
 
@@ -283,8 +269,6 @@ export class Loci extends BaseContract {
     mint(to: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
-
-    owner(overrides?: CallOverrides): Promise<[string]>;
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
 
@@ -303,8 +287,6 @@ export class Loci extends BaseContract {
       account: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<ContractTransaction>;
-
-    safeMint(to: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -363,12 +345,12 @@ export class Loci extends BaseContract {
 
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  baseTokenURI(overrides?: CallOverrides): Promise<string>;
-
   burn(
     tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
+
+  cap(overrides?: CallOverrides): Promise<BigNumber>;
 
   getApproved(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
@@ -386,18 +368,10 @@ export class Loci extends BaseContract {
 
   hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<boolean>;
 
-  "initialize(string,string,string,address)"(
+  initialize(
     _name: string,
     _symbol: string,
     _baseURI: string,
-    _proxyRegistry: string,
-    overrides?: Overrides & { from?: string | Promise<string> },
-  ): Promise<ContractTransaction>;
-
-  "initialize(string,string,string)"(
-    name: string,
-    symbol: string,
-    baseTokenURI: string,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
 
@@ -406,8 +380,6 @@ export class Loci extends BaseContract {
   mint(to: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
   name(overrides?: CallOverrides): Promise<string>;
-
-  owner(overrides?: CallOverrides): Promise<string>;
 
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
@@ -426,8 +398,6 @@ export class Loci extends BaseContract {
     account: string,
     overrides?: Overrides & { from?: string | Promise<string> },
   ): Promise<ContractTransaction>;
-
-  safeMint(to: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>;
 
   "safeTransferFrom(address,address,uint256)"(
     from: string,
@@ -482,9 +452,9 @@ export class Loci extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    baseTokenURI(overrides?: CallOverrides): Promise<string>;
-
     burn(tokenId: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    cap(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
@@ -498,28 +468,13 @@ export class Loci extends BaseContract {
 
     hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<boolean>;
 
-    "initialize(string,string,string,address)"(
-      _name: string,
-      _symbol: string,
-      _baseURI: string,
-      _proxyRegistry: string,
-      overrides?: CallOverrides,
-    ): Promise<void>;
-
-    "initialize(string,string,string)"(
-      name: string,
-      symbol: string,
-      baseTokenURI: string,
-      overrides?: CallOverrides,
-    ): Promise<void>;
+    initialize(_name: string, _symbol: string, _baseURI: string, overrides?: CallOverrides): Promise<void>;
 
     isApprovedForAll(owner: string, operator: string, overrides?: CallOverrides): Promise<boolean>;
 
     mint(to: string, overrides?: CallOverrides): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
-
-    owner(overrides?: CallOverrides): Promise<string>;
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
@@ -530,8 +485,6 @@ export class Loci extends BaseContract {
     renounceRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<void>;
 
     revokeRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<void>;
-
-    safeMint(to: string, overrides?: CallOverrides): Promise<void>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -664,9 +617,9 @@ export class Loci extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    baseTokenURI(overrides?: CallOverrides): Promise<BigNumber>;
-
     burn(tokenId: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
+
+    cap(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -684,18 +637,10 @@ export class Loci extends BaseContract {
 
     hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    "initialize(string,string,string,address)"(
+    initialize(
       _name: string,
       _symbol: string,
       _baseURI: string,
-      _proxyRegistry: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<BigNumber>;
-
-    "initialize(string,string,string)"(
-      name: string,
-      symbol: string,
-      baseTokenURI: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
 
@@ -704,8 +649,6 @@ export class Loci extends BaseContract {
     mint(to: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
-
-    owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -724,8 +667,6 @@ export class Loci extends BaseContract {
       account: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<BigNumber>;
-
-    safeMint(to: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -785,12 +726,12 @@ export class Loci extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    baseTokenURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     burn(
       tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
+
+    cap(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getApproved(tokenId: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -808,18 +749,10 @@ export class Loci extends BaseContract {
 
     hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "initialize(string,string,string,address)"(
+    initialize(
       _name: string,
       _symbol: string,
       _baseURI: string,
-      _proxyRegistry: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
-    ): Promise<PopulatedTransaction>;
-
-    "initialize(string,string,string)"(
-      name: string,
-      symbol: string,
-      baseTokenURI: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
 
@@ -828,8 +761,6 @@ export class Loci extends BaseContract {
     mint(to: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -848,8 +779,6 @@ export class Loci extends BaseContract {
       account: string,
       overrides?: Overrides & { from?: string | Promise<string> },
     ): Promise<PopulatedTransaction>;
-
-    safeMint(to: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,

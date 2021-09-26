@@ -3,28 +3,20 @@ import { ethers, upgrades } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Loci, ProxyRegistry } from "../../typechain";
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../constants";
+import { Loci } from "../../../typechain";
+import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../../constants";
 
 describe("Loci", function () {
   let nft: ContractFactory;
-  let proxy: ContractFactory;
   let nftInstance: Loci;
-  let proxyInstance: ProxyRegistry;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
 
   beforeEach(async function () {
     nft = await ethers.getContractFactory("Loci");
-    proxy = await ethers.getContractFactory("ProxyRegistry");
     [owner, addr1] = await ethers.getSigners();
 
-    proxyInstance = (await upgrades.deployProxy(proxy)) as ProxyRegistry;
-    nftInstance = (await upgrades.deployProxy(
-      nft,
-      ["memoryOS NFT token", "MIND", baseTokenURI, proxyInstance.address],
-      { initializer: "initialize(string name, string symbol, string baseURI, address proxyRegistry)" },
-    )) as Loci;
+    nftInstance = (await upgrades.deployProxy(nft, ["memoryOS NFT token", "Loci", baseTokenURI])) as Loci;
   });
 
   describe("Deployment", function () {
@@ -54,7 +46,7 @@ describe("Loci", function () {
   });
 
   describe("Transfer", function () {
-    it("should transfer tokens to DEX", async function () {
+    it("should transfer tokens to another address", async function () {
       await nftInstance.mint(owner.address);
       await nftInstance.transferFrom(owner.address, addr1.address, 0);
 

@@ -151,6 +151,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC721TradableUpgradeable__factory>;
     getContractFactory(
+      name: "IERC721TradableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.IERC721TradableUpgradeable__factory>;
+    getContractFactory(
       name: "IFactoryERC721",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IFactoryERC721__factory>;
@@ -163,9 +167,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.Loci__factory>;
     getContractFactory(
-      name: "CreatureFactory",
+      name: "LociFactory",
       signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.CreatureFactory__factory>;
+    ): Promise<Contracts.LociFactory__factory>;
     getContractFactory(
       name: "LociLootBox",
       signerOrOptions?: ethers.Signer | FactoryOptions,

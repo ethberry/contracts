@@ -8,8 +8,8 @@ import { baseTokenURI } from "../../constants";
 
 describe("Loci OpenSea", function () {
   let nft: ContractFactory;
-  let proxy: ContractFactory;
   let nftInstance: LociOpenSea;
+  let proxy: ContractFactory;
   let proxyInstance: ProxyRegistry;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;

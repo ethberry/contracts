@@ -3,14 +3,16 @@
 pragma solidity ^0.8.2;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
 import "../IFactoryERC721.sol";
-import "./Loci.sol";
+import "../IERC721TradableUpgradeable.sol";
 import "./LociLootBox.sol";
 
-contract CreatureFactory is Initializable, IFactoryERC721, OwnableUpgradeable {
+contract LociFactory is Initializable, IFactoryERC721, AccessControlEnumerableUpgradeable {
     using StringsUpgradeable for string;
+    using AddressUpgradeable for address;
 
     event Transfer(
         address indexed from,
@@ -18,27 +20,40 @@ contract CreatureFactory is Initializable, IFactoryERC721, OwnableUpgradeable {
         uint256 indexed tokenId
     );
 
-    address public _proxyRegistryAddress;
-    address public _nftAddress;
-    address public _lootBoxNftAddress;
-    string public baseURI = "https://creatures-api.opensea.io/api/factory/";
+    string public baseURI;
 
-    /*
-     * Three different options for minting Creatures (common, rare, epic, legendary).
-     */
-    uint256 NUM_OPTIONS = 4;
+    ProxyRegistry _proxyRegistry;
+    IERC721TradableUpgradeable _tradable;
+    LociLootBox _lootBox;
 
-    uint256 SINGLE_CREATURE_OPTION = 0;
-    uint256 MULTIPLE_CREATURE_OPTION = 1;
-    uint256 LOOTBOX_OPTION = 2;
-    uint256 NUM_CREATURES_IN_MULTIPLE_CREATURE_OPTION = 4;
+    uint256 NUM_OPTIONS;
 
-    constructor(address proxyRegistryAddress_, address nftAddress_, address lootBoxAddress_) {
-        _proxyRegistryAddress = proxyRegistryAddress_;
-        _nftAddress = nftAddress_;
-        _lootBoxNftAddress = lootBoxAddress_;
-
+    function initialize(
+        string memory _baseURI
+    ) public initializer {
+        baseURI = _baseURI;
+        NUM_OPTIONS = 4; // common, rare, epic, legendary
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         fireTransferEvents(address(0), owner());
+    }
+
+    function setProxyRegistry(address proxyRegistry_) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(proxyRegistry_.isContract(), "LociFactory: The ProxyRegistry must be a deployed contract");
+        _proxyRegistry = ProxyRegistry(proxyRegistry_);
+    }
+
+    function setTradable(address tradableAddress_) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(tradableAddress_.isContract(), "LociFactory: The Tradable must be a deployed contract");
+        _tradable = IERC721TradableUpgradeable(tradableAddress_);
+    }
+
+    function setLootBox(address lootBox_) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(lootBox_.isContract(), "LociFactory: The LootBox must be a deployed contract");
+        _lootBox = LociLootBox(lootBox_);
+    }
+
+    function owner() public view virtual returns (address) {
+        return getRoleMember(DEFAULT_ADMIN_ROLE, 0);
     }
 
     function name() override external pure returns (string memory) {
@@ -57,12 +72,6 @@ contract CreatureFactory is Initializable, IFactoryERC721, OwnableUpgradeable {
         return NUM_OPTIONS;
     }
 
-    function transferOwnership(address newOwner) override public onlyOwner {
-        address _prevOwner = owner();
-        super.transferOwnership(newOwner);
-        fireTransferEvents(_prevOwner, newOwner);
-    }
-
     function fireTransferEvents(address _from, address _to) private {
         for (uint256 i = 0; i < NUM_OPTIONS; i++) {
             emit Transfer(_from, _to, i);
@@ -71,16 +80,14 @@ contract CreatureFactory is Initializable, IFactoryERC721, OwnableUpgradeable {
 
     function mint(uint256 _optionId, address _toAddress) override public {
         // Must be sent from the owner proxy or owner.
-        ProxyRegistry proxyRegistry = ProxyRegistry(_proxyRegistryAddress);
         assert(
-            address(proxyRegistry.proxies(owner())) == _msgSender() ||
-                owner() == _msgSender() ||
-                _lootBoxNftAddress == _msgSender()
+            address(_proxyRegistry.proxies(owner())) == _msgSender() ||
+            owner() == _msgSender() ||
+            address(_lootBox) == _msgSender()
         );
         require(canMint(_optionId));
 
-        Loci loci = Loci(_nftAddress);
-        loci.mint(_toAddress);
+        _tradable.mint(_toAddress);
     }
 
     function canMint(uint256 _optionId) override public view returns (bool) {
@@ -88,9 +95,7 @@ contract CreatureFactory is Initializable, IFactoryERC721, OwnableUpgradeable {
             return false;
         }
 
-        Loci loci = Loci(_nftAddress);
-
-        return loci.totalSupply() < loci.cap();
+        return _tradable.totalSupply() < _tradable.cap();
     }
 
     function tokenURI(uint256 _optionId) override external view returns (string memory) {
@@ -114,18 +119,17 @@ contract CreatureFactory is Initializable, IFactoryERC721, OwnableUpgradeable {
      * Use isApprovedForAll so the frontend doesn't have to worry about different method names.
      */
     function isApprovedForAll(address _owner, address _operator)
-        public
-        view
-        returns (bool)
+    public
+    view
+    returns (bool)
     {
         if (owner() == _owner && _owner == _operator) {
             return true;
         }
 
-        ProxyRegistry proxyRegistry = ProxyRegistry(_proxyRegistryAddress);
         if (
             owner() == _owner &&
-            address(proxyRegistry.proxies(_owner)) == _operator
+            address(_proxyRegistry.proxies(_owner)) == _operator
         ) {
             return true;
         }

@@ -62,7 +62,7 @@
     "url": "https://github.com/gemunion/contracts"
   },
   "scripts": {
-    "build": "hardhat compile && hardhat typechain",
+    "build": "hardhat compile",
     "clean": "hardhat clean",
     "deploy:mainnet": "hardhat --network mainnet deploy",
     "deploy:mumbai": "hardhat --network mumbai deploy",

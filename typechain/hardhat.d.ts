@@ -122,6 +122,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC721PresetMinterPauserAutoIdUpgradeable__factory>;
     getContractFactory(
+      name: "ERC721HolderUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.ERC721HolderUpgradeable__factory>;
+    getContractFactory(
       name: "ERC165Upgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC165Upgradeable__factory>;
@@ -178,6 +182,10 @@ declare module "hardhat/types/runtime" {
       name: "ProxyRegistry",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ProxyRegistry__factory>;
+    getContractFactory(
+      name: "Game",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.Game__factory>;
     getContractFactory(
       name: "Marketplace",
       signerOrOptions?: ethers.Signer | FactoryOptions,

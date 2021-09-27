@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { MindCoinPolygon } from "../../typechain";
-import { childProxyManagerMumbai, DEPOSITOR_ROLE } from "../constants";
+import { addr, DEPOSITOR_ROLE } from "../constants";
 
 describe("MindToken (Polygon)", function () {
   let coin: ContractFactory;
@@ -27,8 +27,8 @@ describe("MindToken (Polygon)", function () {
 
   describe("Bridge", function () {
     it("Should set the right roles to deployer", async function () {
-      await coinInstance.grantRole(DEPOSITOR_ROLE, childProxyManagerMumbai);
-      const isDepositor = await coinInstance.hasRole(DEPOSITOR_ROLE, childProxyManagerMumbai);
+      await coinInstance.grantRole(DEPOSITOR_ROLE, addr.mumbai.childProxyManager);
+      const isDepositor = await coinInstance.hasRole(DEPOSITOR_ROLE, addr.mumbai.childProxyManager);
       expect(isDepositor).to.equal(true);
     });
   });

@@ -3,14 +3,14 @@ import { ethers, upgrades } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Loci, LociFactory, LociLootBox, ProxyRegistry } from "../../../typechain";
+import { Loci, LociFactory, LootBox, ProxyRegistry } from "../../../typechain";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE } from "../../constants";
 
 describe("LociFactory", function () {
   let nft: ContractFactory;
   let nftInstance: Loci;
   let lootBox: ContractFactory;
-  let lootBoxInstance: LociLootBox;
+  let lootBoxInstance: LootBox;
   let proxy: ContractFactory;
   let proxyInstance: ProxyRegistry;
   let factory: ContractFactory;
@@ -21,7 +21,7 @@ describe("LociFactory", function () {
     nft = await ethers.getContractFactory("Loci");
     proxy = await ethers.getContractFactory("ProxyRegistry");
     factory = await ethers.getContractFactory("LociFactory");
-    lootBox = await ethers.getContractFactory("LociLootBox");
+    lootBox = await ethers.getContractFactory("LootBox");
     [owner] = await ethers.getSigners();
 
     nftInstance = (await upgrades.deployProxy(nft, ["memoryOS NFT token", "Loci", baseTokenURI])) as Loci;
@@ -32,11 +32,7 @@ describe("LociFactory", function () {
     await factoryInstance.setProxyRegistry(proxyInstance.address);
     await factoryInstance.setTradable(nftInstance.address);
 
-    lootBoxInstance = (await upgrades.deployProxy(lootBox, [
-      "memoryOS NFT token",
-      "Loci",
-      baseTokenURI,
-    ])) as LociLootBox;
+    lootBoxInstance = (await upgrades.deployProxy(lootBox, ["memoryOS NFT token", "Loci", baseTokenURI])) as LootBox;
     await lootBoxInstance.setFactory(factoryInstance.address);
     await factoryInstance.setLootBox(lootBoxInstance.address);
   });

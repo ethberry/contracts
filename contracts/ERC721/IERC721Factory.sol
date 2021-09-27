@@ -7,7 +7,7 @@ pragma solidity ^0.8.2;
  * for minting is specified by an _optionId, which can be used to delineate various
  * ways of minting.
  */
-interface IFactoryERC721 {
+interface IERC721Factory {
     /**
      * Returns the name of this factory.
      */

@@ -7,14 +7,14 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
 import "../ERC721TradableUpgradeable.sol";
-import "../IFactoryERC721.sol";
-import "./Loci.sol";
+import "../IERC721Factory.sol";
+import "../Loci/Loci.sol";
 
 
-contract LociLootBox is Initializable, ERC721TradableUpgradeable {
+contract LootBox is Initializable, ERC721TradableUpgradeable {
     using AddressUpgradeable for address;
 
-    IFactoryERC721 _factory;
+    IERC721Factory _factory;
 
     function initialize(
         string memory _name,
@@ -25,8 +25,8 @@ contract LociLootBox is Initializable, ERC721TradableUpgradeable {
     }
 
     function setFactory(address factory_) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(factory_.isContract(), "LociLootBox: The Factory must be a deployed contract");
-        _factory = IFactoryERC721(factory_);
+        require(factory_.isContract(), "LootBox: The Factory must be a deployed contract");
+        _factory = IERC721Factory(factory_);
     }
 
     function unpack(uint256 _tokenId) public {

@@ -6,11 +6,11 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
-import "../IFactoryERC721.sol";
-import "../IERC721TradableUpgradeable.sol";
-import "./LociLootBox.sol";
+import "./IERC721Factory.sol";
+import "./IERC721TradableUpgradeable.sol";
+import "./LootBox/LootBox.sol";
 
-contract LociFactory is Initializable, IFactoryERC721, AccessControlEnumerableUpgradeable {
+contract LociFactory is Initializable, IERC721Factory, AccessControlEnumerableUpgradeable {
     using StringsUpgradeable for string;
     using AddressUpgradeable for address;
 
@@ -24,7 +24,7 @@ contract LociFactory is Initializable, IFactoryERC721, AccessControlEnumerableUp
 
     ProxyRegistry _proxyRegistry;
     IERC721TradableUpgradeable _tradable;
-    LociLootBox _lootBox;
+    LootBox _lootBox;
 
     uint256 NUM_OPTIONS;
 
@@ -49,7 +49,7 @@ contract LociFactory is Initializable, IFactoryERC721, AccessControlEnumerableUp
 
     function setLootBox(address lootBox_) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(lootBox_.isContract(), "LociFactory: The LootBox must be a deployed contract");
-        _lootBox = LociLootBox(lootBox_);
+        _lootBox = LootBox(lootBox_);
     }
 
     function owner() public view virtual returns (address) {

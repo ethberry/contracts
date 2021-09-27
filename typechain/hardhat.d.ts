@@ -143,6 +143,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC721CappedUpgradeable__factory>;
     getContractFactory(
+      name: "LociFactory",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.LociFactory__factory>;
+    getContractFactory(
       name: "ERC721OpenSeaUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC721OpenSeaUpgradeable__factory>;
@@ -151,13 +155,13 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.ERC721TradableUpgradeable__factory>;
     getContractFactory(
+      name: "IERC721Factory",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.IERC721Factory__factory>;
+    getContractFactory(
       name: "IERC721TradableUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.IERC721TradableUpgradeable__factory>;
-    getContractFactory(
-      name: "IFactoryERC721",
-      signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.IFactoryERC721__factory>;
     getContractFactory(
       name: "LociOpenSea",
       signerOrOptions?: ethers.Signer | FactoryOptions,
@@ -167,13 +171,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.Loci__factory>;
     getContractFactory(
-      name: "LociFactory",
+      name: "LootBox",
       signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.LociFactory__factory>;
-    getContractFactory(
-      name: "LociLootBox",
-      signerOrOptions?: ethers.Signer | FactoryOptions,
-    ): Promise<Contracts.LociLootBox__factory>;
+    ): Promise<Contracts.LootBox__factory>;
     getContractFactory(
       name: "ProxyRegistry",
       signerOrOptions?: ethers.Signer | FactoryOptions,

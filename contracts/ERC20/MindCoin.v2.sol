@@ -6,7 +6,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/presets/ERC20PresetMinte
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20SnapshotUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20CappedUpgradeable.sol";
 
-contract MindCoin is Initializable, ERC20PresetMinterPauserUpgradeable, ERC20CappedUpgradeable, ERC20SnapshotUpgradeable {
+contract MindCoin2 is Initializable, ERC20PresetMinterPauserUpgradeable, ERC20CappedUpgradeable, ERC20SnapshotUpgradeable {
     bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
 
     function initialize(string memory _name, string memory _symbol) public override virtual initializer {

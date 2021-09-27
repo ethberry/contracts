@@ -19,6 +19,7 @@
     "web3": "1.5.3"
   },
   "devDependencies": {
+    "@chainlink/contracts": "0.2.2",
     "@gemunion/eslint-config": "0.1.10",
     "@typechain/ethers-v5": "7.1.2",
     "@typechain/hardhat": "2.3.0",

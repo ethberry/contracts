@@ -6,20 +6,17 @@ import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 
 import "./VRFConsumerBaseUpgradable.sol";
 
-contract Sample is Initializable, VRFConsumerBaseUpgradable {
+contract Link is Initializable, VRFConsumerBaseUpgradable {
     using SafeMathUpgradeable for uint256;
 
     bytes32 internal keyHash;
     uint256 internal fee;
 
-    function initialize()
+    function initialize(address _vrfCoordinator, address _link)
     public
     initializer
     {
-        VRFConsumerBaseUpgradable.initialize(
-            0xa555fC018435bef5A13C6c6870a9d4C11DEC329C, // VRF Coordinator
-            0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06  // LINK Token
-        );
+        __VRFConsumerBaseUpgradable_init(_vrfCoordinator, _link);
 
         keyHash = 0xcaf3c3727e033261d383b315559476f48034c13b18f8cafed4d871abe5049186;
         fee = 0.1 * 10 ** 18;

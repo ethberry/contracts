@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.2;
 
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 import "@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol";
 
-abstract contract VRFConsumerBaseUpgradable is VRFRequestIDBase {
+abstract contract VRFConsumerBaseUpgradable is Initializable, VRFRequestIDBase {
     using SafeMathUpgradeable for uint256;
 
     function fulfillRandomness(bytes32 requestId, uint256 randomness)
@@ -30,7 +31,7 @@ abstract contract VRFConsumerBaseUpgradable is VRFRequestIDBase {
     mapping(bytes32 /* keyHash */ => uint256 /* nonce */) private nonces;
 
     // replaced constructor with initializer <--
-    function initialize(address _vrfCoordinator, address _link) public {
+    function __VRFConsumerBaseUpgradable_init(address _vrfCoordinator, address _link) internal initializer {
         vrfCoordinator = _vrfCoordinator;
         LINK = LinkTokenInterface(_link);
     }

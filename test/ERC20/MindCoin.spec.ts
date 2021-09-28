@@ -18,12 +18,12 @@ describe("MindToken", function () {
   let coin: ContractFactory;
   let coinInstance: MindCoin;
   let owner: SignerWithAddress;
-  let addr1: SignerWithAddress;
+  let receiver: SignerWithAddress;
   let addr2: SignerWithAddress;
 
   beforeEach(async function () {
     coin = await ethers.getContractFactory("MindCoin");
-    [owner, addr1, addr2] = await ethers.getSigners();
+    [owner, receiver, addr2] = await ethers.getSigners();
 
     coinInstance = (await upgrades.deployProxy(coin, ["memoryOS COIN token", "MIND"])) as MindCoin;
 
@@ -31,7 +31,7 @@ describe("MindToken", function () {
   });
 
   describe("Deployment", function () {
-    it("Should set the right roles to deployer", async function () {
+    it("should set the right roles to deployer", async function () {
       const isAdmin = await coinInstance.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
       expect(isAdmin).to.equal(true);
       const isMinter = await coinInstance.hasRole(MINTER_ROLE, owner.address);
@@ -42,7 +42,7 @@ describe("MindToken", function () {
       expect(isSnapshoter).to.equal(true);
     });
 
-    it("Should assign the total supply of tokens to the owner", async function () {
+    it("should assign the total supply of tokens to the owner", async function () {
       const totalSupply = await coinInstance.totalSupply();
       expect(totalSupply).to.equal(initialTokenAmountInWei);
       const ownerBalance = await coinInstance.balanceOf(owner.address);
@@ -50,29 +50,44 @@ describe("MindToken", function () {
     });
   });
 
+  describe("Transfer", function () {
+    it("should fail: transfer amount exceeds balance", async function () {
+      const tx = coinInstance.connect(receiver).transfer(owner.address, amount);
+      await expect(tx).to.be.revertedWith("ERC20: transfer amount exceeds balance");
+    });
+
+    it("should transfer", async function () {
+      await coinInstance.transfer(receiver.address, amount);
+      const receiverBalance = await coinInstance.balanceOf(receiver.address);
+      expect(receiverBalance).to.equal(amount);
+      const ownerBalance = await coinInstance.balanceOf(owner.address);
+      expect(ownerBalance).to.equal(initialTokenAmountInWei.sub(amount));
+    });
+  });
+
   describe("Snapshot", function () {
-    it("Should fail with unexisting snapshot", async function () {
-      await coinInstance.transfer(addr1.address, amount);
-      const addr1Balance = await coinInstance.balanceOf(addr1.address);
+    it("should fail: nonexistent id", async function () {
+      await coinInstance.transfer(receiver.address, amount);
+      const addr1Balance = await coinInstance.balanceOf(receiver.address);
       expect(addr1Balance).to.equal(amount);
 
       const tx = coinInstance.snapshot();
       await expect(tx).to.emit(coinInstance, "Snapshot").withArgs("1");
 
-      const tx2 = coinInstance.balanceOfAt(addr1.address, "2");
+      const tx2 = coinInstance.balanceOfAt(receiver.address, "2");
       await expect(tx2).to.be.revertedWith("ERC20Snapshot: nonexistent id");
     });
 
-    it("Should make snapshot", async function () {
-      await coinInstance.transfer(addr1.address, amount);
-      const addr1Balance = await coinInstance.balanceOf(addr1.address);
+    it("should make snapshot", async function () {
+      await coinInstance.transfer(receiver.address, amount);
+      const addr1Balance = await coinInstance.balanceOf(receiver.address);
       expect(addr1Balance).to.equal(amount);
 
       const tx = coinInstance.snapshot();
 
       await expect(tx).to.emit(coinInstance, "Snapshot").withArgs("1");
 
-      const balance1 = await coinInstance.balanceOfAt(addr1.address, "1");
+      const balance1 = await coinInstance.balanceOfAt(receiver.address, "1");
       expect(balance1).to.equal(amount);
 
       const balance2 = await coinInstance.balanceOfAt(addr2.address, "1");
@@ -84,13 +99,13 @@ describe("MindToken", function () {
   });
 
   describe("Mint", function () {
-    it("should fail: wrong role", async function () {
-      const tx = coinInstance.connect(addr1).mint(addr1.address, amount);
+    it("should fail: must have minter role to mint", async function () {
+      const tx = coinInstance.connect(receiver).mint(receiver.address, amount);
       await expect(tx).to.be.revertedWith("ERC20PresetMinterPauser: must have minter role to mint");
     });
 
     it("should fail: cap exceeded", async function () {
-      const tx = coinInstance.mint(addr1.address, cap);
+      const tx = coinInstance.mint(receiver.address, cap);
       await expect(tx).to.be.revertedWith("ERC20Capped: cap exceeded");
     });
 
@@ -104,7 +119,7 @@ describe("MindToken", function () {
   });
 
   describe("Burn", function () {
-    it("should fail: exceeds balance", async function () {
+    it("should fail: burn amount exceeds balance", async function () {
       const tx = coinInstance.burn(initialTokenAmountInWei.add(amount));
       await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds balance");
     });

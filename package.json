@@ -53,14 +53,14 @@
   },
   "license": "UNLICENSED",
   "main": "./dist/index.js",
-  "name": "@gemunion/contracts",
+  "name": "@gemunion/memoryos-contracts",
   "private": true,
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gemunion/contracts"
+    "url": "https://github.com/gemunion/memoryos-contracts"
   },
   "scripts": {
     "build": "hardhat compile",

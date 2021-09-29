@@ -43,10 +43,6 @@ abstract contract ERC721OpenSeaUpgradeable is Initializable, ERC721PresetMinterP
         return getRoleMember(DEFAULT_ADMIN_ROLE, 0);
     }
 
-    function baseTokenURI() public view returns (string memory){
-        return _baseURI();
-    }
-
     /**
      * Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
      */

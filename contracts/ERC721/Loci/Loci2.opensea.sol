@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../ERC721TradableUpgradeable.sol";
 import "../ERC721OpenSeaUpgradeable.sol";
 
-contract LociOpenSea is Initializable, ERC721TradableUpgradeable, ERC721OpenSeaUpgradeable {
+contract LociOpenSea2 is Initializable, ERC721TradableUpgradeable, ERC721OpenSeaUpgradeable {
     function initialize(
         string memory _name,
         string memory _symbol,
@@ -22,7 +22,7 @@ contract LociOpenSea is Initializable, ERC721TradableUpgradeable, ERC721OpenSeaU
     function _baseURI() internal view
     override (ERC721TradableUpgradeable, ERC721PresetMinterPauserAutoIdUpgradeable)
     returns (string memory) {
-        return "https://us-central1-encoder-memoryos.cloudfunctions.net/LociNftMetadataJson/";
+        return "https://us-central1-encoder-memoryos.cloudfunctions.net/LociMetadataJson/";
     }
 
     function isApprovedForAll(address owner, address operator)

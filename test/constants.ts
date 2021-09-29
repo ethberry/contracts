@@ -1,6 +1,7 @@
 import { ethers } from "hardhat";
 
-export const baseTokenURI = "http://localhost/";
+// export const baseTokenURI = "http://localhost/";
+export const baseTokenURI = "https://us-central1-encoder-memoryos.cloudfunctions.net/LociMetadataJson/";
 
 export const DEFAULT_ADMIN_ROLE = "0x0000000000000000000000000000000000000000000000000000000000000000";
 export const MINTER_ROLE = ethers.utils.id("MINTER_ROLE");
@@ -44,4 +45,7 @@ export const addr = {
     chainLinkFee: 0.0001,
     chainLinkKeyHash: "0xf86195cf7690c55907b2b611ebb7343a6f649bff128701cc542f0569e2c549da",
   },
-};
+} as Record<string, any>;
+
+// rinkeby Link deployed to: 0xc643120D54a9E0252D8B09189905E2C073d331BC
+// mumbai  Link deployed to: 0x7d8CE7aB7109c13d2c47518e49e811f0DA012516

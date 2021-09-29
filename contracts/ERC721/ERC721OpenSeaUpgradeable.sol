@@ -8,7 +8,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/presets/ERC721PresetMin
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
-import "./ProxyRegistry.sol";
+import "../OpenSea/ProxyRegistry.sol";
 
 /**
  * @dev Extension of {ERC721} that adds a cap to the supply of tokens.

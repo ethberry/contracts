@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/presets/ERC721PresetMin
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
-import "./ProxyRegistry.sol";
+import "../OpenSea/ProxyRegistry.sol";
 import "./ERC721CappedUpgradeable.sol";
 
 abstract contract ERC721TradableUpgradeable is Initializable, ERC721PresetMinterPauserAutoIdUpgradeable, ERC721URIStorageUpgradeable, ERC721CappedUpgradeable {

@@ -6,14 +6,16 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 import "../ERC721TradableUpgradeable.sol";
 import "../ERC721OpenSeaUpgradeable.sol";
+import "../ERC721LinkUpgradeable.sol";
 
-contract LociOpenSea2 is Initializable, ERC721TradableUpgradeable, ERC721OpenSeaUpgradeable {
+contract LociOpenSea2 is Initializable, ERC721TradableUpgradeable, ERC721OpenSeaUpgradeable, ERC721LinkUpgradeable {
     function initialize(
         string memory _name,
         string memory _symbol,
         string memory _baseURI
     ) public override initializer {
         __ERC721Tradable_init(_name, _symbol, _baseURI, 100);
+        __ERC721LinkUpgradeable_init_unchained();
         __ERC721OpenSea_init_unchained();
     }
 

@@ -2,6 +2,7 @@
 dist/
 coverage/
 typechain/
+besu/
 
 # IDE
 .idea

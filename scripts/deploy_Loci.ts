@@ -9,7 +9,7 @@ async function main() {
   const proxy = await ethers.getContractFactory("ProxyRegistry");
   const proxyInstance = (await upgrades.deployProxy(proxy)) as ProxyRegistry;
 
-  const nftInstance = (await upgrades.deployProxy(nft, ["Loci NFT", "Loci (OpenSea)", baseTokenURI])) as Loci;
+  const nftInstance = (await upgrades.deployProxy(nft, ["Loci-NFTv2", "Loci (OpenSea)", baseTokenURI])) as Loci;
 
   await nftInstance.setProxyRegistry(proxyInstance.address);
 

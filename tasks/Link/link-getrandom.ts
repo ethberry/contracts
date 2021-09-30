@@ -7,6 +7,38 @@ task("link-random", "Get random number from Link contract")
   .setAction(async (taskArgs, hre) => {
     const LINK_ABI = [
       {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: false,
+            internalType: "bytes32",
+            name: "requestId",
+            type: "bytes32",
+          },
+          {
+            indexed: false,
+            internalType: "uint256",
+            name: "randomness",
+            type: "uint256",
+          },
+        ],
+        name: "GotRandomness",
+        type: "event",
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: false,
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+        ],
+        name: "Snapshot",
+        type: "event",
+      },
+      {
         inputs: [
           {
             internalType: "uint256",
@@ -26,28 +58,7 @@ task("link-random", "Get random number from Link contract")
         type: "function",
       },
       {
-        inputs: [
-          {
-            internalType: "address",
-            name: "_vrfCoordinator",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "_link",
-            type: "address",
-          },
-          {
-            internalType: "bytes32",
-            name: "_keyHash",
-            type: "bytes32",
-          },
-          {
-            internalType: "uint256",
-            name: "_fee",
-            type: "uint256",
-          },
-        ],
+        inputs: [],
         name: "initialize",
         outputs: [],
         stateMutability: "nonpayable",
@@ -83,7 +94,7 @@ task("link-random", "Get random number from Link contract")
     const accounts = await hre.ethers.getSigners();
     const signer = accounts[0];
 
-    // Create connection to dNFT Contract and call the burn function
+    // Create connection to dNFT Contract and call the function
     const LinkContract = new hre.ethers.Contract(contractAddr, LINK_ABI, signer);
 
     // const TOW = await LinkContract.owner();

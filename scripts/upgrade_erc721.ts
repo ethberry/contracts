@@ -1,21 +1,21 @@
 import "@nomiclabs/hardhat-ethers";
 import { ethers, upgrades } from "hardhat";
-import { LociOpenSea2 } from "../typechain";
+import { Loci, ProxyRegistry } from "../typechain";
 
 async function main() {
   // We get the contract to deploy
   // const oldnft = await ethers.getContractFactory("LociOpenSea");
-  const newnft = await ethers.getContractFactory("LociOpenSea2");
+  const newnft = await ethers.getContractFactory("Loci");
 
   // const proxy = await ethers.getContractFactory("ProxyRegistry");
   // const proxyInstance = (await upgrades.deployProxy(proxy)) as ProxyRegistry;
 
-  const oldContractAddress = "0x34471fa7c9195516805bb05ed245dcbbaec4b5f2";
-  const newtokenInstance = (await upgrades.upgradeProxy(oldContractAddress, newnft)) as LociOpenSea2;
+  const oldContractAddress = "0x12D6653672f7bD8D3182F848a50c3855aa9f1D2B";
+  const newtokenInstance = (await upgrades.upgradeProxy(oldContractAddress, newnft)) as Loci;
 
   // await newtokenInstance.setProxyRegistry(proxyInstance.address);
 
-  console.info(`MindToken ${newtokenInstance.address} upgraded`);
+  console.info(`Contract ${newtokenInstance.address} upgraded`);
 }
 
 main()

@@ -4,34 +4,24 @@ pragma solidity ^0.8.2;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/presets/ERC721PresetMinterPauserAutoIdUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
 import "../OpenSea/ProxyRegistry.sol";
 
-/**
- * @dev Extension of {ERC721} that adds a cap to the supply of tokens.
- */
-abstract contract ERC721OpenSeaUpgradeable is Initializable, ERC721PresetMinterPauserAutoIdUpgradeable {
-    using AddressUpgradeable for address;
+abstract contract ERC721OpenSeaUpgradeable is Initializable,
+        ERC721Upgradeable,
+        AccessControlEnumerableUpgradeable {
 
+    using AddressUpgradeable for address;
     ProxyRegistry private _proxyRegistry;
 
-    /**
-     * @dev Sets the value of the `cap`. This value is immutable, it can only be
-     * set once during construction.
-     */
-    function __ERC721OpenSea_init(
-        string memory name_,
-        string memory symbol_,
-        string memory baseTokenURI_
+    function __ERC721OpenSeaUpgradeable_init(
     ) internal initializer {
-        __ERC721PresetMinterPauserAutoId_init(name_, symbol_, baseTokenURI_);
-        __ERC721OpenSea_init_unchained();
+        __ERC721OpenSeaUpgradeable_init_unchained();
     }
 
-    function __ERC721OpenSea_init_unchained() internal initializer {
+    function __ERC721OpenSeaUpgradeable_init_unchained() internal initializer {
     }
 
     function setProxyRegistry(address proxyRegistry_) external onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -47,7 +37,7 @@ abstract contract ERC721OpenSeaUpgradeable is Initializable, ERC721PresetMinterP
      * Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
      */
     function isApprovedForAll(address owner_, address operator_)
-    override
+    override (ERC721Upgradeable)
     virtual
     public
     view
@@ -60,4 +50,18 @@ abstract contract ERC721OpenSeaUpgradeable is Initializable, ERC721PresetMinterP
 
         return super.isApprovedForAll(owner_, operator_);
     }
+
+    /**
+     * @dev See {IERC165-supportsInterface}.
+     */
+    function supportsInterface(bytes4 interfaceId)
+    public
+    view
+    virtual
+    override(AccessControlEnumerableUpgradeable, ERC721Upgradeable)
+    returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+    uint256[48] private __gap;
 }

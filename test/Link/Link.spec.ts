@@ -15,8 +15,8 @@ describe("Link", function () {
     [owner] = await ethers.getSigners();
 
     linkInstance = (await upgrades.deployProxy(link, [
-      "0xa555fC018435bef5A13C6c6870a9d4C11DEC329C",
-      "0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06",
+      "0xa555fC018435bef5A13C6c6870a9d4C11DEC329C", // VRF Coordinator
+      "0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06", // LINK Token
     ])) as Link;
   });
 

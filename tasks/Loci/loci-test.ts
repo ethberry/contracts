@@ -1,12 +1,12 @@
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-web3";
 
-task("loci-mint", "Creates a new LOCI ERC-721 NFT")
+task("loci-test", "Test for new LOCI ERC-721 NFT")
   .addParam("contract", "The address of the dNFT contract that you want to read")
   .setAction(async (taskArgs, hre) => {
     const contractAddr = taskArgs.contract;
     const networkId = hre.network.name;
-    console.info("Mint LOCI NFT on network ", networkId);
+    console.info("Testing LOCI NFT on network ", networkId);
     const LOCI_ABI = [
       {
         anonymous: false,
@@ -921,13 +921,21 @@ task("loci-mint", "Creates a new LOCI ERC-721 NFT")
         type: "function",
       },
     ];
+
     // Get signer information
     const accounts = await hre.ethers.getSigners();
     const signer = accounts[0];
+    // const addr1 = accounts[1];
+    // console.log("signer.address:", signer.address);
+    // console.log("addr1.address:", addr1.address);
 
     // Create connection to dNFT Contract and call the createCollectible function
     const LociNFTContract = new hre.ethers.Contract(contractAddr, LOCI_ABI, signer);
-    await LociNFTContract.mintTo(signer.address).then(() => console.info("Collectible Created!"));
+    // await LociNFTContract.connect(signer)
+    //   .mint(signer.address, { from: signer.address })
+    const res = await LociNFTContract.testRandomMint().then(() => console.info("Collectible Created!"));
+    console.log("res", res);
+
     // const BTU = await LociNFTContract.tokenURI(tokenid._hex);
     // console.log("BTU", BTU);
     // console.info(

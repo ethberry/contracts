@@ -24,14 +24,14 @@ task("fund-link", "Funds a contract with LINK")
     let linkContractAddr: string;
     switch (networkName) {
       case "rinkeby":
-        linkContractAddr = "0x61284003E50b2D7cA2B95F93857abB78a1b0F3Ca";
+        linkContractAddr = "0x01BE23585060835E02B77ef475b0Cc51aA1e0709";
         break;
       case "mumbai":
         linkContractAddr = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
         break;
       default:
         // default to rinkeby
-        linkContractAddr = "0x61284003E50b2D7cA2B95F93857abB78a1b0F3Ca";
+        linkContractAddr = "0x01BE23585060835E02B77ef475b0Cc51aA1e0709";
     }
     // Fund with 1 LINK token
     const amount = hre.web3.utils.toHex(1e18);

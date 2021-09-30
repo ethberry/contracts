@@ -1,13 +1,10 @@
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-web3";
 
-task("loci-mint", "Creates a new LOCI ERC-721 NFT")
+task("mint-random", "Mint random Nft")
   .addParam("contract", "The address of the dNFT contract that you want to read")
   .setAction(async (taskArgs, hre) => {
-    const contractAddr = taskArgs.contract;
-    const networkId = hre.network.name;
-    console.info("Mint LOCI NFT on network ", networkId);
-    const LOCI_ABI = [
+    const LINK_ABI = [
       {
         anonymous: false,
         inputs: [
@@ -816,13 +813,6 @@ task("loci-mint", "Creates a new LOCI ERC-721 NFT")
         type: "function",
       },
       {
-        inputs: [],
-        name: "testRandomMint",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-      {
         inputs: [
           {
             internalType: "uint256",
@@ -921,19 +911,26 @@ task("loci-mint", "Creates a new LOCI ERC-721 NFT")
         type: "function",
       },
     ];
+    const contractAddr = taskArgs.contract;
+    // const seed = hre.ethers.BigNumber.from((taskArgs.seed * 1e18).toString());
+    // const seed = taskArgs.seed;
+
+    const networkName = hre.network.name;
+    console.info("Minting random from Link in ", networkName);
+    // console.info("With seed ", seed);
     // Get signer information
     const accounts = await hre.ethers.getSigners();
     const signer = accounts[0];
 
-    // Create connection to dNFT Contract and call the createCollectible function
-    const LociNFTContract = new hre.ethers.Contract(contractAddr, LOCI_ABI, signer);
-    await LociNFTContract.mintTo(signer.address).then(() => console.info("Collectible Created!"));
-    // const BTU = await LociNFTContract.tokenURI(tokenid._hex);
-    // console.log("BTU", BTU);
-    // console.info(
-    //   "To sell your NFT go to https://testnets.opensea.io/account",
-    //   "and sign in with the same wallet used in this transaction.",
-    // );
+    // Create connection to dNFT Contract and call the burn function
+    const LinkContract = new hre.ethers.Contract(contractAddr, LINK_ABI, signer);
+    // console.log("LinkContract", LinkContract);
+
+    // const TOW = await LinkContract.symbol();
+    // console.log("symbol", TOW);
+
+    const mintNumber = await LinkContract.mintTo(signer.address).then(() => console.info("Got Random! "));
+    console.info("Random is ", mintNumber);
   });
 
 module.exports = {};

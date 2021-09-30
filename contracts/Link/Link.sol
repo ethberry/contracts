@@ -4,7 +4,7 @@ pragma solidity ^0.8.2;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 
-import "./VRFConsumerBaseUpgradable.sol";
+import "../VRF/VRFConsumerBaseUpgradable.sol";
 
 contract Link is Initializable, VRFConsumerBaseUpgradable {
     using SafeMathUpgradeable for uint256;

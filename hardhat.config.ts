@@ -32,6 +32,7 @@ export default {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY_MUMBAI as string}`,
       accounts: [process.env.MM_PRIVATEKEY],
       gasPrice: 8000000000, // default is 'auto' which breaks chains without the london hardfork
+      timeout: 142000,
       // gas: 29999915,
     },
     // ropsten: {
@@ -42,7 +43,7 @@ export default {
       url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY as string}`,
       gas: 29999915,
       gasPrice: 8000000000,
-      timeout: 42000,
+      timeout: 142000,
       // accounts: [process.env.MM_PRIVATEKEY],
       accounts: {
         mnemonic: process.env.MM_MNEMONIC,

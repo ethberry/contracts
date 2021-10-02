@@ -6,7 +6,8 @@ import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+//import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 
 import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 import "@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol";
@@ -16,10 +17,11 @@ import "../VRF/VRFConsumerBaseUpgradable.sol";
 abstract contract ERC721LinkUpgradeable is Initializable,
         VRFConsumerBaseUpgradable,
         ContextUpgradeable,
-        ERC721Upgradeable,
+        ERC721URIStorageUpgradeable,
         AccessControlEnumerableUpgradeable
 {
     using SafeMathUpgradeable for uint256;
+    using StringsUpgradeable for uint256;
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter public _tokenIdTracker;
     mapping (bytes32 /* requestId */ => address /* nft owner */) queue;
@@ -46,6 +48,7 @@ function __ERC721LinkUpgradeable_init(
       // RINKEBY
       fee = 0.1 ether;
       vrfCoordinatorAddr = 0xb3dCcb4Cf7a26f6cf6B120Cf5A73875B7BBc655B;
+//      vrfCoordinatorAddr = _msgSender(); // only for tests
       linkAddr = 0x01BE23585060835E02B77ef475b0Cc51aA1e0709;
       keyHash = 0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311;
 
@@ -68,11 +71,26 @@ function __ERC721LinkUpgradeable_init(
  *
  * - the caller must have the `MINTER_ROLE`.
  */
-    function mintTo(address to) public virtual {
+    function mintTo(address to) external {
         require(hasRole(MINTER_ROLE, _msgSender()), "Error: must have minter role to mint");
         // We cannot just use balanceOf to create the new tokenId because tokens
         // can be burned (destroyed), so we need a separate counter.
         _mint(to, _tokenIdTracker.current());
+        _tokenIdTracker.increment();
+    }
+
+    function _getCurrentTokenindex() public view // dev
+    returns (uint256)
+    {
+        return _tokenIdTracker.current();
+    }
+
+    function _mintRandom(uint256 d3Result, address to) public
+    {
+        uint256 currentTokenIndex = _tokenIdTracker.current();
+        emit MintRandom(d3Result, to, currentTokenIndex);
+        _mint(to, currentTokenIndex);
+        _setTokenURI(currentTokenIndex, string(abi.encodePacked(d3Result.toString(), "/", currentTokenIndex.toString())));
         _tokenIdTracker.increment();
     }
 
@@ -84,9 +102,8 @@ function __ERC721LinkUpgradeable_init(
     function fulfillRandomness(bytes32 requestId, uint256 randomness) internal
     override (VRFConsumerBaseUpgradable)
     {
-        uint256 d6Result = randomness.mod(6).add(1);
-        emit MintRandom(d6Result, queue[requestId], _tokenIdTracker.current());
-        mintTo(queue[requestId]);
+        uint256 d3Result = randomness.mod(3);
+        _mintRandom(d3Result, queue[requestId]);
         delete queue[requestId];
     }
 

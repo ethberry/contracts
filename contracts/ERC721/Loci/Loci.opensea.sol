@@ -48,10 +48,10 @@ abstract contract LociOpenSea is Initializable,
     }
 
     function tokenURI(uint256 tokenId) public view
-    override(ERC721Upgradeable, ERC721TradableUpgradeable)
+    override(ERC721Upgradeable, ERC721TradableUpgradeable, ERC721URIStorageUpgradeable)
     returns (string memory)
     {
-        return super.tokenURI(tokenId);
+        return ERC721URIStorageUpgradeable.tokenURI(tokenId);
     }
 
     function isApprovedForAll(address owner, address operator)
@@ -60,12 +60,7 @@ abstract contract LociOpenSea is Initializable,
     override(ERC721Upgradeable, ERC721OpenSeaUpgradeable)
     returns (bool)
     {
-        return super.isApprovedForAll(owner, operator);
-    }
-
-    function baseTokenURI() public view
-    returns (string memory){
-        return super._baseURI();
+        return ERC721OpenSeaUpgradeable.isApprovedForAll(owner, operator);
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -74,23 +69,32 @@ abstract contract LociOpenSea is Initializable,
     override(ERC721TradableUpgradeable, ERC721LinkUpgradeable, ERC721OpenSeaUpgradeable)
     returns (bool)
     {
-        return super.supportsInterface(interfaceId);
+        return ERC721Upgradeable.supportsInterface(interfaceId);
     }
 
-    function mintRandom() public {
+    function mintRandom() external {
         queue[getRandomNumber(42)] = _msgSender();
     }
 
+//    function mintTo(address to) public override {
+//        super.mintTo(to);
+//    }
 
-    function _mint(address to, uint256 tokenId) internal virtual override(ERC721Upgradeable, ERC721TradableUpgradeable) {
-        return super._mint(to, tokenId);
+//    function _mintRandom(uint256 d3Result, address to) public override {
+//        super._mintRandom(d3Result,to);
+//    }
+
+
+    function _mint(address to, uint256 tokenId) internal virtual
+    override(ERC721Upgradeable, ERC721TradableUpgradeable) {
+        return ERC721Upgradeable._mint(to, tokenId);
     }
 
     function _burn(uint256 tokenId)
     internal
-    override(ERC721Upgradeable, ERC721TradableUpgradeable)
+    override(ERC721Upgradeable, ERC721TradableUpgradeable, ERC721URIStorageUpgradeable)
     {
-        super._burn(tokenId);
+        ERC721Upgradeable._burn(tokenId);
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)

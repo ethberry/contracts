@@ -20,7 +20,7 @@ abstract contract ERC721TradableUpgradeable is Initializable,
     function __ERC721TradableUpgradeable_init(
     ) internal initializer {
         __ERC721URIStorage_init_unchained();
-        __ERC721Capped_init_unchained(100);
+        __ERC721Capped_init_unchained(uint256(100));
         __ERC721TradableUpgradeable_init_unchained();
     }
 
@@ -53,7 +53,7 @@ abstract contract ERC721TradableUpgradeable is Initializable,
     override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
     returns (string memory)
     {
-        return super.tokenURI(tokenId);
+        return ERC721URIStorageUpgradeable.tokenURI(tokenId);
     }
 
     function supportsInterface(bytes4 interfaceId)

@@ -8,6 +8,9 @@ export const MINTER_ROLE = ethers.utils.id("MINTER_ROLE");
 export const PAUSER_ROLE = ethers.utils.id("PAUSER_ROLE");
 export const SNAPSHOT_ROLE = ethers.utils.id("SNAPSHOT_ROLE");
 export const DEPOSITOR_ROLE = ethers.utils.id("DEPOSITOR_ROLE");
+export const URI_SETTER_ROLE = ethers.utils.id("URI_SETTER_ROLE");
+
+export const TEST_DATA = "0x00000000000000000000000000000000000000000000000000000000686f6c61";
 
 export const decimals = ethers.BigNumber.from(10).pow(18);
 export const amount = 100;

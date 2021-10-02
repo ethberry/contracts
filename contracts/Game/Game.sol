@@ -9,8 +9,9 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 contract Game is Initializable, ERC721HolderUpgradeable, PausableUpgradeable, OwnableUpgradeable {
     function initialize() initializer public {
-        __Pausable_init();
-        __Ownable_init();
-        __ERC721Holder_init();
+        __ERC721Holder_init_unchained();
+        __Context_init_unchained();
+        __Pausable_init_unchained();
+        __Ownable_init_unchained();
     }
 }

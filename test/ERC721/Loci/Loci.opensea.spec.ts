@@ -30,7 +30,7 @@ describe("Loci OpenSea", function () {
   });
 
   describe("Deployment", function () {
-    it("Should set owner", async function () {
+    it("should set owner", async function () {
       const address = await nftInstance.owner();
       expect(address).to.equal(owner.address);
     });

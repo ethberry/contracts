@@ -19,14 +19,14 @@ describe("MindToken (Polygon)", function () {
   });
 
   describe("Deployment", function () {
-    it("Should set the right roles to deployer", async function () {
+    it("should set the right roles to deployer", async function () {
       const isDepositor = await coinInstance.hasRole(DEPOSITOR_ROLE, owner.address);
       expect(isDepositor).to.equal(false);
     });
   });
 
   describe("Bridge", function () {
-    it("Should set the right roles to deployer", async function () {
+    it("should set the right roles to deployer", async function () {
       await coinInstance.grantRole(DEPOSITOR_ROLE, addr.mumbai.childProxyManager);
       const isDepositor = await coinInstance.hasRole(DEPOSITOR_ROLE, addr.mumbai.childProxyManager);
       expect(isDepositor).to.equal(true);

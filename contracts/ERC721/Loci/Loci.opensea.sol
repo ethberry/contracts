@@ -63,11 +63,10 @@ abstract contract LociOpenSea is Initializable,
         return super.isApprovedForAll(owner, operator);
     }
 
-//    function baseTokenURI() public view
-//    returns (string memory){
-//        return super._baseURI();
-//    }
-
+    function baseTokenURI() public view
+    returns (string memory){
+        return super._baseURI();
+    }
 
     function supportsInterface(bytes4 interfaceId)
     public

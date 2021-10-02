@@ -29,7 +29,7 @@ describe("Marketplace", function () {
   });
 
   describe("Deployment", function () {
-    it("Should set the right roles to deployer", async function () {
+    it("should set the right roles to deployer", async function () {
       const balanceOfMarket = await coinInstance.balanceOf(marketInstance.address);
       expect(balanceOfMarket).to.equal(0);
       const balanceOfOwner = await coinInstance.balanceOf(owner.address);

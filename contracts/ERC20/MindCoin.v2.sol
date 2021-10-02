@@ -16,7 +16,7 @@ contract MindCoin2 is Initializable, ERC20PresetMinterPauserUpgradeable, ERC20Ca
     function __MindCoin_init(string memory _name, string memory _symbol) internal initializer {
         __ERC20PresetMinterPauser_init(_name, _symbol);
 
-        __ERC20Capped_init_unchained(2 * 1e9 * 1e18);
+        __ERC20Capped_init_unchained(3 * 1e9 * 1e18);
         __ERC20Snapshot_init_unchained();
 
         __MindCoin_init_unchained();

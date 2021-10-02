@@ -4,8 +4,6 @@ pragma solidity ^0.8.2;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 
-import "./VRFConsumerBaseUpgradable.sol";
-
 contract Dispersion is Initializable  {
     using SafeMathUpgradeable for uint256;
 

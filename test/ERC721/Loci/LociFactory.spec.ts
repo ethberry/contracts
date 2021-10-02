@@ -38,7 +38,7 @@ describe("LociFactory", function () {
   });
 
   describe("Deployment", function () {
-    it("Should set the right roles to deployer", async function () {
+    it("should set the right roles to deployer", async function () {
       const isAdmin = await factoryInstance.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
       expect(isAdmin).to.equal(true);
     });

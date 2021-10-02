@@ -20,7 +20,7 @@ describe("Memoverse", function () {
   });
 
   describe("Deployment", function () {
-    it("Should set the right roles to deployer", async function () {
+    it("should set the right roles to deployer", async function () {
       const isAdmin = await nftInstance.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
       expect(isAdmin).to.equal(true);
       const isMinter = await nftInstance.hasRole(MINTER_ROLE, owner.address);

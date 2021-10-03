@@ -7,8 +7,7 @@ async function main() {
   const token = await ethers.getContractFactory("MindCoin");
   // ethers.utils.parseUnits("10", "gwei");
 
-  const tokenInstance = (await upgrades.deployProxy(token, ["memoryOS COIN token", "MIND"])) as MindCoin;
-
+  const tokenInstance = (await upgrades.deployProxy(token, ["link test COIN token", "LINK"])) as MindCoin;
   console.info("MindToken deployed to:", tokenInstance.address);
 }
 

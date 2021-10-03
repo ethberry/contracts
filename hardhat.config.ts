@@ -40,14 +40,14 @@ export default {
     //   accounts: [`0x${process.env.ROPSTEN_PRIVATE_KEY as string}`],
     // },
     rinkeby: {
-      url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY as string}`,
-      gas: 29999915,
+      url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY_RINKEBY as string}`,
+      gas: 2100000,
       gasPrice: 8000000000,
       timeout: 142000,
-      // accounts: [process.env.MM_PRIVATEKEY],
-      accounts: {
-        mnemonic: process.env.MM_MNEMONIC,
-      },
+      accounts: [process.env.MM_PRIVATEKEY],
+      // accounts: {
+      //   mnemonic: process.env.MM_MNEMONIC,
+      // },
       saveDeployments: true,
     },
   },

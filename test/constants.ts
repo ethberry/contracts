@@ -20,6 +20,13 @@ export const initialTokenAmountInWei = ethers.BigNumber.from(initialTokenAmount)
 export const cap = ethers.BigNumber.from("2000000000").mul(decimals);
 
 export const addr = {
+  hardhat: {
+    openSeaProxyRegistry: "0xa5409ec958c83c3f309868babaca7c86dcb077c1",
+    chainLinkVRFCoordinator: "0xf0d54349aDdcf704F77AE15b96510dEA15cb7952",
+    chainLinkToken: "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+    chainLinkFee: 2,
+    chainLinkKeyHash: "0xAA77729D3466CA35AE8D28B3BBAC7CC36A5031EFDC430821C02BC31A238AF445",
+  },
   mainnet: {
     openSeaProxyRegistry: "0xa5409ec958c83c3f309868babaca7c86dcb077c1",
     chainLinkVRFCoordinator: "0xf0d54349aDdcf704F77AE15b96510dEA15cb7952",

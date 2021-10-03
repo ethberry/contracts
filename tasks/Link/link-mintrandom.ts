@@ -4,7 +4,7 @@ import "@nomiclabs/hardhat-web3";
 task("mint-random", "Mint random Nft")
   .addParam("contract", "The address of the dNFT contract that you want to read")
   .setAction(async (taskArgs, hre) => {
-    const LINK_ABI = [
+    const LOCI_ABI = [
       {
         anonymous: false,
         inputs: [
@@ -923,13 +923,13 @@ task("mint-random", "Mint random Nft")
     const signer = accounts[0];
 
     // Create connection to dNFT Contract and call the burn function
-    const LinkContract = new hre.ethers.Contract(contractAddr, LINK_ABI, signer);
+    const LinkContract = new hre.ethers.Contract(contractAddr, LOCI_ABI, signer);
     // console.log("LinkContract", LinkContract);
 
     // const TOW = await LinkContract.symbol();
     // console.log("symbol", TOW);
 
-    const mintNumber = await LinkContract.mintTo(signer.address).then(() => console.info("Got Random! "));
+    const mintNumber = await LinkContract.mintRandom().then(() => console.info("Minted! "));
     console.info("Random is ", mintNumber);
   });
 

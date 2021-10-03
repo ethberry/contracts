@@ -31,7 +31,7 @@ describe("Game", function () {
 
   describe("Transfer", function () {
     it("should transfer nft", async function () {
-      await nftInstance.mint(owner.address);
+      await nftInstance.mintTo(owner.address);
       await nftInstance.transferFrom(owner.address, gameInstance.address, 0);
 
       const balanceOfOwner = await nftInstance.balanceOf(owner.address);

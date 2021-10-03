@@ -41,4 +41,18 @@ contract MindCoin is Initializable, ERC20PresetMinterPauserUpgradeable, ERC20Cap
     {
         super._beforeTokenTransfer(from, to, amount);
     }
+    // VRF CORDINATOR TEST
+    function transferAndCall(
+        address to,
+        uint256 value,
+        bytes calldata data
+    )
+    external
+    pure
+    returns (
+        bool success
+    )
+    {
+        return true;
+    }
 }

@@ -51,6 +51,22 @@ hardhat run --network ropsten scripts/deploy_erc20.ts
 ```
 
 ## verify on etherscan (if proxy used)
+#### Deploy contract first (see #deploy)
+Then run:
 ```shell
 hardhat verify --network rinkeby <implementation address>
+```
+
+## Complete deploy and mint random LociNft
+### Deploy contract
+```shell
+hardhat run --network <network> scripts/deploy_Loci.ts
+```
+### Fund contract with 1 LINK
+```shell
+hardhat fund-link --network <network> --contract <LociNFT deployed address>
+```
+### Mint some random LociNft
+```shell
+ hardhat loci-mint --network <network> --contract <LociNFT deployed address>
 ```

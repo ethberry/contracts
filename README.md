@@ -49,3 +49,8 @@ hardhat run --network besu scripts/deploy_erc20.ts
 ```shell
 hardhat run --network ropsten scripts/deploy_erc20.ts
 ```
+
+## verify on etherscan (if proxy used)
+```shell
+hardhat verify --network rinkeby <implementation address>
+```

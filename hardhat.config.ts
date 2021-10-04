@@ -1,6 +1,7 @@
 import { config } from "dotenv";
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
+import "@nomiclabs/hardhat-etherscan";
 import "@openzeppelin/hardhat-upgrades";
 import "@typechain/hardhat";
 import "hardhat-deploy";
@@ -52,7 +53,7 @@ export default {
     },
   },
   solidity: {
-    version: "0.8.4",
+    version: "0.8.2",
     settings: {
       optimizer: {
         enabled: true,

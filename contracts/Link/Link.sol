@@ -33,7 +33,7 @@ contract Link is Initializable, VRFConsumerBaseUpgradable {
     }
 
     event Random(uint256 id);
-    function fulfillRandomness(bytes32 requestId, uint256 randomness) internal pure override {
+    function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
         uint256 d6Result = randomness.mod(6).add(1);
         emit Random(d6Result);
     }

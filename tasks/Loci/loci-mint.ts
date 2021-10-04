@@ -1,6 +1,6 @@
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-web3";
-import LociJson from "../../artifacts/contracts/ERC721/Loci/Loci.sol/Loci.json";
+// import LociJson from "../../artifacts/contracts/ERC721/Loci/Loci.sol/Loci.json";
 
 task("loci-mint", "Creates a new LOCI ERC-721 NFT")
   .addParam("contract", "The address of the dNFT contract that you want to read")
@@ -8,7 +8,8 @@ task("loci-mint", "Creates a new LOCI ERC-721 NFT")
     const contractAddr = taskArgs.contract;
     const networkId = hre.network.name;
     console.info("Mint random LOCI NFT on network ", networkId);
-    const LOCI_ABI = LociJson.abi;
+    // const LOCI_ABI = LociJson.abi;
+    const LOCI_ABI: Array<any>[any] = [];
     // Get signer information
     const accounts = await hre.ethers.getSigners();
     const signer = accounts[0];

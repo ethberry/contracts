@@ -5,9 +5,10 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/presets/ERC20PresetMinterPauserUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20SnapshotUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20CappedUpgradeable.sol";
-import "../WhiteBlackList/BlackListable.sol";
 
-contract MindCoin is Initializable, BlackListable,
+import "../WhiteBlackList/BlackList.sol";
+
+contract MindCoin is Initializable, BlackListUpgradeable,
         ERC20PresetMinterPauserUpgradeable,
         ERC20CappedUpgradeable,
         ERC20SnapshotUpgradeable {
@@ -23,7 +24,7 @@ contract MindCoin is Initializable, BlackListable,
         __ERC20Capped_init_unchained(2 * 1e9 * 1e18);
         __ERC20Snapshot_init_unchained();
 
-        __BlackListable_init_unchained();
+        __BlackList_init_unchained();
 
         __MindCoin_init_unchained();
     }
@@ -49,6 +50,7 @@ contract MindCoin is Initializable, BlackListable,
         require(!isBlacklisted(to), "Error: receiver is BlackListed");
         super._beforeTokenTransfer(from, to, amount);
     }
+
     // VRF CORDINATOR TEST
     function transferAndCall(
         address to,

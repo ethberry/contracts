@@ -99,7 +99,7 @@ describe("DEX", function () {
 
   describe("Sell", function () {
     it("should sell tokens for initial price", async function () {
-      // contract should has eth
+      // contract should have eth
       await owner.sendTransaction({
         to: marketInstance.address,
         value: parseEther("1"),

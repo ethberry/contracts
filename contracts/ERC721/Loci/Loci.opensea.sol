@@ -76,15 +76,6 @@ abstract contract LociOpenSea is Initializable,
         queue[getRandomNumber(42)] = _msgSender();
     }
 
-//    function mintTo(address to) public override {
-//        super.mintTo(to);
-//    }
-
-//    function _mintRandom(uint256 d3Result, address to) public override {
-//        super._mintRandom(d3Result,to);
-//    }
-
-
     function _mint(address to, uint256 tokenId) internal virtual
     override(ERC721Upgradeable, ERC721TradableUpgradeable) {
         return ERC721Upgradeable._mint(to, tokenId);

@@ -172,5 +172,17 @@ describe("MindToken", function () {
       const tx = coinInstance.unblacklist(receiver.address);
       await expect(tx).to.emit(coinInstance, "UnBlacklisted").withArgs(receiver.address);
     });
+
+    it("should NOT transfer to address in black list", async function () {
+      await coinInstance.blacklist(receiver.address);
+      const tx = coinInstance.transfer(receiver.address, amount);
+      await expect(tx).to.be.revertedWith("Error: receiver is BlackListed");
+    });
+
+    it("should NOT transfer from address in black list", async function () {
+      await coinInstance.blacklist(receiver.address);
+      const tx = coinInstance.connect(receiver).transfer(owner.address, amount);
+      await expect(tx).to.be.revertedWith("Error: sender is BlackListed");
+    });
   });
 });

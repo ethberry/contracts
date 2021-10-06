@@ -45,6 +45,8 @@ contract MindCoin is Initializable, BlackListable,
     whenNotPaused
     override(ERC20Upgradeable, ERC20SnapshotUpgradeable, ERC20PresetMinterPauserUpgradeable)
     {
+        require(!isBlacklisted(from), "Error: sender is BlackListed");
+        require(!isBlacklisted(to), "Error: receiver is BlackListed");
         super._beforeTokenTransfer(from, to, amount);
     }
     // VRF CORDINATOR TEST

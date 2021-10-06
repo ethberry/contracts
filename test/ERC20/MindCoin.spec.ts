@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers, upgrades } from "hardhat";
-import { ContractFactory } from "ethers";
+import { ContractFactory, ContractReceipt, ContractTransaction } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { MindCoin } from "../../typechain";
@@ -130,6 +130,47 @@ describe("MindToken", function () {
       expect(balance).to.equal(initialTokenAmountInWei.sub(amount));
       const totalSupply = await coinInstance.totalSupply();
       expect(totalSupply).to.equal(initialTokenAmountInWei.sub(amount));
+    });
+  });
+
+  describe("Black list", function () {
+    it("should fail: no admin role", async function () {
+      const tx = coinInstance.connect(receiver).blacklist(receiver.address);
+      await expect(tx).to.be.revertedWith("Error: must have admin role");
+    });
+
+    it("should fail: address not in black list", async function () {
+      const isBlackListed = await coinInstance.isBlacklisted(receiver.address);
+      expect(isBlackListed).to.equal(false);
+    });
+
+    it("should fail: can not blacklist admin", async function () {
+      const tx = coinInstance.blacklist(owner.address);
+      await expect(tx).to.be.revertedWith("Error: can not blacklist admin");
+    });
+
+    it("should add to black list", async function () {
+      const tx: ContractTransaction = await coinInstance.blacklist(receiver.address);
+      await tx.wait(1);
+      const isBlackListed = await coinInstance.isBlacklisted(receiver.address);
+      expect(isBlackListed).to.equal(true);
+    });
+
+    it("should emit blacklist event", async function () {
+      const tx = coinInstance.blacklist(receiver.address);
+      await expect(tx).to.emit(coinInstance, "Blacklisted").withArgs(receiver.address);
+    });
+
+    it("should delete from black list", async function () {
+      const tx: ContractTransaction = await coinInstance.unblacklist(receiver.address);
+      await tx.wait(1);
+      const isBlackListed = await coinInstance.isBlacklisted(receiver.address);
+      expect(isBlackListed).to.equal(false);
+    });
+
+    it("should emit unblacklist event", async function () {
+      const tx = coinInstance.unblacklist(receiver.address);
+      await expect(tx).to.emit(coinInstance, "UnBlacklisted").withArgs(receiver.address);
     });
   });
 });

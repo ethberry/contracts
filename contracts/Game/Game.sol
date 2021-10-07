@@ -5,7 +5,8 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/utils/ERC721HolderUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "../WhiteBlackList/WhiteList.sol";
+
+import "../AccessList/WhiteList.sol";
 
 
 contract Game is Initializable, ERC721HolderUpgradeable,

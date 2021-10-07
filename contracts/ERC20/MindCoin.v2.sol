@@ -6,7 +6,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/presets/ERC20PresetMinte
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20SnapshotUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20CappedUpgradeable.sol";
 
-import "../WhiteBlackList/BlackList.sol";
+import "../AccessList/BlackList.sol";
 
 contract MindCoin2 is Initializable, BlackListUpgradeable, ERC20PresetMinterPauserUpgradeable, ERC20CappedUpgradeable, ERC20SnapshotUpgradeable {
     bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");

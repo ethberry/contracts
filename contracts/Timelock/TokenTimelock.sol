@@ -4,7 +4,7 @@ pragma solidity ^0.8.2;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/TokenTimelockUpgradeable.sol";
 
-contract MindTokenTimelock is Initializable, TokenTimelockUpgradeable {
+contract TokenTimelock is Initializable, TokenTimelockUpgradeable {
     function initialize(
         IERC20Upgradeable _token,
         address _beneficiary,

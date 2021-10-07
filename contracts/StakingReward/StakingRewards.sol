@@ -24,9 +24,9 @@ contract StakingRewards is Initializable, ReentrancyGuardUpgradeable, PausableUp
 
     IERC20Upgradeable public rewardsToken;
     IERC20Upgradeable public stakingToken;
-    uint256 public periodFinish = 0;
-    uint256 public rewardRate = 0;
-    uint256 public rewardsDuration = 7 days;
+    uint256 public periodFinish;
+    uint256 public rewardRate;
+    uint256 public rewardsDuration;
     uint256 public lastUpdateTime;
     uint256 public rewardPerTokenStored;
 
@@ -45,6 +45,10 @@ contract StakingRewards is Initializable, ReentrancyGuardUpgradeable, PausableUp
         __Pausable_init();
         __Ownable_init();
         __ReentrancyGuard_init();
+
+        periodFinish = 0;
+        rewardRate = 0;
+        rewardsDuration = 7 days;
 
         rewardsToken = IERC20Upgradeable(_rewardsToken);
         stakingToken = IERC20Upgradeable(_stakingToken);
@@ -84,33 +88,33 @@ contract StakingRewards is Initializable, ReentrancyGuardUpgradeable, PausableUp
 
     /* ========== MUTATIVE FUNCTIONS ========== */
 
-    function stake(uint256 amount) external nonReentrant whenNotPaused updateReward(msg.sender) {
+    function stake(uint256 amount) external nonReentrant whenNotPaused updateReward(_msgSender()) {
         require(amount > 0, "Cannot stake 0");
         _totalSupply = _totalSupply.add(amount);
-        _balances[msg.sender] = _balances[msg.sender].add(amount);
-        stakingToken.safeTransferFrom(msg.sender, address(this), amount);
-        emit Staked(msg.sender, amount);
+        _balances[_msgSender()] = _balances[_msgSender()].add(amount);
+        stakingToken.safeTransferFrom(_msgSender(), address(this), amount);
+        emit Staked(_msgSender(), amount);
     }
 
-    function withdraw(uint256 amount) public nonReentrant updateReward(msg.sender) {
+    function withdraw(uint256 amount) public nonReentrant updateReward(_msgSender()) {
         require(amount > 0, "Cannot withdraw 0");
         _totalSupply = _totalSupply.sub(amount);
-        _balances[msg.sender] = _balances[msg.sender].sub(amount);
-        stakingToken.safeTransfer(msg.sender, amount);
-        emit Withdrawn(msg.sender, amount);
+        _balances[_msgSender()] = _balances[_msgSender()].sub(amount);
+        stakingToken.safeTransfer(_msgSender(), amount);
+        emit Withdrawn(_msgSender(), amount);
     }
 
-    function getReward() public nonReentrant updateReward(msg.sender) {
-        uint256 reward = rewards[msg.sender];
+    function getReward() public nonReentrant updateReward(_msgSender()) {
+        uint256 reward = rewards[_msgSender()];
         if (reward > 0) {
-            rewards[msg.sender] = 0;
-            rewardsToken.safeTransfer(msg.sender, reward);
-            emit RewardPaid(msg.sender, reward);
+            rewards[_msgSender()] = 0;
+            rewardsToken.safeTransfer(_msgSender(), reward);
+            emit RewardPaid(_msgSender(), reward);
         }
     }
 
     function exit() external {
-        withdraw(_balances[msg.sender]);
+        withdraw(_balances[_msgSender()]);
         getReward();
     }
 

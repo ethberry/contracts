@@ -15,7 +15,7 @@ export const TEST_DATA = "0x0000000000000000000000000000000000000000000000000000
 export const decimals = ethers.BigNumber.from(10).pow(18);
 export const amount = 100;
 export const amountInWei = ethers.BigNumber.from(amount).mul(decimals);
-export const initialTokenAmount = 2 * 1e3;
+export const initialTokenAmount = 1000;
 export const initialTokenAmountInWei = ethers.BigNumber.from(initialTokenAmount).mul(decimals);
 export const cap = ethers.BigNumber.from("2000000000").mul(decimals);
 

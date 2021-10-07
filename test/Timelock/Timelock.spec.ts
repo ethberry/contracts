@@ -3,47 +3,47 @@ import { ethers, upgrades } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { MindCoin, MindTokenTimelock, TokenTimelockUpgradeable } from "../../typechain";
+import { TokenTimelockErc20, TokenTimelock, TokenTimelockUpgradeable } from "../../typechain";
 import { amount, initialTokenAmountInWei } from "../constants";
 
-describe.skip("Time Lock", function () {
-  let coin: ContractFactory;
+describe("Time Lock", function () {
+  let token: ContractFactory;
+  let tokenInstance: TokenTimelockErc20;
   let timelock: ContractFactory;
-  let coinInstance: MindCoin;
   let timelockInstance: TokenTimelockUpgradeable;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
   const releaseAfter = 10; // sec
 
   beforeEach(async function () {
-    coin = await ethers.getContractFactory("MindCoin");
-    timelock = await ethers.getContractFactory("MindTokenTimelock");
+    token = await ethers.getContractFactory("TokenTimelockErc20");
+    timelock = await ethers.getContractFactory("TokenTimelock");
     [owner, addr1] = await ethers.getSigners();
 
-    coinInstance = (await upgrades.deployProxy(coin, ["memoryOS COIN token", "MIND"])) as MindCoin;
+    tokenInstance = (await upgrades.deployProxy(token)) as TokenTimelockErc20;
     timelockInstance = (await upgrades.deployProxy(timelock, [
-      coinInstance.address,
+      tokenInstance.address,
       addr1.address,
       Math.floor(Date.now() / 1000) + releaseAfter,
-    ])) as MindTokenTimelock;
+    ])) as TokenTimelock;
 
-    await coinInstance.mint(owner.address, initialTokenAmountInWei);
+    await tokenInstance.mint(owner.address, initialTokenAmountInWei);
   });
 
   describe("Deployment", function () {
     it("TimeLock should has zero balance", async function () {
-      const balanceOfMarket = await coinInstance.balanceOf(timelockInstance.address);
+      const balanceOfMarket = await tokenInstance.balanceOf(timelockInstance.address);
       expect(balanceOfMarket).to.equal(0);
-      const balanceOfOwner = await coinInstance.balanceOf(owner.address);
+      const balanceOfOwner = await tokenInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(initialTokenAmountInWei);
     });
   });
 
-  describe("Lock", function () {
+  describe.skip("Lock", function () {
     it("should NOT release tokens", async function () {
-      await coinInstance.approve(owner.address, amount);
-      await coinInstance.transferFrom(owner.address, timelockInstance.address, amount);
-      const balanceOfOwner = await coinInstance.balanceOf(owner.address);
+      await tokenInstance.approve(owner.address, amount);
+      await tokenInstance.transferFrom(owner.address, timelockInstance.address, amount);
+      const balanceOfOwner = await tokenInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
 
       const tx = timelockInstance.connect(addr1).release();
@@ -53,17 +53,17 @@ describe.skip("Time Lock", function () {
     it("should release tokens", async function () {
       this.timeout(11000);
 
-      await coinInstance.approve(owner.address, amount);
-      await coinInstance.transferFrom(owner.address, timelockInstance.address, amount);
-      const balanceOfOwner = await coinInstance.balanceOf(owner.address);
+      await tokenInstance.approve(owner.address, amount);
+      await tokenInstance.transferFrom(owner.address, timelockInstance.address, amount);
+      const balanceOfOwner = await tokenInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
 
       await new Promise(resolve => setTimeout(resolve, releaseAfter * 1000));
 
       await timelockInstance.connect(addr1).release();
-      const balanceOfAdvisor = await coinInstance.balanceOf(addr1.address);
+      const balanceOfAdvisor = await tokenInstance.balanceOf(addr1.address);
       expect(balanceOfAdvisor).to.equal(amount);
-      const balanceOfTimelock = await coinInstance.balanceOf(timelockInstance.address);
+      const balanceOfTimelock = await tokenInstance.balanceOf(timelockInstance.address);
       expect(balanceOfTimelock).to.equal(0);
     });
   });

@@ -2,6 +2,7 @@ import { ethers } from "hardhat";
 
 // export const baseTokenURI = "http://localhost/";
 export const baseTokenURI = "https://us-central1-encoder-memoryos.cloudfunctions.net/LociMetadataJson/";
+export const baseTokenURInft = "https://us-central1-encoder-memoryos.cloudfunctions.net/LociNftMetadataJson/";
 
 export const DEFAULT_ADMIN_ROLE = "0x0000000000000000000000000000000000000000000000000000000000000000";
 export const MINTER_ROLE = ethers.utils.id("MINTER_ROLE");
@@ -18,6 +19,7 @@ export const amountInWei = ethers.BigNumber.from(amount).mul(decimals);
 export const initialTokenAmount = 1000;
 export const initialTokenAmountInWei = ethers.BigNumber.from(initialTokenAmount).mul(decimals);
 export const cap = ethers.BigNumber.from("2000000000").mul(decimals);
+export const nftcap1 = ethers.BigNumber.from(1);
 
 export const addr = {
   hardhat: {

@@ -10,3 +10,7 @@ hardhat balance --account 0x
 
 node scripts/sample-script.ts
 ```
+
+## inheritance and calls graph
+surya inheritance -i contracts/ERC721/ERC721TradableUpgradeable.sol | dot -Tpng > graph/ERC721TradableUpgradeable.png
+surya graph contracts/ERC721/ERC721TradableUpgradeable.sol | dot -Tpng > graph/ERC721TradableUpgradeable.png

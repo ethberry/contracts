@@ -9,19 +9,21 @@ import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
 import "../OpenSea/ProxyRegistry.sol";
 
-abstract contract ERC721OpenSeaUpgradeable is Initializable,
+abstract contract ERC721OpenSeaUpgradeable is
+        Initializable,
         ERC721Upgradeable,
-        AccessControlEnumerableUpgradeable {
+        AccessControlEnumerableUpgradeable
+{
 
     using AddressUpgradeable for address;
     ProxyRegistry private _proxyRegistry;
 
-    function __ERC721OpenSeaUpgradeable_init(
-    ) internal initializer {
+    function __ERC721OpenSeaUpgradeable_init() internal initializer {
         __ERC721OpenSeaUpgradeable_init_unchained();
     }
 
     function __ERC721OpenSeaUpgradeable_init_unchained() internal initializer {
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
     function setProxyRegistry(address proxyRegistry_) external onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -32,6 +34,7 @@ abstract contract ERC721OpenSeaUpgradeable is Initializable,
     function owner() public view virtual returns (address) {
         return getRoleMember(DEFAULT_ADMIN_ROLE, 0);
     }
+
 
     /**
      * Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
@@ -47,7 +50,6 @@ abstract contract ERC721OpenSeaUpgradeable is Initializable,
         if (address(_proxyRegistry.proxies(owner_)) == operator_) {
             return true;
         }
-
         return super.isApprovedForAll(owner_, operator_);
     }
 
@@ -58,10 +60,10 @@ abstract contract ERC721OpenSeaUpgradeable is Initializable,
     public
     view
     virtual
-    override(AccessControlEnumerableUpgradeable, ERC721Upgradeable)
+    override(ERC721Upgradeable, AccessControlEnumerableUpgradeable)
     returns (bool)
     {
-        return super.supportsInterface(interfaceId);
+        return AccessControlEnumerableUpgradeable.supportsInterface(interfaceId);
     }
     uint256[48] private __gap;
 }

@@ -78,7 +78,7 @@ abstract contract LociOpenSea is Initializable,
 
     function _mint(address to, uint256 tokenId) internal virtual
     override(ERC721Upgradeable, ERC721TradableUpgradeable) {
-        return ERC721Upgradeable._mint(to, tokenId);
+        ERC721TradableUpgradeable._mint(to, tokenId);
     }
 
     function _burn(uint256 tokenId)

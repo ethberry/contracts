@@ -10,7 +10,7 @@ async function main() {
   // const proxy = await ethers.getContractFactory("ProxyRegistry");
   // const proxyInstance = (await upgrades.deployProxy(proxy)) as ProxyRegistry;
 
-  const oldContractAddress = "0x135F2B5C3E13AC20234E87Fd64340C47555595Bb";
+  const oldContractAddress = "0xFfdb7cD34d5B0d2d263fBFB3559D342c3D83Df9D";
   const newtokenInstance = (await upgrades.upgradeProxy(oldContractAddress, newnft)) as Loci;
 
   // await newtokenInstance.setProxyRegistry(proxyInstance.address);

@@ -40,4 +40,12 @@ abstract contract ERC721CappedUpgradeable is Initializable, ERC721EnumerableUpgr
         require(ERC721EnumerableUpgradeable.totalSupply() <= cap(), "ERC721Capped: cap exceeded");
         super._mint(to_, tokenId_);
     }
+    /**
+     * @dev public set cap.
+     */
+    function _setCap(uint256 _newcap) public virtual
+    {
+        require(ERC721EnumerableUpgradeable.totalSupply() <= _newcap, "ERC721Capped: cap too low");
+        _cap = _newcap;
+    }
 }

@@ -3,24 +3,26 @@
 pragma solidity 0.8.2;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
-import "../OpenSea/ProxyRegistry.sol";
 import "./ERC721CappedUpgradeable.sol";
 
 abstract contract ERC721TradableUpgradeable is Initializable,
-    ERC721URIStorageUpgradeable,
     ERC721CappedUpgradeable,
+    ERC721URIStorageUpgradeable,
     ERC721PausableUpgradeable,
     ERC721BurnableUpgradeable
 {
     function __ERC721TradableUpgradeable_init(
     ) internal initializer {
-        __ERC721URIStorage_init_unchained();
         __ERC721Capped_init_unchained(uint256(100));
+        __ERC721URIStorage_init_unchained();
+        __ERC721Pausable_init_unchained();
+        __ERC721Burnable_init_unchained();
+
         __ERC721TradableUpgradeable_init_unchained();
     }
 
@@ -29,13 +31,19 @@ abstract contract ERC721TradableUpgradeable is Initializable,
 
     // The following functions are overrides required by Solidity.
 
+    function _mint(address to, uint256 tokenId) internal virtual
+    override(ERC721Upgradeable, ERC721CappedUpgradeable)
+    {
+         ERC721CappedUpgradeable._mint(to, tokenId);
+    }
+
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
     internal
     virtual
     whenNotPaused
-    override(ERC721Upgradeable, ERC721EnumerableUpgradeable, ERC721PausableUpgradeable)
+    override(ERC721Upgradeable, ERC721PausableUpgradeable, ERC721EnumerableUpgradeable)
     {
-        super._beforeTokenTransfer(from, to, tokenId);
+        ERC721EnumerableUpgradeable._beforeTokenTransfer(from, to, tokenId);
     }
 
     function _burn(uint256 tokenId)
@@ -43,7 +51,7 @@ abstract contract ERC721TradableUpgradeable is Initializable,
     virtual
     override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
     {
-        super._burn(tokenId);
+        ERC721URIStorageUpgradeable._burn(tokenId);
     }
 
     function tokenURI(uint256 tokenId)
@@ -63,11 +71,6 @@ abstract contract ERC721TradableUpgradeable is Initializable,
     override(ERC721Upgradeable, ERC721EnumerableUpgradeable)
     returns (bool)
     {
-        return super.supportsInterface(interfaceId);
-    }
-
-    function _mint(address to, uint256 tokenId) internal virtual
-    override(ERC721Upgradeable, ERC721CappedUpgradeable) {
-        return super._mint(to, tokenId);
+        return ERC721EnumerableUpgradeable.supportsInterface(interfaceId);
     }
 }

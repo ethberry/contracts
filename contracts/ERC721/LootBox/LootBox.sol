@@ -23,7 +23,6 @@ contract LootBox is Initializable, ERC721TradableUpgradeable, AccessControlUpgra
         string memory _symbol,
         string memory _baseURI
     ) public initializer {
-//        __ERC721TradableUpgradeable_init(_name, _symbol, _baseURI);
         __ERC721TradableUpgradeable_init();
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }

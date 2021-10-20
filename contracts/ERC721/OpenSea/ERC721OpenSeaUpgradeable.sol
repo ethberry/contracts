@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
-import "../OpenSea/ProxyRegistry.sol";
+import "./utils/ProxyRegistry.sol";
 
 abstract contract ERC721OpenSeaUpgradeable is
         Initializable,

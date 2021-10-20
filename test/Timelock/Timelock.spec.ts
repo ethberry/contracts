@@ -6,7 +6,7 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { TokenTimelockErc20, TokenTimelock, TokenTimelockUpgradeable } from "../../typechain";
 import { amount, initialTokenAmountInWei } from "../constants";
 
-describe("Time Lock", function () {
+describe.skip("Time Lock", function () {
   let token: ContractFactory;
   let tokenInstance: TokenTimelockErc20;
   let timelock: ContractFactory;
@@ -39,7 +39,7 @@ describe("Time Lock", function () {
     });
   });
 
-  describe.skip("Lock", function () {
+  describe("Lock", function () {
     it("should NOT release tokens", async function () {
       await tokenInstance.approve(owner.address, amount);
       await tokenInstance.transferFrom(owner.address, timelockInstance.address, amount);

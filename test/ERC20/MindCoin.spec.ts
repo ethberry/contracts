@@ -12,6 +12,8 @@ import {
   MINTER_ROLE,
   PAUSER_ROLE,
   SNAPSHOT_ROLE,
+  tokenName,
+  tokenSymbol,
 } from "../constants";
 
 describe("MindToken", function () {
@@ -25,7 +27,7 @@ describe("MindToken", function () {
     coin = await ethers.getContractFactory("MindCoin");
     [owner, receiver, addr2] = await ethers.getSigners();
 
-    coinInstance = (await upgrades.deployProxy(coin, ["memoryOS COIN token", "MIND"])) as MindCoin;
+    coinInstance = (await upgrades.deployProxy(coin, [tokenName, tokenSymbol])) as MindCoin;
 
     await coinInstance.mint(owner.address, initialTokenAmountInWei);
   });

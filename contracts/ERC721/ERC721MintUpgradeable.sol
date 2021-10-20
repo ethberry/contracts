@@ -19,10 +19,7 @@ abstract contract ERC721MintUpgradeable is Initializable,
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
-    event TokenMint(address ownerId, uint256 tokenId);
-
-    function __ERC721MintUpgradeable_init(
-    ) public initializer {
+    function __ERC721MintUpgradeable_init() public initializer {
         __ERC721MintUpgradeable_init_unchained();
     }
 
@@ -38,26 +35,20 @@ abstract contract ERC721MintUpgradeable is Initializable,
         return _tokenIdTracker.current();
     }
 
-    function _mintTo(address to) internal virtual
-    {
-        require(hasRole(MINTER_ROLE, _msgSender()), "Error: must have minter role to mint");
-        uint256 currentTokenIndex = _tokenIdTracker.current();
-        emit TokenMint(to, currentTokenIndex);
-        _mint(to, currentTokenIndex);
+    function _mintTo(address to) internal virtual onlyRole(MINTER_ROLE) {
+        _mint(to, _tokenIdTracker.current());
         _tokenIdTracker.increment();
     }
 
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    virtual
+    function supportsInterface(bytes4 interfaceId) public view virtual
     override(ERC721Upgradeable, AccessControlEnumerableUpgradeable)
     returns (bool)
     {
         return AccessControlEnumerableUpgradeable.supportsInterface(interfaceId);
     }
+
     uint256[48] private __gap;
 }

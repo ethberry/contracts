@@ -3,6 +3,8 @@ import { ethers } from "hardhat";
 // export const baseTokenURI = "http://localhost/";
 export const baseTokenURI = "https://us-central1-encoder-memoryos.cloudfunctions.net/LociMetadataJson/";
 export const baseTokenURInft = "https://us-central1-encoder-memoryos.cloudfunctions.net/LociNftMetadataJson/";
+export const tokenSymbol = "SYMBOL";
+export const tokenName = "Lorem ipsum...";
 
 export const DEFAULT_ADMIN_ROLE = "0x0000000000000000000000000000000000000000000000000000000000000000";
 export const MINTER_ROLE = ethers.utils.id("MINTER_ROLE");
@@ -12,6 +14,7 @@ export const DEPOSITOR_ROLE = ethers.utils.id("DEPOSITOR_ROLE");
 export const URI_SETTER_ROLE = ethers.utils.id("URI_SETTER_ROLE");
 
 export const TEST_DATA = "0x00000000000000000000000000000000000000000000000000000000686f6c61";
+export const ZERO_ADDR = "0x0000000000000000000000000000000000000000";
 
 export const decimals = ethers.BigNumber.from(10).pow(18);
 export const amount = 100;

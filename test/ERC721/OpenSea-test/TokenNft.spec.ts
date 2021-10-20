@@ -4,17 +4,17 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { TokenNft } from "../../../typechain";
-import { baseTokenURInft, DEFAULT_ADMIN_ROLE, MINTER_ROLE, nftcap1 } from "../../constants";
+import { baseTokenURInft, DEFAULT_ADMIN_ROLE, MINTER_ROLE, nftcap1, ZERO_ADDR } from "../../constants";
 
 describe("TokenNft", function () {
   let nft: ContractFactory;
   let nftInstance: TokenNft;
   let owner: SignerWithAddress;
-  let addr1: SignerWithAddress;
+  let receiver: SignerWithAddress;
 
   beforeEach(async function () {
     nft = await ethers.getContractFactory("TokenNft");
-    [owner, addr1] = await ethers.getSigners();
+    [owner, receiver] = await ethers.getSigners();
 
     nftInstance = (await upgrades.deployProxy(nft, [
       "TokenNft opensea test token",
@@ -34,8 +34,10 @@ describe("TokenNft", function () {
 
   describe("Mint", function () {
     it("should fail for wrong role", async function () {
-      const tx = nftInstance.connect(addr1).mint(addr1.address);
-      await expect(tx).to.be.revertedWith("Error: must have minter role to mint");
+      const tx = nftInstance.connect(receiver).mint(receiver.address);
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
+      );
     });
 
     it("should set initial cap", async function () {
@@ -77,7 +79,7 @@ describe("TokenNft", function () {
     it("should emit TokenMint event", async function () {
       const tokenCount = await nftInstance._tokenIdTracker();
       const tx = nftInstance.mint(owner.address);
-      await expect(tx).to.emit(nftInstance, "TokenMint").withArgs(owner.address, tokenCount);
+      await expect(tx).to.emit(nftInstance, "Transfer").withArgs(ZERO_ADDR, owner.address, tokenCount);
     });
 
     it("should set token URI", async function () {
@@ -90,15 +92,15 @@ describe("TokenNft", function () {
   describe("Transfer", function () {
     it("should transfer tokens to another address", async function () {
       await nftInstance.mint(owner.address);
-      await nftInstance.transferFrom(owner.address, addr1.address, 0);
+      await nftInstance.transferFrom(owner.address, receiver.address, 0);
 
       const balanceOfOwner = await nftInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
 
-      const balanceOfReceiver = await nftInstance.balanceOf(addr1.address);
+      const balanceOfReceiver = await nftInstance.balanceOf(receiver.address);
       expect(balanceOfReceiver).to.equal(1);
 
-      const item = await nftInstance.tokenOfOwnerByIndex(addr1.address, 0);
+      const item = await nftInstance.tokenOfOwnerByIndex(receiver.address, 0);
       expect(item).to.equal(0); // 0 is nft index
     });
   });

@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { MindCoinPolygon } from "../../typechain";
-import { addr, DEPOSITOR_ROLE } from "../constants";
+import { addr, DEPOSITOR_ROLE, tokenName, tokenSymbol } from "../constants";
 
 describe("MindToken (Polygon)", function () {
   let coin: ContractFactory;
@@ -15,7 +15,7 @@ describe("MindToken (Polygon)", function () {
     coin = await ethers.getContractFactory("MindCoinPolygon");
     [owner] = await ethers.getSigners();
 
-    coinInstance = (await upgrades.deployProxy(coin, ["memoryOS COIN token", "MIND"])) as MindCoinPolygon;
+    coinInstance = (await upgrades.deployProxy(coin, [tokenName, tokenSymbol])) as MindCoinPolygon;
   });
 
   describe("Deployment", function () {

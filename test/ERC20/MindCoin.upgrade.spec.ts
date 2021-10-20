@@ -3,7 +3,16 @@ import { ethers, upgrades } from "hardhat";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { MindCoin, MindCoin2 } from "../../typechain";
-import { amount, cap, DEFAULT_ADMIN_ROLE, initialTokenAmountInWei, MINTER_ROLE, PAUSER_ROLE } from "../constants";
+import {
+  amount,
+  cap,
+  DEFAULT_ADMIN_ROLE,
+  initialTokenAmountInWei,
+  MINTER_ROLE,
+  PAUSER_ROLE,
+  tokenName,
+  tokenSymbol,
+} from "../constants";
 
 describe("MindToken (upgrade)", function () {
   let tokenInstance: MindCoin2;
@@ -13,7 +22,7 @@ describe("MindToken (upgrade)", function () {
   beforeEach(async function () {
     [owner, addr1] = await ethers.getSigners();
     const tmpToken = await ethers.getContractFactory("MindCoin");
-    const tmpInstance = (await upgrades.deployProxy(tmpToken, ["memoryOS COIN token", "MIND"])) as MindCoin;
+    const tmpInstance = (await upgrades.deployProxy(tmpToken, [tokenName, tokenSymbol])) as MindCoin;
     await tmpInstance.mint(owner.address, initialTokenAmountInWei);
     await tmpInstance.transfer(addr1.address, amount);
     const token = await ethers.getContractFactory("MindCoin2");

@@ -7,10 +7,10 @@ import "./TokenNft.opensea.sol";
 
 contract TokenNft is Initializable, TokenNftOpenSea {
     function initialize(
-        string memory _name,
-        string memory _symbol,
-        string memory _baseURI
+        string memory name,
+        string memory symbol,
+        string memory baseURL
     ) public initializer {
-        __TokenNftOpenSea_init(_name, _symbol, _baseURI);
+        __TokenNftOpenSea_init(name, symbol, baseURL);
     }
 }

@@ -6,9 +6,10 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
-import "./IERC721Factory.sol";
-import "./IERC721TradableUpgradeable.sol";
-import "./LootBox/LootBox.sol";
+import "../IERC721Factory.sol";
+import "../IERC721TradableUpgradeable.sol";
+import "../LootBox/LootBox.sol";
+import "./utils/ProxyRegistry.sol";
 
 contract LociFactory is Initializable, IERC721Factory, AccessControlEnumerableUpgradeable {
     using StringsUpgradeable for string;

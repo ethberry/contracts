@@ -1,6 +1,5 @@
 import "./balance";
 import "./accounts";
-import "./transfer";
 import "./fund-link";
 import "./test-mint";
 import "./Loci/loci-mint";

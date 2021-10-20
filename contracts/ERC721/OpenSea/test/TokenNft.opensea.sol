@@ -4,9 +4,9 @@ pragma solidity 0.8.2;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-import "../ERC721TradableUpgradeable.sol";
+import "../../ERC721TradableUpgradeable.sol";
+import "../../ERC721MintUpgradeable.sol";
 import "../ERC721OpenSeaUpgradeable.sol";
-import "../ERC721MintUpgradeable.sol";
 
 
 abstract contract TokenNftOpenSea is Initializable,
@@ -14,14 +14,14 @@ abstract contract TokenNftOpenSea is Initializable,
             ERC721OpenSeaUpgradeable,
             ERC721MintUpgradeable
 {
-    string private baseAPI;
+    string private _baseURL;
 
     function __TokenNftOpenSea_init(
-        string memory _name,
-        string memory _symbol,
-        string memory _baseAPI
+        string memory name,
+        string memory symbol,
+        string memory baseURL
     ) public initializer {
-        __ERC721_init_unchained(_name, _symbol);
+        __ERC721_init_unchained(name, symbol);
         __ERC721Capped_init_unchained(uint256(100));
 
         __ERC721Enumerable_init_unchained();
@@ -38,7 +38,7 @@ abstract contract TokenNftOpenSea is Initializable,
         __ERC721OpenSeaUpgradeable_init_unchained();
         __ERC721MintUpgradeable_init_unchained();
 
-        baseAPI = _baseAPI;
+        _baseURL = baseURL;
     }
 
     // implementation contract functions
@@ -78,7 +78,7 @@ abstract contract TokenNftOpenSea is Initializable,
     override (ERC721Upgradeable)
     returns (string memory) {
         // return "https://us-central1-encoder-memoryos.cloudfunctions.net/LociNftMetadataJson/";
-        return baseAPI;
+        return _baseURL;
     }
 
     /* public view functions */

@@ -16,8 +16,7 @@ abstract contract ERC721TradableUpgradeable is Initializable,
     ERC721PausableUpgradeable,
     ERC721BurnableUpgradeable
 {
-    function __ERC721TradableUpgradeable_init(
-    ) internal initializer {
+    function __ERC721TradableUpgradeable_init() internal initializer {
         __ERC721Capped_init_unchained(uint256(100));
         __ERC721URIStorage_init_unchained();
         __ERC721Pausable_init_unchained();

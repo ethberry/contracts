@@ -1,6 +1,5 @@
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-web3";
-import LociJson from "../../artifacts/contracts/ERC721/Loci/Loci.sol/Loci.json";
 
 task("loci-test", "Test for new LOCI ERC-721 NFT")
   .addParam("contract", "The address of the dNFT contract that you want to read")
@@ -9,7 +8,7 @@ task("loci-test", "Test for new LOCI ERC-721 NFT")
     const contractAddr = taskArgs.contract;
     const networkId = hre.network.name;
     console.info("Testing LOCI NFT on network ", networkId);
-    const LOCI_ABI = LociJson.abi;
+    const factory = await hre.ethers.getContractFactory("Loci");
     // const LOCI_ABI: Array<any>[any] = [];
     // Get signer information
     const accounts = await hre.ethers.getSigners();
@@ -19,7 +18,7 @@ task("loci-test", "Test for new LOCI ERC-721 NFT")
     // console.log("addr1.address:", addr1.address);
 
     // Create connection to dNFT Contract and call the createCollectible function
-    const LociNFTContract = new hre.ethers.Contract(contractAddr, LOCI_ABI, signer);
+    const LociNFTContract = new hre.ethers.Contract(contractAddr, factory.interface, signer);
     // await LociNFTContract.connect(signer)
     //   .mint(signer.address, { from: signer.address })
     // const tokenid = hre.ethers.BigNumber.from(taskArgs.tokenind);
@@ -47,7 +46,7 @@ task("loci-test", "Test for new LOCI ERC-721 NFT")
 
     //
     const res3 = await LociNFTContract.mintRandom();
-    console.log("totalSupply", res3);
+    console.info("totalSupply", res3);
 
     // const BTU = await LociNFTContract.tokenURI(tokenid._hex);
     // console.log("BTU", BTU);

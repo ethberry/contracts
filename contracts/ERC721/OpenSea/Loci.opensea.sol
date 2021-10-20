@@ -4,22 +4,30 @@ pragma solidity 0.8.2;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
+import "../ChainLink/ERC721LinkUpgradeable.sol";
 import "../ERC721TradableUpgradeable.sol";
-import "../ERC721OpenSeaUpgradeable.sol";
-import "../ERC721LinkUpgradeable.sol";
+import "./ERC721OpenSeaUpgradeable.sol";
 
 
-abstract contract LociOpenSea is Initializable,
+contract LociOpenSea is Initializable,
             ERC721TradableUpgradeable,
             ERC721OpenSeaUpgradeable,
             ERC721LinkUpgradeable
 {
-    string private baseAPI;
+    string private _baseURL;
+
+    function initialize(
+        string memory name,
+        string memory symbol,
+        string memory baseURL
+    ) public initializer {
+        __LociOpenSea_init(name, symbol, baseURL);
+    }
 
     function __LociOpenSea_init(
-        string memory _name,
-        string memory _symbol,
-        string memory _baseAPI
+        string memory name,
+        string memory symbol,
+        string memory baseURL
     ) public initializer {
         __ERC721TradableUpgradeable_init_unchained();
         __ERC721OpenSeaUpgradeable_init_unchained();
@@ -28,14 +36,13 @@ abstract contract LociOpenSea is Initializable,
         __ERC165_init_unchained();
         __AccessControl_init_unchained();
         __AccessControlEnumerable_init_unchained();
-        __ERC721_init_unchained(_name, _symbol);
+        __ERC721_init_unchained(name, symbol);
         __ERC721Enumerable_init_unchained();
         __ERC721Burnable_init_unchained();
         __Pausable_init_unchained();
         __ERC721Pausable_init_unchained();
 
-        baseAPI = _baseAPI;
-
+        _baseURL = baseURL;
     }
 
     // The following functions are overrides required by Solidity.
@@ -43,8 +50,7 @@ abstract contract LociOpenSea is Initializable,
     function _baseURI() internal view
     override (ERC721Upgradeable)
     returns (string memory) {
-        // return "https://us-central1-encoder-memoryos.cloudfunctions.net/LociNftMetadataJson/";
-        return baseAPI;
+        return _baseURL;
     }
 
     function tokenURI(uint256 tokenId) public view

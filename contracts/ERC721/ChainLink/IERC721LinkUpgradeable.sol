@@ -7,8 +7,6 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721Enume
 /**
  * @dev Required interface of an ERC721 compliant contract.
  */
-interface IERC721TradableUpgradeable is IERC721EnumerableUpgradeable {
-    function cap() external view returns (uint256);
-    function mint(address to) external;
-    function mintTo(address to) external;
+interface IERC721LinkUpgradeable is IERC721EnumerableUpgradeable {
+    function mintRandom() external;
 }

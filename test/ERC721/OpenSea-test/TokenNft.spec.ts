@@ -1,10 +1,18 @@
 import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { TokenNft } from "../../../typechain";
-import { baseTokenURInft, DEFAULT_ADMIN_ROLE, MINTER_ROLE, nftcap1, ZERO_ADDR } from "../../constants";
+import {
+  baseTokenURInft,
+  DEFAULT_ADMIN_ROLE,
+  MINTER_ROLE,
+  nftcap1,
+  tokenName,
+  tokenSymbol,
+  ZERO_ADDR,
+} from "../../constants";
 
 describe("TokenNft", function () {
   let nft: ContractFactory;
@@ -16,11 +24,7 @@ describe("TokenNft", function () {
     nft = await ethers.getContractFactory("TokenNft");
     [owner, receiver] = await ethers.getSigners();
 
-    nftInstance = (await upgrades.deployProxy(nft, [
-      "TokenNft opensea test token",
-      "TokenNft",
-      baseTokenURInft,
-    ])) as TokenNft;
+    nftInstance = (await nft.deploy(tokenName, tokenSymbol, baseTokenURInft)) as TokenNft;
   });
 
   describe("Deployment", function () {

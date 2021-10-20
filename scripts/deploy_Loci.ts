@@ -1,5 +1,5 @@
 import "@nomiclabs/hardhat-ethers";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { getImplementationAddress } from "@openzeppelin/upgrades-core";
 
 import { baseTokenURI } from "../test/constants";

@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
@@ -24,15 +24,15 @@ describe("LociFactory", function () {
     lootBox = await ethers.getContractFactory("LootBox");
     [owner] = await ethers.getSigners();
 
-    nftInstance = (await upgrades.deployProxy(nft, [tokenName, tokenSymbol, baseTokenURI])) as Loci;
+    nftInstance = (await nft.deploy(tokenName, tokenSymbol, baseTokenURI)) as Loci;
 
-    proxyInstance = (await upgrades.deployProxy(proxy)) as ProxyRegistry;
+    proxyInstance = (await proxy.deploy()) as ProxyRegistry;
 
-    factoryInstance = (await upgrades.deployProxy(factory, [baseTokenURI])) as LociFactory;
+    factoryInstance = (await factory.deploy(baseTokenURI)) as LociFactory;
     await factoryInstance.setProxyRegistry(proxyInstance.address);
     await factoryInstance.setTradable(nftInstance.address);
 
-    lootBoxInstance = (await upgrades.deployProxy(lootBox, [tokenName, tokenSymbol, baseTokenURI])) as LootBox;
+    lootBoxInstance = (await lootBox.deploy(tokenName, tokenSymbol, baseTokenURI)) as LootBox;
     await lootBoxInstance.setFactory(factoryInstance.address);
     await factoryInstance.setLootBox(lootBoxInstance.address);
   });

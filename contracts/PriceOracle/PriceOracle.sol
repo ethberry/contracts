@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.2;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract PriceOracle is Initializable, OwnableUpgradeable {
+contract PriceOracle is Ownable {
   uint256 public priceInWei;
 
-  function initialize() initializer public {
-    __Ownable_init();
+  constructor() {
     priceInWei = 1; // initial price is 1 wei
   }
 

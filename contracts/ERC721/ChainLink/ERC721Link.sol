@@ -1,29 +1,25 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.2;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
-import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
-import "@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol";
+import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 
-import "./utils/VRFConsumerBaseUpgradable.sol";
-
-abstract contract ERC721LinkUpgradeable is Initializable,
-VRFConsumerBaseUpgradable,
-ContextUpgradeable,
-ERC721URIStorageUpgradeable,
-AccessControlEnumerableUpgradeable
+abstract contract ERC721Link is
+VRFConsumerBase,
+Context,
+ERC721URIStorage,
+AccessControlEnumerable
 {
-    using SafeMathUpgradeable for uint256;
-    using StringsUpgradeable for uint256;
-    using CountersUpgradeable for CountersUpgradeable.Counter;
-    CountersUpgradeable.Counter public _tokenIdTracker;
+    using SafeMath for uint256;
+    using Strings for uint256;
+    using Counters for Counters.Counter;
+    Counters.Counter public _tokenIdTracker;
     mapping(bytes32 /* requestId */ => address /* nft owner */) queue;
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
@@ -33,11 +29,10 @@ AccessControlEnumerableUpgradeable
     bytes32 internal keyHash;
     uint256 internal fee;
 
-    function __ERC721LinkUpgradeable_init() public initializer {
-        __ERC721LinkUpgradeable_init_unchained();
-    }
-
-    function __ERC721LinkUpgradeable_init_unchained() public initializer {
+    constructor() VRFConsumerBase(
+        address(0xb3dCcb4Cf7a26f6cf6B120Cf5A73875B7BBc655B),
+        address(0x01BE23585060835E02B77ef475b0Cc51aA1e0709)
+    ) {
         // MUMBAI
         // fee = 0.0001 * 10 ** 18;
         // vrfCoordinator = 0x8C7382F9D8f56b33781fE506E897a4F1e2d17255;
@@ -45,17 +40,8 @@ AccessControlEnumerableUpgradeable
         // keyHash = 0x6e75b569a01ef56d18cab6a8e71e6600d6ce853834d4a5748b720d06f878b3a4;
         // RINKEBY
         fee = 0.1 ether;
-        vrfCoordinatorAddr = 0xb3dCcb4Cf7a26f6cf6B120Cf5A73875B7BBc655B;
         //      vrfCoordinatorAddr = _msgSender(); // only for tests
-        linkAddr = 0x01BE23585060835E02B77ef475b0Cc51aA1e0709;
         keyHash = 0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311;
-
-        __VRFConsumerBaseUpgradable_init(vrfCoordinatorAddr, linkAddr);
-
-        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        _setupRole(MINTER_ROLE, _msgSender());
-        _setupRole(PAUSER_ROLE, _msgSender());
-
     }
 
     /**
@@ -86,13 +72,13 @@ AccessControlEnumerableUpgradeable
         // _setTokenURI(currentTokenIndex, string(abi.encodePacked(d3Result.toString(), "/", currentTokenIndex.toString())));
     }
 
-    function getRandomNumber(uint256 userProvidedSeed) public returns (bytes32 requestId) {
+    function getRandomNumber() public returns (bytes32 requestId) {
         require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK - fill contract with faucet");
-        return requestRandomness(keyHash, fee, userProvidedSeed);
+        return requestRandomness(keyHash, fee);
     }
 
     function fulfillRandomness(bytes32 requestId, uint256 randomness) internal
-    override (VRFConsumerBaseUpgradable)
+    override (VRFConsumerBase)
     {
         uint256 d3Result = randomness.mod(3);
         _mintRandom(d3Result, queue[requestId]);
@@ -106,7 +92,7 @@ AccessControlEnumerableUpgradeable
     public
     view
     virtual
-    override(AccessControlEnumerableUpgradeable, ERC721Upgradeable)
+    override(AccessControlEnumerable, ERC721)
     returns (bool)
     {
         return super.supportsInterface(interfaceId);

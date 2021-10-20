@@ -3,12 +3,10 @@ pragma solidity ^0.8.2;
 
 import "./MindCoin.sol";
 
-contract MindCoinPolygon is Initializable, MindCoin {
+contract MindCoinPolygon is MindCoin {
     bytes32 public constant DEPOSITOR_ROLE = keccak256("DEPOSITOR_ROLE");
 
-    function initialize(string memory _name, string memory _symbol) public override virtual initializer {
-        __MindCoin_init(_name, _symbol);
-
+    constructor(string memory _name, string memory _symbol) MindCoin(_name, _symbol) {
         // Minting in constructor is not allowed
         // https://docs.polygon.technology/docs/develop/ethereum-polygon/pos/mapping-assets#implementation
     }

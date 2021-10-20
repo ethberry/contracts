@@ -1,5 +1,5 @@
 import "@nomiclabs/hardhat-ethers";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { baseTokenURI } from "../test/constants";
 import { LociOpenSea, ProxyRegistry } from "../typechain";
 

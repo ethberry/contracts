@@ -1,39 +1,35 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.2;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/finance/PaymentSplitterUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/finance/PaymentSplitter.sol";
 
 import "../PriceOracle/IPriceOracle.sol";
 
-contract Dex is Initializable, PausableUpgradeable, PaymentSplitterUpgradeable {
-    using SafeMathUpgradeable for uint256;
-    using SafeERC20Upgradeable for IERC20Upgradeable;
-    using AddressUpgradeable for address;
+contract Dex is Pausable, PaymentSplitter {
+    using SafeMath for uint256;
+    using SafeERC20 for IERC20;
+    using Address for address;
 
     event Bought(uint256 amount);
     event Sold(uint256 amount);
 
-    IERC20Upgradeable public acceptedToken;
+    IERC20 public acceptedToken;
     IPriceOracle public priceOracle;
 
-    function initialize(
+    constructor(
         address acceptedToken_,
         address priceOracle_,
         address[] memory payees_,
         uint256[] memory shares_
-    ) initializer public {
-        __Pausable_init();
-        __PaymentSplitter_init(payees_, shares_);
-
+    ) PaymentSplitter(payees_, shares_) {
         require(acceptedToken_.isContract(), "The accepted token address must be a deployed contract");
-        acceptedToken = IERC20Upgradeable(acceptedToken_);
+        acceptedToken = IERC20(acceptedToken_);
 
         require(priceOracle_.isContract(), "The Oracle must be a deployed contract");
         priceOracle = IPriceOracle(priceOracle_);

@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
@@ -16,7 +16,7 @@ describe("Loci", function () {
     nft = await ethers.getContractFactory("Loci");
     [owner, receiver] = await ethers.getSigners();
 
-    nftInstance = (await upgrades.deployProxy(nft, [tokenName, tokenSymbol, baseTokenURI])) as Loci;
+    nftInstance = (await nft.deploy(tokenName, tokenSymbol, baseTokenURI)) as Loci;
   });
 
   describe("Deployment", function () {

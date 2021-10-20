@@ -1,17 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.2;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-import "../utils/VRFConsumerBaseUpgradable.sol";
-
-contract Dispersion is Initializable  {
-    using SafeMathUpgradeable for uint256;
-
-    function initialize() public initializer {
-
-    }
+contract Dispersion  {
+    using SafeMath for uint256;
 
     function getDispersion(uint256 randomness) external pure returns (uint256) {
         uint256 d100Result = randomness.mod(100);

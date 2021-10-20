@@ -2,68 +2,65 @@
 
 pragma solidity 0.8.2;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-import "../ChainLink/ERC721LinkUpgradeable.sol";
-import "../ERC721TradableUpgradeable.sol";
+import "../ChainLink/ERC721Link.sol";
+import "../ERC721Tradable.sol";
 
-contract Loci is Initializable, ERC721TradableUpgradeable, ERC721LinkUpgradeable {
-    function initialize(
+contract Loci is ERC721Tradable, ERC721Link {
+
+    string private _baseURL;
+
+    constructor (
         string memory name,
         string memory symbol,
         string memory baseURL
-    ) public initializer {
-        __ERC721TradableUpgradeable_init_unchained();
-        __Context_init_unchained();
-        __ERC165_init_unchained();
-        __AccessControl_init_unchained();
-        __AccessControlEnumerable_init_unchained();
-        __ERC721_init_unchained(name, symbol);
-        __ERC721Enumerable_init_unchained();
-        __ERC721Burnable_init_unchained();
-        __Pausable_init_unchained();
-        __ERC721Pausable_init_unchained();
-        __ERC721LinkUpgradeable_init_unchained();
+    ) ERC721(name, symbol) ERC721Capped(uint256(100)) {
+        // TODO test baseURL;
+        _baseURL = baseURL;
+
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+        _setupRole(PAUSER_ROLE, _msgSender());
+        _setupRole(MINTER_ROLE, _msgSender());
     }
 
     function mintRandom() external {
-        queue[getRandomNumber(42)] = _msgSender();
+        queue[getRandomNumber()] = _msgSender();
     }
 
     /* overrides */
 
     function tokenURI(uint256 tokenId) public view
-    override(ERC721TradableUpgradeable, ERC721URIStorageUpgradeable)
+    override(ERC721Tradable, ERC721URIStorage)
     returns (string memory)
     {
-        return ERC721URIStorageUpgradeable.tokenURI(tokenId);
+        return ERC721URIStorage.tokenURI(tokenId);
     }
 
     function supportsInterface(bytes4 interfaceId)
     public
     view
-    override(ERC721TradableUpgradeable, ERC721LinkUpgradeable)
+    override(ERC721Tradable, ERC721Link)
     returns (bool)
     {
-        return ERC721Upgradeable.supportsInterface(interfaceId);
+        return ERC721.supportsInterface(interfaceId);
     }
 
     function _mint(address to, uint256 tokenId) internal virtual
-    override(ERC721Upgradeable, ERC721TradableUpgradeable) {
-        ERC721TradableUpgradeable._mint(to, tokenId);
+    override(ERC721, ERC721Tradable) {
+        ERC721Tradable._mint(to, tokenId);
     }
 
     function _burn(uint256 tokenId)
     internal
-    override(ERC721TradableUpgradeable, ERC721URIStorageUpgradeable)
+    override(ERC721Tradable, ERC721URIStorage)
     {
-        ERC721Upgradeable._burn(tokenId);
+        ERC721._burn(tokenId);
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
     internal
     whenNotPaused
-    override(ERC721Upgradeable, ERC721TradableUpgradeable)
+    override(ERC721, ERC721Tradable)
     {
         super._beforeTokenTransfer(from, to, tokenId);
     }

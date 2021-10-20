@@ -1,10 +1,10 @@
 import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { Game, Loci } from "../../typechain";
-import { baseTokenURI } from "../constants";
+import { baseTokenURI, tokenName, tokenSymbol } from "../constants";
 
 describe("Game", function () {
   let nft: ContractFactory;
@@ -18,8 +18,8 @@ describe("Game", function () {
     game = await ethers.getContractFactory("Game");
     [owner] = await ethers.getSigners();
 
-    nftInstance = (await upgrades.deployProxy(nft, ["memoryOS NFT token", "Loci", baseTokenURI])) as Loci;
-    gameInstance = (await upgrades.deployProxy(game)) as Game;
+    nftInstance = (await nft.deploy(tokenName, tokenSymbol, baseTokenURI)) as Loci;
+    gameInstance = (await game.deploy()) as Game;
   });
 
   describe("Deployment", function () {

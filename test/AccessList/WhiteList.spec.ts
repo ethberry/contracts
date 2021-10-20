@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
@@ -16,7 +16,7 @@ describe("WhiteList", function () {
     contract = await ethers.getContractFactory("WhiteListTest");
     [owner, receiver] = await ethers.getSigners();
 
-    contractInstance = (await upgrades.deployProxy(contract)) as WhiteListTest;
+    contractInstance = (await contract.deploy()) as WhiteListTest;
   });
 
   describe("Deployment", function () {
@@ -56,9 +56,7 @@ describe("WhiteList", function () {
 
     it("should fail: test method", async function () {
       const tx = contractInstance.connect(receiver).testMe();
-      await expect(tx).to.be.revertedWith(
-        `WhiteListUpgradeable: account ${receiver.address.toLowerCase()} is not whitelisted`,
-      );
+      await expect(tx).to.be.revertedWith(`WhiteList: account ${receiver.address.toLowerCase()} is not whitelisted`);
     });
   });
 });

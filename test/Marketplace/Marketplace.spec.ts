@@ -1,10 +1,10 @@
 import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { Loci, Marketplace, MindCoin } from "../../typechain";
-import { baseTokenURI, initialTokenAmountInWei } from "../constants";
+import { baseTokenURI, initialTokenAmountInWei, tokenName, tokenSymbol } from "../constants";
 
 describe("Marketplace", function () {
   let market: ContractFactory;
@@ -21,9 +21,9 @@ describe("Marketplace", function () {
     market = await ethers.getContractFactory("Marketplace");
     [owner] = await ethers.getSigners();
 
-    coinInstance = (await upgrades.deployProxy(coin, ["memoryOS COIN token", "MIND"])) as MindCoin;
-    marketInstance = (await upgrades.deployProxy(market, [coinInstance.address, 100])) as Marketplace;
-    nftInstance = (await upgrades.deployProxy(nft, ["memoryOS NFT token", "MIND", baseTokenURI])) as Loci;
+    coinInstance = (await coin.deploy(tokenName, tokenSymbol)) as MindCoin;
+    marketInstance = (await market.deploy(coinInstance.address, 100)) as Marketplace;
+    nftInstance = (await nft.deploy(tokenName, tokenSymbol, baseTokenURI)) as Loci;
 
     await coinInstance.mint(owner.address, initialTokenAmountInWei);
   });

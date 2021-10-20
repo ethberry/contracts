@@ -1,24 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.2;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
+import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
-abstract contract BlackListUpgradeable is Initializable, AccessControlEnumerableUpgradeable {
+abstract contract BlackList is AccessControlEnumerable {
 
     mapping (address => bool) blackList;
 
     event Blacklisted(address indexed addr);
     event UnBlacklisted(address indexed addr);
-
-    function __BlackList_init() initializer public {
-        __AccessControlEnumerable_init();
-        __BlackList_init_unchained();
-    }
-
-    function __BlackList_init_unchained() internal initializer {
-
-    }
 
     function blacklist(address addr) public onlyRole(DEFAULT_ADMIN_ROLE) {
         blackList[addr] = true;
@@ -39,8 +29,8 @@ abstract contract BlackListUpgradeable is Initializable, AccessControlEnumerable
             revert(
             string(
                 abi.encodePacked(
-                    "BlackListUpgradeable: account ",
-                    StringsUpgradeable.toHexString(uint160(account), 20),
+                    "BlackList: account ",
+                    Strings.toHexString(uint160(account), 20),
                     " is not blacklisted"
                 )
             )

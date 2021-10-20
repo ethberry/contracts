@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
@@ -15,7 +15,7 @@ describe("MindToken (Polygon)", function () {
     coin = await ethers.getContractFactory("MindCoinPolygon");
     [owner] = await ethers.getSigners();
 
-    coinInstance = (await upgrades.deployProxy(coin, [tokenName, tokenSymbol])) as MindCoinPolygon;
+    coinInstance = (await coin.deploy(tokenName, tokenSymbol)) as MindCoinPolygon;
   });
 
   describe("Deployment", function () {

@@ -1,5 +1,5 @@
 import "@nomiclabs/hardhat-ethers";
-import { ethers, upgrades, network } from "hardhat";
+import { ethers, network } from "hardhat";
 import { Link } from "../typechain";
 import { addr } from "../test/constants";
 

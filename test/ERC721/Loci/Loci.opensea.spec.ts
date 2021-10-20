@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
@@ -18,8 +18,8 @@ describe("Loci OpenSea", function () {
     proxy = await ethers.getContractFactory("ProxyRegistry");
     [owner] = await ethers.getSigners();
 
-    proxyInstance = (await upgrades.deployProxy(proxy)) as ProxyRegistry;
-    nftInstance = (await upgrades.deployProxy(nft, [tokenName, tokenSymbol, baseTokenURI])) as LociOpenSea;
+    proxyInstance = (await proxy.deploy()) as ProxyRegistry;
+    nftInstance = (await nft.deploy(tokenName, tokenSymbol, baseTokenURI)) as LociOpenSea;
 
     await nftInstance.setProxyRegistry(proxyInstance.address);
   });

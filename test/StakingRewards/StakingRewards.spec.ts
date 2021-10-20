@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
@@ -18,11 +18,11 @@ describe("Staking Reward", function () {
     stakingRewards = await ethers.getContractFactory("StakingRewards");
     [owner] = await ethers.getSigners();
 
-    tokenInstance = (await upgrades.deployProxy(token)) as StakingRewardsErc20;
-    stakingRewardsInstance = (await upgrades.deployProxy(stakingRewards, [
+    tokenInstance = (await token.deploy()) as StakingRewardsErc20;
+    stakingRewardsInstance = (await stakingRewards.deploy(
       tokenInstance.address,
       tokenInstance.address,
-    ])) as StakingRewards;
+    )) as StakingRewards;
 
     await tokenInstance.mint(owner.address, initialTokenAmountInWei);
   });

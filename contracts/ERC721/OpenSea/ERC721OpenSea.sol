@@ -2,32 +2,19 @@
 
 pragma solidity 0.8.2;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
 
 import "./utils/ProxyRegistry.sol";
 
-abstract contract ERC721OpenSeaUpgradeable is
-        Initializable,
-        ERC721Upgradeable,
-        AccessControlEnumerableUpgradeable
-{
+abstract contract ERC721OpenSea is ERC721, AccessControlEnumerable {
 
-    using AddressUpgradeable for address;
+    using Address for address;
     ProxyRegistry private _proxyRegistry;
 
-    function __ERC721OpenSeaUpgradeable_init() internal initializer {
-        __ERC721OpenSeaUpgradeable_init_unchained();
-    }
-
-    function __ERC721OpenSeaUpgradeable_init_unchained() internal initializer {
-        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    }
-
     function setProxyRegistry(address proxyRegistry_) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(proxyRegistry_.isContract(), "ERC721OpenSeaUpgradeable: The ProxyRegistry must be a deployed contract");
+        require(proxyRegistry_.isContract(), "ERC721OpenSea: The ProxyRegistry must be a deployed contract");
         _proxyRegistry = ProxyRegistry(proxyRegistry_);
     }
 
@@ -40,7 +27,7 @@ abstract contract ERC721OpenSeaUpgradeable is
      * Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
      */
     function isApprovedForAll(address owner_, address operator_)
-    override (ERC721Upgradeable)
+    override (ERC721)
     virtual
     public
     view
@@ -60,10 +47,10 @@ abstract contract ERC721OpenSeaUpgradeable is
     public
     view
     virtual
-    override(ERC721Upgradeable, AccessControlEnumerableUpgradeable)
+    override(ERC721, AccessControlEnumerable)
     returns (bool)
     {
-        return AccessControlEnumerableUpgradeable.supportsInterface(interfaceId);
+        return AccessControlEnumerable.supportsInterface(interfaceId);
     }
     uint256[48] private __gap;
 }

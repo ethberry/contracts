@@ -1,19 +1,18 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.2;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 
-contract StakingRewards is Initializable, ReentrancyGuardUpgradeable, PausableUpgradeable, OwnableUpgradeable {
-    using SafeMathUpgradeable for uint256;
-    using SafeERC20Upgradeable for IERC20Upgradeable;
+contract StakingRewards is ReentrancyGuard, Pausable, Ownable {
+    using SafeMath for uint256;
+    using SafeERC20 for IERC20;
 
     event RewardAdded(uint256 reward);
     event Staked(address indexed user, uint256 amount);
@@ -22,8 +21,8 @@ contract StakingRewards is Initializable, ReentrancyGuardUpgradeable, PausableUp
     event RewardsDurationUpdated(uint256 newDuration);
     event Recovered(address token, uint256 amount);
 
-    IERC20Upgradeable public rewardsToken;
-    IERC20Upgradeable public stakingToken;
+    IERC20 public rewardsToken;
+    IERC20 public stakingToken;
     uint256 public periodFinish;
     uint256 public rewardRate;
     uint256 public rewardsDuration;
@@ -38,20 +37,16 @@ contract StakingRewards is Initializable, ReentrancyGuardUpgradeable, PausableUp
 
     /* ========== CONSTRUCTOR ========== */
 
-    function initialize(
+    constructor(
         address _rewardsToken,
         address _stakingToken
-    ) initializer public {
-        __Pausable_init();
-        __Ownable_init();
-        __ReentrancyGuard_init();
-
+    ) {
         periodFinish = 0;
         rewardRate = 0;
         rewardsDuration = 7 days;
 
-        rewardsToken = IERC20Upgradeable(_rewardsToken);
-        stakingToken = IERC20Upgradeable(_stakingToken);
+        rewardsToken = IERC20(_rewardsToken);
+        stakingToken = IERC20(_stakingToken);
     }
 
     /* ========== VIEWS ========== */
@@ -65,7 +60,7 @@ contract StakingRewards is Initializable, ReentrancyGuardUpgradeable, PausableUp
     }
 
     function lastTimeRewardApplicable() public view returns (uint256) {
-        return MathUpgradeable.min(block.timestamp, periodFinish);
+        return Math.min(block.timestamp, periodFinish);
     }
 
     function rewardPerToken() public view returns (uint256) {

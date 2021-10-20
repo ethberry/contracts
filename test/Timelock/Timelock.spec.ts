@@ -1,31 +1,31 @@
 import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { TokenTimelockErc20, TokenTimelock, TokenTimelockUpgradeable } from "../../typechain";
+import { TokenTimelockErc20, Vault } from "../../typechain";
 import { amount, initialTokenAmountInWei } from "../constants";
 
 describe.skip("Time Lock", function () {
   let token: ContractFactory;
   let tokenInstance: TokenTimelockErc20;
   let timelock: ContractFactory;
-  let timelockInstance: TokenTimelockUpgradeable;
+  let timelockInstance: Vault;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
   const releaseAfter = 10; // sec
 
   beforeEach(async function () {
     token = await ethers.getContractFactory("TokenTimelockErc20");
-    timelock = await ethers.getContractFactory("TokenTimelock");
+    timelock = await ethers.getContractFactory("Vault");
     [owner, addr1] = await ethers.getSigners();
 
-    tokenInstance = (await upgrades.deployProxy(token)) as TokenTimelockErc20;
-    timelockInstance = (await upgrades.deployProxy(timelock, [
+    tokenInstance = (await token.deploy()) as TokenTimelockErc20;
+    timelockInstance = (await timelock.deploy(
       tokenInstance.address,
       addr1.address,
       Math.floor(Date.now() / 1000) + releaseAfter,
-    ])) as TokenTimelock;
+    )) as Vault;
 
     await tokenInstance.mint(owner.address, initialTokenAmountInWei);
   });

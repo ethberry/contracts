@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
@@ -16,7 +16,7 @@ describe("BlackList", function () {
     contract = await ethers.getContractFactory("BlackListTest");
     [owner, receiver] = await ethers.getSigners();
 
-    contractInstance = (await upgrades.deployProxy(contract)) as BlackListTest;
+    contractInstance = (await contract.deploy()) as BlackListTest;
   });
 
   describe("Deployment", function () {
@@ -56,9 +56,7 @@ describe("BlackList", function () {
 
     it("should fail: test method", async function () {
       const tx = contractInstance.connect(receiver).testMe();
-      await expect(tx).to.be.revertedWith(
-        `BlackListUpgradeable: account ${receiver.address.toLowerCase()} is not blacklisted`,
-      );
+      await expect(tx).to.be.revertedWith(`BlackList: account ${receiver.address.toLowerCase()} is not blacklisted`);
     });
   });
 });

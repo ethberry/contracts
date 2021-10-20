@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
@@ -16,7 +16,7 @@ import {
   tokenSymbol,
 } from "../constants";
 
-describe("MindToken", function () {
+describe("MindCoin", function () {
   let coin: ContractFactory;
   let coinInstance: MindCoin;
   let owner: SignerWithAddress;
@@ -27,7 +27,7 @@ describe("MindToken", function () {
     coin = await ethers.getContractFactory("MindCoin");
     [owner, receiver, addr2] = await ethers.getSigners();
 
-    coinInstance = (await upgrades.deployProxy(coin, [tokenName, tokenSymbol])) as MindCoin;
+    coinInstance = (await coin.deploy(tokenName, tokenSymbol)) as MindCoin;
 
     await coinInstance.mint(owner.address, initialTokenAmountInWei);
   });

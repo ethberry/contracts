@@ -5,12 +5,14 @@ pragma solidity 0.8.2;
 import "./TokenNft.opensea.sol";
 
 
-contract TokenNft is Initializable, TokenNftOpenSea {
-    function initialize(
+contract TokenNft is TokenNftOpenSea {
+    constructor(
         string memory name,
         string memory symbol,
         string memory baseURL
-    ) public initializer {
-        __TokenNftOpenSea_init(name, symbol, baseURL);
+    ) TokenNftOpenSea(name, symbol, baseURL) {
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+        _setupRole(PAUSER_ROLE, _msgSender());
+        _setupRole(MINTER_ROLE, _msgSender());
     }
 }

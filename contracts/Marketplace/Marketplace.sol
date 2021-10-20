@@ -1,24 +1,23 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.2;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165CheckerUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/metatx/MinimalForwarderUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/utils/introspection/ERC165Checker.sol";
+import "@openzeppelin/contracts/metatx/MinimalForwarder.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 
 
-contract Marketplace is Initializable, OwnableUpgradeable, PausableUpgradeable {
-    using SafeMathUpgradeable for uint256;
-    using AddressUpgradeable for address;
-    using ERC165CheckerUpgradeable for address;
+contract Marketplace is Ownable, Pausable {
+    using SafeMath for uint256;
+    using Address for address;
+    using ERC165Checker for address;
 
-    IERC20Upgradeable public acceptedToken;
+    IERC20 public acceptedToken;
 
     struct Order {
         // Order ID
@@ -71,18 +70,15 @@ contract Marketplace is Initializable, OwnableUpgradeable, PausableUpgradeable {
       * @param _acceptedToken - Address of the ERC20 accepted for this marketplace
       * @param _ownerCutPerMillion - owner cut per million
       */
-    function initialize(
+    constructor(
         address _acceptedToken,
         uint256 _ownerCutPerMillion
-    ) initializer public {
-        __Pausable_init();
-        __Ownable_init();
-
+    ) {
         // Fee init
         setOwnerCutPerMillion(_ownerCutPerMillion);
 
         require(_acceptedToken.isContract(), "The accepted token address must be a deployed contract");
-        acceptedToken = IERC20Upgradeable(_acceptedToken);
+        acceptedToken = IERC20(_acceptedToken);
     }
 
     /**
@@ -180,7 +176,7 @@ contract Marketplace is Initializable, OwnableUpgradeable, PausableUpgradeable {
 
         address sender = _msgSender();
 
-        IERC721Upgradeable nftRegistry = IERC721Upgradeable(nftAddress);
+        IERC721 nftRegistry = IERC721(nftAddress);
         address assetOwner = nftRegistry.ownerOf(assetId);
 
         require(sender == assetOwner, "Only the owner can create orders");
@@ -273,7 +269,7 @@ contract Marketplace is Initializable, OwnableUpgradeable, PausableUpgradeable {
 
         address sender = _msgSender();
 
-        IERC721Upgradeable nftRegistry = IERC721Upgradeable(nftAddress);
+        IERC721 nftRegistry = IERC721(nftAddress);
 
         Order memory order = orderByAssetId[nftAddress][assetId];
 

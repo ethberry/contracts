@@ -2,18 +2,17 @@
 
 pragma solidity ^0.8.2;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
+import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
 
 import "../IERC721Factory.sol";
-import "../IERC721TradableUpgradeable.sol";
+import "../IERC721Tradable.sol";
 import "../LootBox/LootBox.sol";
 import "./utils/ProxyRegistry.sol";
 
-contract LociFactory is Initializable, IERC721Factory, AccessControlEnumerableUpgradeable {
-    using StringsUpgradeable for string;
-    using AddressUpgradeable for address;
+contract LociFactory is IERC721Factory, AccessControlEnumerable {
+    using Strings for string;
+    using Address for address;
 
     event Transfer(
         address indexed from,
@@ -24,14 +23,14 @@ contract LociFactory is Initializable, IERC721Factory, AccessControlEnumerableUp
     string public baseURI;
 
     ProxyRegistry _proxyRegistry;
-    IERC721TradableUpgradeable _tradable;
+    IERC721Tradable _tradable;
     LootBox _lootBox;
 
     uint256 NUM_OPTIONS;
 
-    function initialize(
+    constructor(
         string memory _baseURI
-    ) public initializer {
+    ) {
         baseURI = _baseURI;
         NUM_OPTIONS = 4; // common, rare, epic, legendary
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -45,7 +44,7 @@ contract LociFactory is Initializable, IERC721Factory, AccessControlEnumerableUp
 
     function setTradable(address tradableAddress_) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(tradableAddress_.isContract(), "LociFactory: The Tradable must be a deployed contract");
-        _tradable = IERC721TradableUpgradeable(tradableAddress_);
+        _tradable = IERC721Tradable(tradableAddress_);
     }
 
     function setLootBox(address lootBox_) external onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -100,7 +99,7 @@ contract LociFactory is Initializable, IERC721Factory, AccessControlEnumerableUp
     }
 
     function tokenURI(uint256 _optionId) override external view returns (string memory) {
-        return string(abi.encodePacked(baseURI, StringsUpgradeable.toString(_optionId)));
+        return string(abi.encodePacked(baseURI, Strings.toString(_optionId)));
     }
 
     /**

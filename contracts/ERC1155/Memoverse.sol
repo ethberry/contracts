@@ -1,56 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.2;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155BurnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 
-contract Memoverse is Initializable, ERC1155Upgradeable, AccessControlUpgradeable, PausableUpgradeable, ERC1155BurnableUpgradeable {
+contract Memoverse is ERC1155, AccessControl, Pausable, ERC1155Burnable {
     bytes32 public constant URI_SETTER_ROLE = keccak256("URI_SETTER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-    function initialize() initializer public {
-        __ERC1155_init("http://localhost/");
-        __AccessControl_init();
-        __Pausable_init();
-        __ERC1155Burnable_init();
-
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _setupRole(URI_SETTER_ROLE, msg.sender);
-        _setupRole(PAUSER_ROLE, msg.sender);
-        _setupRole(MINTER_ROLE, msg.sender);
+    constructor() ERC1155("http://localhost/") {
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+        _setupRole(URI_SETTER_ROLE, _msgSender());
+        _setupRole(PAUSER_ROLE, _msgSender());
+        _setupRole(MINTER_ROLE, _msgSender());
     }
-
-    // COLLECTION -> TYPE -> SIZE -> RARITY
-    // [FOUNDERS, ...] -> [LAND, PALACE, ROOM, LOCI] -> [S, M, L, XL] -> [COMMON, UNCOMMON, RARE, EPIC, LEGENDARY]
-
-    // FOUNDERS_LAND_S
-    // FOUNDERS_LAND_M
-    // FOUNDERS_LAND_L
-    // FOUNDERS_LAND_LX
-
-    // FOUNDERS_PALACE_S x RARITY
-    // FOUNDERS_PALACE_M x RARITY
-    // FOUNDERS_PALACE_L x RARITY
-    // FOUNDERS_PALACE_LX x RARITY
-
-    // FOUNDERS_ROOM_S x RARITY
-    // FOUNDERS_ROOM_M x RARITY
-    // FOUNDERS_ROOM_L x RARITY
-    // FOUNDERS_ROOM_LX x RARITY
-
-    // FOUNDERS_LOCI
-    // FOUNDERS_LOCI
-    // FOUNDERS_LOCI
-    // FOUNDERS_LOCI
-
-    // TODO create collection
-    // TODO set collection cap
-    // TODO implement random
-
 
     function setURI(string memory newuri) public onlyRole(URI_SETTER_ROLE) {
         _setURI(newuri);
@@ -91,7 +57,7 @@ contract Memoverse is Initializable, ERC1155Upgradeable, AccessControlUpgradeabl
     function supportsInterface(bytes4 interfaceId)
     public
     view
-    override(ERC1155Upgradeable, AccessControlUpgradeable)
+    override(ERC1155, AccessControl)
     returns (bool)
     {
         return super.supportsInterface(interfaceId);

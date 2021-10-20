@@ -2,40 +2,26 @@
 
 pragma solidity ^0.8.2;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "../ChainLink/IERC721LinkUpgradeable.sol";
-import "../ERC721TradableUpgradeable.sol";
-import "../ERC721MintUpgradeable.sol";
+import "../ChainLink/IERC721Link.sol";
+import "../ERC721Tradable.sol";
+import "../ERC721Mint.sol";
 
 
-contract LootBox2 is Initializable, ERC721TradableUpgradeable, ERC721MintUpgradeable {
-    using AddressUpgradeable for address;
+contract LootBox2 is ERC721Tradable, ERC721Mint {
+    using Address for address;
 
-    IERC721LinkUpgradeable _tradable;
-
+    IERC721Link _tradable;
     string private _baseURL;
 
-    function initialize(
+    constructor(
         string memory name,
         string memory symbol,
         string memory baseURL
-    ) public initializer {
-        __ERC721TradableUpgradeable_init_unchained();
-        __ERC721MintUpgradeable_init_unchained();
-        __Context_init_unchained();
-        __ERC165_init_unchained();
-        __AccessControl_init_unchained();
-        __AccessControlEnumerable_init_unchained();
-        __ERC721_init_unchained(name, symbol);
-        __ERC721Enumerable_init_unchained();
-        __ERC721Burnable_init_unchained();
-        __Pausable_init_unchained();
-        __ERC721Pausable_init_unchained();
-
+    ) ERC721(name, symbol) ERC721Capped(uint256(100)) {
         _baseURL = baseURL;
 
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -45,7 +31,7 @@ contract LootBox2 is Initializable, ERC721TradableUpgradeable, ERC721MintUpgrade
 
     function setTradable(address tradableAddress_) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(tradableAddress_.isContract(), "LootBox: The Tradable must be a deployed contract");
-        _tradable = IERC721LinkUpgradeable(tradableAddress_);
+        _tradable = IERC721Link(tradableAddress_);
     }
 
     function unpack(uint256 _tokenId) public {
@@ -61,43 +47,43 @@ contract LootBox2 is Initializable, ERC721TradableUpgradeable, ERC721MintUpgrade
     /* Overrides */
 
     function _baseURI() internal view
-    override (ERC721Upgradeable)
+    override (ERC721)
     returns (string memory) {
         return _baseURL;
     }
 
     function _mint(address to, uint256 tokenId) internal virtual
-    override(ERC721Upgradeable, ERC721TradableUpgradeable) {
-        ERC721TradableUpgradeable._mint(to, tokenId);
+    override(ERC721, ERC721Tradable) {
+        ERC721Tradable._mint(to, tokenId);
     }
 
     function _burn(uint256 tokenId)
     internal
-    override(ERC721TradableUpgradeable, ERC721URIStorageUpgradeable)
+    override(ERC721Tradable, ERC721URIStorage)
     {
-        ERC721Upgradeable._burn(tokenId);
+        ERC721._burn(tokenId);
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
     internal
     whenNotPaused
-    override(ERC721Upgradeable, ERC721TradableUpgradeable)
+    override(ERC721, ERC721Tradable)
     {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
     function tokenURI(uint256 tokenId) public view
-    override(ERC721TradableUpgradeable, ERC721URIStorageUpgradeable)
+    override(ERC721Tradable, ERC721URIStorage)
     returns (string memory)
     {
-        return ERC721URIStorageUpgradeable.tokenURI(tokenId);
+        return ERC721URIStorage.tokenURI(tokenId);
     }
 
     function supportsInterface(bytes4 interfaceId)
     public
     view
     virtual
-    override(ERC721TradableUpgradeable, ERC721MintUpgradeable)
+    override(ERC721Tradable, ERC721Mint)
     returns (bool)
     {
         return super.supportsInterface(interfaceId);

@@ -25,13 +25,13 @@ abstract contract BlackList is AccessControlEnumerable {
     }
 
     function _blacklist(address account) internal view {
-        if (!isBlacklisted(account)) {
+        if (isBlacklisted(account)) {
             revert(
             string(
                 abi.encodePacked(
                     "BlackList: account ",
                     Strings.toHexString(uint160(account), 20),
-                    " is not blacklisted"
+                    " is blacklisted"
                 )
             )
             );

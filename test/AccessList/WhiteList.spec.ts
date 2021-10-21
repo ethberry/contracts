@@ -58,5 +58,11 @@ describe("WhiteList", function () {
       const tx = contractInstance.connect(receiver).testMe();
       await expect(tx).to.be.revertedWith(`WhiteList: account ${receiver.address.toLowerCase()} is not whitelisted`);
     });
+
+    it("should pass", async function () {
+      await contractInstance.whitelist(receiver.address);
+      const result = await contractInstance.connect(receiver).testMe();
+      expect(result).to.equal(true);
+    });
   });
 });

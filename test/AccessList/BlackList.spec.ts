@@ -54,9 +54,15 @@ describe("BlackList", function () {
       expect(isBlackListed).to.equal(false);
     });
 
-    it("should fail: test method", async function () {
+    it("should fail: blacklisted", async function () {
+      await contractInstance.blacklist(receiver.address);
       const tx = contractInstance.connect(receiver).testMe();
-      await expect(tx).to.be.revertedWith(`BlackList: account ${receiver.address.toLowerCase()} is not blacklisted`);
+      await expect(tx).to.be.revertedWith(`BlackList: account ${receiver.address.toLowerCase()} is blacklisted`);
+    });
+
+    it("should pass", async function () {
+      const result = await contractInstance.connect(receiver).testMe();
+      expect(result).to.equal(true);
     });
   });
 });

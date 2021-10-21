@@ -1,13 +1,12 @@
 import "@nomiclabs/hardhat-ethers";
 import { ethers } from "hardhat";
 
-import { Dispersion } from "../typechain";
 import { mapSeries } from "./utils/mapSeries";
 
 async function main() {
   const contract = await ethers.getContractFactory("Dispersion");
 
-  const dispersionInstance = (await upgrades.deployProxy(contract)) as Dispersion;
+  const dispersionInstance = await contract.deploy();
 
   const result = await mapSeries(
     new Array(1e4).fill(null).map(() => {

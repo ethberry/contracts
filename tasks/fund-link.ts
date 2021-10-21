@@ -6,7 +6,7 @@ task("fund-link", "Funds a contract with LINK")
   .setAction(async (taskArgs, hre) => {
     const contractAddr = taskArgs.contract;
     const networkName = hre.network.name;
-    console.log("Funding contract ", contractAddr, " on network ", networkName);
+    console.info("Funding contract ", contractAddr, " on network ", networkName);
     const LINK_TOKEN_ABI = [
       {
         inputs: [
@@ -37,13 +37,12 @@ task("fund-link", "Funds a contract with LINK")
     const amount = hre.web3.utils.toHex(1e18);
 
     // Get signer information
-    const accounts = await hre.ethers.getSigners();
-    const signer = accounts[0];
+    const [owner] = await hre.ethers.getSigners();
 
     // Create connection to LINK token contract and initiate the transfer
-    const linkTokenContract = new hre.ethers.Contract(linkContractAddr, LINK_TOKEN_ABI, signer);
+    const linkTokenContract = new hre.ethers.Contract(linkContractAddr, LINK_TOKEN_ABI, owner);
     await linkTokenContract.transfer(contractAddr, amount).then(function (transaction: any) {
-      console.log("Contract ", contractAddr, " funded with 1 LINK. Transaction Hash: ", transaction.hash);
+      console.info("Contract ", contractAddr, " funded with 1 LINK. Transaction Hash: ", transaction.hash);
     });
   });
 

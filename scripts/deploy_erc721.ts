@@ -1,15 +1,14 @@
 import "@nomiclabs/hardhat-ethers";
 import { ethers } from "hardhat";
-import { baseTokenURI } from "../test/constants";
-import { LociOpenSea, ProxyRegistry } from "../typechain";
+import { baseTokenURI, tokenName, tokenSymbol } from "../test/constants";
 
 async function main() {
   // We get the contract to deploy
   const nft = await ethers.getContractFactory("LociOpenSea");
   const proxy = await ethers.getContractFactory("ProxyRegistry");
-  const proxyInstance = (await upgrades.deployProxy(proxy)) as ProxyRegistry;
+  const proxyInstance = await proxy.deploy();
 
-  const nftInstance = (await upgrades.deployProxy(nft, ["Loci NFT", "Loci (OpenSea)", baseTokenURI])) as LociOpenSea;
+  const nftInstance = await nft.deploy(tokenName, tokenSymbol, baseTokenURI);
 
   await nftInstance.setProxyRegistry(proxyInstance.address);
 

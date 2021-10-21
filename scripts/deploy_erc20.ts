@@ -1,13 +1,13 @@
 import "@nomiclabs/hardhat-ethers";
 import { ethers } from "hardhat";
-import { MindCoin } from "../typechain";
+import { tokenName, tokenSymbol } from "../test/constants";
 
 async function main() {
   // We get the contract to deploy
   const token = await ethers.getContractFactory("MindCoin");
   // ethers.utils.parseUnits("10", "gwei");
 
-  const tokenInstance = (await upgrades.deployProxy(token, ["link test COIN token", "LINK"])) as MindCoin;
+  const tokenInstance = await token.deploy(tokenName, tokenSymbol);
   console.info("MindToken deployed to:", tokenInstance.address);
 }
 

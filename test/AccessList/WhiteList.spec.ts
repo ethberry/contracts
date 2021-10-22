@@ -56,7 +56,7 @@ describe("WhiteList", function () {
 
     it("should fail: test method", async function () {
       const tx = contractInstance.connect(receiver).testMe();
-      await expect(tx).to.be.revertedWith(`WhiteList: account ${receiver.address.toLowerCase()} is not whitelisted`);
+      await expect(tx).to.be.revertedWith(`WhiteListError("${receiver.address}")`);
     });
 
     it("should pass", async function () {

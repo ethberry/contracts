@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.2;
+pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
+
 abstract contract BlackList is AccessControlEnumerable {
+    error BlackListError(address account);
 
     mapping (address => bool) blackList;
 
@@ -26,15 +28,7 @@ abstract contract BlackList is AccessControlEnumerable {
 
     function _blacklist(address account) internal view {
         if (isBlacklisted(account)) {
-            revert(
-            string(
-                abi.encodePacked(
-                    "BlackList: account ",
-                    Strings.toHexString(uint160(account), 20),
-                    " is blacklisted"
-                )
-            )
-            );
+            revert BlackListError(account);
         }
     }
 

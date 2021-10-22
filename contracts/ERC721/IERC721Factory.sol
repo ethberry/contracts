@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity ^0.8.2;
+pragma solidity ^0.8.4;
 
 /**
  * This is a generic factory contract that can be used to mint tokens. The configuration

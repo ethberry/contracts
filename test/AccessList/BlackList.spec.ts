@@ -57,7 +57,7 @@ describe("BlackList", function () {
     it("should fail: blacklisted", async function () {
       await contractInstance.blacklist(receiver.address);
       const tx = contractInstance.connect(receiver).testMe();
-      await expect(tx).to.be.revertedWith(`BlackList: account ${receiver.address.toLowerCase()} is blacklisted`);
+      await expect(tx).to.be.revertedWith(`BlackListError("${receiver.address}")`);
     });
 
     it("should pass", async function () {

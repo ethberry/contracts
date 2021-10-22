@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.2;
+pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -8,10 +8,11 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/finance/PaymentSplitter.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
 
 import "../PriceOracle/IPriceOracle.sol";
 
-contract Dex is Pausable, PaymentSplitter {
+contract Dex is Context, Pausable, PaymentSplitter {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
     using Address for address;
@@ -41,17 +42,17 @@ contract Dex is Pausable, PaymentSplitter {
         require(amountOfToken > 0, "Not enough to buy even one token");
         uint256 dexBalance = acceptedToken.balanceOf(address(this));
         require(amountOfToken <= dexBalance, "Not enough tokens in the reserve");
-        acceptedToken.transfer(msg.sender, amountOfToken);
+        acceptedToken.safeTransfer(_msgSender(), amountOfToken);
         emit Bought(amountOfToken);
     }
 
     function sell(uint256 amountOfToken) whenNotPaused public {
         require(amountOfToken > 0, "You need to sell at least some tokens");
-        uint256 allowance = acceptedToken.allowance(msg.sender, address(this));
+        uint256 allowance = acceptedToken.allowance(_msgSender(), address(this));
         require(allowance >= amountOfToken, "Check the token allowance");
         uint256 amountOfWei = getWeiAmount(amountOfToken, priceOracle.priceInWei());
-        acceptedToken.transferFrom(msg.sender, address(this), amountOfToken);
-        payable(msg.sender).transfer(amountOfWei);
+        acceptedToken.safeTransferFrom(_msgSender(), address(this), amountOfToken);
+        payable(_msgSender()).transfer(amountOfWei);
         emit Sold(amountOfToken);
     }
 

@@ -5,9 +5,9 @@ import "@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol"
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 
-import "../AccessList/BlackList.sol";
+import "../../../AccessList/BlackList.sol";
 
-contract MindCoin is BlackList,
+contract LinkErc20 is BlackList,
         ERC20PresetMinterPauser,
         ERC20Capped,
         ERC20Snapshot {
@@ -36,5 +36,20 @@ contract MindCoin is BlackList,
         require(!isBlacklisted(from), "Error: sender is BlackListed");
         require(!isBlacklisted(to), "Error: receiver is BlackListed");
         super._beforeTokenTransfer(from, to, amount);
+    }
+
+    // VRF CORDINATOR TEST
+    function transferAndCall(
+        address to,
+        uint256 value,
+        bytes calldata data
+    )
+    external
+    pure
+    returns (
+        bool success
+    )
+    {
+        return true;
     }
 }

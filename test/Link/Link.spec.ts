@@ -15,7 +15,7 @@ describe("Link", function () {
 
   beforeEach(async function () {
     link = await ethers.getContractFactory("Link");
-    coin = await ethers.getContractFactory("MindCoin");
+    coin = await ethers.getContractFactory("LinkErc20");
     [owner] = await ethers.getSigners();
 
     coinInstance = (await coin.deploy(tokenName, tokenSymbol)) as MindCoin;

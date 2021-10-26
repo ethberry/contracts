@@ -43,8 +43,8 @@ contract Erc20Store is AccessControl, Pausable {
     public
     whenNotPaused
     {
-        _acceptedToken.safeTransferFrom(_msgSender(), address(this), amount);
-        _lootBox.mintTo(_msgSender());
+        _acceptedToken.transferFrom(_msgSender(), address(this), amount);
+        // _lootBox.mintTo(_msgSender());
     }
 
 }

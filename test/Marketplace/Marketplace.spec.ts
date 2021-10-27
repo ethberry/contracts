@@ -3,27 +3,27 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Loci, Marketplace, MindCoin } from "../../typechain";
-import { baseTokenURI, initialTokenAmountInWei, tokenName, tokenSymbol } from "../constants";
+import { Marketplace, MarketplaceErc20, MarketplaceErc721 } from "../../typechain";
+import { initialTokenAmountInWei } from "../constants";
 
 describe("Marketplace", function () {
   let market: ContractFactory;
   let coin: ContractFactory;
   let nft: ContractFactory;
   let marketInstance: Marketplace;
-  let coinInstance: MindCoin;
-  let nftInstance: Loci;
+  let coinInstance: MarketplaceErc20;
+  let nftInstance: MarketplaceErc721;
   let owner: SignerWithAddress;
 
   beforeEach(async function () {
-    coin = await ethers.getContractFactory("MindCoin");
-    nft = await ethers.getContractFactory("Loci");
+    coin = await ethers.getContractFactory("MarketplaceErc20");
+    nft = await ethers.getContractFactory("MarketplaceErc721");
     market = await ethers.getContractFactory("Marketplace");
     [owner] = await ethers.getSigners();
 
-    coinInstance = (await coin.deploy(tokenName, tokenSymbol)) as MindCoin;
+    coinInstance = (await coin.deploy()) as MarketplaceErc20;
+    nftInstance = (await nft.deploy()) as MarketplaceErc721;
     marketInstance = (await market.deploy(coinInstance.address, 100)) as Marketplace;
-    nftInstance = (await nft.deploy(tokenName, tokenSymbol, baseTokenURI)) as Loci;
 
     await coinInstance.mint(owner.address, initialTokenAmountInWei);
   });

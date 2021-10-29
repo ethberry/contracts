@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { MindCoin } from "../../typechain";
+import { MindCoin } from "../../typechain-types";
 import {
   amount,
   cap,

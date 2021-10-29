@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { StakingRewards, StakingRewardsErc20 } from "../../typechain";
+import { StakingRewards, StakingRewardsErc20 } from "../../typechain-types";
 import { initialTokenAmountInWei } from "../constants";
 
 describe("Staking Reward", function () {

@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Loci } from "../../../typechain";
+import { Loci } from "../../../typechain-types";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
 describe("Loci", function () {

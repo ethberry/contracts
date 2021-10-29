@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Gateway, GatewayErc20, GatewayErc721, GatewayErc1155 } from "../../typechain";
+import { Gateway, GatewayErc20, GatewayErc721, GatewayErc1155 } from "../../typechain-types";
 import { amount, DEFAULT_ADMIN_ROLE } from "../constants";
 
 describe("Gateway", function () {

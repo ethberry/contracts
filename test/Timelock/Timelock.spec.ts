@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { TokenTimelockErc20, Vault } from "../../typechain";
+import { TokenTimelockErc20, Vault } from "../../typechain-types";
 import { amount, initialTokenAmountInWei } from "../constants";
 
 describe.skip("Time Lock", function () {

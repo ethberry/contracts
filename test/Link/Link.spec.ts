@@ -3,7 +3,7 @@ import { ethers, web3 } from "hardhat";
 import { ContractFactory, ContractReceipt, ContractTransaction } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Link, MindCoin } from "../../typechain";
+import { Link, MindCoin } from "../../typechain-types";
 import { amountInWei, initialTokenAmountInWei, tokenName, tokenSymbol } from "../constants";
 
 describe("Link", function () {

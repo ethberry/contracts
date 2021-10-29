@@ -1,7 +1,7 @@
 # Project
 dist/
 coverage/
-typechain/
+typechain-types/
 besu/
 
 # IDE

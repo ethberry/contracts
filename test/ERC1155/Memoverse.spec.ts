@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Memoverse } from "../../typechain";
+import { Memoverse } from "../../typechain-types";
 import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, TEST_DATA, URI_SETTER_ROLE } from "../constants";
 
 describe("Memoverse", function () {

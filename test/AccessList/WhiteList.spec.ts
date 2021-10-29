@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { WhiteListTest } from "../../typechain";
+import { WhiteListTest } from "../../typechain-types";
 import { DEFAULT_ADMIN_ROLE } from "../constants";
 
 describe("WhiteList", function () {

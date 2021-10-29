@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { TokenNft } from "../../../typechain";
+import { TokenNft } from "../../../typechain-types";
 import {
   baseTokenURInft,
   DEFAULT_ADMIN_ROLE,

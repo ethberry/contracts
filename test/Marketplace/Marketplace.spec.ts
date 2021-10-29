@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Marketplace, MarketplaceErc20, MarketplaceErc721 } from "../../typechain";
+import { Marketplace, MarketplaceErc20, MarketplaceErc721 } from "../../typechain-types";
 import { initialTokenAmountInWei } from "../constants";
 
 describe("Marketplace", function () {

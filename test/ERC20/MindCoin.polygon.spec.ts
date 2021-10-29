@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { MindCoinPolygon } from "../../typechain";
+import { MindCoinPolygon } from "../../typechain-types";
 import { addr, DEPOSITOR_ROLE, tokenName, tokenSymbol } from "../constants";
 
 describe("MindToken (Polygon)", function () {

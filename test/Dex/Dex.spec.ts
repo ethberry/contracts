@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Dex, MindCoin, PriceOracle } from "../../typechain";
+import { Dex, MindCoin, PriceOracle } from "../../typechain-types";
 import { amount, decimals, initialTokenAmountInWei, tokenName, tokenSymbol } from "../constants";
 import { parseEther } from "ethers/lib/utils";
 

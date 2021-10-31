@@ -8,6 +8,8 @@ import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 contract Link is VRFConsumerBase {
     using SafeMath for uint256;
 
+    event Random(uint256 id);
+
     bytes32 internal keyHash;
     uint256 internal fee;
     address link_addr;
@@ -25,8 +27,6 @@ contract Link is VRFConsumerBase {
         require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK - fill contract with faucet");
         return requestRandomness(keyHash, fee);
     }
-
-    event Random(uint256 id);
 
     function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
         uint256 d6Result = randomness.mod(6).add(1);

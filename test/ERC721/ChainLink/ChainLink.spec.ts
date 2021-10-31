@@ -3,8 +3,8 @@ import { ethers, web3 } from "hardhat";
 import { ContractFactory, ContractReceipt, ContractTransaction } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { Link, MindCoin } from "../../typechain-types";
-import { amountInWei, initialTokenAmountInWei, tokenName, tokenSymbol } from "../constants";
+import { Link, MindCoin } from "../../../typechain-types";
+import { amountInWei, initialTokenAmountInWei, tokenName, tokenSymbol } from "../../constants";
 
 describe("Link", function () {
   let link: ContractFactory;
@@ -34,8 +34,8 @@ describe("Link", function () {
       expect(coinInstanceBalance).to.equal(0);
       const tx = linkInstance.getRandomNumber();
       await expect(tx).to.be.revertedWith("Not enough LINK - fill contract with faucet");
-      void owner; // ??
     });
+
     it("should request Random", async function () {
       await coinInstance.transfer(linkInstance.address, amountInWei);
       const coinInstanceBalance = await coinInstance.balanceOf(linkInstance.address);

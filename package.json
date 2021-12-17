@@ -9,11 +9,11 @@
     "@nomiclabs/hardhat-etherscan": "2.1.8",
     "@nomiclabs/hardhat-waffle": "2.0.1",
     "@nomiclabs/hardhat-web3": "2.0.0",
-    "@openzeppelin/contracts": "4.4.0",
+    "@openzeppelin/contracts": "4.4.1",
     "@chainlink/contracts": "0.3.0",
     "dotenv": "10.0.0",
     "ethers": "5.5.2",
-    "hardhat": "2.7.1",
+    "hardhat": "2.8.0",
     "hardhat-deploy": "0.9.14",
     "hardhat-gas-reporter": "1.0.6",
     "web3": "1.6.1"
@@ -26,7 +26,7 @@
     "@typechain/hardhat": "3.0.0",
     "@types/chai": "4.3.0",
     "@types/mocha": "9.0.0",
-    "@types/node": "16.11.12",
+    "@types/node": "16.11.14",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
     "chai": "4.3.4",
@@ -47,7 +47,7 @@
     "rimraf": "3.0.2",
     "ts-node": "10.4.0",
     "typechain": "6.0.5",
-    "typescript": "4.5.3"
+    "typescript": "4.5.4"
   },
   "engines": {
     "node": ">=12.13"

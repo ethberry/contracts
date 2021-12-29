@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 
-abstract contract ERC721Mint is  Context, ERC721URIStorage, AccessControlEnumerable {
+abstract contract ERC721Mint is Context, ERC721URIStorage, AccessControlEnumerable {
     using Counters for Counters.Counter;
     Counters.Counter public _tokenIdTracker;
 
@@ -34,6 +34,4 @@ abstract contract ERC721Mint is  Context, ERC721URIStorage, AccessControlEnumera
     {
         return AccessControlEnumerable.supportsInterface(interfaceId);
     }
-
-    uint256[48] private __gap;
 }

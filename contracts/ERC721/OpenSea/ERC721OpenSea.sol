@@ -52,5 +52,4 @@ abstract contract ERC721OpenSea is ERC721, AccessControlEnumerable {
     {
         return AccessControlEnumerable.supportsInterface(interfaceId);
     }
-    uint256[48] private __gap;
 }

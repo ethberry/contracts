@@ -1,10 +1,10 @@
-scripts
-tasks
+/scripts
+/tasks
 test
 
-artifacts
-cache
-typechain-types
+/artifacts
+/cache
+/typechain-types
 
 besu
 
@@ -17,5 +17,6 @@ hardhat.config.ts
 tsconfig.json
 tsconfig.test.json
 
-ERC998
 utils
+
+.idea

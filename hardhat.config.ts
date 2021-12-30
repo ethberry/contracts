@@ -35,10 +35,10 @@ export default {
       timeout: 142000,
       // gas: 29999915,
     },
-    // ropsten: {
-    //   url: `https://eth-ropsten.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
-    //   accounts: [`0x${process.env.ROPSTEN_PRIVATE_KEY as string}`],
-    // },
+    ropsten: {
+      url: `https://eth-ropsten.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY_ROPSTEN as string}`,
+      accounts: [`0x${process.env.ROPSTEN_PRIVATE_KEY as string}`],
+    },
     rinkeby: {
       url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY_RINKEBY as string}`,
       gas: 2100000,
@@ -49,6 +49,14 @@ export default {
       //   mnemonic: process.env.MM_MNEMONIC,
       // },
       saveDeployments: true,
+    },
+    binancetest: {
+      url: process.env.RPC_URL_BINANCE,
+      chainId: 97,
+      gasPrice: 20000000000,
+      accounts: {
+        mnemonic: process.env.MM_MNEMONIC,
+      },
     },
   },
   solidity: {

@@ -32,6 +32,10 @@ jobs:
 
       - name: Build Packages
         run: npm run build
+        env:
+          MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
+          MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
+          RPC_URL_BINANCE: ${{ secrets.RPC_URL_BINANCE }}
 
       - name: Version by NPM
         run: npm version patch -m "[Manual release] [skip ci] %s"

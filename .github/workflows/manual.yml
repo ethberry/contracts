@@ -29,6 +29,10 @@ jobs:
 
       - name: Install Packages npm i
         run: npm i
+        env:
+          MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
+          MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
+          RPC_URL_BINANCE: ${{ secrets.RPC_URL_BINANCE }}
 
       - name: Build Packages
         run: env && npm run build

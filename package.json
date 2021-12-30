@@ -18,6 +18,7 @@
     "hardhat-gas-reporter": "1.0.6",
     "web3": "1.6.1"
   },
+  "description": "Collection of contracts and presets",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "2.0.3",
     "@gemunion/eslint-config": "0.1.10",
@@ -70,7 +71,8 @@
     "deploy:polygon": "hardhat --network polygon deploy",
     "deploy:rinkeby": "hardhat --network rinkeby deploy",
     "lint": "eslint . --fix",
-    "start": "hardhat run scripts/sample-script.ts",
+    "prebuild": "rimraf artifacts cache typechain-types",
+    "prepare": "npm run build",
     "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",

@@ -1,45 +1,43 @@
 // SPDX-License-Identifier: UNLICENSED
 
+// Author: TrejGun
+// Email: trejgun+impulse@gmail.com
+// Website: https://gemunion.io/
+
 pragma solidity ^0.8.4;
 
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
 
-/**
- * @dev Extension of {ERC721} that adds a cap to the supply of tokens.
- */
-abstract contract ERC721Capped is ERC721Enumerable {
-    uint256 private _cap;
+abstract contract ERC721Capped is Context, ERC721Enumerable {
+  uint256 internal _cap;
 
-    /**
-     * @dev Sets the value of the `cap`. This value is immutable, it can only be
-     * set once during construction.
-     */
-     constructor(uint256 cap_) {
-         require(cap_ > 0, "ERC721Capped: cap is 0");
-         _cap = cap_;
-    }
+  constructor(uint256 cap_) {
+    require(cap_ > 0, "ERC721Capped: cap is 0");
+    _cap = cap_;
+  }
 
-    /**
-     * @dev Returns the cap on the token's total supply.
-     */
-    function cap() public view virtual returns (uint256) {
-        return _cap;
-    }
+  /**
+   * @dev Returns the cap on the token's total supply.
+   */
+  function cap() public view virtual returns (uint256) {
+    return _cap;
+  }
 
-    /**
-     * @dev See {ERC721-_mint}.
-     */
-    function _mint(address to_, uint256 tokenId_) internal virtual override {
-        require(ERC721Enumerable.totalSupply() <= cap(), "ERC721Capped: cap exceeded");
-        super._mint(to_, tokenId_);
-    }
-    /**
-     * @dev public set cap.
-     */
-    function _setCap(uint256 _newcap) public virtual
-    {
-        require(ERC721Enumerable.totalSupply() <= _newcap, "ERC721Capped: cap too low");
-        _cap = _newcap;
-    }
+  function _mint(address to, uint256 tokenId) internal virtual override {
+    require(totalSupply() + 1 <= cap(), "ERC20Capped: cap exceeded");
+    super._mint(to, tokenId);
+  }
+
+  function _safeMint(address to, uint256 tokenId) internal virtual override {
+    require(totalSupply() + 1 <= cap(), "ERC20Capped: cap exceeded");
+    super._safeMint(to, tokenId);
+  }
 }

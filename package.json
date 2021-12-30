@@ -10,7 +10,7 @@
     "@nomiclabs/hardhat-waffle": "2.0.1",
     "@nomiclabs/hardhat-web3": "2.0.0",
     "@openzeppelin/contracts": "4.4.1",
-    "@chainlink/contracts": "0.3.0",
+    "@chainlink/contracts": "0.2.2",
     "dotenv": "10.0.0",
     "ethers": "5.5.2",
     "hardhat": "2.8.0",
@@ -20,7 +20,6 @@
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "2.0.3",
-    "@chainlink/contracts": "0.3.0",
     "@gemunion/eslint-config": "0.1.10",
     "@typechain/ethers-v5": "8.0.5",
     "@typechain/hardhat": "3.1.0",
@@ -54,14 +53,14 @@
   },
   "license": "UNLICENSED",
   "main": "./dist/index.js",
-  "name": "@gemunion/memoryos-contracts",
+  "name": "@gemunion/contracts",
   "private": true,
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gemunion/memoryos-contracts"
+    "url": "https://github.com/gemunion/contracts"
   },
   "scripts": {
     "build": "hardhat compile",

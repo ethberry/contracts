@@ -19,7 +19,7 @@ describe("BlackList", function () {
     contractInstance = (await contract.deploy()) as BlackListTest;
   });
 
-  describe("Deployment", function () {
+  describe("constructor", function () {
     it("should set the right roles to deployer", async function () {
       const isAdmin = await contractInstance.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
       expect(isAdmin).to.equal(true);

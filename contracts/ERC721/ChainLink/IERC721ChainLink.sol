@@ -6,4 +6,6 @@
 
 pragma solidity ^0.8.4;
 
-contract OwnableDelegateProxy {}
+interface IERC721ChainLink {
+  function mintRandom(address _to) external;
+}

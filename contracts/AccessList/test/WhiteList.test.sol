@@ -1,23 +1,20 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.4;
 
+// Author: TrejGun
+// Email: trejgun+impulse@gmail.com
+// Website: https://gemunion.io/
+
+pragma solidity ^0.8.4;
 
 import "../WhiteList.sol";
 
 contract WhiteListTest is WhiteList {
 
-    constructor() {
-        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    }
+  constructor() {
+    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+  }
 
-    function testMe()
-    external
-    view
-    onlyWhiteListed
-    returns (
-        bool success
-    )
-    {
-        return true;
-    }
+  function testMe() external view onlyWhiteListed returns (bool success){
+    return true;
+  }
 }

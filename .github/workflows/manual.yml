@@ -54,6 +54,15 @@ jobs:
         run: npm publish
         env:
           GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
+          MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
+          MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
+          RPC_URL_BINANCE: ${{ secrets.RPC_URL_BINANCE }}
+          ALCHEMY_API_KEY_RINKEBY: ${{ secrets.ALCHEMY_API_KEY_RINKEBY }}
+          ALCHEMY_API_KEY_ROPSTEN: ${{ secrets.ALCHEMY_API_KEY_ROPSTEN }}
+          ALCHEMY_API_KEY_POLYGON: ${{ secrets.ALCHEMY_API_KEY_POLYGON }}
+          ALCHEMY_API_KEY_MUMBAI: ${{ secrets.ALCHEMY_API_KEY_MUMBAI }}
+          ROPSTEN_PRIVATE_KEY: ${{ secrets.ROPSTEN_PRIVATE_KEY }}
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
 
       - name: Git push
         run: git push --no-verify && git push --tags --no-verify

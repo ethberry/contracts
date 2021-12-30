@@ -55,7 +55,6 @@
   "license": "UNLICENSED",
   "main": "./dist/index.js",
   "name": "@gemunion/contracts",
-  "private": true,
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },

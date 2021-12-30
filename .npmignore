@@ -1,7 +1,6 @@
 scripts
 tasks
 test
-utils
 
 artifacts
 cache
@@ -17,3 +16,6 @@ renovate.json
 hardhat.config.ts
 tsconfig.json
 tsconfig.test.json
+
+ERC998
+utils

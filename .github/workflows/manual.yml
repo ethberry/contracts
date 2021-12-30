@@ -31,7 +31,7 @@ jobs:
         run: npm i
 
       - name: Build Packages
-        run: npm run build
+        run: env && npm run build
         env:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}

@@ -40,7 +40,7 @@ export default {
       accounts: [process.env.MM_PRIVATEKEY],
     },
     rinkeby: {
-      url: process.env.RIMKEBY_RPC_URL,
+      url: process.env.RINKEBY_RPC_URL,
       gas: 2100000,
       gasPrice: 8000000000,
       timeout: 142000,

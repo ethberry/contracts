@@ -6,8 +6,8 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "hardhat/console.sol";
+
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
@@ -171,84 +171,19 @@ IERC998ERC20TopDownEnumerable
         return rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId];
     }
 
-    function transferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId
-    ) public override virtual {
-        _transferFrom(_from, _to, _tokenId);
-    }
-
-    function safeTransferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId
-    ) public override virtual {
-        _transferFrom(_from, _to, _tokenId);
-        if (_to.isContract()) {
-            bytes4 retval =
-            IERC721Receiver(_to).onERC721Received(
-                msg.sender,
-                _from,
-                _tokenId,
-                ""
-            );
-            require(
-                retval == ERC721_RECEIVED_OLD || retval == ERC721_RECEIVED_NEW,
-                "ComposableTopDown: safeTransferFrom(3) onERC721Received invalid return value"
-            );
-        }
-    }
-
-    function safeTransferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId,
-        bytes memory _data
-    ) public override virtual {
-        _transferFrom(_from, _to, _tokenId);
-        if (_to.isContract()) {
-            bytes4 retval =
-            IERC721Receiver(_to).onERC721Received(
-                msg.sender,
-                _from,
-                _tokenId,
-                _data
-            );
-            require(
-                retval == ERC721_RECEIVED_OLD || retval == ERC721_RECEIVED_NEW,
-                "ComposableTopDown: safeTransferFrom(4) onERC721Received invalid return value"
-            );
-            rootOwnerOf(_tokenId);
-        }
-    }
-
-    function _transferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId
-    ) private {
-        require(
-            _from != address(0),
-            "ComposableTopDown: _transferFrom _from zero address"
-        );
-        require(
-            tokenIdToTokenOwner[_tokenId] == _from,
-            "ComposableTopDown: _transferFrom _from not owner"
-        );
-        require(
-            _to != address(0),
-            "ComposableTopDown: _transferFrom _to zero address"
-        );
-
-        if (msg.sender != _from) {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal virtual override {
+        if (_msgSender() != from) {
             bytes memory callData =
             abi.encodeWithSelector(
                 ROOT_OWNER_OF_CHILD,
                 address(this),
-                _tokenId
+                tokenId
             );
-            (bool callSuccess, bytes memory data) = _from.staticcall(callData);
+            (bool callSuccess, bytes memory data) = from.staticcall(callData);
             if (callSuccess == true) {
                 bytes32 rootOwner;
                 assembly {
@@ -259,31 +194,9 @@ IERC998ERC20TopDownEnumerable
                     "ComposableTopDown: _transferFrom token is child of other top down composable"
                 );
             }
-
-            require(
-                tokenOwnerToOperators[_from][msg.sender] ||
-                rootOwnerAndTokenIdToApprovedAddress[_from][_tokenId] ==
-                msg.sender,
-                "ComposableTopDown: _transferFrom msg.sender not approved"
-            );
         }
 
-        // clear approval
-        if (
-            rootOwnerAndTokenIdToApprovedAddress[_from][_tokenId] != address(0)
-        ) {
-            delete rootOwnerAndTokenIdToApprovedAddress[_from][_tokenId];
-            emit Approval(_from, address(0), _tokenId);
-        }
-
-        // remove and transfer token
-        if (_from != _to) {
-            assert(tokenOwnerToTokenCount[_from] > 0);
-            tokenOwnerToTokenCount[_from]--;
-            tokenIdToTokenOwner[_tokenId] = _to;
-            tokenOwnerToTokenCount[_to]++;
-        }
-        emit Transfer(_from, _to, _tokenId);
+        super._beforeTokenTransfer(from, to, tokenId);
     }
 
     ////////////////////////////////////////////////////////
@@ -565,25 +478,6 @@ IERC998ERC20TopDownEnumerable
         }
     }
 
-    function __checkOnERC721Received(address from, address to, uint256 tokenId, bytes memory _data) private returns (bool) {
-        if (to.isContract()) {
-            try IERC721Receiver(to).onERC721Received(msg.sender, from, tokenId, _data) returns (bytes4 retval) {
-                return retval == IERC721Receiver(to).onERC721Received.selector;
-            } catch (bytes memory reason) {
-                if (reason.length == 0) {
-                    revert("ERC721: transfer to non ERC721Receiver implementer");
-                } else {
-                    // solhint-disable-next-line no-inline-assembly
-                    assembly {
-                        revert(add(32, reason), mload(reason))
-                    }
-                }
-            }
-        } else {
-            return true;
-        }
-    }
-
     function removeChild(
         uint256 _tokenId,
         address _childContract,
@@ -616,6 +510,7 @@ IERC998ERC20TopDownEnumerable
             tokenIdToTokenOwner[_tokenId] != address(0),
             "ComposableTopDown: receiveChild _tokenId does not exist."
         );
+        // @dev this is edge case, _tokenId can't be 0
         require(
             childTokenOwner[_childContract][_childTokenId] != _tokenId,
             "ComposableTopDown: receiveChild _childTokenId already received"

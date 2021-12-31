@@ -6,6 +6,8 @@
 
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
+
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
@@ -17,8 +19,6 @@ import "@openzeppelin/contracts/access/IAccessControl.sol";
 import "@openzeppelin/contracts/access/IAccessControlEnumerable.sol";
 
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
-
-import "hardhat/console.sol";
 
 contract InterfaceIdCalculator {
 

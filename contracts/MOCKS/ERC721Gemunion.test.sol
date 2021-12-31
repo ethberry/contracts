@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.4;
 
-import "../ERC721Gemunion.sol";
+import "../ERC721/ERC721Gemunion.sol";
 
 contract ERC721GemunionTest is ERC721Gemunion {
   constructor (

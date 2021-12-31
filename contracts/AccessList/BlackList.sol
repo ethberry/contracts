@@ -6,10 +6,10 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
 
-abstract contract BlackList is AccessControlEnumerable {
+abstract contract BlackList is AccessControl {
   error BlackListError(address account);
 
   mapping(address => bool) blackList;

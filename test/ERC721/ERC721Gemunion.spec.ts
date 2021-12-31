@@ -213,8 +213,12 @@ describe("ERC721Gemunion", function () {
   describe("pause", function () {
     it("should fail: not an owner", async function () {
       const tx = nftInstance.connect(receiver).pause();
-
       await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
+      );
+
+      const tx2 = nftInstance.connect(receiver).unpause();
+      await expect(tx2).to.be.revertedWith(
         `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
       );
     });

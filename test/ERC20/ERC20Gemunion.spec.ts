@@ -52,8 +52,8 @@ describe("ERC20Gemunion", function () {
     it("should assign the total supply of tokens to the owner", async function () {
       const totalSupply = await coinInstance.totalSupply();
       expect(totalSupply).to.equal(initialTokenAmountInWei);
-      const ownerBalance = await coinInstance.balanceOf(owner.address);
-      expect(ownerBalance).to.equal(initialTokenAmountInWei);
+      const balanceOfOwner = await coinInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(initialTokenAmountInWei);
     });
   });
 
@@ -69,8 +69,8 @@ describe("ERC20Gemunion", function () {
 
       const receiverBalance = await coinInstance.balanceOf(receiver.address);
       expect(receiverBalance).to.equal(amount);
-      const ownerBalance = await coinInstance.balanceOf(owner.address);
-      expect(ownerBalance).to.equal(initialTokenAmountInWei.sub(amount));
+      const balanceOfOwner = await coinInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
     });
 
     it("should transfer to contract", async function () {
@@ -81,8 +81,8 @@ describe("ERC20Gemunion", function () {
 
       const receiverBalance = await coinInstance.balanceOf(coinNonReceiverInstance.address);
       expect(receiverBalance).to.equal(amount);
-      const ownerBalance = await coinInstance.balanceOf(owner.address);
-      expect(ownerBalance).to.equal(initialTokenAmountInWei.sub(amount));
+      const balanceOfOwner = await coinInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
     });
   });
 
@@ -122,7 +122,9 @@ describe("ERC20Gemunion", function () {
   describe("mint", function () {
     it("should fail: must have minter role to mint", async function () {
       const tx = coinInstance.connect(receiver).mint(receiver.address, amount);
-      await expect(tx).to.be.revertedWith("ERC20Gemunion: must have minter role to mint");
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
+      );
     });
 
     it("should mint more tokens", async function () {
@@ -150,6 +152,37 @@ describe("ERC20Gemunion", function () {
       expect(balance).to.equal(initialTokenAmountInWei.sub(amount));
       const totalSupply = await coinInstance.totalSupply();
       expect(totalSupply).to.equal(initialTokenAmountInWei.sub(amount));
+    });
+  });
+
+  describe("pause", function () {
+    it("should fail: not an owner", async function () {
+      const tx = coinInstance.connect(receiver).pause();
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
+      );
+
+      const tx2 = coinInstance.connect(receiver).unpause();
+      await expect(tx2).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
+      );
+    });
+
+    it("should pause/unpause", async function () {
+      const tx2 = coinInstance.pause();
+      await expect(tx2).to.emit(coinInstance, "Paused").withArgs(owner.address);
+
+      const tx3 = coinInstance.transfer(receiver.address, amount);
+      await expect(tx3).to.be.revertedWith(`ERC20Pausable: token transfer while paused`);
+
+      const tx4 = coinInstance.unpause();
+      await expect(tx4).to.emit(coinInstance, "Unpaused").withArgs(owner.address);
+
+      const tx5 = coinInstance.transfer(receiver.address, amount);
+      await expect(tx5).to.not.be.reverted;
+
+      const balanceOfOwner = await coinInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
     });
   });
 

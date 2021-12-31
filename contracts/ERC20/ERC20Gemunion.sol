@@ -64,8 +64,7 @@ abstract contract ERC20Gemunion is Context, AccessControlEnumerable, ERC20Burnab
    *
    * - the caller must have the `MINTER_ROLE`.
    */
-  function mint(address to, uint256 amount) public virtual {
-    require(hasRole(MINTER_ROLE, _msgSender()), "ERC20Gemunion: must have minter role to mint");
+  function mint(address to, uint256 amount) public virtual onlyRole(MINTER_ROLE) {
     _mint(to, amount);
   }
 
@@ -78,8 +77,7 @@ abstract contract ERC20Gemunion is Context, AccessControlEnumerable, ERC20Burnab
    *
    * - the caller must have the `PAUSER_ROLE`.
    */
-  function pause() public virtual {
-    require(hasRole(PAUSER_ROLE, _msgSender()), "ERC20Gemunion: must have pauser role to pause");
+  function pause() public virtual onlyRole(PAUSER_ROLE) {
     _pause();
   }
 
@@ -92,8 +90,7 @@ abstract contract ERC20Gemunion is Context, AccessControlEnumerable, ERC20Burnab
    *
    * - the caller must have the `PAUSER_ROLE`.
    */
-  function unpause() public virtual {
-    require(hasRole(PAUSER_ROLE, _msgSender()), "ERC20Gemunion: must have pauser role to unpause");
+  function unpause() public virtual onlyRole(PAUSER_ROLE) {
     _unpause();
   }
 

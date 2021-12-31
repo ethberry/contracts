@@ -26,21 +26,21 @@ export default {
       ],
     },
     polygon: {
-      url: `https://polygon-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY_POLYGON as string}`,
+      url: process.env.POLYGON_RPC_URL,
     },
     mumbai: {
-      url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY_MUMBAI as string}`,
+      url: process.env.MUMBAI_RPC_URL,
       accounts: [process.env.MM_PRIVATEKEY],
       gasPrice: 8000000000, // default is 'auto' which breaks chains without the london hardfork
       timeout: 142000,
       // gas: 29999915,
     },
     ropsten: {
-      url: `https://eth-ropsten.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY_ROPSTEN as string}`,
-      accounts: [`0x${process.env.ROPSTEN_PRIVATE_KEY as string}`],
+      url: process.env.ROPSTEN_RPC_URL,
+      accounts: [process.env.MM_PRIVATEKEY],
     },
     rinkeby: {
-      url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY_RINKEBY as string}`,
+      url: process.env.RIMKEBY_RPC_URL,
       gas: 2100000,
       gasPrice: 8000000000,
       timeout: 142000,
@@ -51,7 +51,7 @@ export default {
       saveDeployments: true,
     },
     binancetest: {
-      url: process.env.RPC_URL_BINANCE,
+      url: process.env.BINANCE_RPC_URL,
       chainId: 97,
       gasPrice: 20000000000,
       accounts: {

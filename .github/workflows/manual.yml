@@ -33,10 +33,10 @@ jobs:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
           BINANCE_RPC_URL: ${{ secrets.RPC_URL_BINANCE }}
-          ALCHEMY_API_KEY_RINKEBY: ${{ secrets.ALCHEMY_API_KEY_RINKEBY }}
-          ALCHEMY_API_KEY_ROPSTEN: ${{ secrets.ALCHEMY_API_KEY_ROPSTEN }}
-          ALCHEMY_API_KEY_POLYGON: ${{ secrets.ALCHEMY_API_KEY_POLYGON }}
-          ALCHEMY_API_KEY_MUMBAI: ${{ secrets.ALCHEMY_API_KEY_MUMBAI }}
+          RINKEBY_RPC_URL: ${{ secrets.ALCHEMY_API_KEY_RINKEBY }}
+          ROPSTEN_RPC_URL: ${{ secrets.ALCHEMY_API_KEY_ROPSTEN }}
+          POLYGON_RPC_URL: ${{ secrets.ALCHEMY_API_KEY_POLYGON }}
+          MUMBAI_RPC_URL: ${{ secrets.ALCHEMY_API_KEY_MUMBAI }}
           ROPSTEN_PRIVATE_KEY: ${{ secrets.ROPSTEN_PRIVATE_KEY }}
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
 
@@ -57,10 +57,10 @@ jobs:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
           BINANCE_RPC_URL: ${{ secrets.RPC_URL_BINANCE }}
-          ALCHEMY_API_KEY_RINKEBY: ${{ secrets.ALCHEMY_API_KEY_RINKEBY }}
-          ALCHEMY_API_KEY_ROPSTEN: ${{ secrets.ALCHEMY_API_KEY_ROPSTEN }}
-          ALCHEMY_API_KEY_POLYGON: ${{ secrets.ALCHEMY_API_KEY_POLYGON }}
-          ALCHEMY_API_KEY_MUMBAI: ${{ secrets.ALCHEMY_API_KEY_MUMBAI }}
+          RINKEBY_RPC_URL: ${{ secrets.ALCHEMY_API_KEY_RINKEBY }}
+          ROPSTEN_RPC_URL: ${{ secrets.ALCHEMY_API_KEY_ROPSTEN }}
+          POLYGON_RPC_URL: ${{ secrets.ALCHEMY_API_KEY_POLYGON }}
+          MUMBAI_RPC_URL: ${{ secrets.ALCHEMY_API_KEY_MUMBAI }}
           ROPSTEN_PRIVATE_KEY: ${{ secrets.ROPSTEN_PRIVATE_KEY }}
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
 

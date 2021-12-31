@@ -71,7 +71,7 @@
     "deploy:rinkeby": "hardhat --network rinkeby deploy",
     "lint": "eslint . --fix",
     "prebuild": "rimraf artifacts cache typechain-types",
-    "prepare": "npm run build",
+    "preversion": "npm run build",
     "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",

@@ -32,7 +32,7 @@ jobs:
         env:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
-          RPC_URL_BINANCE: ${{ secrets.RPC_URL_BINANCE }}
+          BINANCE_RPC_URL: ${{ secrets.RPC_URL_BINANCE }}
           ALCHEMY_API_KEY_RINKEBY: ${{ secrets.ALCHEMY_API_KEY_RINKEBY }}
           ALCHEMY_API_KEY_ROPSTEN: ${{ secrets.ALCHEMY_API_KEY_ROPSTEN }}
           ALCHEMY_API_KEY_POLYGON: ${{ secrets.ALCHEMY_API_KEY_POLYGON }}
@@ -56,7 +56,7 @@ jobs:
           GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
-          RPC_URL_BINANCE: ${{ secrets.RPC_URL_BINANCE }}
+          BINANCE_RPC_URL: ${{ secrets.RPC_URL_BINANCE }}
           ALCHEMY_API_KEY_RINKEBY: ${{ secrets.ALCHEMY_API_KEY_RINKEBY }}
           ALCHEMY_API_KEY_ROPSTEN: ${{ secrets.ALCHEMY_API_KEY_ROPSTEN }}
           ALCHEMY_API_KEY_POLYGON: ${{ secrets.ALCHEMY_API_KEY_POLYGON }}

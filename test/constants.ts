@@ -49,6 +49,13 @@ export const addr = {
     chainLinkFee: 0.0001,
     chainLinkKeyHash: "0x6e75b569a01ef56d18cab6a8e71e6600d6ce853834d4a5748b720d06f878b3a4",
   },
+  binancetest: {
+    childProxyManager: "0xb5505a6d998549090530911180f38aC5130101c6",
+    chainLinkVRFCoordinator: "0xa555fC018435bef5A13C6c6870a9d4C11DEC329C",
+    chainLinkToken: "0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06",
+    chainLinkFee: 0.1,
+    chainLinkKeyHash: "0xcaf3c3727e033261d383b315559476f48034c13b18f8cafed4d871abe5049186",
+  },
   polygon: {
     childProxyManager: "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa",
     chainLinkVRFCoordinator: "0x3d2341ADb2D31f1c5530cDC622016af293177AE0",

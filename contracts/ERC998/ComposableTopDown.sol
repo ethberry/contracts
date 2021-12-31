@@ -153,86 +153,22 @@ IERC998ERC20TopDownEnumerable
 
     // returns the owner at the top of the tree of composables
 
-    function ownerOf(uint256 _tokenId)
-    public
-    view
-    override
-    virtual
-    returns (address tokenOwner)
-    {
-        tokenOwner = tokenIdToTokenOwner[_tokenId];
-        require(
-            tokenOwner != address(0),
-            "ComposableTopDown: ownerOf _tokenId zero address"
-        );
-        return tokenOwner;
-    }
-
-    function balanceOf(address _tokenOwner)
-    public
-    view
-    override
-    virtual
-    returns (uint256)
-    {
-        require(
-            _tokenOwner != address(0),
-            "ComposableTopDown: balanceOf _tokenOwner zero address"
-        );
-        return tokenOwnerToTokenCount[_tokenOwner];
-    }
-
-    function approve(address _approved, uint256 _tokenId) public override virtual {
+    function approve(address to, uint256 _tokenId) public override virtual {
         address rootOwner = address(uint160(uint256(rootOwnerOf(_tokenId))));
+        require(to != rootOwner, "ComposableTopDown: approval to current owner");
+
         require(
-            rootOwner == msg.sender ||
-            tokenOwnerToOperators[rootOwner][msg.sender],
-            "ComposableTopDown: approve msg.sender not owner"
+            _msgSender() == rootOwner ||
+            isApprovedForAll(rootOwner, _msgSender()),
+            "ComposableTopDown: approve caller is not owner nor approved for all"
         );
-        rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId] = _approved;
-        emit Approval(rootOwner, _approved, _tokenId);
+        rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId] = to;
+        emit Approval(rootOwner, to, _tokenId);
     }
 
-    function getApproved(uint256 _tokenId)
-    public
-    view
-    override
-    virtual
-    returns (address)
-    {
+    function getApproved(uint256 _tokenId) public view override virtual returns (address){
         address rootOwner = address(uint160(uint256(rootOwnerOf(_tokenId))));
         return rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId];
-    }
-
-    function setApprovalForAll(address _operator, bool _approved)
-    public
-    override
-    virtual
-    {
-        require(
-            _operator != address(0),
-            "ComposableTopDown: setApprovalForAll _operator zero address"
-        );
-        tokenOwnerToOperators[msg.sender][_operator] = _approved;
-        emit ApprovalForAll(msg.sender, _operator, _approved);
-    }
-
-    function isApprovedForAll(address _owner, address _operator)
-    public
-    view
-    override
-    virtual
-    returns (bool)
-    {
-        require(
-            _owner != address(0),
-            "ComposableTopDown: isApprovedForAll _owner zero address"
-        );
-        require(
-            _operator != address(0),
-            "ComposableTopDown: isApprovedForAll _operator zero address"
-        );
-        return tokenOwnerToOperators[_owner][_operator];
     }
 
     function transferFrom(

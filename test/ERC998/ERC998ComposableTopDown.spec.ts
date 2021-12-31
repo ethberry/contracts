@@ -83,7 +83,7 @@ describe("ERC998ComposableTopDown", function () {
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
       const tx = nftInstance.balanceOf(ZERO_ADDR);
-      await expect(tx).to.be.revertedWith(`ComposableTopDown: balanceOf _tokenOwner zero address`);
+      await expect(tx).to.be.revertedWith(`ERC721: balance query for the zero address`);
     });
 
     it("should get balance of owner", async function () {
@@ -96,6 +96,97 @@ describe("ERC998ComposableTopDown", function () {
       await nftInstance.safeMint(owner.address);
       const balance = await nftInstance.balanceOf(receiver.address);
       expect(balance).to.equal(0);
+    });
+  });
+
+  describe("ownerOf", function () {
+    it("should get owner of token", async function () {
+      await nftInstance.safeMint(owner.address);
+      const ownerOfToken = await nftInstance.ownerOf(0);
+      expect(ownerOfToken).to.equal(owner.address);
+    });
+
+    it("should get owner of burned token", async function () {
+      await nftInstance.safeMint(owner.address);
+      const tx = nftInstance.burn(0);
+      await expect(tx).to.not.be.reverted;
+      const balanceOfOwner = await nftInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(0);
+      const tx2 = nftInstance.ownerOf(0);
+      await expect(tx2).to.be.revertedWith(`ERC721: owner query for nonexistent token`);
+    });
+  });
+
+  describe("tokenURI", function () {
+    it("should get default token URI", async function () {
+      await nftInstance.safeMint(owner.address);
+      const uri = await nftInstance.tokenURI(0);
+      expect(uri).to.equal(`${baseTokenURI}0`);
+    });
+
+    it("should override token URI", async function () {
+      await nftInstance.safeMint(owner.address);
+      await nftInstance.setTokenURI(0, "newURI");
+      const uri = await nftInstance.tokenURI(0);
+      expect(uri).to.equal(`${baseTokenURI}newURI`);
+    });
+  });
+
+  describe("approve", function () {
+    it("should fail: not an owner", async function () {
+      await nftInstance.safeMint(owner.address);
+      const tx = nftInstance.connect(receiver).approve(owner.address, 0);
+      await expect(tx).to.be.revertedWith(`ComposableTopDown: approval to current owner`);
+    });
+
+    it("should fail: approve to self", async function () {
+      await nftInstance.safeMint(owner.address);
+      const tx = nftInstance.approve(owner.address, 0);
+      await expect(tx).to.be.revertedWith("ComposableTopDown: approval to current owner");
+    });
+
+    it("should approve", async function () {
+      await nftInstance.safeMint(owner.address);
+      const tx = nftInstance.approve(receiver.address, 0);
+
+      await expect(tx).to.emit(nftInstance, "Approval").withArgs(owner.address, receiver.address, 0);
+
+      const approved = await nftInstance.getApproved(0);
+      expect(approved).to.equal(receiver.address);
+
+      const tx1 = nftInstance.connect(receiver).burn(0);
+      await expect(tx1).to.emit(nftInstance, "Transfer").withArgs(owner.address, ZERO_ADDR, 0);
+
+      const balanceOfOwner = await nftInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(0);
+    });
+  });
+
+  describe("setApprovalForAll", function () {
+    it("should approve for all", async function () {
+      await nftInstance.safeMint(owner.address);
+      await nftInstance.safeMint(owner.address);
+
+      const balanceOfOwner = await nftInstance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(2);
+
+      const tx1 = nftInstance.setApprovalForAll(receiver.address, true);
+      await expect(tx1).to.not.be.reverted;
+
+      const approved1 = await nftInstance.getApproved(0);
+      expect(approved1).to.equal(ZERO_ADDR);
+
+      const isApproved1 = await nftInstance.isApprovedForAll(owner.address, receiver.address);
+      expect(isApproved1).to.equal(true);
+
+      const tx2 = nftInstance.setApprovalForAll(receiver.address, false);
+      await expect(tx2).to.not.be.reverted;
+
+      const approved3 = await nftInstance.getApproved(0);
+      expect(approved3).to.equal(ZERO_ADDR);
+
+      const isApproved2 = await nftInstance.isApprovedForAll(owner.address, receiver.address);
+      expect(isApproved2).to.equal(false);
     });
   });
 

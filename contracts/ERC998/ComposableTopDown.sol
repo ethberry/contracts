@@ -37,9 +37,6 @@ IERC998ERC20TopDownEnumerable
   bytes4 constant ERC998_MAGIC_VALUE = 0xcd740db5;
   bytes32 constant ERC998_MAGIC_VALUE_32 = 0xcd740db500000000000000000000000000000000000000000000000000000000;
 
-  // tokenId => token owner
-  mapping(uint256 => address) private tokenIdToTokenOwner;
-
   // tokenId => last state hash indicator
   mapping(uint256 => uint256) private tokenIdToStateHash;
 
@@ -64,7 +61,6 @@ IERC998ERC20TopDownEnumerable
     require(to != address(0), "ComposableTopDown: _to zero address");
 
     uint256 tokenCount = _tokenIdTracker.current();
-    tokenIdToTokenOwner[tokenCount] = to;
     tokenOwnerToTokenCount[to]++;
     tokenIdToStateHash[tokenCount] = uint256(keccak256(abi.encodePacked(uint256(uint160(address(this))), tokenCount)));
 
@@ -72,15 +68,15 @@ IERC998ERC20TopDownEnumerable
     _tokenIdTracker.increment();
   }
 
-//  function safeTransferFrom(
-//    address _from,
-//    address _to,
-//    uint256 _tokenId,
-//    bytes memory _data
-//  ) public override {
-//    super.safeTransferFrom(_from, _to, _tokenId, _data);
-//    rootOwnerOf(_tokenId);
-//  }
+  //  function safeTransferFrom(
+  //    address _from,
+  //    address _to,
+  //    uint256 _tokenId,
+  //    bytes memory _data
+  //  ) public override {
+  //    super.safeTransferFrom(_from, _to, _tokenId, _data);
+  //    rootOwnerOf(_tokenId);
+  //  }
 
   //from zepellin ERC721Receiver.sol
   //old version
@@ -117,7 +113,7 @@ IERC998ERC20TopDownEnumerable
         _childTokenId
       );
     } else {
-      rootOwnerAddress = tokenIdToTokenOwner[_childTokenId];
+      rootOwnerAddress = ownerOf(_childTokenId);
       require(rootOwnerAddress != address(0), "ComposableTopDown: ownerOf _tokenId zero address");
     }
     // Case 1: Token owner is this contract and token.
@@ -412,7 +408,7 @@ IERC998ERC20TopDownEnumerable
       parentTokenId != 0,
       "ComposableTopDown: ownerOfChild not found"
     );
-    address parentTokenOwnerAddress = tokenIdToTokenOwner[parentTokenId];
+    address parentTokenOwnerAddress = ownerOf(parentTokenId);
     assembly {
       parentTokenOwner := or(ERC998_MAGIC_VALUE_32, parentTokenOwnerAddress)
     }
@@ -458,7 +454,7 @@ IERC998ERC20TopDownEnumerable
       parentTokenId != 0,
       "ComposableTopDown: _ownerOfChild not found"
     );
-    return (tokenIdToTokenOwner[parentTokenId], parentTokenId);
+    return (ownerOf(parentTokenId), parentTokenId);
   }
 
   function _parseTokenId(bytes memory _data) private pure returns (uint256 tokenId){
@@ -507,7 +503,7 @@ IERC998ERC20TopDownEnumerable
     uint256 _childTokenId
   ) private {
     require(
-      tokenIdToTokenOwner[_tokenId] != address(0),
+      ownerOf(_tokenId) != address(0),
       "ComposableTopDown: receiveChild _tokenId does not exist."
     );
     // @dev this is edge case, _tokenId can't be 0
@@ -670,7 +666,7 @@ IERC998ERC20TopDownEnumerable
     uint256 _value
   ) private {
     require(
-      tokenIdToTokenOwner[_tokenId] != address(0),
+    ownerOf(_tokenId) != address(0),
       "ComposableTopDown: erc20Received _tokenId does not exist"
     );
     if (_value == 0) {
@@ -742,7 +738,7 @@ IERC998ERC20TopDownEnumerable
   function _updateStateHash(uint256 tokenId, uint256 childReference, uint256 value) private {
     uint256 _newStateHash = uint256(keccak256(abi.encodePacked(tokenIdToStateHash[tokenId], childReference, value)));
     tokenIdToStateHash[tokenId] = _newStateHash;
-    while (tokenIdToTokenOwner[tokenId] == address(this)) {
+    while (ownerOf(tokenId) == address(this)) {
       tokenId = childTokenOwner[address(this)][tokenId];
       _newStateHash = uint256(keccak256(abi.encodePacked(tokenIdToStateHash[tokenId], uint256(uint160(address(this))), _newStateHash)));
       tokenIdToStateHash[tokenId] = _newStateHash;

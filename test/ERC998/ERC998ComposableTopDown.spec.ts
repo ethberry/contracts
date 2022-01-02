@@ -261,6 +261,38 @@ describe("ERC998ComposableTopDown", function () {
       await expect(tx).to.be.revertedWith(`ERC721: transfer caller is not owner nor approved`);
     });
 
+    it("should fail: burned token", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      await erc721Instance.burn(0);
+
+      const tx = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0,
+        "0x0000000000000000000000000000000000000000000000000000000000000001",
+      );
+      await expect(tx).to.be.revertedWith(`ERC721: operator query for nonexistent token`);
+    });
+
+    it("should fail: receiver is burned", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      await erc998Instance.burn(1);
+
+      const tx = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0,
+        "0x0000000000000000000000000000000000000000000000000000000000000001",
+      );
+      await expect(tx).to.be.revertedWith(`ERC721: owner query for nonexistent token`);
+    });
+
     it("should transfer own tokens to receiver contract", async function () {
       await erc998Instance.safeMint(owner.address);
       const tx = erc998Instance["safeTransferFrom(address,address,uint256)"](
@@ -341,8 +373,76 @@ describe("ERC998ComposableTopDown", function () {
       // TODO "ComposableTopDown: _transferFrom token is child of other top down composable"
     });
 
-    // DOUBLE CHECK
-    it("should transfer token to its child token", async function () {
+    it.skip("should not transfer token to itself", async function () {
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc998Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        1,
+        "0x0000000000000000000000000000000000000000000000000000000000000001",
+      );
+      await expect(tx1).to.be.reverted;
+    });
+
+    it("should transfer tree of tokens to wallet", async function () {
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc998Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        3,
+        "0x0000000000000000000000000000000000000000000000000000000000000002",
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = erc998Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        2,
+        "0x0000000000000000000000000000000000000000000000000000000000000001",
+      );
+      await expect(tx2).to.not.be.reverted;
+
+      const tx3 = erc998Instance["safeTransferFrom(address,address,uint256)"](owner.address, receiver.address, 1);
+      await expect(tx3).to.not.be.reverted;
+
+      const balance = await erc998Instance.balanceOf(receiver.address);
+      expect(balance).to.equal(1);
+    });
+
+    it("should not transfer token from the middle of the tree", async function () {
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc998Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        3,
+        "0x0000000000000000000000000000000000000000000000000000000000000002",
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = erc998Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        2,
+        "0x0000000000000000000000000000000000000000000000000000000000000001",
+      );
+      await expect(tx2).to.not.be.reverted;
+
+      const tx3 = erc998Instance["safeTransferFrom(address,address,uint256)"](owner.address, receiver.address, 2);
+      // DOUBLE CHECK
+      await expect(tx3).to.be.revertedWith(`ERC721: transfer caller is not owner nor approved`);
+    });
+
+    it.skip("should not transfer token to its child token", async function () {
       await erc998Instance.safeMint(owner.address); // this is edge case
       await erc998Instance.safeMint(owner.address);
       await erc998Instance.safeMint(owner.address);
@@ -361,7 +461,8 @@ describe("ERC998ComposableTopDown", function () {
         2,
         "0x0000000000000000000000000000000000000000000000000000000000000001",
       );
-      await expect(tx2).to.not.be.reverted;
+      // DOUBLE CHECK
+      await expect(tx2).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
     });
   });
 

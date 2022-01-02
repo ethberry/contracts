@@ -4,12 +4,14 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import {
+  ERC20GemunionTest,
   ERC721GemunionTest,
   ERC998ComposableTopDownTest,
   ERC998GemunionNonReceiverTest,
   ERC998GemunionReceiverTest,
 } from "../../typechain-types";
 import {
+  amount,
   baseTokenURI,
   DEFAULT_ADMIN_ROLE,
   MINTER_ROLE,
@@ -20,10 +22,12 @@ import {
 } from "../constants";
 
 describe("ERC998ComposableTopDown", function () {
-  let erc998: ContractFactory;
-  let erc998Instance: ERC998ComposableTopDownTest;
+  let erc20: ContractFactory;
+  let erc20Instance: ERC20GemunionTest;
   let erc721: ContractFactory;
   let erc721Instance: ERC721GemunionTest;
+  let erc998: ContractFactory;
+  let erc998Instance: ERC998ComposableTopDownTest;
   let nftReceiver: ContractFactory;
   let nftReceiverInstance: ERC998GemunionReceiverTest;
   let nftNonReceiver: ContractFactory;
@@ -32,12 +36,14 @@ describe("ERC998ComposableTopDown", function () {
   let receiver: SignerWithAddress;
 
   beforeEach(async function () {
+    erc20 = await ethers.getContractFactory("ERC20GemunionTest");
     erc721 = await ethers.getContractFactory("ERC721GemunionTest");
     erc998 = await ethers.getContractFactory("ERC998ComposableTopDownTest");
     nftReceiver = await ethers.getContractFactory("ERC998GemunionReceiverTest");
     nftNonReceiver = await ethers.getContractFactory("ERC998GemunionNonReceiverTest");
     [owner, receiver] = await ethers.getSigners();
 
+    erc20Instance = (await erc20.deploy(tokenName, tokenSymbol)) as ERC20GemunionTest;
     erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721GemunionTest;
     erc998Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ComposableTopDownTest;
     nftReceiverInstance = (await nftReceiver.deploy(tokenName, tokenSymbol)) as ERC998GemunionReceiverTest;
@@ -245,7 +251,7 @@ describe("ERC998ComposableTopDown", function () {
     });
   });
 
-  describe("safeTransfer", function () {
+  describe("safeTransferFrom", function () {
     it("should fail: not an owner", async function () {
       await erc998Instance.safeMint(owner.address);
       const tx = erc998Instance
@@ -315,7 +321,7 @@ describe("ERC998ComposableTopDown", function () {
       await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
     });
 
-    it("should not transfer token owned by another token", async function () {
+    it("should transfer token to another token", async function () {
       await erc721Instance.safeMint(owner.address);
       await erc998Instance.safeMint(owner.address); // this is edge case
       await erc998Instance.safeMint(owner.address);
@@ -329,7 +335,33 @@ describe("ERC998ComposableTopDown", function () {
       await expect(tx1).to.emit(erc998Instance, "ReceivedChild").withArgs(owner.address, 1, erc721Instance.address, 0);
       await expect(tx1).to.emit(erc721Instance, "Transfer").withArgs(owner.address, erc998Instance.address, 0);
 
+      const balanceOfOwner = await erc721Instance.balanceOf(erc998Instance.address);
+      expect(balanceOfOwner).to.equal(1);
+
       // TODO "ComposableTopDown: _transferFrom token is child of other top down composable"
+    });
+
+    // DOUBLE CHECK
+    it("should transfer token to its child token", async function () {
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc998Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        1,
+        "0x0000000000000000000000000000000000000000000000000000000000000002",
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = erc998Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        2,
+        "0x0000000000000000000000000000000000000000000000000000000000000001",
+      );
+      await expect(tx2).to.not.be.reverted;
     });
   });
 
@@ -584,6 +616,76 @@ describe("ERC998ComposableTopDown", function () {
 
       const total = await erc998Instance.childTokenByIndex(1, erc721Instance.address, 0);
       expect(total).to.equal(0); // erc721 tokenId
+    });
+  });
+
+  describe("getChild", function () {
+    it("should get child", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.approve(erc998Instance.address, 0);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc998Instance.getChild(owner.address, 1, erc721Instance.address, 0);
+      await expect(tx1).to.emit(erc998Instance, "ReceivedChild").withArgs(owner.address, 1, erc721Instance.address, 0);
+      await expect(tx1).to.emit(erc721Instance, "Transfer").withArgs(owner.address, erc998Instance.address, 0);
+    });
+  });
+
+  describe("getERC20", function () {
+    it("should get erc20 tokens", async function () {
+      await erc20Instance.mint(owner.address, amount);
+      await erc20Instance.approve(erc998Instance.address, amount);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc998Instance.getERC20(owner.address, 1, erc20Instance.address, amount);
+      await expect(tx1)
+        .to.emit(erc998Instance, "ReceivedERC20")
+        .withArgs(owner.address, 1, erc20Instance.address, amount);
+      await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(owner.address, erc998Instance.address, amount);
+    });
+  });
+
+  describe("balanceOfERC20", function () {
+    it("should get balance of erc20 tokens", async function () {
+      await erc20Instance.mint(owner.address, amount);
+      await erc20Instance.approve(erc998Instance.address, amount);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      await erc998Instance.getERC20(owner.address, 1, erc20Instance.address, amount);
+
+      const balance = await erc998Instance.balanceOfERC20(1, erc20Instance.address);
+      expect(balance).to.equal(amount);
+    });
+  });
+
+  describe("erc20ContractByIndex", function () {
+    it("should get erc20 contract by index", async function () {
+      await erc20Instance.mint(owner.address, amount);
+      await erc20Instance.approve(erc998Instance.address, amount);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      await erc998Instance.getERC20(owner.address, 1, erc20Instance.address, amount);
+
+      const address = await erc998Instance.erc20ContractByIndex(1, 0);
+      expect(address).to.equal(erc20Instance.address);
+    });
+  });
+
+  describe("totalERC20Contracts", function () {
+    it("should get total erc20 contracts", async function () {
+      await erc20Instance.mint(owner.address, amount);
+      await erc20Instance.approve(erc998Instance.address, amount);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      await erc998Instance.getERC20(owner.address, 1, erc20Instance.address, amount);
+
+      const total = await erc998Instance.totalERC20Contracts(1);
+      expect(total).to.equal(1);
     });
   });
 

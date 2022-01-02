@@ -72,6 +72,16 @@ IERC998ERC20TopDownEnumerable
     _tokenIdTracker.increment();
   }
 
+//  function safeTransferFrom(
+//    address _from,
+//    address _to,
+//    uint256 _tokenId,
+//    bytes memory _data
+//  ) public override {
+//    super.safeTransferFrom(_from, _to, _tokenId, _data);
+//    rootOwnerOf(_tokenId);
+//  }
+
   //from zepellin ERC721Receiver.sol
   //old version
   bytes4 constant ERC721_RECEIVED_OLD = 0xf0b9e5ba;

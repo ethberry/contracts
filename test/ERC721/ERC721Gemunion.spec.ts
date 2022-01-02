@@ -236,7 +236,7 @@ describe("ERC721Gemunion", function () {
     });
   });
 
-  describe("safeTransfer", function () {
+  describe("safeTransferFrom", function () {
     it("should fail: not an owner", async function () {
       await erc721Instance.safeMint(owner.address);
       const tx = erc721Instance

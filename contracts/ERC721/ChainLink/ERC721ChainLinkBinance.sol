@@ -22,15 +22,12 @@ abstract contract ERC721ChainLinkBinance is VRFConsumerBase {
   uint256 internal fee;
 
   constructor() VRFConsumerBase(
-    // BINANCE TESTNET
     address(0xa555fC018435bef5A13C6c6870a9d4C11DEC329C), // vrfCoordinator
     address(0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06)  // LINK token
   )
   {
-    // BINANCE TESTNET
     fee = 0.1 ether;
     keyHash = 0xcaf3c3727e033261d383b315559476f48034c13b18f8cafed4d871abe5049186; // BINANCE
-    //    keyHash = 0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311; // rinkeby
   }
 
   function _mintRandom(uint256 result, address to) internal {

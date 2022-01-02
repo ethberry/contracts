@@ -17,7 +17,7 @@ export default {
       allowUnlimitedContractSize: true,
     },
     besu: {
-      url: `http://127.0.0.1:8545`,
+      url: process.env.BESU_RPC_URL,
       // https://besu.hyperledger.org/en/stable/Reference/Accounts-for-Testing/
       accounts: [
         "0x8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63", // 0xfe3b557e8fb62b89f4916b721be55ceb828dbd73

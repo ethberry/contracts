@@ -41,14 +41,7 @@ IERC998ERC20TopDownEnumerable
   mapping(uint256 => uint256) private tokenIdToStateHash;
 
   // root token owner address => (tokenId => approved address)
-  mapping(address => mapping(uint256 => address))
-  private rootOwnerAndTokenIdToApprovedAddress;
-
-  // token owner address => token count
-  mapping(address => uint256) private tokenOwnerToTokenCount;
-
-  // token owner => (operator address => bool)
-  mapping(address => mapping(address => bool)) private tokenOwnerToOperators;
+  mapping(address => mapping(uint256 => address)) private rootOwnerAndTokenIdToApprovedAddress;
 
   constructor(
     string memory name,
@@ -61,7 +54,6 @@ IERC998ERC20TopDownEnumerable
     require(to != address(0), "ComposableTopDown: _to zero address");
 
     uint256 tokenCount = _tokenIdTracker.current();
-    tokenOwnerToTokenCount[to]++;
     tokenIdToStateHash[tokenCount] = uint256(keccak256(abi.encodePacked(uint256(uint160(address(this))), tokenCount)));
 
     _safeMint(to, tokenCount);
@@ -86,8 +78,7 @@ IERC998ERC20TopDownEnumerable
 
   bytes4 constant ALLOWANCE = bytes4(keccak256("allowance(address,address)"));
   bytes4 constant APPROVE = bytes4(keccak256("approve(address,uint256)"));
-  bytes4 constant ROOT_OWNER_OF_CHILD =
-  bytes4(keccak256("rootOwnerOfChild(address,uint256)"));
+  bytes4 constant ROOT_OWNER_OF_CHILD = bytes4(keccak256("rootOwnerOfChild(address,uint256)"));
 
   ////////////////////////////////////////////////////////
   // ERC721 implementation
@@ -437,9 +428,8 @@ IERC998ERC20TopDownEnumerable
     address rootOwner = address(uint160(uint256(rootOwnerOf(tokenId))));
     require(
       rootOwner == _msgSender() ||
-      tokenOwnerToOperators[rootOwner][_msgSender()] ||
-      rootOwnerAndTokenIdToApprovedAddress[rootOwner][tokenId] ==
-      _msgSender(),
+      isApprovedForAll(rootOwner, _msgSender()) ||
+      rootOwnerAndTokenIdToApprovedAddress[rootOwner][tokenId] == _msgSender(),
       "ComposableTopDown: _transferChild _msgSender() not eligible"
     );
     removeChild(tokenId, _childContract, _childTokenId);
@@ -549,7 +539,7 @@ IERC998ERC20TopDownEnumerable
     address rootOwner = address(uint160(uint256(rootOwnerOf(_tokenId))));
     require(
       rootOwner == _msgSender() ||
-      tokenOwnerToOperators[rootOwner][_msgSender()] ||
+      isApprovedForAll(rootOwner, _msgSender()) ||
       rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId] ==
       _msgSender(),
       "ComposableTopDown: transferERC20 _msgSender() not eligible"
@@ -577,7 +567,7 @@ IERC998ERC20TopDownEnumerable
     address rootOwner = address(uint160(uint256(rootOwnerOf(_tokenId))));
     require(
       rootOwner == _msgSender() ||
-      tokenOwnerToOperators[rootOwner][_msgSender()] ||
+      isApprovedForAll(rootOwner, _msgSender()) ||
       rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId] ==
       _msgSender(),
       "ComposableTopDown: transferERC223 _msgSender() not eligible"

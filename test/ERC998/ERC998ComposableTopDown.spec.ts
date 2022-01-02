@@ -333,6 +333,260 @@ describe("ERC998ComposableTopDown", function () {
     });
   });
 
+  describe("safeTransferChild", function () {
+    it("should transfer token owned by another token to the wallet", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = erc998Instance["safeTransferChild(uint256,address,address,uint256)"](
+        1,
+        receiver.address,
+        erc721Instance.address,
+        0,
+      );
+      await expect(tx2)
+        .to.emit(erc998Instance, "TransferChild")
+        .withArgs(1, receiver.address, erc721Instance.address, 0);
+    });
+
+    it("should transfer token owned by another token to the receiver contract", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = erc998Instance["safeTransferChild(uint256,address,address,uint256)"](
+        1,
+        nftReceiverInstance.address,
+        erc721Instance.address,
+        0,
+      );
+      await expect(tx2)
+        .to.emit(erc998Instance, "TransferChild")
+        .withArgs(1, nftReceiverInstance.address, erc721Instance.address, 0);
+    });
+
+    it("should non transfer token owned by another token to the non receiver contract", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = erc998Instance["safeTransferChild(uint256,address,address,uint256)"](
+        1,
+        nftNonReceiverInstance.address,
+        erc721Instance.address,
+        0,
+      );
+      await expect(tx2).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
+    });
+
+    it("should not transfer token which is not owned", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx = erc998Instance["safeTransferChild(uint256,address,address,uint256)"](
+        1,
+        receiver.address,
+        erc721Instance.address,
+        0,
+      );
+
+      await expect(tx).to.be.revertedWith(`ComposableTopDown: _transferChild _childContract _childTokenId not found`);
+    });
+  });
+
+  describe("transferChild", function () {
+    it("should transfer token owned by another token to wallet", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = erc998Instance.transferChild(1, receiver.address, erc721Instance.address, 0);
+      await expect(tx2)
+        .to.emit(erc998Instance, "TransferChild")
+        .withArgs(1, receiver.address, erc721Instance.address, 0);
+    });
+
+    it("should transfer token owned by another token to the receiver contract", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = erc998Instance.transferChild(1, nftReceiverInstance.address, erc721Instance.address, 0);
+      await expect(tx2)
+        .to.emit(erc998Instance, "TransferChild")
+        .withArgs(1, nftReceiverInstance.address, erc721Instance.address, 0);
+    });
+
+    it("should transfer token owned by another token to the non receiver contract", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = erc998Instance.transferChild(1, nftNonReceiverInstance.address, erc721Instance.address, 0);
+      await expect(tx2)
+        .to.emit(erc998Instance, "TransferChild")
+        .withArgs(1, nftNonReceiverInstance.address, erc721Instance.address, 0);
+    });
+
+    it("should not transfer token which is not owned", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx = erc998Instance.transferChild(1, receiver.address, erc721Instance.address, 0);
+
+      await expect(tx).to.be.revertedWith(`ComposableTopDown: _transferChild _childContract _childTokenId not found`);
+    });
+  });
+
+  describe("childExists", function () {
+    it("should check if child exists", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const isExist1 = await erc998Instance.childExists(erc721Instance.address, 0);
+      expect(isExist1).to.equal(true);
+
+      const isExist2 = await erc998Instance.childExists(erc721Instance.address, 1);
+      expect(isExist2).to.equal(false);
+    });
+  });
+
+  describe("totalChildContracts", function () {
+    it("should count child contracts", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const total = await erc998Instance.totalChildContracts(1);
+      expect(total).to.equal(1);
+    });
+  });
+
+  describe("childContractByIndex", function () {
+    it("should get child contract by index", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const address = await erc998Instance.childContractByIndex(1, 0);
+      expect(address).to.equal(erc721Instance.address);
+    });
+  });
+
+  describe("totalChildTokens", function () {
+    it("should get child contract tokens count", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const total = await erc998Instance.totalChildTokens(1, erc721Instance.address);
+      expect(total).to.equal(1);
+    });
+  });
+
+  describe("childTokenByIndex", function () {
+    it("should get child contract tokens count", async function () {
+      await erc721Instance.safeMint(owner.address);
+      await erc998Instance.safeMint(owner.address); // this is edge case
+      await erc998Instance.safeMint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const total = await erc998Instance.childTokenByIndex(1, erc721Instance.address, 0);
+      expect(total).to.equal(0); // erc721 tokenId
+    });
+  });
+
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {
       const supportsIERC721 = await erc998Instance.supportsInterface("0x80ac58cd");

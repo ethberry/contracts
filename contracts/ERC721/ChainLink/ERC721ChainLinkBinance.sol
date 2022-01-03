@@ -30,17 +30,12 @@ abstract contract ERC721ChainLinkBinance is VRFConsumerBase {
     keyHash = 0xcaf3c3727e033261d383b315559476f48034c13b18f8cafed4d871abe5049186; // BINANCE
   }
 
-  function _mintRandom(uint256 result, address to) internal {
-    _useRandom(result, to);
-  }
-
-  function _useRandom(uint256 result, address to) internal virtual;
+  function _useRandom(uint256 result, bytes32 requestId) internal virtual;
 
   function getRandomNumber() public virtual returns (bytes32 requestId);
 
   function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override (VRFConsumerBase) {
-    _mintRandom(randomness.mod(100), queue[requestId]);
-    delete queue[requestId];
+    _useRandom(randomness.mod(100), requestId);
   }
 
 }

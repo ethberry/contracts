@@ -32,22 +32,25 @@ contract TokenTestLink is ERC721ChainLink, IERC721ChainLink, ERC721Gemunion {
     queue[getRandomNumber()] = to;
   }
 
-  function safeMint(address to) public onlyRole(MINTER_ROLE) override {
-    _safeMint(to, _tokenIdTracker.current());
-    _tokenIdTracker.increment();
-  }
-
-  function _useRandom(uint256 result, address to) internal override {
+  event MintRandom(address _owner, bytes32 _reqId);
+  function _useRandom(uint256 result, bytes32 _requestId) internal override {
     _rarity[_tokenIdTracker.current()] = result;
-    safeMint(to);
+    emit MintRandom(queue[_requestId], _requestId);
+    safeMint(queue[_requestId]);
+    delete queue[_requestId];
   }
 
-  event RandomRequest(bytes32 requestId);
+  event RandomRequest(bytes32 _requestId);
   function getRandomNumber() public override onlyRole(MINTER_ROLE) returns (bytes32 requestId) {
     require(LINK.balanceOf(address(this)) >= fee, "ERC721Link: Not enough LINK");
     requestId = VRFConsumerBase.requestRandomness(keyHash, fee);
     emit RandomRequest(requestId);
     return requestId;
+  }
+
+  function safeMint(address to) public onlyRole(MINTER_ROLE) override {
+    _safeMint(to, _tokenIdTracker.current());
+    _tokenIdTracker.increment();
   }
 
   receive() external payable {

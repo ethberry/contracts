@@ -114,7 +114,7 @@ describe("SkinLootBoxRandom", function () {
       await expect(tx).to.be.revertedWith("ERC721Link: Not enough LINK");
     });
 
-    it("should unpack own tokens using random", async function () {
+    it.only("should unpack own tokens using random", async function () {
       await nftInstance.grantRole(MINTER_ROLE, lootInstance.address);
       await nftInstance.grantRole(MINTER_ROLE, vrfInstance.address);
       await lootInstance.setFactory(nftInstance.address);
@@ -127,7 +127,9 @@ describe("SkinLootBoxRandom", function () {
       const balanceOfOwner2 = await nftInstance.balanceOf(owner.address);
       expect(balanceOfOwner2).to.equal(0);
 
-      await linkInstance.transfer(nftInstance.address, amountInWei);
+      const txr: ContractTransaction = await linkInstance.transfer(nftInstance.address, amountInWei);
+      await txr.wait();
+
       const nftInstanceBalance = await linkInstance.balanceOf(nftInstance.address);
       expect(nftInstanceBalance).to.equal(amountInWei);
 
@@ -163,23 +165,24 @@ describe("SkinLootBoxRandom", function () {
       //   console.info("Contract ", nftInstance.address, " funded with 1 LINK. Transaction Hash: ", transaction.hash);
       // });
 
-      const tx = lootInstance.unpack(0);
+      const tx: ContractTransaction = await lootInstance.unpack(0);
+      await tx.wait();
 
       await expect(tx).to.emit(lootInstance, "Transfer").withArgs(owner.address, ZERO_ADDR, 0);
       await expect(tx)
         .to.emit(linkInstance, "Transfer")
         .withArgs(nftInstance.address, vrfInstance.address, parseEther("0.1"));
 
-      await expect(tx).to.emit(vrfInstance, "RandomnessRequest");
-
       await expect(tx).to.emit(nftInstance, "RandomRequest");
-
       const eventFilter = nftInstance.filters.RandomRequest();
       const events = await nftInstance.queryFilter(eventFilter);
       const requestId = events[0].args[0];
-      const randomness = web3.utils.toHex("klgegk;glews;v;lsv1r33232r23r3rr");
 
-      await vrfInstance.callBackWithRandomness(requestId, randomness, nftInstance.address);
+      await expect(tx).to.emit(vrfInstance, "RandomnessRequest");
+      await expect(tx).to.emit(vrfInstance, "RandomnessRequestId").withArgs(requestId, nftInstance.address);
+
+      const trx = await vrfInstance.callBackWithRandomness(requestId, 123, nftInstance.address);
+      await expect(trx).to.emit(nftInstance, "MintRandom").withArgs(owner.address, requestId);
 
       const balanceOfOwner3 = await lootInstance.balanceOf(owner.address);
       expect(balanceOfOwner3).to.equal(0);

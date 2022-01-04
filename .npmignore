@@ -18,3 +18,5 @@ tsconfig.json
 tsconfig.test.json
 
 .idea
+.vscode
+.github

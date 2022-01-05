@@ -6,8 +6,6 @@
 
 pragma solidity ^0.8.4;
 
-import "hardhat/console.sol";
-
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
@@ -60,23 +58,10 @@ abstract contract ComposableTopDown is
     _tokenIdTracker.increment();
   }
 
-  //  function safeTransferFrom(
-  //    address _from,
-  //    address _to,
-  //    uint256 _tokenId,
-  //    bytes memory _data
-  //  ) public override {
-  //    super.safeTransferFrom(_from, _to, _tokenId, _data);
-  //    rootOwnerOf(_tokenId);
-  //  }
-
   bytes4 constant ALLOWANCE = bytes4(keccak256("allowance(address,address)"));
   bytes4 constant APPROVE = bytes4(keccak256("approve(address,uint256)"));
   bytes4 constant ROOT_OWNER_OF_CHILD = bytes4(keccak256("rootOwnerOfChild(address,uint256)"));
 
-  ////////////////////////////////////////////////////////
-  // ERC721 implementation
-  ////////////////////////////////////////////////////////
   function rootOwnerOf(uint256 _tokenId) public view override returns (bytes32 rootOwner) {
     return rootOwnerOfChild(address(0), _tokenId);
   }
@@ -98,7 +83,6 @@ abstract contract ComposableTopDown is
       (rootOwnerAddress, _childTokenId) = _ownerOfChild(_childContract, _childTokenId);
     } else {
       rootOwnerAddress = ownerOf(_childTokenId);
-      require(rootOwnerAddress != address(0), "ComposableTopDown: ownerOf _tokenId zero address");
     }
     // Case 1: Token owner is this contract and token.
     while (rootOwnerAddress == address(this)) {
@@ -242,6 +226,8 @@ abstract contract ComposableTopDown is
     );
   }
 
+  // getChild function enables older contracts like cryptokitties to be transferred into a composable
+  // The _childContract must approve this contract. Then getChild can be called.
   // this contract has to be approved first in _childContract
   function getChild(
     address _from,
@@ -269,14 +255,14 @@ abstract contract ComposableTopDown is
   ) external override returns (bytes4) {
     require(
       _data.length > 0,
-      "ComposableTopDown: onERC721Received(4) _data must contain the uint256 tokenId to transfer the child token to"
+      "ComposableTopDown: onERC721Received _data must contain the uint256 tokenId to transfer the child token to"
     );
     // convert up to 32 bytes of _data to uint256, owner nft tokenId passed as uint in bytes
     uint256 tokenId = _parseTokenId(_data);
     receiveChild(_from, tokenId, _msgSender(), _childTokenId);
     require(
       IERC721(_msgSender()).ownerOf(_childTokenId) != address(0),
-      "ComposableTopDown: onERC721Received(4) child token not owned"
+      "ComposableTopDown: onERC721Received child token not owned"
     );
     // a check for looped ownership chain
     rootOwnerOf(tokenId);
@@ -297,10 +283,6 @@ abstract contract ComposableTopDown is
     return childContracts[_tokenId].length();
   }
 
-  // @notice Get child contract by tokenId and index
-  // @param _tokenId The parent token of child tokens in child contract
-  // @param _index The index position of the child contract
-  // @return childContract The contract found at the tokenId and index.
   function childContractByIndex(uint256 _tokenId, uint256 _index)
     external
     view
@@ -310,19 +292,10 @@ abstract contract ComposableTopDown is
     return childContracts[_tokenId].at(_index);
   }
 
-  // @notice Get the total number of child tokens owned by tokenId that exist in a child contract.
-  // @param _tokenId The parent token of child tokens
-  // @param _childContract The child contract containing the child tokens
-  // @return uint256 The total number of child tokens found in child contract that are owned by tokenId.
   function totalChildTokens(uint256 _tokenId, address _childContract) external view override returns (uint256) {
     return childTokens[_tokenId][_childContract].length();
   }
 
-  // @notice Get child token owned by tokenId, in child contract, at index position
-  // @param _tokenId The parent token of the child token
-  // @param _childContract The child contract of the child token
-  // @param _index The index position of the child token.
-  // @return childTokenId The child tokenId for the parent token, child token and index
   function childTokenByIndex(
     uint256 _tokenId,
     address _childContract,
@@ -555,7 +528,7 @@ abstract contract ComposableTopDown is
     address _erc20Contract,
     uint256 _value
   ) private {
-    require(ownerOf(_tokenId) != address(0), "ComposableTopDown: erc20Received _tokenId does not exist");
+    require(_exists(_tokenId), "ComposableTopDown: erc20Received _tokenId does not exist");
     if (_value == 0) {
       return;
     }

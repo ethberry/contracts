@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 
 // Author: TrejGun
-// Email: trejgun+impulse@gmail.com
+// Email: trejgun+gemunion@gmail.com
 // Website: https://gemunion.io/
 
 pragma solidity ^0.8.4;
@@ -27,9 +27,10 @@ abstract contract ComposableTopDown is
   IERC998ERC20TopDownEnumerable
 {
   using Address for address;
+  using Counters for Counters.Counter;
   using EnumerableSet for EnumerableSet.UintSet;
   using EnumerableSet for EnumerableSet.AddressSet;
-  using Counters for Counters.Counter;
+
   // return this.rootOwnerOf.selector ^ this.rootOwnerOfChild.selector ^
   //   this.tokenOwnerOf.selector ^ this.ownerOfChild.selector;
   bytes4 constant ERC998_MAGIC_VALUE = 0xcd740db5;

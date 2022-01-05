@@ -59,6 +59,13 @@ contract ComposableBottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC
   //old version
   bytes4 constant ERC721_RECEIVED = 0x150b7a02;
 
+  constructor(
+    string memory name,
+    string memory symbol,
+    string memory baseTokenURI,
+    uint256 cap
+  ) ERC721Gemunion(name, symbol, baseTokenURI, cap) {}
+
   function _tokenOwnerOf(uint256 _tokenId)
     internal
     view
@@ -80,6 +87,13 @@ contract ComposableBottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC
     return (tokenOwner, parentTokenId, isParent);
   }
 
+  /**
+   * The tokenOwnerOf function gets the owner of the _tokenId which can be a user address or another ERC721 token.
+   * The tokenOwner address return value can be either a user address or an ERC721 contract address.
+   * If the tokenOwner address is a user address then parentTokenId will be 0 and should not be used or considered.
+   * If tokenOwner address is a user address then isParent is false, otherwise isChild is true, which means that
+   * tokenOwner is an ERC721 contract address and _tokenId is a child of tokenOwner and parentTokenId.
+   */
   function tokenOwnerOf(uint256 _tokenId)
     external
     view
@@ -204,54 +218,6 @@ contract ComposableBottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC
     }
   }
 
-  /**
-   * In a bottom-up composable authentication to transfer etc. is done by getting the rootOwner by finding the parent token
-   * and then the parent token of that one until a final owner address is found.  If the _msgSender() is the rootOwner or is
-   * approved by the rootOwner then _msgSender() is authenticated and the action can occur.
-   * This enables the owner of the top-most parent of a tree of composables to call any method on child composables.
-   */
-  // returns the root owner at the top of the tree of composables
-  function ownerOf(uint256 _tokenId) external view override returns (address) {
-    address tokenOwner = tokenIdToTokenOwner[_tokenId].tokenOwner;
-    require(tokenOwner != address(0), "ComposableBottomUp: ownerOf tokenOwner zero address");
-    return tokenOwner;
-  }
-
-  function balanceOf(address _tokenOwner) external view override returns (uint256) {
-    require(_tokenOwner != address(0), "ComposableBottomUp: balanceOf _tokenOwner zero address");
-    return tokenOwnerToTokenCount[_tokenOwner];
-  }
-
-  function approve(address _approved, uint256 _tokenId) external override {
-    address tokenOwner = tokenIdToTokenOwner[_tokenId].tokenOwner;
-    require(tokenOwner != address(0), "ComposableBottomUp: approve tokenOwner zero address");
-    address rootOwner = address(uint160(uint256(rootOwnerOf(_tokenId))));
-    require(
-      rootOwner == _msgSender() || tokenOwnerToOperators[rootOwner][_msgSender()],
-      "ComposableBottomUp: approve _msgSender() not eligible"
-    );
-
-    rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId] = _approved;
-    emit Approval(rootOwner, _approved, _tokenId);
-  }
-
-  function getApproved(uint256 _tokenId) external view override returns (address) {
-    address rootOwner = address(uint160(uint256(rootOwnerOf(_tokenId))));
-    return rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId];
-  }
-
-  function setApprovalForAll(address _operator, bool _approved) external override {
-    require(_operator != address(0), "ComposableBottomUp: setApprovalForAll _operator zero address");
-    tokenOwnerToOperators[_msgSender()][_operator] = _approved;
-    emit ApprovalForAll(_msgSender(), _operator, _approved);
-  }
-
-  function isApprovedForAll(address _owner, address _operator) external view override returns (bool) {
-    require(_owner != address(0), "ComposableBottomUp: isApprovedForAll _owner zero address");
-    require(_operator != address(0), "ComposableBottomUp: isApprovedForAll _operator zero address");
-    return tokenOwnerToOperators[_owner][_operator];
-  }
-
   function removeChild(
     address _fromContract,
     uint256 _fromTokenId,
@@ -332,7 +298,7 @@ contract ComposableBottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC
     address _toContract,
     uint256 _toTokenId,
     uint256 _tokenId,
-    bytes memory _data
+    bytes memory
   ) external override {
     require(_from != address(0), "ComposableBottomUp: transferToParent _from zero address");
     require(
@@ -398,7 +364,7 @@ contract ComposableBottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC
     address _toContract,
     uint256 _toTokenId,
     uint256 _tokenId,
-    bytes memory _data
+    bytes memory
   ) external override {
     require(
       tokenIdToTokenOwner[_tokenId].tokenOwner == _fromContract,
@@ -498,39 +464,6 @@ contract ComposableBottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC
     emit Transfer(_from, _to, _tokenId);
   }
 
-  function transferFrom(
-    address _from,
-    address _to,
-    uint256 _tokenId
-  ) external override {
-    _transferFrom(_from, _to, _tokenId);
-  }
-
-  function safeTransferFrom(
-    address _from,
-    address _to,
-    uint256 _tokenId
-  ) external override {
-    _transferFrom(_from, _to, _tokenId);
-    if (_to.isContract()) {
-      bytes4 retval = IERC721Receiver(_to).onERC721Received(_msgSender(), _from, _tokenId, "");
-      require(retval == ERC721_RECEIVED, "ComposableBottomUp: safeTransferFrom(3) onERC721Received invalid value");
-    }
-  }
-
-  function safeTransferFrom(
-    address _from,
-    address _to,
-    uint256 _tokenId,
-    bytes memory _data
-  ) external override {
-    _transferFrom(_from, _to, _tokenId);
-    if (_to.isContract()) {
-      bytes4 retval = IERC721Receiver(_to).onERC721Received(_msgSender(), _from, _tokenId, _data);
-      require(retval == ERC721_RECEIVED, "ComposableBottomUp: safeTransferFrom(4) onERC721Received invalid value");
-    }
-  }
-
   function totalChildTokens(address _parentContract, uint256 _parentTokenId) external view override returns (uint256) {
     return parentToChildTokenIds[_parentContract][_parentTokenId].length;
   }
@@ -545,5 +478,19 @@ contract ComposableBottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC
       "ComposableBottomUp: childTokenByIndex invalid _index"
     );
     return parentToChildTokenIds[_parentContract][_parentTokenId][_index];
+  }
+
+  /**
+   * @dev See {IERC165-supportsInterface}.
+   * The interface id 0xa1b23002 is added. The spec claims it to be the interface id of ERC998ERC721BottomUp.
+   * But it is not.
+   * It is added anyway in case some contract checks it being compliant with the spec.
+   */
+  function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+    return
+      interfaceId == type(IERC998ERC721BottomUp).interfaceId ||
+      interfaceId == type(IERC998ERC721BottomUpEnumerable).interfaceId ||
+      interfaceId == 0xa1b23002 ||
+      super.supportsInterface(interfaceId);
   }
 }

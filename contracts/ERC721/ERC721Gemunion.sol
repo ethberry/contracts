@@ -11,8 +11,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
-import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "./ERC721Capped.sol";
@@ -33,8 +32,7 @@ import "./ERC721Capped.sol";
  * and pauser roles to other accounts.
  */
 abstract contract ERC721Gemunion is
-  Context,
-  AccessControlEnumerable,
+  AccessControl,
   ERC721Enumerable,
   ERC721Burnable,
   ERC721Capped,
@@ -88,6 +86,13 @@ abstract contract ERC721Gemunion is
     _tokenIdTracker.increment();
   }
 
+  function mint(address to) public virtual onlyRole(MINTER_ROLE) {
+    // We cannot just use balanceOf to create the new tokenId because tokens
+    // can be burned (destroyed), so we need a separate counter.
+    _mint(to, _tokenIdTracker.current());
+    _tokenIdTracker.increment();
+  }
+
   function getCurrentTokenIndex() public view returns (uint256) {
     return _tokenIdTracker.current();
   }
@@ -125,7 +130,7 @@ abstract contract ERC721Gemunion is
     public
     view
     virtual
-    override(AccessControlEnumerable, ERC721, ERC721Enumerable)
+    override(AccessControl, ERC721, ERC721Enumerable)
     returns (bool)
   {
     return super.supportsInterface(interfaceId);

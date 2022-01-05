@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "./utils/ProxyRegistry.sol";
 import "../../ERC721/ERC721Gemunion.sol";
 
-abstract contract ERC721OpenSea is ERC721Gemunion {
+abstract contract ERC721OpenSea is ERC721Gemunion, AccessControlEnumerable {
 
   event PermanentURI(string _value, uint256 indexed _id);
 
@@ -47,5 +47,26 @@ abstract contract ERC721OpenSea is ERC721Gemunion {
     }
 
     return super.isApprovedForAll(owner_, operator_);
+  }
+
+  /**
+   * @dev Overload {_grantRole} to track enumerable memberships
+   */
+  function _grantRole(bytes32 role, address account) internal virtual override(AccessControl, AccessControlEnumerable) {
+    super._grantRole(role, account);
+  }
+
+  /**
+   * @dev Overload {_revokeRole} to track enumerable memberships
+   */
+  function _revokeRole(bytes32 role, address account) internal virtual override(AccessControl, AccessControlEnumerable) {
+    super._revokeRole(role, account);
+  }
+
+  /**
+   * @dev See {IERC165-supportsInterface}.
+   */
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Gemunion, AccessControlEnumerable) returns (bool) {
+    return super.supportsInterface(interfaceId);
   }
 }

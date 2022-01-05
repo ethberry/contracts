@@ -32,7 +32,7 @@ describe("ERC20Gemunion", function () {
     [owner, receiver, addr2] = await ethers.getSigners();
 
     coinInstance = (await coin.deploy(tokenName, tokenSymbol)) as ERC20GemunionTest;
-    coinNonReceiverInstance = (await coinNonReceiver.deploy(tokenName, tokenSymbol)) as ERC20GemunionNonReceiverTest;
+    coinNonReceiverInstance = (await coinNonReceiver.deploy()) as ERC20GemunionNonReceiverTest;
 
     await coinInstance.mint(owner.address, initialTokenAmountInWei);
   });

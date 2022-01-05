@@ -7,8 +7,8 @@ import {
   ERC20GemunionTest,
   ERC721GemunionTest,
   ERC998ComposableTopDownTest,
-  ERC998GemunionNonReceiverTest,
-  ERC998GemunionReceiverTest,
+  ERC721GemunionNonReceiverTest,
+  ERC721GemunionReceiverTest,
 } from "../../typechain-types";
 import {
   amount,
@@ -29,9 +29,9 @@ describe("ERC998ComposableTopDown", function () {
   let erc998: ContractFactory;
   let erc998Instance: ERC998ComposableTopDownTest;
   let nftReceiver: ContractFactory;
-  let nftReceiverInstance: ERC998GemunionReceiverTest;
+  let nftReceiverInstance: ERC721GemunionReceiverTest;
   let nftNonReceiver: ContractFactory;
-  let nftNonReceiverInstance: ERC998GemunionNonReceiverTest;
+  let nftNonReceiverInstance: ERC721GemunionNonReceiverTest;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
 
@@ -39,15 +39,15 @@ describe("ERC998ComposableTopDown", function () {
     erc20 = await ethers.getContractFactory("ERC20GemunionTest");
     erc721 = await ethers.getContractFactory("ERC721GemunionTest");
     erc998 = await ethers.getContractFactory("ERC998ComposableTopDownTest");
-    nftReceiver = await ethers.getContractFactory("ERC998GemunionReceiverTest");
-    nftNonReceiver = await ethers.getContractFactory("ERC998GemunionNonReceiverTest");
+    nftReceiver = await ethers.getContractFactory("ERC721GemunionReceiverTest");
+    nftNonReceiver = await ethers.getContractFactory("ERC721GemunionNonReceiverTest");
     [owner, receiver] = await ethers.getSigners();
 
     erc20Instance = (await erc20.deploy(tokenName, tokenSymbol)) as ERC20GemunionTest;
     erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721GemunionTest;
     erc998Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ComposableTopDownTest;
-    nftReceiverInstance = (await nftReceiver.deploy(tokenName, tokenSymbol)) as ERC998GemunionReceiverTest;
-    nftNonReceiverInstance = (await nftNonReceiver.deploy(tokenName, tokenSymbol)) as ERC998GemunionNonReceiverTest;
+    nftReceiverInstance = (await nftReceiver.deploy()) as ERC721GemunionReceiverTest;
+    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721GemunionNonReceiverTest;
   });
 
   describe("constructor", function () {
@@ -804,8 +804,6 @@ describe("ERC998ComposableTopDown", function () {
 
       const supportsIAccessControl = await erc998Instance.supportsInterface("0x7965db0b");
       expect(supportsIAccessControl).to.equal(true);
-      const supportsIAccessControlEnumerable = await erc998Instance.supportsInterface("0x5a05180f");
-      expect(supportsIAccessControlEnumerable).to.equal(true);
 
       const supportsERC998 = await erc998Instance.supportsInterface("0x1bc995e4");
       expect(supportsERC998).to.equal(true);

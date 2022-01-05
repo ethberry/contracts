@@ -18,7 +18,7 @@ export const amount = 100;
 export const amountInWei = ethers.BigNumber.from(amount).mul(decimals);
 export const initialTokenAmount = 1000;
 export const initialTokenAmountInWei = ethers.BigNumber.from(initialTokenAmount).mul(decimals);
-export const erc20cap = ethers.BigNumber.from("2000000000").mul(decimals);
+export const erc20cap = ethers.BigNumber.from("1000000000").mul(decimals);
 
 export const addr = {
   hardhat: {

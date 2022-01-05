@@ -202,7 +202,8 @@ abstract contract ComposableTopDown is
     // before transferring.
     // does not work with current standard which does not allow approving self, so we must let it fail in that case.
     bytes memory callData = abi.encodeWithSelector(APPROVE, this, _childTokenId);
-    _childContract.call(callData);
+    (bool success, ) = _childContract.call(callData);
+    (success);
 
     IERC721(_childContract).transferFrom(address(this), _to, _childTokenId);
     emit TransferChild(_fromTokenId, _to, _childContract, _childTokenId);
@@ -581,7 +582,6 @@ abstract contract ComposableTopDown is
    */
   function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
     return
-      interfaceId == type(IERC721).interfaceId ||
       interfaceId == type(IERC998ERC721TopDown).interfaceId ||
       interfaceId == type(IERC998ERC721TopDownEnumerable).interfaceId ||
       interfaceId == type(IERC998ERC20TopDown).interfaceId ||

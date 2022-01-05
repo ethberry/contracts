@@ -6,12 +6,13 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "../ERC20/ERC20Gemunion.sol";
 
-contract ERC998GemunionNonReceiverTest is ERC721 {
-  constructor(
+contract ERC20GemunionTest is ERC20Gemunion {
+  constructor (
     string memory name,
     string memory symbol
-  ) ERC721(name, symbol) {
+  ) ERC20Gemunion(name, symbol, 1e9 * 1e18) {
+
   }
 }

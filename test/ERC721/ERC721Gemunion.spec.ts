@@ -31,8 +31,8 @@ describe("ERC721Gemunion", function () {
     [owner, receiver] = await ethers.getSigners();
 
     erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721GemunionTest;
-    nftReceiverInstance = (await nftReceiver.deploy(tokenName, tokenSymbol)) as ERC721GemunionReceiverTest;
-    nftNonReceiverInstance = (await nftNonReceiver.deploy(tokenName, tokenSymbol)) as ERC721GemunionNonReceiverTest;
+    nftReceiverInstance = (await nftReceiver.deploy()) as ERC721GemunionReceiverTest;
+    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721GemunionNonReceiverTest;
   });
 
   describe("constructor", function () {
@@ -405,8 +405,6 @@ describe("ERC721Gemunion", function () {
 
       const supportsIAccessControl = await erc721Instance.supportsInterface("0x7965db0b");
       expect(supportsIAccessControl).to.equal(true);
-      const supportsIAccessControlEnumerable = await erc721Instance.supportsInterface("0x5a05180f");
-      expect(supportsIAccessControlEnumerable).to.equal(true);
 
       const supportsInvalidInterface = await erc721Instance.supportsInterface("0xffffffff");
       expect(supportsInvalidInterface).to.equal(false);

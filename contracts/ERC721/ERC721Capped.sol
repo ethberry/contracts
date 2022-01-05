@@ -15,7 +15,6 @@ import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-
 abstract contract ERC721Capped is Context, ERC721Enumerable {
   uint256 internal _cap;
 

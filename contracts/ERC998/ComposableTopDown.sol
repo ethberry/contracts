@@ -22,11 +22,11 @@ import "./interfaces/IERC998ERC721TopDownEnumerable.sol";
 import "../ERC721/ERC721Gemunion.sol";
 
 abstract contract ComposableTopDown is
-ERC721Gemunion,
-IERC998ERC721TopDown,
-IERC998ERC721TopDownEnumerable,
-IERC998ERC20TopDown,
-IERC998ERC20TopDownEnumerable
+  ERC721Gemunion,
+  IERC998ERC721TopDown,
+  IERC998ERC721TopDownEnumerable,
+  IERC998ERC20TopDown,
+  IERC998ERC20TopDownEnumerable
 {
   using Address for address;
   using EnumerableSet for EnumerableSet.UintSet;
@@ -83,7 +83,7 @@ IERC998ERC20TopDownEnumerable
   ////////////////////////////////////////////////////////
   // ERC721 implementation
   ////////////////////////////////////////////////////////
-  function rootOwnerOf(uint256 _tokenId) public view override returns (bytes32 rootOwner){
+  function rootOwnerOf(uint256 _tokenId) public view override returns (bytes32 rootOwner) {
     return rootOwnerOfChild(address(0), _tokenId);
   }
 
@@ -93,26 +93,22 @@ IERC998ERC20TopDownEnumerable
   // Case 2: Token owner is other top-down composable
   // Case 3: Token owner is other contract
   // Case 4: Token owner is user
-  function rootOwnerOfChild(
-    address _childContract,
-    uint256 _childTokenId
-  ) public view override returns (bytes32 rootOwner){
+  function rootOwnerOfChild(address _childContract, uint256 _childTokenId)
+    public
+    view
+    override
+    returns (bytes32 rootOwner)
+  {
     address rootOwnerAddress;
     if (_childContract != address(0)) {
-      (rootOwnerAddress, _childTokenId) = _ownerOfChild(
-        _childContract,
-        _childTokenId
-      );
+      (rootOwnerAddress, _childTokenId) = _ownerOfChild(_childContract, _childTokenId);
     } else {
       rootOwnerAddress = ownerOf(_childTokenId);
       require(rootOwnerAddress != address(0), "ComposableTopDown: ownerOf _tokenId zero address");
     }
     // Case 1: Token owner is this contract and token.
     while (rootOwnerAddress == address(this)) {
-      (rootOwnerAddress, _childTokenId) = _ownerOfChild(
-        rootOwnerAddress,
-        _childTokenId
-      );
+      (rootOwnerAddress, _childTokenId) = _ownerOfChild(rootOwnerAddress, _childTokenId);
     }
     bytes memory callData =
     abi.encodeWithSelector(
@@ -197,8 +193,7 @@ IERC998ERC20TopDownEnumerable
   mapping(uint256 => EnumerableSet.AddressSet) private childContracts;
 
   // tokenId => (child address => array of child tokens)
-  mapping(uint256 => mapping(address => EnumerableSet.UintSet))
-  private childTokens;
+  mapping(uint256 => mapping(address => EnumerableSet.UintSet)) private childTokens;
 
   // child address => childId => tokenId
   mapping(address => mapping(uint256 => uint256)) private childTokenOwner;
@@ -210,11 +205,7 @@ IERC998ERC20TopDownEnumerable
     uint256 _childTokenId
   ) external override {
     _transferChild(_fromTokenId, _to, _childContract, _childTokenId);
-    IERC721(_childContract).safeTransferFrom(
-      address(this),
-      _to,
-      _childTokenId
-    );
+    IERC721(_childContract).safeTransferFrom(address(this), _to, _childTokenId);
     emit TransferChild(_fromTokenId, _to, _childContract, _childTokenId);
   }
 
@@ -428,8 +419,8 @@ IERC998ERC20TopDownEnumerable
     address rootOwner = address(uint160(uint256(rootOwnerOf(tokenId))));
     require(
       rootOwner == _msgSender() ||
-      isApprovedForAll(rootOwner, _msgSender()) ||
-      rootOwnerAndTokenIdToApprovedAddress[rootOwner][tokenId] == _msgSender(),
+        isApprovedForAll(rootOwner, _msgSender()) ||
+        rootOwnerAndTokenIdToApprovedAddress[rootOwner][tokenId] == _msgSender(),
       "ComposableTopDown: _transferChild _msgSender() not eligible"
     );
     removeChild(tokenId, _childContract, _childTokenId);
@@ -655,10 +646,7 @@ IERC998ERC20TopDownEnumerable
     address _erc20Contract,
     uint256 _value
   ) private {
-    require(
-    ownerOf(_tokenId) != address(0),
-      "ComposableTopDown: erc20Received _tokenId does not exist"
-    );
+    require(ownerOf(_tokenId) != address(0), "ComposableTopDown: erc20Received _tokenId does not exist");
     if (_value == 0) {
       return;
     }
@@ -680,10 +668,7 @@ IERC998ERC20TopDownEnumerable
       return;
     }
     uint256 erc20Balance = erc20Balances[_tokenId][_erc20Contract];
-    require(
-      erc20Balance >= _value,
-      "ComposableTopDown: removeERC20 value not enough"
-    );
+    require(erc20Balance >= _value, "ComposableTopDown: removeERC20 value not enough");
   unchecked {
     // overflow already checked
     uint256 newERC20Balance = erc20Balance - _value;
@@ -701,18 +686,19 @@ IERC998ERC20TopDownEnumerable
 
   /**
    * @dev See {IERC165-supportsInterface}.
-     * The interface id 0x1bc995e4 is added. The spec claims it to be the interface id of IERC998ERC721TopDown.
-     * But it is not.
-     * It is added anyway in case some contract checks it being compliant with the spec.
-     */
+   * The interface id 0x1bc995e4 is added. The spec claims it to be the interface id of IERC998ERC721TopDown.
+   * But it is not.
+   * It is added anyway in case some contract checks it being compliant with the spec.
+   */
   function supportsInterface(bytes4 interfaceId) public view override virtual returns (bool) {
-    return interfaceId == type(IERC721).interfaceId
-    || interfaceId == type(IERC998ERC721TopDown).interfaceId
-    || interfaceId == type(IERC998ERC721TopDownEnumerable).interfaceId
-    || interfaceId == type(IERC998ERC20TopDown).interfaceId
-    || interfaceId == type(IERC998ERC20TopDownEnumerable).interfaceId
-    || interfaceId == 0x1bc995e4
-    || super.supportsInterface(interfaceId);
+    return
+      interfaceId == type(IERC721).interfaceId ||
+      interfaceId == type(IERC998ERC721TopDown).interfaceId ||
+      interfaceId == type(IERC998ERC721TopDownEnumerable).interfaceId ||
+      interfaceId == type(IERC998ERC20TopDown).interfaceId ||
+      interfaceId == type(IERC998ERC20TopDownEnumerable).interfaceId ||
+      interfaceId == 0x1bc995e4 ||
+      super.supportsInterface(interfaceId);
   }
 
   ////////////////////////////////////////////////////////
@@ -722,9 +708,9 @@ IERC998ERC20TopDownEnumerable
   /**
    * Update the state hash of tokenId and all its ancestors.
    * @param tokenId token id
-     * @param childReference generalization of a child contract adddress
-     * @param value new balance of ERC20, childTokenId of ERC721 or a child's state hash (if childContract==address(this))
-     */
+   * @param childReference generalization of a child contract adddress
+   * @param value new balance of ERC20, childTokenId of ERC721 or a child's state hash (if childContract==address(this))
+   */
   function _updateStateHash(uint256 tokenId, uint256 childReference, uint256 value) private {
     uint256 _newStateHash = uint256(keccak256(abi.encodePacked(tokenIdToStateHash[tokenId], childReference, value)));
     tokenIdToStateHash[tokenId] = _newStateHash;
@@ -743,8 +729,8 @@ IERC998ERC20TopDownEnumerable
 
   /**
    * @dev See {safeTransferFrom}.
-     * Check the state hash and call safeTransferFrom.
-     */
+   * Check the state hash and call safeTransferFrom.
+   */
   function safeCheckedTransferFrom(
     address from,
     address to,
@@ -757,8 +743,8 @@ IERC998ERC20TopDownEnumerable
 
   /**
    * @dev See {transferFrom}.
-     * Check the state hash and call transferFrom.
-     */
+   * Check the state hash and call transferFrom.
+   */
   function checkedTransferFrom(
     address from,
     address to,
@@ -771,8 +757,8 @@ IERC998ERC20TopDownEnumerable
 
   /**
    * @dev See {safeTransferFrom}.
-     * Check the state hash and call safeTransferFrom.
-     */
+   * Check the state hash and call safeTransferFrom.
+   */
   function safeCheckedTransferFrom(
     address from,
     address to,
@@ -783,5 +769,4 @@ IERC998ERC20TopDownEnumerable
     require(expectedStateHash == tokenIdToStateHash[tokenId], "ComposableTopDown: stateHash mismatch (3)");
     safeTransferFrom(from, to, tokenId, data);
   }
-
 }

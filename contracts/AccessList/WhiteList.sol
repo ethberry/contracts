@@ -8,7 +8,6 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-
 abstract contract WhiteList is AccessControl {
   error WhiteListError(address account);
 

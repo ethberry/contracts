@@ -13,6 +13,5 @@ contract ERC721GemunionReceiverTest is ERC721, ERC721Holder {
   constructor(
     string memory name,
     string memory symbol
-  ) ERC721(name, symbol) {
-  }
+  ) ERC721(name, symbol) {}
 }

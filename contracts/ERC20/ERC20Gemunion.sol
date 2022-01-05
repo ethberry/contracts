@@ -29,7 +29,14 @@ import "@openzeppelin/contracts/utils/Context.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-abstract contract ERC20Gemunion is Context, AccessControlEnumerable, ERC20Burnable, ERC20Pausable, ERC20Capped, ERC20Snapshot {
+abstract contract ERC20Gemunion is
+  Context,
+  AccessControlEnumerable,
+  ERC20Burnable,
+  ERC20Pausable,
+  ERC20Capped,
+  ERC20Snapshot
+{
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
   bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
@@ -94,28 +101,11 @@ abstract contract ERC20Gemunion is Context, AccessControlEnumerable, ERC20Burnab
     _unpause();
   }
 
-  function toHexDigit(uint8 d) pure internal returns (bytes1) {
-    if (0 <= d && d <= 9) {
-      return bytes1(uint8(bytes1('0')) + d);
-    } else if (10 <= uint8(d) && uint8(d) <= 15) {
-      return bytes1(uint8(bytes1('a')) + d - 10);
-    }
-    revert();
-  }
-
-  function fromCode(bytes4 code) public pure returns (string memory) {
-    bytes memory result = new bytes(10);
-    result[0] = bytes1('0');
-    result[1] = bytes1('x');
-    for (uint i = 0; i < 4; ++i) {
-      result[2 * i + 2] = toHexDigit(uint8(code[i]) / 16);
-      result[2 * i + 3] = toHexDigit(uint8(code[i]) % 16);
-    }
-    return string(result);
-  }
-
   function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControlEnumerable) returns (bool) {
-    return interfaceId == type(IERC20).interfaceId || interfaceId == type(IERC20Metadata).interfaceId || super.supportsInterface(interfaceId);
+    return
+      interfaceId == type(IERC20).interfaceId ||
+      interfaceId == type(IERC20Metadata).interfaceId ||
+      super.supportsInterface(interfaceId);
   }
 
   function _mint(address account, uint256 amount) internal virtual override(ERC20, ERC20Capped) {

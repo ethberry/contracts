@@ -32,7 +32,15 @@ import "./ERC721Capped.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-abstract contract ERC721Gemunion is Context, AccessControlEnumerable, ERC721Enumerable, ERC721Burnable, ERC721Capped, ERC721Pausable, ERC721URIStorage {
+abstract contract ERC721Gemunion is
+  Context,
+  AccessControlEnumerable,
+  ERC721Enumerable,
+  ERC721Burnable,
+  ERC721Capped,
+  ERC721Pausable,
+  ERC721URIStorage
+{
   using Counters for Counters.Counter;
 
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -114,9 +122,13 @@ abstract contract ERC721Gemunion is Context, AccessControlEnumerable, ERC721Enum
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(
-    bytes4 interfaceId
-  ) public view virtual override(AccessControlEnumerable, ERC721, ERC721Enumerable) returns (bool) {
+  function supportsInterface(bytes4 interfaceId)
+    public
+    view
+    virtual
+    override(AccessControlEnumerable, ERC721, ERC721Enumerable)
+    returns (bool)
+  {
     return super.supportsInterface(interfaceId);
   }
 
@@ -124,10 +136,7 @@ abstract contract ERC721Gemunion is Context, AccessControlEnumerable, ERC721Enum
     return super.tokenURI(tokenId);
   }
 
-  function setTokenURI(
-    uint256 tokenId,
-    string memory _tokenURI
-  ) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
+  function setTokenURI(uint256 tokenId, string memory _tokenURI) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
     _setTokenURI(tokenId, _tokenURI);
   }
 

@@ -9,11 +9,9 @@ pragma solidity ^0.8.4;
 import "../ERC721/ERC721Gemunion.sol";
 
 contract ERC721GemunionTest is ERC721Gemunion {
-  constructor (
+  constructor(
     string memory name,
     string memory symbol,
     string memory baseTokenURI
-  ) ERC721Gemunion(name, symbol, baseTokenURI, 2) {
-
-  }
+  ) ERC721Gemunion(name, symbol, baseTokenURI, 2) {}
 }

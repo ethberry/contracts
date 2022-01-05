@@ -5,23 +5,26 @@
     "url": "https://trejgun.github.io/"
   },
   "dependencies": {
+    "@chainlink/contracts": "0.2.2",
     "@nomiclabs/hardhat-ethers": "2.0.3",
     "@nomiclabs/hardhat-etherscan": "2.1.8",
     "@nomiclabs/hardhat-waffle": "2.0.1",
     "@nomiclabs/hardhat-web3": "2.0.0",
     "@openzeppelin/contracts": "4.4.1",
-    "@chainlink/contracts": "0.2.2",
     "dotenv": "10.0.0",
     "ethers": "5.5.2",
     "hardhat": "2.8.0",
     "hardhat-deploy": "0.9.23",
     "hardhat-gas-reporter": "1.0.6",
+    "prettier-plugin-solidity": "1.0.0-beta.18",
+    "solhint": "3.3.6",
+    "solhint-plugin-prettier": "0.0.5",
     "web3": "1.6.1"
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "2.0.3",
     "@gemunion/eslint-config": "0.1.10",
+    "@nomiclabs/hardhat-ethers": "2.0.3",
     "@typechain/ethers-v5": "8.0.5",
     "@typechain/hardhat": "3.1.0",
     "@types/chai": "4.3.0",
@@ -72,6 +75,7 @@
     "lint": "eslint . --fix",
     "prebuild": "rimraf artifacts cache typechain-types",
     "preversion": "npm run build",
+    "solhint": "solhint -f table contracts/**/*.sol",
     "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",

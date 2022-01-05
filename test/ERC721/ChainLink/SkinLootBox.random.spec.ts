@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ethers, web3 } from "hardhat";
+import { ethers } from "hardhat";
 import { parseEther } from "ethers/lib/utils";
 
 import { ContractFactory, ContractTransaction } from "ethers";
@@ -18,7 +18,7 @@ import {
   initialTokenAmountInWei,
 } from "../../constants";
 
-describe("SkinLootBoxRandom", function () {
+describe("LootBoxRandom", function () {
   let vrf: ContractFactory;
   let vrfInstance: VRFCoordinatorMock;
   let link: ContractFactory;
@@ -114,7 +114,7 @@ describe("SkinLootBoxRandom", function () {
       await expect(tx).to.be.revertedWith("ERC721Link: Not enough LINK");
     });
 
-    it.only("should unpack own tokens using random", async function () {
+    it("should unpack own tokens using random", async function () {
       await nftInstance.grantRole(MINTER_ROLE, lootInstance.address);
       await nftInstance.grantRole(MINTER_ROLE, vrfInstance.address);
       await lootInstance.setFactory(nftInstance.address);

@@ -19,7 +19,7 @@ contract VRFCoordinatorMock is VRFRequestIDBase{
 
   function onTokenTransfer(
     address sender,
-    uint256 fee,
+    uint256,
     bytes memory _data
   ) public onlyLINK {
     (bytes32 keyHash, uint256 seed) = abi.decode(_data, (bytes32, uint256));

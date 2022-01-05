@@ -32,7 +32,6 @@ contract TokenIdCalculator {
   constructor() {
     uint256 tokenId = 1;
     bytes memory tokenIdBytes = new bytes(32);
-    bytes memory result;
     assembly {
       mstore(add(tokenIdBytes, 32), tokenId)
     }

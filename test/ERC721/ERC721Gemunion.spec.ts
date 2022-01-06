@@ -143,8 +143,8 @@ describe("ERC721Gemunion", function () {
 
     it("should approve", async function () {
       await erc721Instance.mint(owner.address);
-      const tx = erc721Instance.approve(receiver.address, 0);
 
+      const tx = erc721Instance.approve(receiver.address, 0);
       await expect(tx).to.emit(erc721Instance, "Approval").withArgs(owner.address, receiver.address, 0);
 
       const approved = await erc721Instance.getApproved(0);

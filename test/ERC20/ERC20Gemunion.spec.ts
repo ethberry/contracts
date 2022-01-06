@@ -6,9 +6,7 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { ERC20GemunionTest, ERC20GemunionNonReceiverTest } from "../../typechain-types";
 import {
   amount,
-  erc20cap,
   DEFAULT_ADMIN_ROLE,
-  initialTokenAmountInWei,
   MINTER_ROLE,
   PAUSER_ROLE,
   SNAPSHOT_ROLE,
@@ -18,197 +16,259 @@ import {
 } from "../constants";
 
 describe("ERC20Gemunion", function () {
-  let coin: ContractFactory;
-  let coinInstance: ERC20GemunionTest;
+  let erc20: ContractFactory;
+  let erc20Instance: ERC20GemunionTest;
   let coinNonReceiver: ContractFactory;
   let coinNonReceiverInstance: ERC20GemunionNonReceiverTest;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
-  let addr2: SignerWithAddress;
 
   beforeEach(async function () {
-    coin = await ethers.getContractFactory("ERC20GemunionTest");
+    erc20 = await ethers.getContractFactory("ERC20GemunionTest");
     coinNonReceiver = await ethers.getContractFactory("ERC20GemunionNonReceiverTest");
-    [owner, receiver, addr2] = await ethers.getSigners();
+    [owner, receiver] = await ethers.getSigners();
 
-    coinInstance = (await coin.deploy(tokenName, tokenSymbol)) as ERC20GemunionTest;
+    erc20Instance = (await erc20.deploy(tokenName, tokenSymbol)) as ERC20GemunionTest;
     coinNonReceiverInstance = (await coinNonReceiver.deploy()) as ERC20GemunionNonReceiverTest;
-
-    await coinInstance.mint(owner.address, initialTokenAmountInWei);
   });
 
   describe("constructor", function () {
     it("should set the right roles to deployer", async function () {
-      const isAdmin = await coinInstance.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
+      const isAdmin = await erc20Instance.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
       expect(isAdmin).to.equal(true);
-      const isMinter = await coinInstance.hasRole(MINTER_ROLE, owner.address);
+      const isMinter = await erc20Instance.hasRole(MINTER_ROLE, owner.address);
       expect(isMinter).to.equal(true);
-      const isPauser = await coinInstance.hasRole(PAUSER_ROLE, owner.address);
+      const isPauser = await erc20Instance.hasRole(PAUSER_ROLE, owner.address);
       expect(isPauser).to.equal(true);
-      const isSnapshoter = await coinInstance.hasRole(SNAPSHOT_ROLE, owner.address);
+      const isSnapshoter = await erc20Instance.hasRole(SNAPSHOT_ROLE, owner.address);
       expect(isSnapshoter).to.equal(true);
-    });
-
-    it("should assign the total supply of tokens to the owner", async function () {
-      const totalSupply = await coinInstance.totalSupply();
-      expect(totalSupply).to.equal(initialTokenAmountInWei);
-      const balanceOfOwner = await coinInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(initialTokenAmountInWei);
-    });
-  });
-
-  describe("transfer", function () {
-    it("should fail: transfer amount exceeds balance", async function () {
-      const tx = coinInstance.connect(receiver).transfer(owner.address, amount);
-      await expect(tx).to.be.revertedWith("ERC20: transfer amount exceeds balance");
-    });
-
-    it("should transfer", async function () {
-      const tx = coinInstance.transfer(receiver.address, amount);
-      await expect(tx).to.emit(coinInstance, "Transfer").withArgs(owner.address, receiver.address, amount);
-
-      const receiverBalance = await coinInstance.balanceOf(receiver.address);
-      expect(receiverBalance).to.equal(amount);
-      const balanceOfOwner = await coinInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
-    });
-
-    it("should transfer to contract", async function () {
-      const tx = coinInstance.transfer(coinNonReceiverInstance.address, amount);
-      await expect(tx)
-        .to.emit(coinInstance, "Transfer")
-        .withArgs(owner.address, coinNonReceiverInstance.address, amount);
-
-      const receiverBalance = await coinInstance.balanceOf(coinNonReceiverInstance.address);
-      expect(receiverBalance).to.equal(amount);
-      const balanceOfOwner = await coinInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
-    });
-  });
-
-  describe("snapshot", function () {
-    it("should fail: nonexistent id", async function () {
-      await coinInstance.transfer(receiver.address, amount);
-      const addr1Balance = await coinInstance.balanceOf(receiver.address);
-      expect(addr1Balance).to.equal(amount);
-
-      const tx = coinInstance.snapshot();
-      await expect(tx).to.emit(coinInstance, "Snapshot").withArgs("1");
-
-      const tx2 = coinInstance.balanceOfAt(receiver.address, "2");
-      await expect(tx2).to.be.revertedWith("ERC20Snapshot: nonexistent id");
-    });
-
-    it("should make snapshot", async function () {
-      await coinInstance.transfer(receiver.address, amount);
-      const addr1Balance = await coinInstance.balanceOf(receiver.address);
-      expect(addr1Balance).to.equal(amount);
-
-      const tx = coinInstance.snapshot();
-
-      await expect(tx).to.emit(coinInstance, "Snapshot").withArgs("1");
-
-      const balance1 = await coinInstance.balanceOfAt(receiver.address, "1");
-      expect(balance1).to.equal(amount);
-
-      const balance2 = await coinInstance.balanceOfAt(addr2.address, "1");
-      expect(balance2).to.equal(0);
-
-      const totalSupply = await coinInstance.totalSupplyAt("1");
-      expect(totalSupply).to.equal(initialTokenAmountInWei);
     });
   });
 
   describe("mint", function () {
     it("should fail: must have minter role to mint", async function () {
-      const tx = coinInstance.connect(receiver).mint(receiver.address, amount);
+      const tx = erc20Instance.connect(receiver).mint(receiver.address, amount);
       await expect(tx).to.be.revertedWith(
         `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
       );
     });
 
-    it("should mint more tokens", async function () {
-      const tx = coinInstance.mint(owner.address, amount);
-      await expect(tx).to.emit(coinInstance, "Transfer").withArgs(ZERO_ADDR, owner.address, amount);
+    it("should mint", async function () {
+      const tx = erc20Instance.mint(owner.address, amount);
+      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(ZERO_ADDR, owner.address, amount);
 
-      const balance = await coinInstance.balanceOf(owner.address);
-      expect(balance).to.equal(initialTokenAmountInWei.add(amount));
-      const totalSupply = await coinInstance.totalSupply();
-      expect(totalSupply).to.equal(initialTokenAmountInWei.add(amount));
+      const balance = await erc20Instance.balanceOf(owner.address);
+      expect(balance).to.equal(amount);
+
+      const totalSupply = await erc20Instance.totalSupply();
+      expect(totalSupply).to.equal(amount);
+    });
+  });
+
+  describe("balanceOf", function () {
+    it("should not fail for zero addr", async function () {
+      await erc20Instance.mint(owner.address, amount);
+
+      const tx = erc20Instance.burn(amount);
+      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, amount);
+
+      const balance = await erc20Instance.balanceOf(ZERO_ADDR);
+      expect(balance).to.equal(0);
+    });
+
+    it("should get balance of owner", async function () {
+      await erc20Instance.mint(owner.address, amount);
+
+      const balance = await erc20Instance.balanceOf(owner.address);
+      expect(balance).to.equal(amount);
+    });
+
+    it("should get balance of not owner", async function () {
+      const balance = await erc20Instance.balanceOf(receiver.address);
+      expect(balance).to.equal(0);
+    });
+  });
+
+  describe("transfer", function () {
+    it("should fail: transfer amount exceeds balance", async function () {
+      const tx = erc20Instance.connect(receiver).transfer(owner.address, amount);
+      await expect(tx).to.be.revertedWith("ERC20: transfer amount exceeds balance");
+    });
+
+    it("should transfer", async function () {
+      await erc20Instance.mint(owner.address, amount);
+
+      const tx = erc20Instance.transfer(receiver.address, amount);
+      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, receiver.address, amount);
+
+      const receiverBalance = await erc20Instance.balanceOf(receiver.address);
+      expect(receiverBalance).to.equal(amount);
+
+      const balanceOfOwner = await erc20Instance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(0);
+    });
+
+    it("should transfer to contract", async function () {
+      await erc20Instance.mint(owner.address, amount);
+
+      const tx = erc20Instance.transfer(coinNonReceiverInstance.address, amount);
+      await expect(tx)
+        .to.emit(erc20Instance, "Transfer")
+        .withArgs(owner.address, coinNonReceiverInstance.address, amount);
+
+      const nonReceiverBalance = await erc20Instance.balanceOf(coinNonReceiverInstance.address);
+      expect(nonReceiverBalance).to.equal(amount);
+
+      const balanceOfOwner = await erc20Instance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(0);
+    });
+  });
+
+  describe("snapshot", function () {
+    it("should fail: nonexistent id", async function () {
+      const tx = erc20Instance.snapshot();
+      await expect(tx).to.emit(erc20Instance, "Snapshot").withArgs("1");
+
+      const tx2 = erc20Instance.balanceOfAt(receiver.address, "2");
+      await expect(tx2).to.be.revertedWith("ERC20Snapshot: nonexistent id");
+    });
+
+    it("should make snapshot", async function () {
+      await erc20Instance.mint(owner.address, amount);
+
+      const tx = erc20Instance.snapshot();
+      await expect(tx).to.emit(erc20Instance, "Snapshot").withArgs("1");
+
+      const balanceOfReceiver = await erc20Instance.balanceOfAt(receiver.address, "1");
+      expect(balanceOfReceiver).to.equal(0);
+
+      const balanceOfOwner = await erc20Instance.balanceOfAt(owner.address, "1");
+      expect(balanceOfOwner).to.equal(amount);
+
+      const totalSupply = await erc20Instance.totalSupplyAt("1");
+      expect(totalSupply).to.equal(amount);
+    });
+  });
+
+  describe("approve", function () {
+    it("should fail: approve to zero address", async function () {
+      const tx = erc20Instance.approve(ZERO_ADDR, amount);
+      await expect(tx).to.be.revertedWith("ERC20: approve to the zero address");
+    });
+
+    it("should approve with zero balance", async function () {
+      const tx = erc20Instance.connect(receiver).approve(owner.address, amount);
+      await expect(tx).to.emit(erc20Instance, "Approval").withArgs(receiver.address, owner.address, amount);
+    });
+
+    it("should approve to self", async function () {
+      const tx = erc20Instance.approve(owner.address, amount);
+      await expect(tx).to.emit(erc20Instance, "Approval").withArgs(owner.address, owner.address, amount);
+    });
+
+    it("should approve", async function () {
+      const tx = erc20Instance.approve(receiver.address, amount);
+      await expect(tx).to.emit(erc20Instance, "Approval").withArgs(owner.address, receiver.address, amount);
+
+      const approved = await erc20Instance.allowance(owner.address, receiver.address);
+      expect(approved).to.equal(amount);
     });
   });
 
   describe("burn", function () {
     it("should fail: burn amount exceeds balance", async function () {
-      const tx = coinInstance.burn(initialTokenAmountInWei.add(amount));
+      const tx = erc20Instance.burn(amount);
       await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds balance");
     });
 
-    it("should burn tokens", async function () {
-      const tx = coinInstance.burn(amount);
-      await expect(tx).to.emit(coinInstance, "Transfer").withArgs(owner.address, ZERO_ADDR, amount);
+    it("should burn zero", async function () {
+      const tx = erc20Instance.burn(0);
+      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, 0);
+    });
 
-      const balance = await coinInstance.balanceOf(owner.address);
-      expect(balance).to.equal(initialTokenAmountInWei.sub(amount));
-      const totalSupply = await coinInstance.totalSupply();
-      expect(totalSupply).to.equal(initialTokenAmountInWei.sub(amount));
+    it("should burn tokens", async function () {
+      await erc20Instance.mint(owner.address, amount);
+
+      const tx = erc20Instance.burn(amount);
+      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, amount);
+
+      const balance = await erc20Instance.balanceOf(owner.address);
+      expect(balance).to.equal(0);
+
+      const totalSupply = await erc20Instance.totalSupply();
+      expect(totalSupply).to.equal(0);
+    });
+  });
+
+  describe("burnFrom", function () {
+    it("should fail: burn from zero account", async function () {
+      const tx = erc20Instance.burnFrom(ZERO_ADDR, amount);
+      await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds allowance");
+    });
+
+    it("should fail: burn from other account", async function () {
+      await erc20Instance.mint(owner.address, amount);
+
+      await erc20Instance.approve(receiver.address, amount);
+      const tx = erc20Instance.connect(receiver).burnFrom(owner.address, amount);
+      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, amount);
     });
   });
 
   describe("pause", function () {
     it("should fail: not an owner", async function () {
-      const tx = coinInstance.connect(receiver).pause();
+      const tx = erc20Instance.connect(receiver).pause();
       await expect(tx).to.be.revertedWith(
         `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
       );
 
-      const tx2 = coinInstance.connect(receiver).unpause();
+      const tx2 = erc20Instance.connect(receiver).unpause();
       await expect(tx2).to.be.revertedWith(
         `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
       );
     });
 
     it("should pause/unpause", async function () {
-      const tx2 = coinInstance.pause();
-      await expect(tx2).to.emit(coinInstance, "Paused").withArgs(owner.address);
+      await erc20Instance.mint(owner.address, amount);
 
-      const tx3 = coinInstance.transfer(receiver.address, amount);
-      await expect(tx3).to.be.revertedWith(`ERC20Pausable: token transfer while paused`);
+      const tx1 = erc20Instance.pause();
+      await expect(tx1).to.emit(erc20Instance, "Paused").withArgs(owner.address);
 
-      const tx4 = coinInstance.unpause();
-      await expect(tx4).to.emit(coinInstance, "Unpaused").withArgs(owner.address);
+      const tx2 = erc20Instance.transfer(receiver.address, amount);
+      await expect(tx2).to.be.revertedWith(`ERC20Pausable: token transfer while paused`);
 
-      const tx5 = coinInstance.transfer(receiver.address, amount);
+      const tx4 = erc20Instance.unpause();
+      await expect(tx4).to.emit(erc20Instance, "Unpaused").withArgs(owner.address);
+
+      const tx5 = erc20Instance.transfer(receiver.address, amount);
       await expect(tx5).to.not.be.reverted;
 
-      const balanceOfOwner = await coinInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(initialTokenAmountInWei.sub(amount));
+      const balanceOfOwner = await erc20Instance.balanceOf(owner.address);
+      expect(balanceOfOwner).to.equal(0);
     });
   });
 
   describe("cap", function () {
     it("should fail: cap exceeded", async function () {
-      const tx = coinInstance.mint(owner.address, erc20cap);
+      const tx = erc20Instance.mint(owner.address, amount + 1);
       await expect(tx).to.be.revertedWith("ERC20Capped: cap exceeded");
     });
   });
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {
-      const supportsIERC20 = await coinInstance.supportsInterface("0x36372b07");
+      const supportsIERC20 = await erc20Instance.supportsInterface("0x36372b07");
       expect(supportsIERC20).to.equal(true);
-      const supportsIERC20Metadata = await coinInstance.supportsInterface("0xa219a025");
+      const supportsIERC20Metadata = await erc20Instance.supportsInterface("0xa219a025");
       expect(supportsIERC20Metadata).to.equal(true);
 
-      const supportsIERC165 = await coinInstance.supportsInterface("0x01ffc9a7");
+      const supportsIERC165 = await erc20Instance.supportsInterface("0x01ffc9a7");
       expect(supportsIERC165).to.equal(true);
 
-      const supportsIAccessControl = await coinInstance.supportsInterface("0x7965db0b");
+      const supportsIAccessControl = await erc20Instance.supportsInterface("0x7965db0b");
       expect(supportsIAccessControl).to.equal(true);
-      const supportsIAccessControlEnumerable = await coinInstance.supportsInterface("0x5a05180f");
-      expect(supportsIAccessControlEnumerable).to.equal(true);
 
-      const supportsInvalidInterface = await coinInstance.supportsInterface("0xffffffff");
+      const supportsInvalidInterface = await erc20Instance.supportsInterface("0xffffffff");
       expect(supportsInvalidInterface).to.equal(false);
     });
   });

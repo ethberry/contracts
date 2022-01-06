@@ -8,15 +8,16 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { TokenTestLink, LootboxTestLink, LinkErc20, VRFCoordinatorMock } from "../../../typechain-types";
 import {
   baseTokenURI,
+  decimals,
   DEFAULT_ADMIN_ROLE,
   MINTER_ROLE,
   PAUSER_ROLE,
   tokenName,
   tokenSymbol,
   ZERO_ADDR,
-  amountInWei,
-  initialTokenAmountInWei,
 } from "../../constants";
+
+const linkAmountInWei = ethers.BigNumber.from("1000").mul(decimals);
 
 describe("LootBoxRandom", function () {
   let vrf: ContractFactory;
@@ -37,7 +38,7 @@ describe("LootBoxRandom", function () {
 
     link = await ethers.getContractFactory("LinkErc20");
     linkInstance = (await link.deploy(tokenName, tokenSymbol)) as LinkErc20;
-    await linkInstance.mint(owner.address, initialTokenAmountInWei);
+    await linkInstance.mint(owner.address, linkAmountInWei);
     vrf = await ethers.getContractFactory("VRFCoordinatorMock");
     vrfInstance = (await vrf.deploy(linkInstance.address)) as VRFCoordinatorMock;
 
@@ -127,11 +128,11 @@ describe("LootBoxRandom", function () {
       const balanceOfOwner2 = await nftInstance.balanceOf(owner.address);
       expect(balanceOfOwner2).to.equal(0);
 
-      const txr: ContractTransaction = await linkInstance.transfer(nftInstance.address, amountInWei);
+      const txr: ContractTransaction = await linkInstance.transfer(nftInstance.address, linkAmountInWei);
       await txr.wait();
 
       const nftInstanceBalance = await linkInstance.balanceOf(nftInstance.address);
-      expect(nftInstanceBalance).to.equal(amountInWei);
+      expect(nftInstanceBalance).to.equal(linkAmountInWei);
 
       // Create connection to LINK token contract and initiate the transfer
       // const LINK_TOKEN_ABI = [

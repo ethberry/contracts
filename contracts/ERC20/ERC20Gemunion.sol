@@ -12,7 +12,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
-import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 
 /**
@@ -31,7 +31,7 @@ import "@openzeppelin/contracts/utils/Context.sol";
  */
 abstract contract ERC20Gemunion is
   Context,
-  AccessControlEnumerable,
+  AccessControl,
   ERC20Burnable,
   ERC20Pausable,
   ERC20Capped,
@@ -101,7 +101,7 @@ abstract contract ERC20Gemunion is
     _unpause();
   }
 
-  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControlEnumerable) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl) returns (bool) {
     return
       interfaceId == type(IERC20).interfaceId ||
       interfaceId == type(IERC20Metadata).interfaceId ||

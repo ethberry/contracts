@@ -15,10 +15,7 @@ export const DEAD_ADDR = "0x000000000000000000000000000000000000dead";
 
 export const decimals = ethers.BigNumber.from(10).pow(18);
 export const amount = 100;
-export const amountInWei = ethers.BigNumber.from(amount).mul(decimals);
-export const initialTokenAmount = 1000;
-export const initialTokenAmountInWei = ethers.BigNumber.from(initialTokenAmount).mul(decimals);
-export const erc20cap = ethers.BigNumber.from("1000000000").mul(decimals);
+export const tokenId = 1;
 
 export const addr = {
   hardhat: {

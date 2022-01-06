@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { ContractFactory } from "ethers";
+import { BigNumber, ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import {
@@ -8,7 +8,7 @@ import {
   ERC1155GemunionReceiverTest,
   ERC1155GemunionNonReceiverTest,
 } from "../../typechain-types";
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../constants";
+import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenId, ZERO_ADDR } from "../constants";
 
 describe("ERC1155Gemunion", function () {
   let erc1155: ContractFactory;
@@ -43,6 +43,137 @@ describe("ERC1155Gemunion", function () {
       expect(isMinter).to.equal(true);
       const isPauser = await erc1155Instance.hasRole(PAUSER_ROLE, owner.address);
       expect(isPauser).to.equal(true);
+    });
+  });
+
+  describe("mint", function () {
+    it("should fail for wrong role", async function () {
+      const tx = erc1155Instance.connect(receiver).mint(receiver.address, 1, amount, "0x");
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
+      );
+    });
+
+    it("should mint to wallet", async function () {
+      const tx = erc1155Instance.mint(receiver.address, tokenId, amount, "0x");
+      await expect(tx)
+        .to.emit(erc1155Instance, "TransferSingle")
+        .withArgs(owner.address, ZERO_ADDR, receiver.address, tokenId, amount);
+
+      const balance = await erc1155Instance.balanceOf(receiver.address, tokenId);
+      expect(balance).to.equal(amount);
+
+      const totalSupply = await erc1155Instance.totalSupply(tokenId);
+      expect(totalSupply).to.equal(amount);
+    });
+
+    it("should fail to mint to non receiver", async function () {
+      const tx = erc1155Instance.mint(nftNonReceiverInstance.address, tokenId, amount, "0x");
+      await expect(tx).to.be.revertedWith(`ERC1155: transfer to non ERC1155Receiver implementer`);
+    });
+
+    it("should mint to receiver", async function () {
+      const tx = erc1155Instance.mint(nftReceiverInstance.address, tokenId, amount, "0x");
+      await expect(tx)
+        .to.emit(erc1155Instance, "TransferSingle")
+        .withArgs(owner.address, ZERO_ADDR, nftReceiverInstance.address, tokenId, amount);
+
+      const balance = await erc1155Instance.balanceOf(nftReceiverInstance.address, tokenId);
+      expect(balance).to.equal(amount);
+    });
+  });
+
+  describe("balanceOf", function () {
+    it("should fail for zero addr", async function () {
+      const tx = erc1155Instance.balanceOf(ZERO_ADDR, tokenId);
+      await expect(tx).to.be.revertedWith(`ERC1155: balance query for the zero address`);
+    });
+
+    it("should get balance of owner", async function () {
+      await erc1155Instance.mint(owner.address, tokenId, amount, "0x");
+      const balance = await erc1155Instance.balanceOf(owner.address, tokenId);
+      expect(balance).to.equal(amount);
+    });
+
+    it("should get balance of not owner", async function () {
+      await erc1155Instance.mint(owner.address, tokenId, amount, "0x");
+      const balance = await erc1155Instance.balanceOf(receiver.address, tokenId);
+      expect(balance).to.equal(0);
+    });
+  });
+
+  describe("balanceOfBatch", function () {
+    it("should fail for zero addr", async function () {
+      const tx = erc1155Instance.balanceOfBatch([ZERO_ADDR], [tokenId]);
+      await expect(tx).to.be.revertedWith(`ERC1155: balance query for the zero address`);
+    });
+
+    it("should get balance of owner", async function () {
+      await erc1155Instance.mint(owner.address, tokenId, amount, "0x");
+      const balances = await erc1155Instance.balanceOfBatch([owner.address, receiver.address], [tokenId, 100]);
+      expect(balances).to.deep.equal([BigNumber.from(amount), BigNumber.from(0)]);
+    });
+  });
+
+  describe("uri", function () {
+    it("should get default token URI", async function () {
+      const uri = await erc1155Instance.uri(0);
+      expect(uri).to.equal(baseTokenURI);
+    });
+  });
+
+  describe("pause", function () {
+    it("should fail: not an owner", async function () {
+      const tx = erc1155Instance.connect(receiver).pause();
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
+      );
+
+      const tx2 = erc1155Instance.connect(receiver).unpause();
+      await expect(tx2).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
+      );
+    });
+
+    it("should pause/unpause", async function () {
+      const tx1 = erc1155Instance.mint(owner.address, tokenId, amount, "0x");
+      await expect(tx1).to.not.be.reverted;
+
+      const balanceOfOwner1 = await erc1155Instance.balanceOf(owner.address, tokenId);
+      expect(balanceOfOwner1).to.equal(amount);
+
+      const tx2 = erc1155Instance.pause();
+      await expect(tx2).to.emit(erc1155Instance, "Paused").withArgs(owner.address);
+
+      const tx3 = erc1155Instance.mint(owner.address, tokenId, amount, "0x");
+      await expect(tx3).to.be.revertedWith(`ERC1155Pausable: token transfer while paused`);
+
+      const tx4 = erc1155Instance.unpause();
+      await expect(tx4).to.emit(erc1155Instance, "Unpaused").withArgs(owner.address);
+
+      const tx5 = erc1155Instance.mint(owner.address, tokenId, amount, "0x");
+      await expect(tx5).to.not.be.reverted;
+
+      const balanceOfOwner = await erc1155Instance.balanceOf(owner.address, tokenId);
+      expect(balanceOfOwner).to.equal(2 * amount);
+    });
+  });
+
+  describe("supportsInterface", function () {
+    it("should support all interfaces", async function () {
+      const supportsIERC1155 = await erc1155Instance.supportsInterface("0xd9b67a26");
+      expect(supportsIERC1155).to.equal(true);
+      const supportsIERC1155MetadataURI = await erc1155Instance.supportsInterface("0x0e89341c");
+      expect(supportsIERC1155MetadataURI).to.equal(true);
+
+      const supportsIERC165 = await erc1155Instance.supportsInterface("0x01ffc9a7");
+      expect(supportsIERC165).to.equal(true);
+
+      const supportsIAccessControl = await erc1155Instance.supportsInterface("0x7965db0b");
+      expect(supportsIAccessControl).to.equal(true);
+
+      const supportsInvalidInterface = await erc1155Instance.supportsInterface("0xffffffff");
+      expect(supportsInvalidInterface).to.equal(false);
     });
   });
 });

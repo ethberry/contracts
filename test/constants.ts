@@ -3,6 +3,7 @@ import { ethers } from "hardhat";
 export const baseTokenURI = "http://localhost/";
 export const tokenSymbol = "SYMBOL";
 export const tokenName = "Lorem ipsum...";
+export const tokenId = 1;
 
 export const DEFAULT_ADMIN_ROLE = "0x0000000000000000000000000000000000000000000000000000000000000000";
 export const MINTER_ROLE = ethers.utils.id("MINTER_ROLE");
@@ -15,7 +16,6 @@ export const DEAD_ADDR = "0x000000000000000000000000000000000000dead";
 
 export const decimals = ethers.BigNumber.from(10).pow(18);
 export const amount = 100;
-export const tokenId = 1;
 
 export const addr = {
   hardhat: {

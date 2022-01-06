@@ -19,7 +19,7 @@ import {
 
 const linkAmountInWei = ethers.BigNumber.from("1000").mul(decimals);
 
-describe("LootBoxRandom", function () {
+describe("LootBox", function () {
   let vrf: ContractFactory;
   let vrfInstance: VRFCoordinatorMock;
   let link: ContractFactory;

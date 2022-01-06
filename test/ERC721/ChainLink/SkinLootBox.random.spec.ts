@@ -94,7 +94,7 @@ describe("LootBoxRandom", function () {
     it("should fail not owner of token", async function () {
       await nftInstance.grantRole(MINTER_ROLE, lootInstance.address);
       await lootInstance.setFactory(nftInstance.address);
-      await lootInstance.safeMint(owner.address);
+      await lootInstance.mint(owner.address);
       const tx = lootInstance.connect(receiver).unpack(0);
       await expect(tx).to.be.revertedWith("LootBox: unpack caller is not owner nor approved");
     });
@@ -102,7 +102,7 @@ describe("LootBoxRandom", function () {
     it("should fail not enough LINK", async function () {
       await nftInstance.grantRole(MINTER_ROLE, lootInstance.address);
       await lootInstance.setFactory(nftInstance.address);
-      const txx: ContractTransaction = await lootInstance.safeMint(owner.address);
+      const txx: ContractTransaction = await lootInstance.mint(owner.address);
       await txx.wait();
 
       const balanceOfOwner1 = await lootInstance.balanceOf(owner.address);
@@ -118,7 +118,7 @@ describe("LootBoxRandom", function () {
       await nftInstance.grantRole(MINTER_ROLE, lootInstance.address);
       await nftInstance.grantRole(MINTER_ROLE, vrfInstance.address);
       await lootInstance.setFactory(nftInstance.address);
-      const txx: ContractTransaction = await lootInstance.safeMint(owner.address);
+      const txx: ContractTransaction = await lootInstance.mint(owner.address);
       await txx.wait();
 
       const balanceOfOwner1 = await lootInstance.balanceOf(owner.address);

@@ -49,7 +49,7 @@ abstract contract ComposableTopDown is
     uint256 cap
   ) ERC721Gemunion(name, symbol, baseTokenURI, cap) {}
 
-  function safeMint(address to) public virtual override onlyRole(MINTER_ROLE) {
+  function mint(address to) public virtual override onlyRole(MINTER_ROLE) {
     require(to != address(0), "ComposableTopDown: _to zero address");
 
     uint256 tokenCount = _tokenIdTracker.current();

@@ -46,16 +46,16 @@ describe("ERC721Gemunion", function () {
     });
   });
 
-  describe("safeMint", function () {
+  describe("mint", function () {
     it("should fail for wrong role", async function () {
-      const tx = erc721Instance.connect(receiver).safeMint(receiver.address);
+      const tx = erc721Instance.connect(receiver).mint(receiver.address);
       await expect(tx).to.be.revertedWith(
         `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
       );
     });
 
     it("should mint to wallet", async function () {
-      const tx = erc721Instance.safeMint(owner.address);
+      const tx = erc721Instance.mint(owner.address);
       await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(ZERO_ADDR, owner.address, 0);
 
       const balance = await erc721Instance.balanceOf(owner.address);
@@ -63,12 +63,12 @@ describe("ERC721Gemunion", function () {
     });
 
     it("should fail to mint to non receiver", async function () {
-      const tx = erc721Instance.safeMint(nftNonReceiverInstance.address);
+      const tx = erc721Instance.mint(nftNonReceiverInstance.address);
       await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
     });
 
     it("should mint to receiver", async function () {
-      const tx = erc721Instance.safeMint(nftReceiverInstance.address);
+      const tx = erc721Instance.mint(nftReceiverInstance.address);
       await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(ZERO_ADDR, nftReceiverInstance.address, 0);
 
       const balance = await erc721Instance.balanceOf(nftReceiverInstance.address);
@@ -83,13 +83,13 @@ describe("ERC721Gemunion", function () {
     });
 
     it("should get balance of owner", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const balance = await erc721Instance.balanceOf(owner.address);
       expect(balance).to.equal(1);
     });
 
     it("should get balance of not owner", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const balance = await erc721Instance.balanceOf(receiver.address);
       expect(balance).to.equal(0);
     });
@@ -97,13 +97,13 @@ describe("ERC721Gemunion", function () {
 
   describe("ownerOf", function () {
     it("should get owner of token", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const ownerOfToken = await erc721Instance.ownerOf(0);
       expect(ownerOfToken).to.equal(owner.address);
     });
 
     it("should get owner of burned token", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const tx = erc721Instance.burn(0);
       await expect(tx).to.not.be.reverted;
       const balanceOfOwner = await erc721Instance.balanceOf(owner.address);
@@ -115,13 +115,13 @@ describe("ERC721Gemunion", function () {
 
   describe("tokenURI", function () {
     it("should get default token URI", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const uri = await erc721Instance.tokenURI(0);
       expect(uri).to.equal(`${baseTokenURI}0`);
     });
 
     it("should override token URI", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       await erc721Instance.setTokenURI(0, "newURI");
       const uri = await erc721Instance.tokenURI(0);
       expect(uri).to.equal(`${baseTokenURI}newURI`);
@@ -130,19 +130,19 @@ describe("ERC721Gemunion", function () {
 
   describe("approve", function () {
     it("should fail: not an owner", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const tx = erc721Instance.connect(receiver).approve(owner.address, 0);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
 
     it("should fail: approve to self", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const tx = erc721Instance.approve(owner.address, 0);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
 
     it("should approve", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const tx = erc721Instance.approve(receiver.address, 0);
 
       await expect(tx).to.emit(erc721Instance, "Approval").withArgs(owner.address, receiver.address, 0);
@@ -160,8 +160,8 @@ describe("ERC721Gemunion", function () {
 
   describe("setApprovalForAll", function () {
     it("should approve for all", async function () {
-      await erc721Instance.safeMint(owner.address);
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
+      await erc721Instance.mint(owner.address);
 
       const balanceOfOwner = await erc721Instance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(2);
@@ -188,21 +188,21 @@ describe("ERC721Gemunion", function () {
 
   describe("transferFrom", function () {
     it("should fail: not an owner", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const tx = erc721Instance.connect(receiver).transferFrom(owner.address, receiver.address, 0);
 
       await expect(tx).to.be.revertedWith(`ERC721: transfer caller is not owner nor approved`);
     });
 
     it("should fail: zero addr", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const tx = erc721Instance.transferFrom(owner.address, ZERO_ADDR, 0);
 
       await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
     });
 
     it("should transfer own tokens to wallet", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const tx = erc721Instance.transferFrom(owner.address, receiver.address, 0);
 
       await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(owner.address, receiver.address, 0);
@@ -218,7 +218,7 @@ describe("ERC721Gemunion", function () {
     });
 
     it("should transfer approved tokens to wallet", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       await erc721Instance.approve(receiver.address, 0);
 
       const tx = erc721Instance.connect(receiver).transferFrom(owner.address, receiver.address, 0);
@@ -238,7 +238,7 @@ describe("ERC721Gemunion", function () {
 
   describe("safeTransferFrom", function () {
     it("should fail: not an owner", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const tx = erc721Instance
         .connect(receiver)
         ["safeTransferFrom(address,address,uint256)"](owner.address, receiver.address, 0);
@@ -247,7 +247,7 @@ describe("ERC721Gemunion", function () {
     });
 
     it("should transfer own tokens to receiver contract", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const tx = erc721Instance["safeTransferFrom(address,address,uint256)"](
         owner.address,
         nftReceiverInstance.address,
@@ -267,7 +267,7 @@ describe("ERC721Gemunion", function () {
     });
 
     it("should transfer own tokens to non receiver contract", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const tx = erc721Instance["safeTransferFrom(address,address,uint256)"](
         owner.address,
         nftNonReceiverInstance.address,
@@ -277,7 +277,7 @@ describe("ERC721Gemunion", function () {
     });
 
     it("should transfer approved tokens to receiver contract", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       await erc721Instance.approve(receiver.address, 0);
 
       const tx = erc721Instance
@@ -297,7 +297,7 @@ describe("ERC721Gemunion", function () {
     });
 
     it("should transfer approved tokens to non receiver contract", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       await erc721Instance.approve(receiver.address, 0);
 
       const tx = erc721Instance
@@ -309,14 +309,14 @@ describe("ERC721Gemunion", function () {
 
   describe("burn", function () {
     it("should fail: not an owner", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const tx = erc721Instance.connect(receiver).burn(0);
 
       await expect(tx).to.be.revertedWith(`ERC721Burnable: caller is not owner nor approved`);
     });
 
     it("should burn own token", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       const tx = await erc721Instance.burn(0);
 
       await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, 0);
@@ -326,7 +326,7 @@ describe("ERC721Gemunion", function () {
     });
 
     it("should burn approved token", async function () {
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
       await erc721Instance.approve(receiver.address, 0);
 
       const tx = await erc721Instance.burn(0);
@@ -352,7 +352,7 @@ describe("ERC721Gemunion", function () {
     });
 
     it("should pause/unpause", async function () {
-      const tx1 = erc721Instance.safeMint(owner.address);
+      const tx1 = erc721Instance.mint(owner.address);
       await expect(tx1).to.not.be.reverted;
 
       const balanceOfOwner1 = await erc721Instance.balanceOf(owner.address);
@@ -361,13 +361,13 @@ describe("ERC721Gemunion", function () {
       const tx2 = erc721Instance.pause();
       await expect(tx2).to.emit(erc721Instance, "Paused").withArgs(owner.address);
 
-      const tx3 = erc721Instance.safeMint(owner.address);
+      const tx3 = erc721Instance.mint(owner.address);
       await expect(tx3).to.be.revertedWith(`ERC721Pausable: token transfer while paused`);
 
       const tx4 = erc721Instance.unpause();
       await expect(tx4).to.emit(erc721Instance, "Unpaused").withArgs(owner.address);
 
-      const tx5 = erc721Instance.safeMint(owner.address);
+      const tx5 = erc721Instance.mint(owner.address);
       await expect(tx5).to.not.be.reverted;
 
       const balanceOfOwner = await erc721Instance.balanceOf(owner.address);
@@ -377,8 +377,8 @@ describe("ERC721Gemunion", function () {
 
   describe("cap", function () {
     it("should fail: cap exceeded", async function () {
-      await erc721Instance.safeMint(owner.address);
-      await erc721Instance.safeMint(owner.address);
+      await erc721Instance.mint(owner.address);
+      await erc721Instance.mint(owner.address);
 
       const cap = await erc721Instance.cap();
       expect(cap).to.equal(2);
@@ -386,7 +386,7 @@ describe("ERC721Gemunion", function () {
       const totalSupply = await erc721Instance.totalSupply();
       expect(totalSupply).to.equal(2);
 
-      const tx = erc721Instance.safeMint(owner.address);
+      const tx = erc721Instance.mint(owner.address);
       await expect(tx).to.be.revertedWith(`ERC20Capped: cap exceeded`);
     });
   });

@@ -21,8 +21,7 @@ abstract contract ERC721ChainLink is VRFConsumerBase {
   bytes32 internal keyHash;
   uint256 internal fee;
 
-  constructor(address _link, address _vrf, bytes32 _keyhash, uint256 _fee) VRFConsumerBase(_vrf, _link)
-  {
+  constructor(address _link, address _vrf, bytes32 _keyhash, uint256 _fee) VRFConsumerBase(_vrf, _link) {
     fee = _fee;
     keyHash = _keyhash;
   }

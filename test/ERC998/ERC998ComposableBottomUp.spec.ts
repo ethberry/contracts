@@ -63,16 +63,16 @@ describe("ERC998ComposableBottomUp", function () {
     });
   });
 
-  describe("safeMint", function () {
+  describe("mint", function () {
     it("should fail for wrong role", async function () {
-      const tx = erc998Instance.connect(receiver).safeMint(receiver.address);
+      const tx = erc998Instance.connect(receiver).mint(receiver.address);
       await expect(tx).to.be.revertedWith(
         `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
       );
     });
 
     it("should mint to wallet", async function () {
-      const tx = erc998Instance.safeMint(owner.address);
+      const tx = erc998Instance.mint(owner.address);
       await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(ZERO_ADDR, owner.address, 0);
 
       const balance = await erc998Instance.balanceOf(owner.address);
@@ -80,12 +80,12 @@ describe("ERC998ComposableBottomUp", function () {
     });
 
     it("should fail to mint to non receiver", async function () {
-      const tx = erc998Instance.safeMint(nftNonReceiverInstance.address);
+      const tx = erc998Instance.mint(nftNonReceiverInstance.address);
       await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
     });
 
     it("should mint to receiver", async function () {
-      const tx = erc998Instance.safeMint(nftReceiverInstance.address);
+      const tx = erc998Instance.mint(nftReceiverInstance.address);
       await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(ZERO_ADDR, nftReceiverInstance.address, 0);
 
       const balance = await erc998Instance.balanceOf(nftReceiverInstance.address);
@@ -100,13 +100,13 @@ describe("ERC998ComposableBottomUp", function () {
     });
 
     it("should get balance of owner", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       const balance = await erc998Instance.balanceOf(owner.address);
       expect(balance).to.equal(1);
     });
 
     it("should get balance of not owner", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       const balance = await erc998Instance.balanceOf(receiver.address);
       expect(balance).to.equal(0);
     });
@@ -114,13 +114,13 @@ describe("ERC998ComposableBottomUp", function () {
 
   describe("ownerOf", function () {
     it("should get owner of token", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       const ownerOfToken = await erc998Instance.ownerOf(0);
       expect(ownerOfToken).to.equal(owner.address);
     });
 
     it("should get owner of burned token", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       const tx = erc998Instance.burn(0);
       await expect(tx).to.not.be.reverted;
       const balanceOfOwner = await erc998Instance.balanceOf(owner.address);
@@ -132,13 +132,13 @@ describe("ERC998ComposableBottomUp", function () {
 
   describe("tokenURI", function () {
     it("should get default token URI", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       const uri = await erc998Instance.tokenURI(0);
       expect(uri).to.equal(`${baseTokenURI}0`);
     });
 
     it("should override token URI", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       await erc998Instance.setTokenURI(0, "newURI");
       const uri = await erc998Instance.tokenURI(0);
       expect(uri).to.equal(`${baseTokenURI}newURI`);
@@ -147,19 +147,19 @@ describe("ERC998ComposableBottomUp", function () {
 
   describe("approve", function () {
     it("should fail: not an owner", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       const tx = erc998Instance.connect(receiver).approve(owner.address, 0);
       await expect(tx).to.be.revertedWith(`ERC721: approval to current owner`);
     });
 
     it("should fail: approve to self", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       const tx = erc998Instance.approve(owner.address, 0);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
 
     it("should approve", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       const tx = erc998Instance.approve(receiver.address, 0);
 
       await expect(tx).to.emit(erc998Instance, "Approval").withArgs(owner.address, receiver.address, 0);
@@ -177,8 +177,8 @@ describe("ERC998ComposableBottomUp", function () {
 
   describe("setApprovalForAll", function () {
     it("should approve for all", async function () {
-      await erc998Instance.safeMint(owner.address);
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
+      await erc998Instance.mint(owner.address);
 
       const balanceOfOwner = await erc998Instance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(2);
@@ -205,21 +205,21 @@ describe("ERC998ComposableBottomUp", function () {
 
   describe("transferFrom", function () {
     it("should fail: not an owner", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       const tx = erc998Instance.connect(receiver).transferFrom(owner.address, receiver.address, 0);
 
       await expect(tx).to.be.revertedWith("ERC721: transfer caller is not owner nor approved");
     });
 
     it("should fail: zero addr", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       const tx = erc998Instance.transferFrom(owner.address, ZERO_ADDR, 0);
 
       await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
     });
 
     it("should transfer own tokens to wallet", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       const tx = erc998Instance.transferFrom(owner.address, receiver.address, 0);
 
       await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(owner.address, receiver.address, 0);
@@ -235,7 +235,7 @@ describe("ERC998ComposableBottomUp", function () {
     });
 
     it("should transfer approved tokens to wallet", async function () {
-      await erc998Instance.safeMint(owner.address);
+      await erc998Instance.mint(owner.address);
       await erc998Instance.approve(receiver.address, 0);
 
       const tx = erc998Instance.connect(receiver).transferFrom(owner.address, receiver.address, 0);

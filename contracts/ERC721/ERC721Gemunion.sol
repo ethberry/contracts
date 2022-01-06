@@ -79,17 +79,10 @@ abstract contract ERC721Gemunion is
    *
    * - the caller must have the `MINTER_ROLE`.
    */
-  function safeMint(address to) public virtual onlyRole(MINTER_ROLE) {
-    // We cannot just use balanceOf to create the new tokenId because tokens
-    // can be burned (destroyed), so we need a separate counter.
-    _safeMint(to, _tokenIdTracker.current());
-    _tokenIdTracker.increment();
-  }
-
   function mint(address to) public virtual onlyRole(MINTER_ROLE) {
     // We cannot just use balanceOf to create the new tokenId because tokens
     // can be burned (destroyed), so we need a separate counter.
-    _mint(to, _tokenIdTracker.current());
+    _safeMint(to, _tokenIdTracker.current());
     _tokenIdTracker.increment();
   }
 

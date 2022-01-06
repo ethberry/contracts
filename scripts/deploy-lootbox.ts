@@ -94,7 +94,7 @@ async function main() {
   });
 
   // Mint 1 ERC721 Lootbox to Owner
-  const tx: ContractTransaction = await lootInstance.safeMint(owner.address);
+  const tx: ContractTransaction = await lootInstance.mint(owner.address);
   await tx.wait();
   console.info("1 ERC721 Lootbox minted to Owner, Tx: ", tx.hash);
 

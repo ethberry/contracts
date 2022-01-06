@@ -12,7 +12,5 @@ contract ERC20GemunionTest is ERC20Gemunion {
   constructor (
     string memory name,
     string memory symbol
-  ) ERC20Gemunion(name, symbol, 1e9 * 1e18) {
-
-  }
+  ) ERC20Gemunion(name, symbol, 1e9 * 1e18) {}
 }

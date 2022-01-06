@@ -36,7 +36,7 @@ contract TokenTestLink is ERC721ChainLink, IERC721ChainLink, ERC721Gemunion {
   function _useRandom(uint256 result, bytes32 _requestId) internal override {
     _rarity[_tokenIdTracker.current()] = result;
     emit MintRandom(queue[_requestId], _requestId);
-    safeMint(queue[_requestId]);
+    mint(queue[_requestId]);
     delete queue[_requestId];
   }
 
@@ -48,7 +48,7 @@ contract TokenTestLink is ERC721ChainLink, IERC721ChainLink, ERC721Gemunion {
     return requestId;
   }
 
-  function safeMint(address to) public onlyRole(MINTER_ROLE) override {
+  function mint(address to) public onlyRole(MINTER_ROLE) override {
     _safeMint(to, _tokenIdTracker.current());
     _tokenIdTracker.increment();
   }

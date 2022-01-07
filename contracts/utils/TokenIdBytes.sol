@@ -8,15 +8,10 @@ pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
 
-import "./Formatter.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract TokenIdCalculator is Formatter {
+contract TokenIdCalculator {
   constructor() {
-    uint256 tokenId = 1;
-    bytes memory tokenIdBytes = new bytes(32);
-    assembly {
-      mstore(add(tokenIdBytes, 32), tokenId)
-    }
-    console.log("TokenId", fromCode(tokenIdBytes));
+    console.log("TokenId", Strings.toHexString(1, 32));
   }
 }

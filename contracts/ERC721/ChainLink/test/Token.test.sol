@@ -8,8 +8,8 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "../../ERC721/ChainLink/ERC721ChainLink.sol";
-import "../../ERC721/ERC721Gemunion.sol";
+import "../ERC721ChainLink.sol";
+import "../../ERC721Gemunion.sol";
 
 contract TokenTestLink is ERC721ChainLink, IERC721ChainLink, ERC721Gemunion {
   using Counters for Counters.Counter;

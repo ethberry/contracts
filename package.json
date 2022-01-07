@@ -1,8 +1,8 @@
 {
   "author": {
-    "email": "TrejGun+gemunion@gmail.com",
+    "email": "trejgun+gemunion@gmail.com",
     "name": "TrejGun",
-    "url": "https://trejgun.github.io/"
+    "url": "https://gemunion.io/"
   },
   "dependencies": {
     "@chainlink/contracts": "0.3.1",
@@ -79,5 +79,5 @@
     "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",
-  "version": "0.0.6"
+  "version": "0.0.7"
 }

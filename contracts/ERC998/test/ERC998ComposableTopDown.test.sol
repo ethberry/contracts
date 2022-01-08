@@ -6,15 +6,15 @@
 
 pragma solidity ^0.8.4;
 
-import "../ComposableTopDown.sol";
+import "../ERC998TopDown.sol";
 
-contract ERC998ComposableTopDownTest is ComposableTopDown {
+contract ERC998ComposableTopDownTest is ERC998TopDown {
 
   constructor (
     string memory name,
     string memory symbol,
     string memory baseTokenURI
-  ) ComposableTopDown(name, symbol, baseTokenURI, 1000) {
+  ) ERC998TopDown(name, symbol, baseTokenURI, 1000) {
 
   }
 }

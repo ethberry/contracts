@@ -6,15 +6,15 @@
 
 pragma solidity ^0.8.4;
 
-import "../ComposableBottomUp.sol";
+import "../ERC998BottomUp.sol";
 
-contract ERC998ComposableBottomUpTest is ComposableBottomUp {
+contract ERC998ComposableBottomUpTest is ERC998BottomUp {
 
   constructor (
     string memory name,
     string memory symbol,
     string memory baseTokenURI
-  ) ComposableBottomUp(name, symbol, baseTokenURI, 1000) {
+  ) ERC998BottomUp(name, symbol, baseTokenURI, 1000) {
 
   }
 }

@@ -12,10 +12,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "../ERC20/Polygon/ERC20PolygonParent.sol";
 
 contract ERC20GemunionPolygonParent is ERC20, AccessControl, ERC20PolygonParent {
-  constructor (
-    string memory name,
-    string memory symbol
-  ) ERC20(name, symbol) {
+  constructor(string memory name, string memory symbol) ERC20(name, symbol) {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }
 }

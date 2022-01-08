@@ -17,9 +17,10 @@ import "./interfaces/IERC998ERC721BottomUpEnumerable.sol";
 
 import "../ERC721/ERC721Gemunion.sol";
 
-contract ComposableBottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC721BottomUpEnumerable {
+contract ERC998BottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC721BottomUpEnumerable {
   using Address for address;
   using SafeMath for uint256;
+  using Counters for Counters.Counter;
 
   struct TokenOwner {
     address tokenOwner;
@@ -48,13 +49,6 @@ contract ComposableBottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC
   // tokenId => position in childTokens array
   mapping(uint256 => uint256) private tokenIdToChildTokenIdsIndex;
 
-  // wrapper on minting new 721
-  /*
-  function mint721(address _to) public returns(uint256) {
-    _mint(_to, allTokens.length + 1);
-    return allTokens.length;
-  }
-  */
   //from zepellin ERC721Receiver.sol
   //old version
   bytes4 constant ERC721_RECEIVED = 0x150b7a02;
@@ -65,6 +59,11 @@ contract ComposableBottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC
     string memory baseTokenURI,
     uint256 cap
   ) ERC721Gemunion(name, symbol, baseTokenURI, cap) {}
+
+  function mint(address to) public virtual override onlyRole(MINTER_ROLE) {
+    _safeMint(to, _tokenIdTracker.current());
+    _tokenIdTracker.increment();
+  }
 
   function _tokenOwnerOf(uint256 _tokenId)
     internal

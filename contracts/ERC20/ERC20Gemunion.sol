@@ -28,14 +28,7 @@ import "@openzeppelin/contracts/utils/Context.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-abstract contract ERC20Gemunion is
-  Context,
-  AccessControl,
-  ERC20Burnable,
-  ERC20Pausable,
-  ERC20Capped,
-  ERC20Snapshot
-{
+abstract contract ERC20Gemunion is Context, AccessControl, ERC20Burnable, ERC20Pausable, ERC20Capped, ERC20Snapshot {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
   bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");

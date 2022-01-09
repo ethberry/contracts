@@ -83,6 +83,43 @@ describe("ERC1155Gemunion", function () {
     });
   });
 
+  describe("mintBatch", function () {
+    it("should fail for wrong role", async function () {
+      const tx = erc1155Instance.connect(receiver).mintBatch(receiver.address, [tokenId], [amount], "0x");
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
+      );
+    });
+
+    it("should mint to wallet", async function () {
+      const tx = erc1155Instance.mintBatch(receiver.address, [tokenId], [amount], "0x");
+      await expect(tx)
+        .to.emit(erc1155Instance, "TransferBatch")
+        .withArgs(owner.address, ZERO_ADDR, receiver.address, [tokenId], [amount]);
+
+      const balance = await erc1155Instance.balanceOf(receiver.address, tokenId);
+      expect(balance).to.equal(amount);
+
+      const totalSupply = await erc1155Instance.totalSupply(tokenId);
+      expect(totalSupply).to.equal(amount);
+    });
+
+    it("should fail to mint to non receiver", async function () {
+      const tx = erc1155Instance.mintBatch(nftNonReceiverInstance.address, [tokenId], [amount], "0x");
+      await expect(tx).to.be.revertedWith(`ERC1155: transfer to non ERC1155Receiver implementer`);
+    });
+
+    it("should mint to receiver", async function () {
+      const tx = erc1155Instance.mintBatch(nftReceiverInstance.address, [tokenId], [amount], "0x");
+      await expect(tx)
+        .to.emit(erc1155Instance, "TransferBatch")
+        .withArgs(owner.address, ZERO_ADDR, nftReceiverInstance.address, [tokenId], [amount]);
+
+      const balance = await erc1155Instance.balanceOf(nftReceiverInstance.address, tokenId);
+      expect(balance).to.equal(amount);
+    });
+  });
+
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
       const tx = erc1155Instance.balanceOf(ZERO_ADDR, tokenId);

@@ -39,4 +39,13 @@ abstract contract ERC721Capped is Context, ERC721Enumerable {
     require(totalSupply() + 1 <= cap(), "ERC20Capped: cap exceeded");
     super._safeMint(to, tokenId);
   }
+
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 tokenId
+  ) internal virtual override(ERC721Enumerable) {
+    require(super.totalSupply() <= _cap, "ERC721Impulse: cap exceeded");
+    super._beforeTokenTransfer(from, to, tokenId);
+  }
 }

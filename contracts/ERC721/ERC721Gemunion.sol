@@ -157,9 +157,7 @@ abstract contract ERC721Gemunion is
     address from,
     address to,
     uint256 tokenId
-  ) internal virtual override(ERC721, ERC721Enumerable, ERC721Pausable) {
+  ) internal virtual override(ERC721, ERC721Enumerable, ERC721Pausable, ERC721Capped) {
     super._beforeTokenTransfer(from, to, tokenId);
-
-    require(super.totalSupply() <= _cap, "ERC721Gemunion: cap exceeded");
   }
 }

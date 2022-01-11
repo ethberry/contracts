@@ -4,15 +4,7 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { ERC721GemunionTest, ERC721GemunionReceiverTest, ERC721GemunionNonReceiverTest } from "../../typechain-types";
-import {
-  baseTokenURI,
-  DEFAULT_ADMIN_ROLE,
-  MINTER_ROLE,
-  PAUSER_ROLE,
-  tokenName,
-  tokenSymbol,
-  ZERO_ADDR,
-} from "../constants";
+import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 describe("ERC721Gemunion", function () {
   let erc721: ContractFactory;
@@ -56,7 +48,7 @@ describe("ERC721Gemunion", function () {
 
     it("should mint to wallet", async function () {
       const tx = erc721Instance.mint(owner.address);
-      await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(ZERO_ADDR, owner.address, 0);
+      await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(ethers.constants.AddressZero, owner.address, 0);
 
       const balance = await erc721Instance.balanceOf(owner.address);
       expect(balance).to.equal(1);
@@ -69,7 +61,9 @@ describe("ERC721Gemunion", function () {
 
     it("should mint to receiver", async function () {
       const tx = erc721Instance.mint(nftReceiverInstance.address);
-      await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(ZERO_ADDR, nftReceiverInstance.address, 0);
+      await expect(tx)
+        .to.emit(erc721Instance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, nftReceiverInstance.address, 0);
 
       const balance = await erc721Instance.balanceOf(nftReceiverInstance.address);
       expect(balance).to.equal(1);
@@ -78,7 +72,7 @@ describe("ERC721Gemunion", function () {
 
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
-      const tx = erc721Instance.balanceOf(ZERO_ADDR);
+      const tx = erc721Instance.balanceOf(ethers.constants.AddressZero);
       await expect(tx).to.be.revertedWith(`ERC721: balance query for the zero address`);
     });
 
@@ -151,7 +145,7 @@ describe("ERC721Gemunion", function () {
       expect(approved).to.equal(receiver.address);
 
       const tx1 = erc721Instance.connect(receiver).burn(0);
-      await expect(tx1).to.emit(erc721Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, 0);
+      await expect(tx1).to.emit(erc721Instance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, 0);
 
       const balanceOfOwner = await erc721Instance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
@@ -170,7 +164,7 @@ describe("ERC721Gemunion", function () {
       await expect(tx1).to.not.be.reverted;
 
       const approved1 = await erc721Instance.getApproved(0);
-      expect(approved1).to.equal(ZERO_ADDR);
+      expect(approved1).to.equal(ethers.constants.AddressZero);
 
       const isApproved1 = await erc721Instance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved1).to.equal(true);
@@ -179,7 +173,7 @@ describe("ERC721Gemunion", function () {
       await expect(tx2).to.not.be.reverted;
 
       const approved3 = await erc721Instance.getApproved(0);
-      expect(approved3).to.equal(ZERO_ADDR);
+      expect(approved3).to.equal(ethers.constants.AddressZero);
 
       const isApproved2 = await erc721Instance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved2).to.equal(false);
@@ -196,7 +190,7 @@ describe("ERC721Gemunion", function () {
 
     it("should fail: zero addr", async function () {
       await erc721Instance.mint(owner.address);
-      const tx = erc721Instance.transferFrom(owner.address, ZERO_ADDR, 0);
+      const tx = erc721Instance.transferFrom(owner.address, ethers.constants.AddressZero, 0);
 
       await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
     });
@@ -319,7 +313,7 @@ describe("ERC721Gemunion", function () {
       await erc721Instance.mint(owner.address);
       const tx = await erc721Instance.burn(0);
 
-      await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, 0);
+      await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, 0);
 
       const balanceOfOwner = await erc721Instance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
@@ -331,7 +325,7 @@ describe("ERC721Gemunion", function () {
 
       const tx = await erc721Instance.burn(0);
 
-      await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, 0);
+      await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, 0);
 
       const balanceOfOwner = await erc721Instance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);

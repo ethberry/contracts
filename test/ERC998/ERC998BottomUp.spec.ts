@@ -10,15 +10,7 @@ import {
   ERC721GemunionNonReceiverTest,
   ERC721GemunionReceiverTest,
 } from "../../typechain-types";
-import {
-  baseTokenURI,
-  DEFAULT_ADMIN_ROLE,
-  MINTER_ROLE,
-  PAUSER_ROLE,
-  tokenName,
-  tokenSymbol,
-  ZERO_ADDR,
-} from "../constants";
+import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 describe("ERC998ComposableBottomUp", function () {
   let erc20: ContractFactory;
@@ -73,7 +65,7 @@ describe("ERC998ComposableBottomUp", function () {
 
     it("should mint to wallet", async function () {
       const tx = erc998Instance.mint(owner.address);
-      await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(ZERO_ADDR, owner.address, 0);
+      await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(ethers.constants.AddressZero, owner.address, 0);
 
       const balance = await erc998Instance.balanceOf(owner.address);
       expect(balance).to.equal(1);
@@ -86,7 +78,9 @@ describe("ERC998ComposableBottomUp", function () {
 
     it("should mint to receiver", async function () {
       const tx = erc998Instance.mint(nftReceiverInstance.address);
-      await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(ZERO_ADDR, nftReceiverInstance.address, 0);
+      await expect(tx)
+        .to.emit(erc998Instance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, nftReceiverInstance.address, 0);
 
       const balance = await erc998Instance.balanceOf(nftReceiverInstance.address);
       expect(balance).to.equal(1);
@@ -95,7 +89,7 @@ describe("ERC998ComposableBottomUp", function () {
 
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
-      const tx = erc998Instance.balanceOf(ZERO_ADDR);
+      const tx = erc998Instance.balanceOf(ethers.constants.AddressZero);
       await expect(tx).to.be.revertedWith(`ERC721: balance query for the zero address`);
     });
 
@@ -168,7 +162,7 @@ describe("ERC998ComposableBottomUp", function () {
       expect(approved).to.equal(receiver.address);
 
       const tx1 = erc998Instance.connect(receiver).burn(0);
-      await expect(tx1).to.emit(erc998Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, 0);
+      await expect(tx1).to.emit(erc998Instance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, 0);
 
       const balanceOfOwner = await erc998Instance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
@@ -187,7 +181,7 @@ describe("ERC998ComposableBottomUp", function () {
       await expect(tx1).to.not.be.reverted;
 
       const approved1 = await erc998Instance.getApproved(0);
-      expect(approved1).to.equal(ZERO_ADDR);
+      expect(approved1).to.equal(ethers.constants.AddressZero);
 
       const isApproved1 = await erc998Instance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved1).to.equal(true);
@@ -196,7 +190,7 @@ describe("ERC998ComposableBottomUp", function () {
       await expect(tx2).to.not.be.reverted;
 
       const approved3 = await erc998Instance.getApproved(0);
-      expect(approved3).to.equal(ZERO_ADDR);
+      expect(approved3).to.equal(ethers.constants.AddressZero);
 
       const isApproved2 = await erc998Instance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved2).to.equal(false);
@@ -213,7 +207,7 @@ describe("ERC998ComposableBottomUp", function () {
 
     it("should fail: zero addr", async function () {
       await erc998Instance.mint(owner.address);
-      const tx = erc998Instance.transferFrom(owner.address, ZERO_ADDR, 0);
+      const tx = erc998Instance.transferFrom(owner.address, ethers.constants.AddressZero, 0);
 
       await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
     });

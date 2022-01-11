@@ -6,15 +6,12 @@ export const tokenName = "Lorem ipsum...";
 export const tokenId = 1;
 
 export const DEFAULT_ADMIN_ROLE = "0x0000000000000000000000000000000000000000000000000000000000000000";
+
 export const MINTER_ROLE = ethers.utils.id("MINTER_ROLE");
 export const PAUSER_ROLE = ethers.utils.id("PAUSER_ROLE");
 export const SNAPSHOT_ROLE = ethers.utils.id("SNAPSHOT_ROLE");
 export const PREDICATE_ROLE = ethers.utils.id("PREDICATE_ROLE");
 export const DEPOSITOR_ROLE = ethers.utils.id("DEPOSITOR_ROLE");
-
-export const TEST_DATA = "0x00000000000000000000000000000000000000000000000000000000686f6c61";
-export const ZERO_ADDR = "0x0000000000000000000000000000000000000000";
-export const DEAD_ADDR = "0x000000000000000000000000000000000000dead";
 
 export const decimals = ethers.BigNumber.from(10).pow(18);
 export const amount = 100;

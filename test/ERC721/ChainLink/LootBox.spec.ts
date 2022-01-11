@@ -14,7 +14,6 @@ import {
   PAUSER_ROLE,
   tokenName,
   tokenSymbol,
-  ZERO_ADDR,
 } from "../../constants";
 
 const linkAmountInWei = ethers.BigNumber.from("1000").mul(decimals);
@@ -169,7 +168,7 @@ describe("LootBox", function () {
       const tx: ContractTransaction = await lootInstance.unpack(0);
       await tx.wait();
 
-      await expect(tx).to.emit(lootInstance, "Transfer").withArgs(owner.address, ZERO_ADDR, 0);
+      await expect(tx).to.emit(lootInstance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, 0);
       await expect(tx)
         .to.emit(linkInstance, "Transfer")
         .withArgs(nftInstance.address, vrfInstance.address, parseEther("0.1"));

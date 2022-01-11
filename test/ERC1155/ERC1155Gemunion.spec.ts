@@ -8,7 +8,7 @@ import {
   ERC1155GemunionReceiverTest,
   ERC1155GemunionNonReceiverTest,
 } from "../../typechain-types";
-import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenId, ZERO_ADDR } from "../constants";
+import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenId } from "../constants";
 
 describe("ERC1155Gemunion", function () {
   let erc1155: ContractFactory;
@@ -58,7 +58,7 @@ describe("ERC1155Gemunion", function () {
       const tx = erc1155Instance.mint(receiver.address, tokenId, amount, "0x");
       await expect(tx)
         .to.emit(erc1155Instance, "TransferSingle")
-        .withArgs(owner.address, ZERO_ADDR, receiver.address, tokenId, amount);
+        .withArgs(owner.address, ethers.constants.AddressZero, receiver.address, tokenId, amount);
 
       const balance = await erc1155Instance.balanceOf(receiver.address, tokenId);
       expect(balance).to.equal(amount);
@@ -76,7 +76,7 @@ describe("ERC1155Gemunion", function () {
       const tx = erc1155Instance.mint(nftReceiverInstance.address, tokenId, amount, "0x");
       await expect(tx)
         .to.emit(erc1155Instance, "TransferSingle")
-        .withArgs(owner.address, ZERO_ADDR, nftReceiverInstance.address, tokenId, amount);
+        .withArgs(owner.address, ethers.constants.AddressZero, nftReceiverInstance.address, tokenId, amount);
 
       const balance = await erc1155Instance.balanceOf(nftReceiverInstance.address, tokenId);
       expect(balance).to.equal(amount);
@@ -95,7 +95,7 @@ describe("ERC1155Gemunion", function () {
       const tx = erc1155Instance.mintBatch(receiver.address, [tokenId], [amount], "0x");
       await expect(tx)
         .to.emit(erc1155Instance, "TransferBatch")
-        .withArgs(owner.address, ZERO_ADDR, receiver.address, [tokenId], [amount]);
+        .withArgs(owner.address, ethers.constants.AddressZero, receiver.address, [tokenId], [amount]);
 
       const balance = await erc1155Instance.balanceOf(receiver.address, tokenId);
       expect(balance).to.equal(amount);
@@ -113,7 +113,7 @@ describe("ERC1155Gemunion", function () {
       const tx = erc1155Instance.mintBatch(nftReceiverInstance.address, [tokenId], [amount], "0x");
       await expect(tx)
         .to.emit(erc1155Instance, "TransferBatch")
-        .withArgs(owner.address, ZERO_ADDR, nftReceiverInstance.address, [tokenId], [amount]);
+        .withArgs(owner.address, ethers.constants.AddressZero, nftReceiverInstance.address, [tokenId], [amount]);
 
       const balance = await erc1155Instance.balanceOf(nftReceiverInstance.address, tokenId);
       expect(balance).to.equal(amount);
@@ -122,7 +122,7 @@ describe("ERC1155Gemunion", function () {
 
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
-      const tx = erc1155Instance.balanceOf(ZERO_ADDR, tokenId);
+      const tx = erc1155Instance.balanceOf(ethers.constants.AddressZero, tokenId);
       await expect(tx).to.be.revertedWith(`ERC1155: balance query for the zero address`);
     });
 
@@ -141,7 +141,7 @@ describe("ERC1155Gemunion", function () {
 
   describe("balanceOfBatch", function () {
     it("should fail for zero addr", async function () {
-      const tx = erc1155Instance.balanceOfBatch([ZERO_ADDR], [tokenId]);
+      const tx = erc1155Instance.balanceOfBatch([ethers.constants.AddressZero], [tokenId]);
       await expect(tx).to.be.revertedWith(`ERC1155: balance query for the zero address`);
     });
 

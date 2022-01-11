@@ -3,12 +3,17 @@
   "plugins": ["prettier"],
   "rules": {
     "compiler-version": ["error", "^0.8.0"],
+    "func-visibility": "off",
+    "no-empty-blocks": "off",
+    "no-inline-assembly": "off",
     "prettier/prettier": [
       "error",
       {
         "printWidth": 120
       }
     ],
-    "quotes": ["error", "double"]
+    "quotes": ["error", "double"],
+    "reason-string": "off",
+    "state-visibility": "off"
   }
 }

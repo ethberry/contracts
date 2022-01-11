@@ -6,13 +6,12 @@
 
 pragma solidity ^0.8.4;
 
-import "../ERC721/ERC721Gemunion.sol";
-import "../utils/Crypto.sol";
+import "../ERC721/ERC721Droppable.sol";
 
-contract CryptoTest is Crypto, ERC721Gemunion {
+contract ERC721DroppableTest is ERC721Droppable {
   constructor(
     string memory name,
     string memory symbol,
     string memory baseTokenURI
-  ) ERC721Gemunion(name, symbol, baseTokenURI, 2) Crypto(name){}
+  ) ERC721Droppable(name, symbol, baseTokenURI, 20) {}
 }

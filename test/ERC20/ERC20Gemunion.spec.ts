@@ -12,7 +12,6 @@ import {
   SNAPSHOT_ROLE,
   tokenName,
   tokenSymbol,
-  ZERO_ADDR,
 } from "../constants";
 
 describe("ERC20Gemunion", function () {
@@ -55,7 +54,7 @@ describe("ERC20Gemunion", function () {
 
     it("should mint", async function () {
       const tx = erc20Instance.mint(owner.address, amount);
-      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(ZERO_ADDR, owner.address, amount);
+      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(ethers.constants.AddressZero, owner.address, amount);
 
       const balance = await erc20Instance.balanceOf(owner.address);
       expect(balance).to.equal(amount);
@@ -70,9 +69,9 @@ describe("ERC20Gemunion", function () {
       await erc20Instance.mint(owner.address, amount);
 
       const tx = erc20Instance.burn(amount);
-      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, amount);
+      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, amount);
 
-      const balance = await erc20Instance.balanceOf(ZERO_ADDR);
+      const balance = await erc20Instance.balanceOf(ethers.constants.AddressZero);
       expect(balance).to.equal(0);
     });
 
@@ -152,7 +151,7 @@ describe("ERC20Gemunion", function () {
 
   describe("approve", function () {
     it("should fail: approve to zero address", async function () {
-      const tx = erc20Instance.approve(ZERO_ADDR, amount);
+      const tx = erc20Instance.approve(ethers.constants.AddressZero, amount);
       await expect(tx).to.be.revertedWith("ERC20: approve to the zero address");
     });
 
@@ -183,14 +182,14 @@ describe("ERC20Gemunion", function () {
 
     it("should burn zero", async function () {
       const tx = erc20Instance.burn(0);
-      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, 0);
+      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, 0);
     });
 
     it("should burn tokens", async function () {
       await erc20Instance.mint(owner.address, amount);
 
       const tx = erc20Instance.burn(amount);
-      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, amount);
+      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, amount);
 
       const balance = await erc20Instance.balanceOf(owner.address);
       expect(balance).to.equal(0);
@@ -202,7 +201,7 @@ describe("ERC20Gemunion", function () {
 
   describe("burnFrom", function () {
     it("should fail: burn from zero account", async function () {
-      const tx = erc20Instance.burnFrom(ZERO_ADDR, amount);
+      const tx = erc20Instance.burnFrom(ethers.constants.AddressZero, amount);
       await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds allowance");
     });
 
@@ -211,7 +210,7 @@ describe("ERC20Gemunion", function () {
 
       await erc20Instance.approve(receiver.address, amount);
       const tx = erc20Instance.connect(receiver).burnFrom(owner.address, amount);
-      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, ZERO_ADDR, amount);
+      await expect(tx).to.emit(erc20Instance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, amount);
     });
   });
 

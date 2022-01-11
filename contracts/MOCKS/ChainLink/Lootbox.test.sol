@@ -8,8 +8,8 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Address.sol";
 
-import "../../ERC721Gemunion.sol";
-import "../IERC721ChainLink.sol";
+import "../../ERC721/ERC721Gemunion.sol";
+import "../../ERC721/ChainLink/IERC721ChainLink.sol";
 
 
 contract LootboxTestLink is ERC721Gemunion {

@@ -49,9 +49,8 @@ describe("ERC721Dropbox", function () {
           { tokenId, account },
         );
 
-        await expect(erc721Instance.connect(addr2).redeem(account, tokenId, receiver.address, signature))
-          .to.emit(erc721Instance, "Transfer")
-          .withArgs(ethers.constants.AddressZero, account, tokenId);
+        const tx = erc721Instance.connect(addr2).redeem(account, tokenId, receiver.address, signature);
+        await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(ethers.constants.AddressZero, account, tokenId);
       }
     });
   });
@@ -79,13 +78,11 @@ describe("ERC721Dropbox", function () {
         { tokenId, account },
       );
 
-      await expect(erc721Instance.redeem(account, tokenId, receiver.address, signature))
-        .to.emit(erc721Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, account, tokenId);
+      const tx1 = erc721Instance.redeem(account, tokenId, receiver.address, signature);
+      await expect(tx1).to.emit(erc721Instance, "Transfer").withArgs(ethers.constants.AddressZero, account, tokenId);
 
-      await expect(erc721Instance.redeem(account, tokenId, receiver.address, signature)).to.be.revertedWith(
-        "ERC721: token already minted",
-      );
+      const tx2 = erc721Instance.redeem(account, tokenId, receiver.address, signature);
+      await expect(tx2).to.be.revertedWith("ERC721: token already minted");
     });
   });
 
@@ -112,9 +109,8 @@ describe("ERC721Dropbox", function () {
         { tokenId, account },
       );
 
-      await expect(erc721Instance.redeem(owner.address, tokenId, receiver.address, signature)).to.be.revertedWith(
-        "Invalid signature",
-      );
+      const tx = erc721Instance.redeem(owner.address, tokenId, receiver.address, signature);
+      await expect(tx).to.be.revertedWith("Invalid signature");
     });
   });
 });

@@ -6,14 +6,12 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 import "./IERC721ChainLink.sol";
 
 abstract contract ERC721ChainLinkBinance is VRFConsumerBase {
-  using SafeMath for uint256;
   using Strings for uint256;
 
   mapping(bytes32 /* requestId */ => address /* nft owner */) internal queue;
@@ -35,7 +33,7 @@ abstract contract ERC721ChainLinkBinance is VRFConsumerBase {
   function getRandomNumber() public virtual returns (bytes32 requestId);
 
   function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override (VRFConsumerBase) {
-    _useRandom(randomness.mod(100), requestId);
+    _useRandom(randomness % 100 + 1, requestId);
   }
 
 }

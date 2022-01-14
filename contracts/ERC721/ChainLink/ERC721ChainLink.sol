@@ -7,28 +7,29 @@
 pragma solidity ^0.8.4;
 
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
 
 import "./IERC721ChainLink.sol";
 
 abstract contract ERC721ChainLink is VRFConsumerBase {
-  using Strings for uint256;
+  // mapping(bytes32 /* requestId */ => address /* nft owner */) internal _queue;
 
-  mapping(bytes32 /* requestId */ => address /* nft owner */) internal queue;
+  bytes32 internal _keyHash;
+  uint256 internal _fee;
 
-  bytes32 internal keyHash;
-  uint256 internal fee;
-
-  constructor(address _link, address _vrf, bytes32 _keyhash, uint256 _fee) VRFConsumerBase(_vrf, _link) {
-    fee = _fee;
-    keyHash = _keyhash;
+  constructor(address vrf, address link, bytes32 keyHash, uint256 fee) VRFConsumerBase(vrf, link) {
+    _fee = fee;
+    _keyHash = keyHash;
   }
 
   function _useRandom(uint256 result, bytes32 requestId) internal virtual;
-  function getRandomNumber() public virtual returns (bytes32 requestId);
+
+  function getRandomNumber() internal virtual returns (bytes32 requestId) {
+    require(LINK.balanceOf(address(this)) >= _fee, "ERC721ChainLink: Not enough LINK");
+    requestId = VRFConsumerBase.requestRandomness(_keyHash, _fee);
+    return requestId;
+  }
 
   function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override (VRFConsumerBase) {
     _useRandom(randomness % 100 + 1, requestId);
   }
-
 }

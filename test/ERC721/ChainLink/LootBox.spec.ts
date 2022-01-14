@@ -50,8 +50,8 @@ describe("LootBox", function () {
       tokenName,
       tokenSymbol,
       baseTokenURI,
-      linkInstance.address,
       vrfInstance.address,
+      linkInstance.address,
       keyHash,
       fee,
     )) as TokenTestLink;
@@ -102,16 +102,13 @@ describe("LootBox", function () {
     it("should fail not enough LINK", async function () {
       await nftInstance.grantRole(MINTER_ROLE, lootInstance.address);
       await lootInstance.setFactory(nftInstance.address);
-      const txx: ContractTransaction = await lootInstance.mint(owner.address);
-      await txx.wait();
+      await lootInstance.mint(owner.address);
 
       const balanceOfOwner1 = await lootInstance.balanceOf(owner.address);
       expect(balanceOfOwner1).to.equal(1);
 
       const tx = lootInstance.unpack(0);
-
-      // const { chainId } = await ethers.provider.getNetwork();
-      await expect(tx).to.be.revertedWith("ERC721Link: Not enough LINK");
+      await expect(tx).to.be.revertedWith("ERC721ChainLink: Not enough LINK");
     });
 
     it("should unpack own tokens using random", async function () {

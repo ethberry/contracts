@@ -6,14 +6,13 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 
 import "./utils/ProxyRegistry.sol";
-import "../../ERC721/ERC721Gemunion.sol";
+import "../../ERC721/preset/ERC721ACBECS.sol";
 
-abstract contract ERC721OpenSea is ERC721Gemunion, AccessControlEnumerable {
+abstract contract ERC721OpenSea is ERC721ACBECS, AccessControlEnumerable {
 
   event PermanentURI(string _value, uint256 indexed _id);
 
@@ -66,7 +65,7 @@ abstract contract ERC721OpenSea is ERC721Gemunion, AccessControlEnumerable {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Gemunion, AccessControlEnumerable) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721ACBECS, AccessControlEnumerable) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 }

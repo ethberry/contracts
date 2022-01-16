@@ -6,19 +6,18 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/utils/Strings.sol";
-
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 
-import "./IDroppable.sol";
+import "./IEIP712ERC721Droppable.sol";
 
-contract Dropbox is EIP712, AccessControl {
+contract EIP712ERC721Dropbox is EIP712, Pausable, AccessControl {
   using Address for address;
 
-  IDroppable _factory;
+  IEIP712ERC721Droppable _factory;
 
   constructor(string memory name) EIP712(name, "1.0.0") {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -26,7 +25,7 @@ contract Dropbox is EIP712, AccessControl {
 
   function setFactory(address factory) external onlyRole(DEFAULT_ADMIN_ROLE) {
     require(factory.isContract(), "LootBox: the factory must be a deployed contract");
-    _factory = IDroppable(factory);
+    _factory = IEIP712ERC721Droppable(factory);
   }
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl) returns (bool) {

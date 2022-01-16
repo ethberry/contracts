@@ -26,7 +26,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-abstract contract ERC1155Gemunion is AccessControl, ERC1155Burnable, ERC1155Supply {
+contract ERC1155ACBS is AccessControl, ERC1155Burnable, ERC1155Supply {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
   /**

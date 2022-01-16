@@ -17,10 +17,10 @@ import "./interfaces/IERC998ERC721BottomUp.sol";
 import "./interfaces/IERC998ERC721TopDown.sol";
 import "./interfaces/IERC998ERC721TopDownEnumerable.sol";
 
-import "../ERC721/ERC721Gemunion.sol";
+import "../ERC721/preset/ERC721ACBECS.sol";
 
 abstract contract ERC998TopDown is
-  ERC721Gemunion,
+  ERC721ACBECS,
   IERC998ERC721TopDown,
   IERC998ERC721TopDownEnumerable,
   IERC998ERC20TopDown,
@@ -44,7 +44,7 @@ abstract contract ERC998TopDown is
     string memory symbol,
     string memory baseTokenURI,
     uint256 cap
-  ) ERC721Gemunion(name, symbol, baseTokenURI, cap) {}
+  ) ERC721ACBECS(name, symbol, baseTokenURI, cap) {}
 
   function mint(address to) public virtual override onlyRole(MINTER_ROLE) {
     _safeMint(to, _tokenIdTracker.current());

@@ -14,9 +14,9 @@ import "./interfaces/IERC20AndERC223.sol";
 import "./interfaces/IERC998ERC20TopDown.sol";
 import "./interfaces/IERC998ERC20TopDownEnumerable.sol";
 
-import "../ERC721/ERC721Gemunion.sol";
+import "../ERC721/preset/ERC721ACBECS.sol";
 
-abstract contract ERC998ERC20TopDown is ERC721Gemunion, IERC998ERC20TopDown, IERC998ERC20TopDownEnumerable {
+abstract contract ERC998ERC20TopDown is ERC721ACBECS, IERC998ERC20TopDown, IERC998ERC20TopDownEnumerable {
   using Address for address;
   using Counters for Counters.Counter;
   using EnumerableSet for EnumerableSet.AddressSet;
@@ -29,7 +29,7 @@ abstract contract ERC998ERC20TopDown is ERC721Gemunion, IERC998ERC20TopDown, IER
     string memory symbol,
     string memory baseTokenURI,
     uint256 cap
-  ) ERC721Gemunion(name, symbol, baseTokenURI, cap) {}
+  ) ERC721ACBECS(name, symbol, baseTokenURI, cap) {}
 
   function mint(address to) public virtual override onlyRole(MINTER_ROLE) {
     _mint(to, _tokenIdTracker.current());

@@ -9,9 +9,9 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "../../ERC721/ChainLink/ERC721ChainLink.sol";
-import "../../ERC721/ERC721Gemunion.sol";
+import "../../ERC721/preset/ERC721ACBEC.sol";
 
-contract TokenTestLink is ERC721ChainLink, IERC721ChainLink, ERC721Gemunion {
+contract TokenTestLink is ERC721ChainLink, IERC721ChainLink, ERC721ACBEC {
   using Counters for Counters.Counter;
 
   mapping(uint256 /* tokenId */ => uint256 /* rarity */) private _rarity;
@@ -25,7 +25,7 @@ contract TokenTestLink is ERC721ChainLink, IERC721ChainLink, ERC721Gemunion {
     address _vrf,
     bytes32 _keyHash,
     uint256 _fee
-  ) ERC721Gemunion(name, symbol, baseTokenURI, 1000) ERC721ChainLink(_link, _vrf, _keyHash, _fee) {
+  ) ERC721ACBEC(name, symbol, baseTokenURI, 1000) ERC721ChainLink(_link, _vrf, _keyHash, _fee) {
 
   }
 

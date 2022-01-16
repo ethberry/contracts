@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "./ERC721Capped.sol";
+import "../ERC721Capped.sol";
 
 /**
  * @dev {ERC721} token, including:
@@ -30,10 +30,10 @@ import "./ERC721Capped.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-abstract contract ERC721Gemunion is
+contract ERC721ACBECS is
   AccessControl,
-  ERC721Enumerable,
   ERC721Burnable,
+  ERC721Enumerable,
   ERC721Capped,
   ERC721URIStorage
 {

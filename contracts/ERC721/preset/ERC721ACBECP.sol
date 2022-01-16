@@ -7,13 +7,13 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "./ERC721Capped.sol";
-import "../EIP712/IDroppable.sol";
+import "../ERC721Capped.sol";
 
 /**
  * @dev {ERC721} token, including:
@@ -30,16 +30,19 @@ import "../EIP712/IDroppable.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-abstract contract ERC721Droppable is
-  IDroppable,
+contract ERC721ACBECP is
   AccessControl,
   ERC721Burnable,
+  ERC721Enumerable,
   ERC721Capped,
-  ERC721Pausable,
-  ERC721URIStorage
+  ERC721Pausable
 {
+  using Counters for Counters.Counter;
+
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
+
+  Counters.Counter internal _tokenIdTracker;
 
   string internal _baseTokenURI;
 
@@ -74,10 +77,22 @@ abstract contract ERC721Droppable is
    *
    * - the caller must have the `MINTER_ROLE`.
    */
-  function mint(address to, uint256 tokenId) public virtual override onlyRole(MINTER_ROLE) {
+  function mint(address to) public virtual onlyRole(MINTER_ROLE) {
     // We cannot just use balanceOf to create the new tokenId because tokens
     // can be burned (destroyed), so we need a separate counter.
-    _safeMint(to, tokenId);
+    _mint(to, _tokenIdTracker.current());
+    _tokenIdTracker.increment();
+  }
+
+  function safeMint(address to) public virtual onlyRole(MINTER_ROLE) {
+    // We cannot just use balanceOf to create the new tokenId because tokens
+    // can be burned (destroyed), so we need a separate counter.
+    _safeMint(to, _tokenIdTracker.current());
+    _tokenIdTracker.increment();
+  }
+
+  function getCurrentTokenIndex() public view returns (uint256) {
+    return _tokenIdTracker.current();
   }
 
   /**
@@ -110,25 +125,13 @@ abstract contract ERC721Droppable is
    * @dev See {IERC165-supportsInterface}.
    */
   function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    virtual
-    override(AccessControl, ERC721, ERC721Enumerable)
-    returns (bool)
+  public
+  view
+  virtual
+  override(AccessControl, ERC721, ERC721Enumerable)
+  returns (bool)
   {
-    return interfaceId == type(IDroppable).interfaceId || super.supportsInterface(interfaceId);
-  }
-
-  function tokenURI(uint256 tokenId) public view virtual override(ERC721, ERC721URIStorage) returns (string memory) {
-    return super.tokenURI(tokenId);
-  }
-
-  function setTokenURI(uint256 tokenId, string memory _tokenURI) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
-    _setTokenURI(tokenId, _tokenURI);
-  }
-
-  function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721URIStorage) {
-    return super._burn(tokenId);
+    return super.supportsInterface(interfaceId);
   }
 
   function _baseURI() internal view virtual override returns (string memory) {
@@ -147,7 +150,7 @@ abstract contract ERC721Droppable is
     address from,
     address to,
     uint256 tokenId
-  ) internal virtual override(ERC721, ERC721Pausable, ERC721Capped) {
+  ) internal virtual override(ERC721, ERC721Enumerable, ERC721Pausable, ERC721Capped) {
     super._beforeTokenTransfer(from, to, tokenId);
   }
 }

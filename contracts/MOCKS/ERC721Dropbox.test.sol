@@ -7,14 +7,14 @@
 pragma solidity ^0.8.4;
 
 import "../ERC721/ERC721Dropbox.sol";
-import "../ERC721/ERC721Gemunion.sol";
+import "../ERC721/preset/ERC721ACB.sol";
 
-contract ERC721DropboxTest is ERC721Dropbox, ERC721Gemunion {
+contract ERC721DropboxTest is ERC721Dropbox, ERC721ACB {
   constructor(
     string memory name,
     string memory symbol,
     string memory baseTokenURI
-  ) ERC721Gemunion(name, symbol, baseTokenURI, 20) ERC721Dropbox(name) {}
+  ) ERC721ACB(name, symbol, baseTokenURI) ERC721Dropbox(name) {}
 
   function redeem(
     address account,
@@ -26,7 +26,7 @@ contract ERC721DropboxTest is ERC721Dropbox, ERC721Gemunion {
     _redeem(account, tokenId, signer, signature);
   }
 
-  function _safeMint(address account, uint256 tokenId) internal virtual override(ERC721Dropbox, ERC721Gemunion) {
+  function _safeMint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721Dropbox) {
     super._safeMint(account, tokenId);
   }
 }

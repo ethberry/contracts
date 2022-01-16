@@ -6,14 +6,14 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import {
   ERC721GemunionNonReceiverTest,
   ERC721GemunionReceiverTest,
-  ERC721GemunionTest,
+  ERC721ACBEC,
   ERC998ERC721TopDownTest,
 } from "../../typechain-types";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 describe("ERC998ERC721TopDownTest", function () {
   let erc721: ContractFactory;
-  let erc721Instance: ERC721GemunionTest;
+  let erc721Instance: ERC721ACBEC;
   let erc998: ContractFactory;
   let erc998Instance: ERC998ERC721TopDownTest;
   let nftReceiver: ContractFactory;
@@ -24,13 +24,13 @@ describe("ERC998ERC721TopDownTest", function () {
   let receiver: SignerWithAddress;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721GemunionTest");
+    erc721 = await ethers.getContractFactory("ERC721ACBEC");
     erc998 = await ethers.getContractFactory("ERC998ERC721TopDownTest");
     nftReceiver = await ethers.getContractFactory("ERC721GemunionReceiverTest");
     nftNonReceiver = await ethers.getContractFactory("ERC721GemunionNonReceiverTest");
     [owner, receiver] = await ethers.getSigners();
 
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721GemunionTest;
+    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBEC;
     erc998Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ERC721TopDownTest;
     nftReceiverInstance = (await nftReceiver.deploy()) as ERC721GemunionReceiverTest;
     nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721GemunionNonReceiverTest;

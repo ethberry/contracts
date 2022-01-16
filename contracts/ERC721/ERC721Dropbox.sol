@@ -6,7 +6,6 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 
@@ -16,13 +15,13 @@ abstract contract ERC721Dropbox is EIP712 {
   function _safeMint(address account, uint256 tokenId) internal virtual;
 
   function _redeem(
-    address account,
+    address to,
     uint256 tokenId,
     address signer,
     bytes calldata signature
   ) internal {
-    require(_verify(signer, _hash(account, tokenId), signature), "Invalid signature");
-    _safeMint(account, tokenId);
+    require(_verify(signer, _hash(to, tokenId), signature), "Invalid signature");
+    _safeMint(to, tokenId);
   }
 
   function _hash(address account, uint256 tokenId) internal view returns (bytes32) {

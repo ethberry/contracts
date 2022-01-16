@@ -11,13 +11,14 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "./interfaces/IERC998ERC721BottomUp.sol";
 import "./interfaces/IERC998ERC721BottomUpEnumerable.sol";
 
-import "../ERC721/ERC721Gemunion.sol";
+import "../ERC721/preset/ERC721ACBECS.sol";
 
-contract ERC998BottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC721BottomUpEnumerable {
+contract ERC998BottomUp is ERC721ACBECS, IERC998ERC721BottomUp, IERC998ERC721BottomUpEnumerable {
   using Address for address;
   using SafeMath for uint256;
   using Counters for Counters.Counter;
@@ -58,7 +59,7 @@ contract ERC998BottomUp is ERC721Gemunion, IERC998ERC721BottomUp, IERC998ERC721B
     string memory symbol,
     string memory baseTokenURI,
     uint256 cap
-  ) ERC721Gemunion(name, symbol, baseTokenURI, cap) {}
+  ) ERC721ACBECS(name, symbol, baseTokenURI, cap) {}
 
   function mint(address to) public virtual override onlyRole(MINTER_ROLE) {
     _safeMint(to, _tokenIdTracker.current());

@@ -9,7 +9,7 @@ import {
   ERC721GemunionTest,
   ERC998ERC721TopDownTest,
 } from "../../typechain-types";
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenName, tokenSymbol } from "../constants";
+import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 describe("ERC998ERC721TopDownTest", function () {
   let erc721: ContractFactory;
@@ -42,8 +42,6 @@ describe("ERC998ERC721TopDownTest", function () {
       expect(isAdmin).to.equal(true);
       const isMinter = await erc998Instance.hasRole(MINTER_ROLE, owner.address);
       expect(isMinter).to.equal(true);
-      const isPauser = await erc998Instance.hasRole(PAUSER_ROLE, owner.address);
-      expect(isPauser).to.equal(true);
     });
   });
 

@@ -8,7 +8,6 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
@@ -27,9 +26,8 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-abstract contract ERC1155Gemunion is AccessControl, ERC1155Burnable, ERC1155Pausable, ERC1155Supply {
+abstract contract ERC1155Gemunion is AccessControl, ERC1155Burnable, ERC1155Supply {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-  bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
   /**
    * @dev Grants `DEFAULT_ADMIN_ROLE`, `MINTER_ROLE`, and `PAUSER_ROLE` to the account that
@@ -38,7 +36,6 @@ abstract contract ERC1155Gemunion is AccessControl, ERC1155Burnable, ERC1155Paus
   constructor(string memory uri) ERC1155(uri) {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
-    _setupRole(PAUSER_ROLE, _msgSender());
   }
 
   /**
@@ -72,32 +69,6 @@ abstract contract ERC1155Gemunion is AccessControl, ERC1155Burnable, ERC1155Paus
   }
 
   /**
-   * @dev Pauses all token transfers.
-   *
-   * See {ERC1155Pausable} and {Pausable-_pause}.
-   *
-   * Requirements:
-   *
-   * - the caller must have the `PAUSER_ROLE`.
-   */
-  function pause() public virtual onlyRole(PAUSER_ROLE) {
-    _pause();
-  }
-
-  /**
-   * @dev Unpauses all token transfers.
-   *
-   * See {ERC1155Pausable} and {Pausable-_unpause}.
-   *
-   * Requirements:
-   *
-   * - the caller must have the `PAUSER_ROLE`.
-   */
-  function unpause() public virtual onlyRole(PAUSER_ROLE) {
-    _unpause();
-  }
-
-  /**
    * @dev See {IERC165-supportsInterface}.
    */
   function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC1155) returns (bool) {
@@ -111,7 +82,7 @@ abstract contract ERC1155Gemunion is AccessControl, ERC1155Burnable, ERC1155Paus
     uint256[] memory ids,
     uint256[] memory amounts,
     bytes memory data
-  ) internal virtual override(ERC1155, ERC1155Pausable, ERC1155Supply) {
+  ) internal virtual override(ERC1155, ERC1155Supply) {
     super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
   }
 }

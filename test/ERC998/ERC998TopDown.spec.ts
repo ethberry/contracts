@@ -5,20 +5,12 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import {
   ERC20GemunionTest,
-  ERC721GemunionTest,
-  ERC998ComposableTopDownTest,
   ERC721GemunionNonReceiverTest,
   ERC721GemunionReceiverTest,
+  ERC721GemunionTest,
+  ERC998ComposableTopDownTest,
 } from "../../typechain-types";
-import {
-  amount,
-  baseTokenURI,
-  DEFAULT_ADMIN_ROLE,
-  MINTER_ROLE,
-  PAUSER_ROLE,
-  tokenName,
-  tokenSymbol,
-} from "../constants";
+import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 describe("ERC998ComposableTopDown", function () {
   let erc20: ContractFactory;
@@ -55,8 +47,6 @@ describe("ERC998ComposableTopDown", function () {
       expect(isAdmin).to.equal(true);
       const isMinter = await erc998Instance.hasRole(MINTER_ROLE, owner.address);
       expect(isMinter).to.equal(true);
-      const isPauser = await erc998Instance.hasRole(PAUSER_ROLE, owner.address);
-      expect(isPauser).to.equal(true);
     });
   });
 

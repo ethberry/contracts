@@ -8,7 +8,6 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
@@ -28,9 +27,8 @@ import "@openzeppelin/contracts/utils/Context.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-abstract contract ERC20Gemunion is Context, AccessControl, ERC20Burnable, ERC20Pausable, ERC20Capped, ERC20Snapshot {
+abstract contract ERC20Gemunion is Context, AccessControl, ERC20Burnable, ERC20Capped, ERC20Snapshot {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-  bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
   bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
 
   /**
@@ -46,7 +44,6 @@ abstract contract ERC20Gemunion is Context, AccessControl, ERC20Burnable, ERC20P
   ) ERC20(name, symbol) ERC20Capped(cap) {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
-    _setupRole(PAUSER_ROLE, _msgSender());
     _setupRole(SNAPSHOT_ROLE, _msgSender());
   }
 
@@ -67,32 +64,6 @@ abstract contract ERC20Gemunion is Context, AccessControl, ERC20Burnable, ERC20P
     _mint(to, amount);
   }
 
-  /**
-   * @dev Pauses all token transfers.
-   *
-   * See {ERC20Pausable} and {Pausable-_pause}.
-   *
-   * Requirements:
-   *
-   * - the caller must have the `PAUSER_ROLE`.
-   */
-  function pause() public virtual onlyRole(PAUSER_ROLE) {
-    _pause();
-  }
-
-  /**
-   * @dev Unpauses all token transfers.
-   *
-   * See {ERC20Pausable} and {Pausable-_unpause}.
-   *
-   * Requirements:
-   *
-   * - the caller must have the `PAUSER_ROLE`.
-   */
-  function unpause() public virtual onlyRole(PAUSER_ROLE) {
-    _unpause();
-  }
-
   function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl) returns (bool) {
     return
       interfaceId == type(IERC20).interfaceId ||
@@ -108,7 +79,7 @@ abstract contract ERC20Gemunion is Context, AccessControl, ERC20Burnable, ERC20P
     address from,
     address to,
     uint256 amount
-  ) internal virtual override(ERC20, ERC20Snapshot, ERC20Pausable) {
+  ) internal virtual override(ERC20, ERC20Snapshot) {
     super._beforeTokenTransfer(from, to, amount);
   }
 }

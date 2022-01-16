@@ -9,7 +9,6 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
@@ -36,13 +35,11 @@ abstract contract ERC721Gemunion is
   ERC721Enumerable,
   ERC721Burnable,
   ERC721Capped,
-  ERC721Pausable,
   ERC721URIStorage
 {
   using Counters for Counters.Counter;
 
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-  bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
   Counters.Counter internal _tokenIdTracker;
 
@@ -65,7 +62,6 @@ abstract contract ERC721Gemunion is
 
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
-    _setupRole(PAUSER_ROLE, _msgSender());
   }
 
   /**
@@ -95,32 +91,6 @@ abstract contract ERC721Gemunion is
 
   function getCurrentTokenIndex() public view returns (uint256) {
     return _tokenIdTracker.current();
-  }
-
-  /**
-   * @dev Pauses all token transfers.
-   *
-   * See {ERC721Pausable} and {Pausable-_pause}.
-   *
-   * Requirements:
-   *
-   * - the caller must have the `PAUSER_ROLE`.
-   */
-  function pause() public virtual onlyRole(PAUSER_ROLE) {
-    _pause();
-  }
-
-  /**
-   * @dev Unpauses all token transfers.
-   *
-   * See {ERC721Pausable} and {Pausable-_unpause}.
-   *
-   * Requirements:
-   *
-   * - the caller must have the `PAUSER_ROLE`.
-   */
-  function unpause() public virtual onlyRole(PAUSER_ROLE) {
-    _unpause();
   }
 
   /**
@@ -164,7 +134,7 @@ abstract contract ERC721Gemunion is
     address from,
     address to,
     uint256 tokenId
-  ) internal virtual override(ERC721, ERC721Enumerable, ERC721Pausable, ERC721Capped) {
+  ) internal virtual override(ERC721, ERC721Enumerable, ERC721Capped) {
     super._beforeTokenTransfer(from, to, tokenId);
   }
 }

@@ -4,11 +4,11 @@ import { BigNumber, ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import {
-  ERC1155GemunionTest,
-  ERC1155GemunionReceiverTest,
   ERC1155GemunionNonReceiverTest,
+  ERC1155GemunionReceiverTest,
+  ERC1155GemunionTest,
 } from "../../typechain-types";
-import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenId } from "../constants";
+import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenId } from "../constants";
 
 describe("ERC1155Gemunion", function () {
   let erc1155: ContractFactory;
@@ -41,8 +41,6 @@ describe("ERC1155Gemunion", function () {
       expect(isAdmin).to.equal(true);
       const isMinter = await erc1155Instance.hasRole(MINTER_ROLE, owner.address);
       expect(isMinter).to.equal(true);
-      const isPauser = await erc1155Instance.hasRole(PAUSER_ROLE, owner.address);
-      expect(isPauser).to.equal(true);
     });
   });
 
@@ -156,43 +154,6 @@ describe("ERC1155Gemunion", function () {
     it("should get default token URI", async function () {
       const uri = await erc1155Instance.uri(0);
       expect(uri).to.equal(baseTokenURI);
-    });
-  });
-
-  describe("pause", function () {
-    it("should fail: not an owner", async function () {
-      const tx = erc1155Instance.connect(receiver).pause();
-      await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
-      );
-
-      const tx2 = erc1155Instance.connect(receiver).unpause();
-      await expect(tx2).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
-      );
-    });
-
-    it("should pause/unpause", async function () {
-      const tx1 = erc1155Instance.mint(owner.address, tokenId, amount, "0x");
-      await expect(tx1).to.not.be.reverted;
-
-      const balanceOfOwner1 = await erc1155Instance.balanceOf(owner.address, tokenId);
-      expect(balanceOfOwner1).to.equal(amount);
-
-      const tx2 = erc1155Instance.pause();
-      await expect(tx2).to.emit(erc1155Instance, "Paused").withArgs(owner.address);
-
-      const tx3 = erc1155Instance.mint(owner.address, tokenId, amount, "0x");
-      await expect(tx3).to.be.revertedWith(`ERC1155Pausable: token transfer while paused`);
-
-      const tx4 = erc1155Instance.unpause();
-      await expect(tx4).to.emit(erc1155Instance, "Unpaused").withArgs(owner.address);
-
-      const tx5 = erc1155Instance.mint(owner.address, tokenId, amount, "0x");
-      await expect(tx5).to.not.be.reverted;
-
-      const balanceOfOwner = await erc1155Instance.balanceOf(owner.address, tokenId);
-      expect(balanceOfOwner).to.equal(2 * amount);
     });
   });
 

@@ -8,11 +8,11 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Address.sol";
 
-import "../../ERC721/ERC721Gemunion.sol";
+import "../../ERC721/ERC721GemunionPausable.sol";
 import "../../ERC721/ChainLink/IERC721ChainLink.sol";
 
 
-contract LootboxTestLink is ERC721Gemunion {
+contract LootboxTestLink is ERC721GemunionPausable {
   using Address for address;
 
   IERC721ChainLink _factory;
@@ -21,9 +21,7 @@ contract LootboxTestLink is ERC721Gemunion {
     string memory name,
     string memory symbol,
     string memory baseTokenURI
-  ) ERC721Gemunion(name, symbol, baseTokenURI, 1000) {
-
-  }
+  ) ERC721GemunionPausable(name, symbol, baseTokenURI, 1000) {}
 
   receive() external payable {
     revert();

@@ -54,13 +54,47 @@ describe("ERC721Gemunion", function () {
       expect(balance).to.equal(1);
     });
 
-    it("should fail to mint to non receiver", async function () {
+    it("should mint to non receiver", async function () {
       const tx = erc721Instance.mint(nftNonReceiverInstance.address);
-      await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
+      await expect(tx)
+        .to.emit(erc721Instance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, nftNonReceiverInstance.address, 0);
     });
 
     it("should mint to receiver", async function () {
       const tx = erc721Instance.mint(nftReceiverInstance.address);
+      await expect(tx)
+        .to.emit(erc721Instance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, nftReceiverInstance.address, 0);
+
+      const balance = await erc721Instance.balanceOf(nftReceiverInstance.address);
+      expect(balance).to.equal(1);
+    });
+  });
+
+  describe("safeMint", function () {
+    it("should fail for wrong role", async function () {
+      const tx = erc721Instance.connect(receiver).safeMint(receiver.address);
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
+      );
+    });
+
+    it("should mint to wallet", async function () {
+      const tx = erc721Instance.safeMint(owner.address);
+      await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(ethers.constants.AddressZero, owner.address, 0);
+
+      const balance = await erc721Instance.balanceOf(owner.address);
+      expect(balance).to.equal(1);
+    });
+
+    it("should fail to mint to non receiver", async function () {
+      const tx = erc721Instance.safeMint(nftNonReceiverInstance.address);
+      await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
+    });
+
+    it("should mint to receiver", async function () {
+      const tx = erc721Instance.safeMint(nftReceiverInstance.address);
       await expect(tx)
         .to.emit(erc721Instance, "Transfer")
         .withArgs(ethers.constants.AddressZero, nftReceiverInstance.address, 0);

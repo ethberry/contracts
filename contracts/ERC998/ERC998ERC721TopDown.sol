@@ -35,11 +35,9 @@ abstract contract ERC998ERC721TopDown is ERC721Gemunion, IERC998ERC721TopDown, I
     string memory symbol,
     string memory baseTokenURI,
     uint256 cap
-  ) ERC721Gemunion(name, symbol, baseTokenURI, cap) {}
-
-  function mint(address to) public virtual override onlyRole(MINTER_ROLE) {
-    _mint(to, _tokenIdTracker.current());
-    _tokenIdTracker.increment();
+  ) ERC721Gemunion(name, symbol, baseTokenURI, cap) {
+    // burn first token because of reasons
+    // mint(0x000000000000000000000000000000000000dead);
   }
 
   bytes4 constant APPROVE = bytes4(keccak256("approve(address,uint256)"));
@@ -180,55 +178,28 @@ abstract contract ERC998ERC721TopDown is ERC721Gemunion, IERC998ERC721TopDown, I
     uint256 _childTokenId
   ) external override {
     _transferChild(_fromTokenId, _to, _childContract, _childTokenId);
-    // this is here to be compatible with cryptokitties and other old contracts that require being owner and approved
-    // before transferring.
-    // does not work with current standard which does not allow approving self, so we must let it fail in that case.
-    bytes memory callData = abi.encodeWithSelector(APPROVE, this, _childTokenId);
-    (bool success, ) = _childContract.call(callData);
-    (success);
-
     IERC721(_childContract).transferFrom(address(this), _to, _childTokenId);
     emit TransferChild(_fromTokenId, _to, _childContract, _childTokenId);
   }
 
   function transferChildToParent(
-    uint256 _fromTokenId,
-    address _toContract,
-    uint256 _toTokenId,
-    address _childContract,
-    uint256 _childTokenId,
-    bytes memory _data
-  ) external override {
-    _transferChild(_fromTokenId, _toContract, _childContract, _childTokenId);
-    emit TransferChild(_fromTokenId, _toContract, _childContract, _childTokenId);
-    IERC998ERC721BottomUp(_childContract).transferToParent(
-      address(this),
-      _toContract,
-      _toTokenId,
-      _childTokenId,
-      _data
-    );
+    uint256,
+    address,
+    uint256,
+    address,
+    uint256,
+    bytes memory
+  ) external pure override {
+    revert("ERC998ERC721TopDown: this method is not supported");
   }
 
-  // getChild function enables older contracts like cryptokitties to be transferred into a composable
-  // The _childContract must approve this contract. Then getChild can be called.
-  // this contract has to be approved first in _childContract
   function getChild(
-    address _from,
-    uint256 _tokenId,
-    address _childContract,
-    uint256 _childTokenId
-  ) external override {
-    receiveChild(_from, _tokenId, _childContract, _childTokenId);
-    require(
-      _from == _msgSender() ||
-        IERC721(_childContract).isApprovedForAll(_from, _msgSender()) ||
-        IERC721(_childContract).getApproved(_childTokenId) == _msgSender(),
-      "ComposableTopDown: getChild _msgSender() not approved"
-    );
-    IERC721(_childContract).transferFrom(_from, address(this), _childTokenId);
-    // a check for looped ownership chain
-    rootOwnerOf(_tokenId);
+    address,
+    uint256,
+    address,
+    uint256
+  ) external pure override {
+    revert("ERC998ERC721TopDown: this method is not supported");
   }
 
   function onERC721Received(
@@ -255,9 +226,6 @@ abstract contract ERC998ERC721TopDown is ERC721Gemunion, IERC998ERC721TopDown, I
 
   // ERC998ERC721TopDownEnumerable
 
-  // @notice Get the total number of child contracts with tokens that are owned by tokenId.
-  // @param _tokenId The parent token of child tokens in child contracts
-  // @return uint256 The total number of child contracts with tokens owned by tokenId.
   function childExists(address _childContract, uint256 _childTokenId) external view returns (bool) {
     uint256 tokenId = childTokenOwner[_childContract][_childTokenId];
     return tokenId != 0;

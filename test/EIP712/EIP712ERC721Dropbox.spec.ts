@@ -8,7 +8,7 @@ import tokens from "./tokens.json";
 import { EIP712ERC721Dropbox, ERC721DroppableTest } from "../../typechain-types";
 import { MINTER_ROLE, tokenName, tokenSymbol, baseTokenURI } from "../constants";
 
-describe("Dropbox", function () {
+describe("EIP712ERC721Dropbox", function () {
   let erc721: ContractFactory;
   let erc721Instance: ERC721DroppableTest;
   let dropbox: ContractFactory;
@@ -46,12 +46,12 @@ describe("Dropbox", function () {
           // Types
           {
             NFT: [
-              { name: "tokenId", type: "uint256" },
               { name: "account", type: "address" },
+              { name: "tokenId", type: "uint256" },
             ],
           },
           // Value
-          { tokenId, account },
+          { account, tokenId },
         );
 
         await expect(dropboxInstance.connect(addr2).redeem(account, tokenId, receiver.address, signature))
@@ -76,12 +76,12 @@ describe("Dropbox", function () {
         // Types
         {
           NFT: [
-            { name: "tokenId", type: "uint256" },
             { name: "account", type: "address" },
+            { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
-        { tokenId, account },
+        { account, tokenId },
       );
 
       await expect(dropboxInstance.redeem(account, tokenId, receiver.address, signature))
@@ -109,16 +109,16 @@ describe("Dropbox", function () {
         // Types
         {
           NFT: [
-            { name: "tokenId", type: "uint256" },
             { name: "account", type: "address" },
+            { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
-        { tokenId, account },
+        { account, tokenId },
       );
 
       await expect(dropboxInstance.redeem(owner.address, tokenId, receiver.address, signature)).to.be.revertedWith(
-        "Invalid signature",
+        "EIP712ERC721Dropbox: Invalid signature",
       );
     });
   });

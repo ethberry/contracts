@@ -38,12 +38,12 @@ contract EIP712ERC721Dropbox is EIP712, Pausable, AccessControl {
     address signer,
     bytes calldata signature
   ) external {
-    require(_verify(signer, _hash(account, tokenId), signature), "Invalid signature");
+    require(_verify(signer, _hash(account, tokenId), signature), "EIP712ERC721Dropbox: Invalid signature");
     _factory.mint(account, tokenId);
   }
 
   function _hash(address account, uint256 tokenId) internal view returns (bytes32) {
-    return _hashTypedDataV4(keccak256(abi.encode(keccak256("NFT(uint256 tokenId,address account)"), tokenId, account)));
+    return _hashTypedDataV4(keccak256(abi.encode(keccak256("NFT(address account,uint256 tokenId)"), account, tokenId)));
   }
 
   function _verify(

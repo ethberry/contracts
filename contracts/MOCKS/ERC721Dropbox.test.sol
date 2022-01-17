@@ -22,7 +22,7 @@ contract ERC721DropboxTest is ERC721Dropbox, ERC721ACB {
     address signer,
     bytes calldata signature
   ) public virtual {
-    require(hasRole(MINTER_ROLE, signer), "ERC721Dropbox: signer has no `MINTER_ROLE`");
+    _checkRole(MINTER_ROLE, signer);
     _redeem(account, tokenId, signer, signature);
   }
 

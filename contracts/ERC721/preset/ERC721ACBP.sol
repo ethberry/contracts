@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract ERC721ACB is AccessControl, ERC721Burnable, ERC721Pausable {
+contract ERC721ACBP is AccessControl, ERC721Burnable, ERC721Pausable {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 

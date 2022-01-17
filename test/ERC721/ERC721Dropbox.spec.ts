@@ -41,12 +41,12 @@ describe("ERC721Dropbox", function () {
           // Types
           {
             NFT: [
-              { name: "tokenId", type: "uint256" },
               { name: "account", type: "address" },
+              { name: "tokenId", type: "uint256" },
             ],
           },
           // Value
-          { tokenId, account },
+          { account, tokenId },
         );
 
         const tx = erc721Instance.connect(addr2).redeem(account, tokenId, receiver.address, signature);
@@ -70,12 +70,12 @@ describe("ERC721Dropbox", function () {
         // Types
         {
           NFT: [
-            { name: "tokenId", type: "uint256" },
             { name: "account", type: "address" },
+            { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
-        { tokenId, account },
+        { account, tokenId },
       );
 
       const tx1 = erc721Instance.redeem(account, tokenId, receiver.address, signature);
@@ -101,16 +101,16 @@ describe("ERC721Dropbox", function () {
         // Types
         {
           NFT: [
-            { name: "tokenId", type: "uint256" },
             { name: "account", type: "address" },
+            { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
-        { tokenId, account },
+        { account, tokenId },
       );
 
       const tx = erc721Instance.redeem(owner.address, tokenId, receiver.address, signature);
-      await expect(tx).to.be.revertedWith("Invalid signature");
+      await expect(tx).to.be.revertedWith("ERC721Dropbox: Invalid signature");
     });
   });
 });

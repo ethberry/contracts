@@ -81,5 +81,5 @@
     "test": "hardhat test"
   },
   "types": "./typechain-types/index.ts",
-  "version": "0.0.12"
+  "version": "0.0.13"
 }

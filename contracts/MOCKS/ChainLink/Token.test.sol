@@ -17,7 +17,7 @@ contract TokenTestLink is ERC721ChainLink, IERC721ChainLink, ERC721ACBEC {
   mapping(uint256 /* tokenId */ => uint256 /* rarity */) private _rarity;
   mapping(bytes32 /* requestId */ => address /* nft owner */) internal _queue;
 
-  constructor (
+  constructor(
     string memory name,
     string memory symbol,
     string memory baseTokenURI,
@@ -25,15 +25,14 @@ contract TokenTestLink is ERC721ChainLink, IERC721ChainLink, ERC721ACBEC {
     address _vrf,
     bytes32 _keyHash,
     uint256 _fee
-  ) ERC721ACBEC(name, symbol, baseTokenURI, 1000) ERC721ChainLink(_link, _vrf, _keyHash, _fee) {
+  ) ERC721ACBEC(name, symbol, baseTokenURI, 1000) ERC721ChainLink(_link, _vrf, _keyHash, _fee) {}
 
-  }
-
-  function mintRandom(address to) external onlyRole(MINTER_ROLE) override {
+  function mintRandom(address to) external override onlyRole(MINTER_ROLE) {
     _queue[getRandomNumber()] = to;
   }
 
   event MintRandom(address _owner, bytes32 _reqId);
+
   function _useRandom(uint256 result, bytes32 _requestId) internal override {
     _rarity[_tokenIdTracker.current()] = result;
     emit MintRandom(_queue[_requestId], _requestId);
@@ -42,13 +41,14 @@ contract TokenTestLink is ERC721ChainLink, IERC721ChainLink, ERC721ACBEC {
   }
 
   event RandomRequest(bytes32 _requestId);
+
   function getRandomNumber() internal override returns (bytes32 requestId) {
     requestId = super.getRandomNumber();
     emit RandomRequest(requestId);
     return requestId;
   }
 
-  function mint(address to) public onlyRole(MINTER_ROLE) override {
+  function mint(address to) public override onlyRole(MINTER_ROLE) {
     _safeMint(to, _tokenIdTracker.current());
     _tokenIdTracker.increment();
   }

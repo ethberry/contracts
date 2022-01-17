@@ -3,12 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import {
-  ERC721GemunionNonReceiverTest,
-  ERC721GemunionReceiverTest,
-  ERC721ACBEC,
-  ERC998ERC721TopDownTest,
-} from "../../typechain-types";
+import { ERC721NonReceiverTest, ERC721ReceiverTest, ERC721ACBEC, ERC998ERC721TopDownTest } from "../../typechain-types";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 describe("ERC998ERC721TopDownTest", function () {
@@ -17,23 +12,23 @@ describe("ERC998ERC721TopDownTest", function () {
   let erc998: ContractFactory;
   let erc998Instance: ERC998ERC721TopDownTest;
   let nftReceiver: ContractFactory;
-  let nftReceiverInstance: ERC721GemunionReceiverTest;
+  let nftReceiverInstance: ERC721ReceiverTest;
   let nftNonReceiver: ContractFactory;
-  let nftNonReceiverInstance: ERC721GemunionNonReceiverTest;
+  let nftNonReceiverInstance: ERC721NonReceiverTest;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
 
   beforeEach(async function () {
     erc721 = await ethers.getContractFactory("ERC721ACBEC");
     erc998 = await ethers.getContractFactory("ERC998ERC721TopDownTest");
-    nftReceiver = await ethers.getContractFactory("ERC721GemunionReceiverTest");
-    nftNonReceiver = await ethers.getContractFactory("ERC721GemunionNonReceiverTest");
+    nftReceiver = await ethers.getContractFactory("ERC721ReceiverTest");
+    nftNonReceiver = await ethers.getContractFactory("ERC721NonReceiverTest");
     [owner, receiver] = await ethers.getSigners();
 
     erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBEC;
     erc998Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ERC721TopDownTest;
-    nftReceiverInstance = (await nftReceiver.deploy()) as ERC721GemunionReceiverTest;
-    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721GemunionNonReceiverTest;
+    nftReceiverInstance = (await nftReceiver.deploy()) as ERC721ReceiverTest;
+    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverTest;
   });
 
   describe("constructor", function () {

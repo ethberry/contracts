@@ -6,26 +6,17 @@ pragma solidity ^0.8.4;
 /// @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-998.md
 ///  Note: the ERC-165 identifier for this interface is 0xa1b23002
 interface IERC998ERC721BottomUp {
-
   /// @dev This emits when a token is transferred to an ERC721 token
   /// @param _toContract The contract the token is transferred to
   /// @param _toTokenId The token the token is transferred to
   /// @param _tokenId The token that is transferred
-  event TransferToParent(
-    address indexed _toContract,
-    uint256 indexed _toTokenId,
-    uint256 _tokenId
-  );
+  event TransferToParent(address indexed _toContract, uint256 indexed _toTokenId, uint256 _tokenId);
 
   /// @dev This emits when a token is transferred from an ERC721 token
   /// @param _fromContract The contract the token is transferred from
   /// @param _fromTokenId The token the token is transferred from
   /// @param _tokenId The token that is transferred
-  event TransferFromParent(
-    address indexed _fromContract,
-    uint256 indexed _fromTokenId,
-    uint256 _tokenId
-  );
+  event TransferFromParent(address indexed _fromContract, uint256 indexed _fromTokenId, uint256 _tokenId);
 
   /// @notice Get the root owner of tokenId.
   /// @param _tokenId The token to query for a root owner address
@@ -38,13 +29,13 @@ interface IERC998ERC721BottomUp {
   /// @return parentTokenId The parent owner of the token and ERC998 magic value
   /// @return isParent True if parentTokenId is a valid parent tokenId and false if there is no parent tokenId
   function tokenOwnerOf(uint256 _tokenId)
-  external
-  view
-  returns (
-    bytes32 tokenOwner,
-    uint256 parentTokenId,
-    bool isParent
-  );
+    external
+    view
+    returns (
+      bytes32 tokenOwner,
+      uint256 parentTokenId,
+      bool isParent
+    );
 
   /// @notice Transfer token from owner address to a token
   /// @param _from The owner address

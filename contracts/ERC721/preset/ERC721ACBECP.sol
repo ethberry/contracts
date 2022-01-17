@@ -30,13 +30,7 @@ import "../ERC721Capped.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-contract ERC721ACBECP is
-  AccessControl,
-  ERC721Burnable,
-  ERC721Enumerable,
-  ERC721Capped,
-  ERC721Pausable
-{
+contract ERC721ACBECP is AccessControl, ERC721Burnable, ERC721Enumerable, ERC721Capped, ERC721Pausable {
   using Counters for Counters.Counter;
 
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -125,11 +119,11 @@ contract ERC721ACBECP is
    * @dev See {IERC165-supportsInterface}.
    */
   function supportsInterface(bytes4 interfaceId)
-  public
-  view
-  virtual
-  override(AccessControl, ERC721, ERC721Enumerable)
-  returns (bool)
+    public
+    view
+    virtual
+    override(AccessControl, ERC721, ERC721Enumerable)
+    returns (bool)
   {
     return super.supportsInterface(interfaceId);
   }

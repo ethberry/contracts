@@ -11,7 +11,6 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "../../ERC721/preset/ERC721ACBECP.sol";
 import "../../ERC721/ChainLink/IERC721ChainLink.sol";
 
-
 contract LootboxTestLink is ERC721ACBECP {
   using Address for address;
 

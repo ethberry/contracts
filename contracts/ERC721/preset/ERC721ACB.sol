@@ -25,10 +25,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-contract ERC721ACB is
-  AccessControl,
-  ERC721Burnable
-{
+contract ERC721ACB is AccessControl, ERC721Burnable {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
   string internal _baseTokenURI;
@@ -62,13 +59,7 @@ contract ERC721ACB is
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    virtual
-    override(AccessControl, ERC721)
-    returns (bool)
-  {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC721) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 

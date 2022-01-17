@@ -12,15 +12,17 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 
 interface ERC677Receiver {
-  function onTokenTransfer(address _sender, uint _value, bytes calldata _data) external;
+  function onTokenTransfer(
+    address _sender,
+    uint256 _value,
+    bytes calldata _data
+  ) external;
 }
 
 contract LinkErc20 is ERC20 {
   using Address for address;
 
-  constructor(string memory _name, string memory _symbol) ERC20(_name, _symbol) {
-
-  }
+  constructor(string memory _name, string memory _symbol) ERC20(_name, _symbol) {}
 
   function mint(address to, uint256 amount) public virtual {
     _mint(to, amount);
@@ -41,7 +43,11 @@ contract LinkErc20 is ERC20 {
     return true;
   }
 
-  function contractFallback(address _to, uint _value, bytes  calldata _data) private {
+  function contractFallback(
+    address _to,
+    uint256 _value,
+    bytes calldata _data
+  ) private {
     ERC677Receiver receiver = ERC677Receiver(_to);
     receiver.onTokenTransfer(msg.sender, _value, _data);
   }

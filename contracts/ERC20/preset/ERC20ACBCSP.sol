@@ -93,9 +93,9 @@ contract ERC20ACBCSP is AccessControl, ERC20Burnable, ERC20Pausable, ERC20Capped
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl) returns (bool) {
     return
-    interfaceId == type(IERC20).interfaceId ||
-    interfaceId == type(IERC20Metadata).interfaceId ||
-    super.supportsInterface(interfaceId);
+      interfaceId == type(IERC20).interfaceId ||
+      interfaceId == type(IERC20Metadata).interfaceId ||
+      super.supportsInterface(interfaceId);
   }
 
   function _mint(address account, uint256 amount) internal virtual override(ERC20, ERC20Capped) {

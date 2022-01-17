@@ -7,5 +7,6 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 
-contract ERC20GemunionNonReceiverTest is AccessControl {}
+contract ERC721ReceiverTest is AccessControl, ERC721Holder {}

@@ -127,11 +127,11 @@ contract ERC721ACBECSP is
    * @dev See {IERC165-supportsInterface}.
    */
   function supportsInterface(bytes4 interfaceId)
-  public
-  view
-  virtual
-  override(AccessControl, ERC721, ERC721Enumerable)
-  returns (bool)
+    public
+    view
+    virtual
+    override(AccessControl, ERC721, ERC721Enumerable)
+    returns (bool)
   {
     return super.supportsInterface(interfaceId);
   }

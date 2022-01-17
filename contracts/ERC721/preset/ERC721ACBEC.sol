@@ -29,12 +29,7 @@ import "../ERC721Capped.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-contract ERC721ACBEC is
-  AccessControl,
-  ERC721Burnable,
-  ERC721Enumerable,
-  ERC721Capped
-{
+contract ERC721ACBEC is AccessControl, ERC721Burnable, ERC721Enumerable, ERC721Capped {
   using Counters for Counters.Counter;
 
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");

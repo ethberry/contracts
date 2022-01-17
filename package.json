@@ -77,7 +77,7 @@
     "lint": "eslint . --fix",
     "prebuild": "rimraf artifacts cache typechain-types",
     "preversion": "npm run build",
-    "solhint": "solhint -f table contracts/**/*.sol",
+    "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",

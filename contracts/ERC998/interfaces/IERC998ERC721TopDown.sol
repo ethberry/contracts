@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 /// @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-998.md
 ///  Note: the ERC-165 identifier for this interface is 0x1efdf36a
 interface IERC998ERC721TopDown is IERC721Receiver {
-
   /// @dev This emits when a token receives a child token.
   /// @param _from The prior owner of the token.
   /// @param _tokenId The token that receives the child token.
@@ -36,19 +35,13 @@ interface IERC998ERC721TopDown is IERC721Receiver {
   /// @notice Get the root owner of tokenId.
   /// @param _tokenId The token to query for a root owner address
   /// @return rootOwner The root owner at the top of tree of tokens and ERC998 magic value.
-  function rootOwnerOf(uint256 _tokenId)
-  external
-  view
-  returns (bytes32 rootOwner);
+  function rootOwnerOf(uint256 _tokenId) external view returns (bytes32 rootOwner);
 
   /// @notice Get the root owner of a child token.
   /// @param _childContract The contract address of the child token.
   /// @param _childTokenId The tokenId of the child.
   /// @return rootOwner The root owner at the top of tree of tokens and ERC998 magic value.
-  function rootOwnerOfChild(address _childContract, uint256 _childTokenId)
-  external
-  view
-  returns (bytes32 rootOwner);
+  function rootOwnerOfChild(address _childContract, uint256 _childTokenId) external view returns (bytes32 rootOwner);
 
   /// @notice Get the parent tokenId of a child token.
   /// @param _childContract The contract address of the child token.
@@ -56,9 +49,9 @@ interface IERC998ERC721TopDown is IERC721Receiver {
   /// @return parentTokenOwner The parent address of the parent token and ERC998 magic value
   /// @return parentTokenId The parent tokenId of _tokenId
   function ownerOfChild(address _childContract, uint256 _childTokenId)
-  external
-  view
-  returns (bytes32 parentTokenOwner, uint256 parentTokenId);
+    external
+    view
+    returns (bytes32 parentTokenOwner, uint256 parentTokenId);
 
   /// @notice Transfer child token from top-down composable to address.
   /// @param _fromTokenId The owning token to transfer from.

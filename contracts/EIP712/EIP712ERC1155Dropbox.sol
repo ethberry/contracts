@@ -99,7 +99,7 @@ contract IEIP712ERC1155Dropbox is AccessControl, Pausable, EIP712 {
   }
 
   /**
- * @dev Pauses all token transfers.
+   * @dev Pauses all token transfers.
    *
    * See {ERC721Pausable} and {Pausable-_pause}.
    *

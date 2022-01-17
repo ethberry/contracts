@@ -13,7 +13,6 @@ import "./utils/ProxyRegistry.sol";
 import "../../ERC721/preset/ERC721ACBECS.sol";
 
 abstract contract ERC721OpenSea is ERC721ACBECS, AccessControlEnumerable {
-
   event PermanentURI(string _value, uint256 indexed _id);
 
   using Address for address;
@@ -39,7 +38,7 @@ abstract contract ERC721OpenSea is ERC721ACBECS, AccessControlEnumerable {
   /**
    * Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
    */
-  function isApprovedForAll(address owner_, address operator_) override (ERC721) virtual public view returns (bool) {
+  function isApprovedForAll(address owner_, address operator_) public view virtual override(ERC721) returns (bool) {
     // Whitelist OpenSea proxy contract for easy trading.
     if (address(_proxyRegistry.proxies(owner_)) == operator_) {
       return true;
@@ -58,14 +57,24 @@ abstract contract ERC721OpenSea is ERC721ACBECS, AccessControlEnumerable {
   /**
    * @dev Overload {_revokeRole} to track enumerable memberships
    */
-  function _revokeRole(bytes32 role, address account) internal virtual override(AccessControl, AccessControlEnumerable) {
+  function _revokeRole(bytes32 role, address account)
+    internal
+    virtual
+    override(AccessControl, AccessControlEnumerable)
+  {
     super._revokeRole(role, account);
   }
 
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721ACBECS, AccessControlEnumerable) returns (bool) {
+  function supportsInterface(bytes4 interfaceId)
+    public
+    view
+    virtual
+    override(ERC721ACBECS, AccessControlEnumerable)
+    returns (bool)
+  {
     return super.supportsInterface(interfaceId);
   }
 }

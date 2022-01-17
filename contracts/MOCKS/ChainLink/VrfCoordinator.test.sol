@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 import "@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol";
 
-contract VRFCoordinatorMock is VRFRequestIDBase{
+contract VRFCoordinatorMock is VRFRequestIDBase {
   LinkTokenInterface public LINK;
 
   event RandomnessRequest(address indexed sender, bytes32 indexed keyHash, uint256 indexed seed);
@@ -24,7 +24,7 @@ contract VRFCoordinatorMock is VRFRequestIDBase{
     (bytes32 keyHash, uint256 seed) = abi.decode(_data, (bytes32, uint256));
     emit RandomnessRequest(sender, keyHash, seed);
 
-    uint256 vRFSeed  = uint256(keccak256(abi.encode(keyHash, seed, address(sender), nonces[keyHash])));
+    uint256 vRFSeed = uint256(keccak256(abi.encode(keyHash, seed, address(sender), nonces[keyHash])));
     bytes32 _requestId = keccak256(abi.encodePacked(keyHash, vRFSeed));
     emit RandomnessRequestId(_requestId, sender);
     // callBackWithRandomness(_requestId, uint256(keccak256(abi.encode(123))), sender);
@@ -39,11 +39,11 @@ contract VRFCoordinatorMock is VRFRequestIDBase{
   ) public {
     v = VRFConsumerBase(consumerContract);
     bytes memory resp = abi.encodeWithSelector(v.rawFulfillRandomness.selector, requestId, randomness);
-//    uint256 b = 206000;
-//    require(gasleft() >= b, "not enough gas for consumer");
+    // uint256 b = 206000;
+    // require(gasleft() >= b, "not enough gas for consumer");
     (bool success, ) = consumerContract.call(resp);
     (success);
-//    v.rawFulfillRandomness(requestId, randomness);
+    // v.rawFulfillRandomness(requestId, randomness);
   }
 
   modifier onlyLINK() {

@@ -3,28 +3,28 @@ import { ethers } from "hardhat";
 import { BigNumber, ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { ERC1155GemunionNonReceiverTest, ERC1155GemunionReceiverTest, ERC1155ACBS } from "../../../typechain-types";
+import { ERC1155NonReceiverTest, ERC1155ReceiverTest, ERC1155ACBS } from "../../../typechain-types";
 import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenId } from "../../constants";
 
 describe("ERC1155ACBS", function () {
   let erc1155: ContractFactory;
   let erc1155Instance: ERC1155ACBS;
   let nftReceiver: ContractFactory;
-  let nftReceiverInstance: ERC1155GemunionReceiverTest;
+  let nftReceiverInstance: ERC1155ReceiverTest;
   let nftNonReceiver: ContractFactory;
-  let nftNonReceiverInstance: ERC1155GemunionNonReceiverTest;
+  let nftNonReceiverInstance: ERC1155NonReceiverTest;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
 
   beforeEach(async function () {
     erc1155 = await ethers.getContractFactory("ERC1155ACBS");
-    nftReceiver = await ethers.getContractFactory("ERC1155GemunionReceiverTest");
-    nftNonReceiver = await ethers.getContractFactory("ERC1155GemunionNonReceiverTest");
+    nftReceiver = await ethers.getContractFactory("ERC1155ReceiverTest");
+    nftNonReceiver = await ethers.getContractFactory("ERC1155NonReceiverTest");
     [owner, receiver] = await ethers.getSigners();
 
     erc1155Instance = (await erc1155.deploy(baseTokenURI)) as ERC1155ACBS;
-    nftReceiverInstance = (await nftReceiver.deploy()) as ERC1155GemunionReceiverTest;
-    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC1155GemunionNonReceiverTest;
+    nftReceiverInstance = (await nftReceiver.deploy()) as ERC1155ReceiverTest;
+    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC1155NonReceiverTest;
 
     void receiver;
     void nftReceiverInstance;

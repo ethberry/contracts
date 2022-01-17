@@ -31,16 +31,16 @@ contract TokenTestLink is ERC721ChainLink, IERC721ChainLink, ERC721ACBEC {
     _queue[getRandomNumber()] = to;
   }
 
-  event MintRandom(address _owner, bytes32 _reqId);
+  event MintRandom(address owner, bytes32 requestId);
 
-  function _useRandom(uint256 result, bytes32 _requestId) internal override {
-    _rarity[_tokenIdTracker.current()] = result;
-    emit MintRandom(_queue[_requestId], _requestId);
-    mint(_queue[_requestId]);
-    delete _queue[_requestId];
+  function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
+    _rarity[_tokenIdTracker.current()] = (randomness % 100) + 1;
+    emit MintRandom(_queue[requestId], requestId);
+    mint(_queue[requestId]);
+    delete _queue[requestId];
   }
 
-  event RandomRequest(bytes32 _requestId);
+  event RandomRequest(bytes32 requestId);
 
   function getRandomNumber() internal override returns (bytes32 requestId) {
     requestId = super.getRandomNumber();

@@ -15,7 +15,9 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "../ERC721Capped.sol";
 
-contract ERC721ACBECS is AccessControl, ERC721Burnable, ERC721Enumerable, ERC721Capped, ERC721URIStorage {
+import "../../AccessList/WhiteListExtended.sol";
+
+contract ERC721ACBECS is AccessControl, ERC721Burnable, ERC721Enumerable, ERC721Capped, ERC721URIStorage, WhiteListExtended {
   using Counters for Counters.Counter;
 
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");

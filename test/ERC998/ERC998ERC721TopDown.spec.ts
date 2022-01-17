@@ -293,6 +293,7 @@ describe("ERC998ERC721TopDownTest", function () {
     });
 
     it("should fail: receiver is burned", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -369,6 +370,7 @@ describe("ERC998ERC721TopDownTest", function () {
     });
 
     it("should transfer token to another token", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -402,6 +404,7 @@ describe("ERC998ERC721TopDownTest", function () {
     });
 
     it("should transfer tree of tokens to wallet", async function () {
+      erc998Instance.whitelist(erc998Instance.address, 0);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
       await erc998Instance.mint(owner.address);
@@ -431,6 +434,7 @@ describe("ERC998ERC721TopDownTest", function () {
     });
 
     it("should not transfer token from the middle of the tree", async function () {
+      erc998Instance.whitelist(erc998Instance.address, 0);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
       await erc998Instance.mint(owner.address);
@@ -483,6 +487,7 @@ describe("ERC998ERC721TopDownTest", function () {
 
   describe("safeTransferChild", function () {
     it("should transfer 721 token owned by another token to the wallet", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -507,6 +512,7 @@ describe("ERC998ERC721TopDownTest", function () {
     });
 
     it("should transfer 721 token owned by another token to the receiver contract", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -531,6 +537,7 @@ describe("ERC998ERC721TopDownTest", function () {
     });
 
     it("should non transfer 721 token owned by another token to the non receiver contract", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -553,6 +560,7 @@ describe("ERC998ERC721TopDownTest", function () {
     });
 
     it("should not transfer 721 token which is not owned", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -568,6 +576,7 @@ describe("ERC998ERC721TopDownTest", function () {
     });
 
     it("should transfer 998 token owned by another token to the wallet", async function () {
+      erc998Instance.whitelist(erc998Instance.address, 0);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
       await erc998Instance.mint(owner.address);
@@ -594,6 +603,7 @@ describe("ERC998ERC721TopDownTest", function () {
 
   describe("transferChild", function () {
     it("should transfer token owned by another token to wallet", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -613,6 +623,7 @@ describe("ERC998ERC721TopDownTest", function () {
     });
 
     it("should transfer token owned by another token to the receiver contract", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -632,6 +643,7 @@ describe("ERC998ERC721TopDownTest", function () {
     });
 
     it("should transfer token owned by another token to the non receiver contract", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -651,6 +663,7 @@ describe("ERC998ERC721TopDownTest", function () {
     });
 
     it("should not transfer token which is not owned", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -661,6 +674,7 @@ describe("ERC998ERC721TopDownTest", function () {
     });
 
     it("should transfer 998 token owned by another token to the wallet", async function () {
+      erc998Instance.whitelist(erc998Instance.address, 0);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
       await erc998Instance.mint(owner.address);
@@ -682,6 +696,7 @@ describe("ERC998ERC721TopDownTest", function () {
 
   describe("childExists", function () {
     it("should check if child exists", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
@@ -705,6 +720,7 @@ describe("ERC998ERC721TopDownTest", function () {
 
   describe("totalChildContracts", function () {
     it("should count child contracts", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -724,6 +740,7 @@ describe("ERC998ERC721TopDownTest", function () {
 
   describe("childContractByIndex", function () {
     it("should get child contract by index", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -743,6 +760,7 @@ describe("ERC998ERC721TopDownTest", function () {
 
   describe("totalChildTokens", function () {
     it("should get child contract tokens count", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -762,6 +780,7 @@ describe("ERC998ERC721TopDownTest", function () {
 
   describe("childTokenByIndex", function () {
     it("should get child contract tokens count", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
@@ -781,6 +800,7 @@ describe("ERC998ERC721TopDownTest", function () {
 
   describe("getChild", function () {
     it("should get child", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
       await erc721Instance.mint(owner.address);
       await erc721Instance.approve(erc998Instance.address, 0);
       await erc998Instance.mint(owner.address); // this is edge case
@@ -788,6 +808,247 @@ describe("ERC998ERC721TopDownTest", function () {
 
       const tx1 = erc998Instance.getChild(owner.address, 1, erc721Instance.address, 0);
       await expect(tx1).to.be.revertedWith(`ERC998ERC721TopDown: this method is not supported`);
+    });
+  });
+
+  describe("WhiteListExtended", function () {
+    it("should add to whitelist", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
+      const tx1 = await erc998Instance.isWhitelisted(erc721Instance.address);
+      expect(tx1).to.equal(true);
+    });
+
+    it("should not in whitelist", async function () {
+      const tx1 = await erc998Instance.isWhitelisted(erc721Instance.address);
+      expect(tx1).to.equal(false);
+    });
+
+    it("should ban in whitelist", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
+      const tx1 = await erc998Instance.isWhitelisted(erc721Instance.address);
+      expect(tx1).to.equal(true);
+      
+      erc998Instance.unWhitelist(erc721Instance.address);
+      const tx2 = await erc998Instance.isWhitelisted(erc721Instance.address);
+      expect(tx2).to.equal(false);
+    });
+
+    it("should match max", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 10);
+      const tx1 = await erc998Instance.getMaxCountWhiteList(erc721Instance.address);
+      expect(tx1).to.equal(10);
+    });
+
+    it("should change max", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
+      erc998Instance.changeMaxCountWhiteList(erc721Instance.address, 10);
+      const tx1 = await erc998Instance.getMaxCountWhiteList(erc721Instance.address);
+      expect(tx1).to.equal(10);
+    });
+
+    it("should make increment for safeTransferFrom", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
+      await erc721Instance.mint(owner.address);
+      await erc721Instance.mint(owner.address);
+      await erc998Instance.mint(owner.address); // this is edge case
+      await erc998Instance.mint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = await erc998Instance.getCurrentCountWhiteList(erc721Instance.address);
+      expect(tx2).to.equal(1);
+
+      const tx3 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        1, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx3).to.not.be.reverted;
+
+      const tx4 = await erc998Instance.getCurrentCountWhiteList(erc721Instance.address);
+      expect(tx4).to.equal(2);
+    });
+
+    it("should make increment/decriment for safeTransferFrom", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
+      await erc721Instance.mint(owner.address);
+      await erc721Instance.mint(owner.address);
+      await erc998Instance.mint(owner.address); // this is edge case
+      await erc998Instance.mint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = await erc998Instance.getCurrentCountWhiteList(erc721Instance.address);
+      expect(tx2).to.equal(1);
+
+      const tx3 = erc998Instance["safeTransferChild(uint256,address,address,uint256)"](
+        1,
+        receiver.address,
+        erc721Instance.address,
+        0,
+      );
+      await expect(tx3)
+        .to.emit(erc998Instance, "TransferChild")
+        .withArgs(1, receiver.address, erc721Instance.address, 0);
+
+      const tx4 = await erc998Instance.getCurrentCountWhiteList(erc721Instance.address);
+      expect(tx4).to.equal(0);
+    });
+
+    it("should change max", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
+      erc998Instance.changeMaxCountWhiteList(erc721Instance.address, 10);
+      const tx1 = await erc998Instance.getMaxCountWhiteList(erc721Instance.address);
+      expect(tx1).to.equal(10);
+    });
+
+    it("should fail with excess number for safeTransferFrom", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 1);
+      await erc721Instance.mint(owner.address);
+      await erc721Instance.mint(owner.address);
+      await erc998Instance.mint(owner.address); // this is edge case
+      await erc998Instance.mint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = await erc998Instance.getCurrentCountWhiteList(erc721Instance.address);
+      expect(tx2).to.equal(1);
+
+      const tx3 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        1, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );            
+      await expect(tx3).to.be.revertedWith(`WhiteListExtended: excess number of tokens`);
+    });
+
+    it("should fail with excess number (with two contracts) for safeTransferFrom", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 1);
+      erc998Instance.whitelist(erc998Instance.address, 2);
+      await erc721Instance.mint(owner.address);
+      await erc721Instance.mint(owner.address);
+      await erc998Instance.mint(owner.address); // this is edge case
+      await erc998Instance.mint(owner.address);
+      await erc998Instance.mint(owner.address);
+      await erc998Instance.mint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+      
+      const tx2 = await erc998Instance.getCurrentCountWhiteList(erc721Instance.address);
+      expect(tx2).to.equal(1);
+
+      const tx3 = erc998Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );       
+      await expect(tx3).to.not.be.reverted;
+
+      const tx4 = await erc998Instance.getCurrentCountWhiteList(erc998Instance.address);
+      expect(tx4).to.equal(1);
+
+      const tx5 = erc998Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        2, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );       
+      await expect(tx5).to.not.be.reverted;
+
+      const tx6 = await erc998Instance.getCurrentCountWhiteList(erc998Instance.address);
+      expect(tx6).to.equal(2);
+
+      const tx7 = erc998Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        3, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );       
+      await expect(tx7).to.be.revertedWith(`WhiteListExtended: excess number of tokens`);
+    });
+
+    it("should make increment/decriment for safeTransferFrom and safeTransferChild", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
+      await erc721Instance.mint(owner.address);
+      await erc998Instance.mint(owner.address); // this is edge case
+      await erc998Instance.mint(owner.address);
+
+      const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        0, // erc721 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = await erc998Instance.getCurrentCountWhiteList(erc721Instance.address);
+      expect(tx2).to.equal(1);
+
+      const tx3 = erc998Instance["safeTransferChild(uint256,address,address,uint256)"](
+        1,
+        receiver.address,
+        erc721Instance.address,
+        0,
+      );
+      await expect(tx3)
+        .to.emit(erc998Instance, "TransferChild")
+        .withArgs(1, receiver.address, erc721Instance.address, 0); 
+
+      const tx4 = await erc998Instance.getCurrentCountWhiteList(erc721Instance.address);
+      expect(tx4).to.equal(0);
+    });
+
+    it("should make increment/decriment for safeTransferFrom and transferChild", async function () {
+      erc998Instance.whitelist(erc998Instance.address, 0);
+      await erc998Instance.mint(owner.address); // this is edge case
+      await erc998Instance.mint(owner.address);
+      await erc998Instance.mint(owner.address);
+
+      const tx1 = erc998Instance["safeTransferFrom(address,address,uint256,bytes)"](
+        owner.address,
+        erc998Instance.address,
+        1, // erc998 tokenId
+        "0x0000000000000000000000000000000000000000000000000000000000000002", // erc998 tokenId
+      );
+      await expect(tx1).to.not.be.reverted;
+
+      const tx2 = await erc998Instance.getCurrentCountWhiteList(erc998Instance.address);
+      expect(tx2).to.equal(1);
+
+      const tx3 = erc998Instance.transferChild(2, receiver.address, erc998Instance.address, 1);
+      await expect(tx3)
+        .to.emit(erc998Instance, "TransferChild")
+        .withArgs(2, receiver.address, erc998Instance.address, 1);
+
+      const tx4 = await erc998Instance.getCurrentCountWhiteList(erc998Instance.address);
+      expect(tx4).to.equal(0);
     });
   });
 });

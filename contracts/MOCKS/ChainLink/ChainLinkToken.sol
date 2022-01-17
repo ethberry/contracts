@@ -8,24 +8,26 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "../../ERC721/ChainLink/ERC721ChainLink.sol";
 import "../../ERC721/preset/ERC721ACBEC.sol";
+import "../../ERC721/ChainLink/ERC721ChainLink.sol";
 
-contract TokenTestLink is ERC721ChainLink, IERC721ChainLink, ERC721ACBEC {
+contract ChainLinkTokenMock is ERC721ChainLink, IERC721ChainLink, ERC721ACBEC {
   using Counters for Counters.Counter;
 
-  mapping(uint256 /* tokenId */ => uint256 /* rarity */) private _rarity;
-  mapping(bytes32 /* requestId */ => address /* nft owner */) internal _queue;
+  // tokenId => rarity
+  mapping(uint256 => uint256) private _rarity;
+  // requestId => owner
+  mapping(bytes32 => address) internal _queue;
 
   constructor(
     string memory name,
     string memory symbol,
     string memory baseTokenURI,
-    address _link,
-    address _vrf,
-    bytes32 _keyHash,
-    uint256 _fee
-  ) ERC721ACBEC(name, symbol, baseTokenURI, 1000) ERC721ChainLink(_link, _vrf, _keyHash, _fee) {}
+    address link,
+    address vrf,
+    bytes32 keyHash,
+    uint256 fee
+  ) ERC721ACBEC(name, symbol, baseTokenURI, 1000) ERC721ChainLink(link, vrf, keyHash, fee) {}
 
   function mintRandom(address to) external override onlyRole(MINTER_ROLE) {
     _queue[getRandomNumber()] = to;

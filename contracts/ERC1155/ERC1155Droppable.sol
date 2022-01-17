@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.4;
 
-import "../EIP712/IEIP712ERC1155Droppable.sol";
+import "../EIP712/interfaces/IEIP712ERC1155Droppable.sol";
 import "./preset/ERC1155ACBSP.sol";
 
 contract ERC1155Droppable is IEIP712ERC1155Droppable, ERC1155ACBSP {

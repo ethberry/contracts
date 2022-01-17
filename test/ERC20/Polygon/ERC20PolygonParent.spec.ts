@@ -3,20 +3,20 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { ERC20GemunionPolygonParent } from "../../../typechain-types";
+import { ERC20PolygonParentMock } from "../../../typechain-types";
 import { amount, DEFAULT_ADMIN_ROLE, PREDICATE_ROLE, tokenName, tokenSymbol } from "../../constants";
 
-describe("ERC20GemunionPolygonParent", function () {
+describe("ERC20PolygonParentMock", function () {
   let erc20: ContractFactory;
-  let erc20Instance: ERC20GemunionPolygonParent;
+  let erc20Instance: ERC20PolygonParentMock;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
 
   beforeEach(async function () {
-    erc20 = await ethers.getContractFactory("ERC20GemunionPolygonParent");
+    erc20 = await ethers.getContractFactory("ERC20PolygonParentMock");
     [owner, receiver] = await ethers.getSigners();
 
-    erc20Instance = (await erc20.deploy(tokenName, tokenSymbol)) as ERC20GemunionPolygonParent;
+    erc20Instance = (await erc20.deploy(tokenName, tokenSymbol)) as ERC20PolygonParentMock;
   });
 
   describe("Deployment", function () {

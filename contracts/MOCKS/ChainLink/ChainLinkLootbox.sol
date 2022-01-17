@@ -9,9 +9,9 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/utils/Address.sol";
 
 import "../../ERC721/preset/ERC721ACBECP.sol";
-import "../../ERC721/ChainLink/IERC721ChainLink.sol";
+import "../../ERC721/ChainLink/interfaces/IERC721ChainLink.sol";
 
-contract LootboxTestLink is ERC721ACBECP {
+contract ChainLinkLootboxMock is ERC721ACBECP {
   using Address for address;
 
   IERC721ChainLink _factory;

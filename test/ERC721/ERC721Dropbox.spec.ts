@@ -5,22 +5,22 @@ import { Network } from "@ethersproject/networks";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import tokens from "./tokens.json";
 
-import { ERC721DropboxTest } from "../../typechain-types";
+import { ERC721DropboxMock } from "../../typechain-types";
 import { MINTER_ROLE, tokenName, tokenSymbol, baseTokenURI } from "../constants";
 
 describe("ERC721Dropbox", function () {
   let erc721: ContractFactory;
-  let erc721Instance: ERC721DropboxTest;
+  let erc721Instance: ERC721DropboxMock;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
   let addr2: SignerWithAddress;
   let network: Network;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721DropboxTest");
+    erc721 = await ethers.getContractFactory("ERC721DropboxMock");
     [owner, receiver, addr2] = await ethers.getSigners();
 
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721DropboxTest;
+    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721DropboxMock;
 
     await erc721Instance.grantRole(MINTER_ROLE, receiver.address);
 

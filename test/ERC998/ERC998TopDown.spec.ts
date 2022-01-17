@@ -5,8 +5,8 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import {
   ERC20ACBCS,
-  ERC721NonReceiverTest,
-  ERC721ReceiverTest,
+  ERC721NonReceiverMock,
+  ERC721ReceiverMock,
   ERC721ACBEC,
   ERC998ComposableTopDownTest,
 } from "../../typechain-types";
@@ -20,9 +20,9 @@ describe("ERC998ComposableTopDown", function () {
   let erc998: ContractFactory;
   let erc998Instance: ERC998ComposableTopDownTest;
   let nftReceiver: ContractFactory;
-  let nftReceiverInstance: ERC721ReceiverTest;
+  let nftReceiverInstance: ERC721ReceiverMock;
   let nftNonReceiver: ContractFactory;
-  let nftNonReceiverInstance: ERC721NonReceiverTest;
+  let nftNonReceiverInstance: ERC721NonReceiverMock;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
 
@@ -30,15 +30,15 @@ describe("ERC998ComposableTopDown", function () {
     erc20 = await ethers.getContractFactory("ERC20ACBCS");
     erc721 = await ethers.getContractFactory("ERC721ACBEC");
     erc998 = await ethers.getContractFactory("ERC998ComposableTopDownTest");
-    nftReceiver = await ethers.getContractFactory("ERC721ReceiverTest");
-    nftNonReceiver = await ethers.getContractFactory("ERC721NonReceiverTest");
+    nftReceiver = await ethers.getContractFactory("ERC721ReceiverMock");
+    nftNonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [owner, receiver] = await ethers.getSigners();
 
     erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ACBCS;
     erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBEC;
     erc998Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ComposableTopDownTest;
-    nftReceiverInstance = (await nftReceiver.deploy()) as ERC721ReceiverTest;
-    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverTest;
+    nftReceiverInstance = (await nftReceiver.deploy()) as ERC721ReceiverMock;
+    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
   describe("constructor", function () {

@@ -8,8 +8,6 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 
 interface ERC677Receiver {
   function onTokenTransfer(
@@ -19,7 +17,7 @@ interface ERC677Receiver {
   ) external;
 }
 
-contract LinkErc20 is ERC20 {
+contract LINK is ERC20 {
   using Address for address;
 
   constructor(string memory _name, string memory _symbol) ERC20(_name, _symbol) {}

@@ -818,6 +818,13 @@ describe("ERC998ERC721TopDownTest", function () {
       expect(tx1).to.equal(true);
     });
 
+    it("should fail for wrong role (whitelist)", async function () {
+      const tx = erc998Instance.connect(receiver).whitelist(erc721Instance.address, 0);
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,
+      );
+    });
+
     it("should not in whitelist", async function () {
       const tx1 = await erc998Instance.isWhitelisted(erc721Instance.address);
       expect(tx1).to.equal(false);
@@ -833,6 +840,17 @@ describe("ERC998ERC721TopDownTest", function () {
       expect(tx2).to.equal(false);
     });
 
+    it("should fail for wrong role (unWhitelist)", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
+      const tx1 = await erc998Instance.isWhitelisted(erc721Instance.address);
+      expect(tx1).to.equal(true);
+
+      const tx = erc998Instance.connect(receiver).unWhitelist(erc721Instance.address);
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,
+      );
+    });
+
     it("should match max", async function () {
       erc998Instance.whitelist(erc721Instance.address, 10);
       const tx1 = await erc998Instance.getMaxCountWhiteList(erc721Instance.address);
@@ -844,6 +862,17 @@ describe("ERC998ERC721TopDownTest", function () {
       erc998Instance.changeMaxCountWhiteList(erc721Instance.address, 10);
       const tx1 = await erc998Instance.getMaxCountWhiteList(erc721Instance.address);
       expect(tx1).to.equal(10);
+    });
+
+    it("should fail for wrong role (changeMaxCountWhiteList)", async function () {
+      erc998Instance.whitelist(erc721Instance.address, 0);
+      const tx1 = await erc998Instance.isWhitelisted(erc721Instance.address);
+      expect(tx1).to.equal(true);
+
+      const tx = erc998Instance.connect(receiver).changeMaxCountWhiteList(erc721Instance.address, 10);
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,
+      );
     });
 
     it("should make increment for safeTransferFrom", async function () {

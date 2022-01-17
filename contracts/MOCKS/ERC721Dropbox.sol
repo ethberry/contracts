@@ -9,7 +9,7 @@ pragma solidity ^0.8.4;
 import "../ERC721/ERC721Dropbox.sol";
 import "../ERC721/preset/ERC721ACB.sol";
 
-contract ERC721DropboxTest is ERC721Dropbox, ERC721ACB {
+contract ERC721DropboxMock is ERC721Dropbox, ERC721ACB {
   constructor(
     string memory name,
     string memory symbol,

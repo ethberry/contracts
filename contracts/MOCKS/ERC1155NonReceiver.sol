@@ -8,4 +8,4 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract ERC1155NonReceiverTest is AccessControl {}
+contract ERC1155NonReceiverMock is AccessControl {}

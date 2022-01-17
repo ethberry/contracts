@@ -12,7 +12,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 
-import "./IEIP712ERC721Droppable.sol";
+import "./interfaces/IEIP712ERC721Droppable.sol";
 
 contract EIP712ERC721Dropbox is EIP712, Pausable, AccessControl {
   using Address for address;

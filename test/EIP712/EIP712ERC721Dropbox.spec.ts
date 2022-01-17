@@ -5,12 +5,12 @@ import { Network } from "@ethersproject/networks";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import tokens from "./tokens.json";
-import { EIP712ERC721Dropbox, ERC721DroppableTest } from "../../typechain-types";
+import { EIP712ERC721Dropbox, ERC721DroppableMock } from "../../typechain-types";
 import { MINTER_ROLE, tokenName, tokenSymbol, baseTokenURI } from "../constants";
 
 describe("EIP712ERC721Dropbox", function () {
   let erc721: ContractFactory;
-  let erc721Instance: ERC721DroppableTest;
+  let erc721Instance: ERC721DroppableMock;
   let dropbox: ContractFactory;
   let dropboxInstance: EIP712ERC721Dropbox;
   let owner: SignerWithAddress;
@@ -19,11 +19,11 @@ describe("EIP712ERC721Dropbox", function () {
   let network: Network;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721DroppableTest");
+    erc721 = await ethers.getContractFactory("ERC721DroppableMock");
     dropbox = await ethers.getContractFactory("EIP712ERC721Dropbox");
     [owner, receiver, addr2] = await ethers.getSigners();
 
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721DroppableTest;
+    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721DroppableMock;
     dropboxInstance = (await dropbox.deploy(tokenName)) as EIP712ERC721Dropbox;
 
     await dropboxInstance.setFactory(erc721Instance.address);

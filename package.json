@@ -80,6 +80,6 @@
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test"
   },
-  "types": "./dist/index.d.ts",
-  "version": "0.0.11"
+  "types": "./typechain-types/index.ts",
+  "version": "0.0.12"
 }

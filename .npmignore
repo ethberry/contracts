@@ -1,12 +1,11 @@
 /scripts
 /tasks
-test
+/test
 
 /artifacts
 /cache
-/typechain-types
 
-besu
+/besu
 
 DOCKER.md
 HARDHAT.md

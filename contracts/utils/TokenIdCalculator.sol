@@ -12,6 +12,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract TokenIdCalculator {
   constructor() {
-    console.log("TokenId", Strings.toHexString(1, 32));
+    console.log("TokenId", Strings.toHexString(100, 32));
+    // 0x0000000000000000000000000000000000000000000000000000000000000064
   }
 }

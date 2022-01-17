@@ -70,7 +70,7 @@ abstract contract ERC998ERC721TopDown is ERC721ACBECS, IERC998ERC721TopDown, IER
     uint256 childTokenId_ = _childTokenId;
     while (rootOwnerAddress == address(this)) {
       (rootOwnerAddress, _childTokenId) = _ownerOfChild(rootOwnerAddress, _childTokenId);
-      require( !(rootOwnerAddress_ == rootOwnerAddress && childTokenId_ == _childTokenId), "ComposableTopDown: fail loop" );
+      require( !(rootOwnerAddress_ == rootOwnerAddress && childTokenId_ == _childTokenId), "ComposableTopDown: circular ownership is forbidden" );
     }
     bytes memory callData = abi.encodeWithSelector(ROOT_OWNER_OF_CHILD, address(this), _childTokenId);
     (bool callSuccess, bytes memory data) = rootOwnerAddress.staticcall(callData);

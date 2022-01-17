@@ -398,7 +398,7 @@ describe("ERC998ERC721TopDownTest", function () {
         1,
         "0x0000000000000000000000000000000000000000000000000000000000000001",
       );
-      await expect(tx1).to.be.revertedWith(`ComposableTopDown: fail loop`);
+      await expect(tx1).to.be.revertedWith(`ComposableTopDown: circular ownership is forbidden`);
     });
 
     it("should transfer tree of tokens to wallet", async function () {
@@ -477,7 +477,7 @@ describe("ERC998ERC721TopDownTest", function () {
         "0x0000000000000000000000000000000000000000000000000000000000000001",
       );
       // DOUBLE CHECK
-      await expect(tx2).to.be.revertedWith(`ComposableTopDown: fail loop`);
+      await expect(tx2).to.be.revertedWith(`ComposableTopDown: circular ownership is forbidden`);
     });
   });
 

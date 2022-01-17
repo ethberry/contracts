@@ -46,11 +46,6 @@ abstract contract ERC998TopDown is
     uint256 cap
   ) ERC721ACBECS(name, symbol, baseTokenURI, cap) {}
 
-  function mint(address to) public virtual override onlyRole(MINTER_ROLE) {
-    _safeMint(to, _tokenIdTracker.current());
-    _tokenIdTracker.increment();
-  }
-
   bytes4 constant ALLOWANCE = bytes4(keccak256("allowance(address,address)"));
   bytes4 constant APPROVE = bytes4(keccak256("approve(address,uint256)"));
   bytes4 constant ROOT_OWNER_OF_CHILD = bytes4(keccak256("rootOwnerOfChild(address,uint256)"));
@@ -78,8 +73,11 @@ abstract contract ERC998TopDown is
       rootOwnerAddress = ownerOf(_childTokenId);
     }
     // Case 1: Token owner is this contract and token.
+    address rootOwnerAddress_ = rootOwnerAddress;
+    uint256 childTokenId_ = _childTokenId;
     while (rootOwnerAddress == address(this)) {
       (rootOwnerAddress, _childTokenId) = _ownerOfChild(rootOwnerAddress, _childTokenId);
+      require( !(rootOwnerAddress_ == rootOwnerAddress && childTokenId_ == _childTokenId), "ComposableTopDown: circular ownership is forbidden" );
     }
     bytes memory callData = abi.encodeWithSelector(ROOT_OWNER_OF_CHILD, address(this), _childTokenId);
     (bool callSuccess, bytes memory data) = rootOwnerAddress.staticcall(callData);

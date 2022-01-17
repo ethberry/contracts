@@ -66,13 +66,47 @@ describe("ERC998ComposableTopDown", function () {
       expect(balance).to.equal(1);
     });
 
-    it("should fail to mint to non receiver", async function () {
+    it("should mint to non receiver", async function () {
       const tx = erc998Instance.mint(nftNonReceiverInstance.address);
-      await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
+      await expect(tx)
+        .to.emit(erc998Instance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, nftNonReceiverInstance.address, 0);
     });
 
     it("should mint to receiver", async function () {
       const tx = erc998Instance.mint(nftReceiverInstance.address);
+      await expect(tx)
+        .to.emit(erc998Instance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, nftReceiverInstance.address, 0);
+
+      const balance = await erc998Instance.balanceOf(nftReceiverInstance.address);
+      expect(balance).to.equal(1);
+    });
+  });
+
+  describe("safeMint", function () {
+    it("should fail for wrong role", async function () {
+      const tx = erc998Instance.connect(receiver).safeMint(receiver.address);
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
+      );
+    });
+
+    it("should mint to wallet", async function () {
+      const tx = erc998Instance.safeMint(owner.address);
+      await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(ethers.constants.AddressZero, owner.address, 0);
+
+      const balance = await erc998Instance.balanceOf(owner.address);
+      expect(balance).to.equal(1);
+    });
+
+    it("should fail to mint to non receiver", async function () {
+      const tx = erc998Instance.safeMint(nftNonReceiverInstance.address);
+      await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
+    });
+
+    it("should mint to receiver", async function () {
+      const tx = erc998Instance.safeMint(nftReceiverInstance.address);
       await expect(tx)
         .to.emit(erc998Instance, "Transfer")
         .withArgs(ethers.constants.AddressZero, nftReceiverInstance.address, 0);
@@ -364,7 +398,7 @@ describe("ERC998ComposableTopDown", function () {
       // TODO "ComposableTopDown: _transferFrom token is child of other top down composable"
     });
 
-    it.skip("should not transfer token to itself", async function () {
+    it("should not transfer token to itself", async function () {
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
 
@@ -374,7 +408,7 @@ describe("ERC998ComposableTopDown", function () {
         1,
         "0x0000000000000000000000000000000000000000000000000000000000000001",
       );
-      await expect(tx1).to.be.reverted;
+      await expect(tx1).to.be.revertedWith(`ComposableTopDown: circular ownership is forbidden`);
     });
 
     it("should transfer tree of tokens to wallet", async function () {
@@ -433,7 +467,7 @@ describe("ERC998ComposableTopDown", function () {
       await expect(tx3).to.be.revertedWith(`ERC721: transfer caller is not owner nor approved`);
     });
 
-    it.skip("should not transfer token to its child token", async function () {
+    it("should not transfer token to its child token", async function () {
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
       await erc998Instance.mint(owner.address);
@@ -452,8 +486,7 @@ describe("ERC998ComposableTopDown", function () {
         2,
         "0x0000000000000000000000000000000000000000000000000000000000000001",
       );
-      // DOUBLE CHECK
-      await expect(tx2).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
+      await expect(tx2).to.be.revertedWith(`ComposableTopDown: circular ownership is forbidden`);
     });
   });
 

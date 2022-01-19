@@ -7,7 +7,7 @@ import {
   ERC20ACBCS,
   ERC721NonReceiverMock,
   ERC721ReceiverMock,
-  ERC721ACBEC,
+  ERC721ACBCE,
   ERC998ComposableBottomUpTest,
 } from "../../typechain-types";
 import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
@@ -16,7 +16,7 @@ describe("ERC998ComposableBottomUp", function () {
   let erc20: ContractFactory;
   let erc20Instance: ERC20ACBCS;
   let erc721: ContractFactory;
-  let erc721Instance: ERC721ACBEC;
+  let erc721Instance: ERC721ACBCE;
   let erc998: ContractFactory;
   let erc998Instance: ERC998ComposableBottomUpTest;
   let nftReceiver: ContractFactory;
@@ -28,14 +28,14 @@ describe("ERC998ComposableBottomUp", function () {
 
   beforeEach(async function () {
     erc20 = await ethers.getContractFactory("ERC20ACBCS");
-    erc721 = await ethers.getContractFactory("ERC721ACBEC");
+    erc721 = await ethers.getContractFactory("ERC721ACBCE");
     erc998 = await ethers.getContractFactory("ERC998ComposableBottomUpTest");
     nftReceiver = await ethers.getContractFactory("ERC721ReceiverMock");
     nftNonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [owner, receiver] = await ethers.getSigners();
 
     erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ACBCS;
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBEC;
+    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBCE;
     erc998Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ComposableBottomUpTest;
     nftReceiverInstance = (await nftReceiver.deploy()) as ERC721ReceiverMock;
     nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverMock;

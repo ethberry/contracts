@@ -14,9 +14,9 @@ import "./interfaces/IERC998ERC721BottomUp.sol";
 import "./interfaces/IERC998ERC721TopDown.sol";
 import "./interfaces/IERC998ERC721TopDownEnumerable.sol";
 
-import "../ERC721/preset/ERC721ACBECS.sol";
+import "../ERC721/preset/ERC721ACBCES.sol";
 
-abstract contract ERC998ERC721TopDown is ERC721ACBECS, IERC998ERC721TopDown, IERC998ERC721TopDownEnumerable {
+abstract contract ERC998ERC721TopDown is ERC721ACBCES, IERC998ERC721TopDown, IERC998ERC721TopDownEnumerable {
   using Address for address;
   using Counters for Counters.Counter;
   using EnumerableSet for EnumerableSet.UintSet;
@@ -35,7 +35,7 @@ abstract contract ERC998ERC721TopDown is ERC721ACBECS, IERC998ERC721TopDown, IER
     string memory symbol,
     string memory baseTokenURI,
     uint256 cap
-  ) ERC721ACBECS(name, symbol, baseTokenURI, cap) {
+  ) ERC721ACBCES(name, symbol, baseTokenURI, cap) {
     // burn first token because of reasons
     // mint(0x000000000000000000000000000000000000dead);
   }

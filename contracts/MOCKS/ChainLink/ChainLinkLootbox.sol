@@ -8,10 +8,10 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Address.sol";
 
-import "../../ERC721/preset/ERC721ACBECP.sol";
+import "../../ERC721/preset/ERC721ACBCEP.sol";
 import "../../ERC721/ChainLink/interfaces/IERC721ChainLink.sol";
 
-contract ChainLinkLootboxMock is ERC721ACBECP {
+contract ChainLinkLootboxMock is ERC721ACBCEP {
   using Address for address;
 
   IERC721ChainLink _factory;
@@ -20,7 +20,7 @@ contract ChainLinkLootboxMock is ERC721ACBECP {
     string memory name,
     string memory symbol,
     string memory baseTokenURI
-  ) ERC721ACBECP(name, symbol, baseTokenURI, 1000) {}
+  ) ERC721ACBCEP(name, symbol, baseTokenURI, 1000) {}
 
   receive() external payable {
     revert();

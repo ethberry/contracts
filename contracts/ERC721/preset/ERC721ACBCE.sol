@@ -7,15 +7,13 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "../ERC721Capped.sol";
+import "../ERC721CappedEnumerable.sol";
 
-contract ERC721ACBECS is AccessControl, ERC721Burnable, ERC721Enumerable, ERC721Capped, ERC721URIStorage {
+contract ERC721ACBCE is AccessControl, ERC721Burnable, ERC721CappedEnumerable {
   using Counters for Counters.Counter;
 
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -29,7 +27,7 @@ contract ERC721ACBECS is AccessControl, ERC721Burnable, ERC721Enumerable, ERC721
     string memory symbol,
     string memory baseTokenURI,
     uint256 cap
-  ) ERC721(name, symbol) ERC721Capped(cap) {
+  ) ERC721(name, symbol) ERC721CappedEnumerable(cap) {
     _baseTokenURI = baseTokenURI;
 
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -78,27 +76,15 @@ contract ERC721ACBECS is AccessControl, ERC721Burnable, ERC721Enumerable, ERC721
     return super.supportsInterface(interfaceId);
   }
 
-  function tokenURI(uint256 tokenId) public view virtual override(ERC721, ERC721URIStorage) returns (string memory) {
-    return super.tokenURI(tokenId);
-  }
-
-  function setTokenURI(uint256 tokenId, string memory _tokenURI) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
-    _setTokenURI(tokenId, _tokenURI);
-  }
-
-  function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721URIStorage) {
-    return super._burn(tokenId);
-  }
-
   function _baseURI() internal view virtual override returns (string memory) {
     return _baseTokenURI;
   }
 
-  function _mint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721Capped) {
+  function _mint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721CappedEnumerable) {
     super._mint(account, tokenId);
   }
 
-  function _safeMint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721Capped) {
+  function _safeMint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721CappedEnumerable) {
     super._safeMint(account, tokenId);
   }
 
@@ -106,7 +92,7 @@ contract ERC721ACBECS is AccessControl, ERC721Burnable, ERC721Enumerable, ERC721
     address from,
     address to,
     uint256 tokenId
-  ) internal virtual override(ERC721, ERC721Enumerable, ERC721Capped) {
+  ) internal virtual override(ERC721, ERC721CappedEnumerable) {
     super._beforeTokenTransfer(from, to, tokenId);
   }
 }

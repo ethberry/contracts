@@ -6,10 +6,11 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-abstract contract ERC721Capped is ERC721Enumerable {
+abstract contract ERC721Capped is ERC721 {
   uint256 internal _cap;
+  uint256[] private _allTokens;
 
   constructor(uint256 cap_) {
     require(cap_ > 0, "ERC721Capped: cap is 0");
@@ -23,22 +24,19 @@ abstract contract ERC721Capped is ERC721Enumerable {
     return _cap;
   }
 
-  function _mint(address to, uint256 tokenId) internal virtual override {
-    require(totalSupply() + 1 <= cap(), "ERC20Capped: cap exceeded");
-    super._mint(to, tokenId);
+  function totalSupply() public view virtual returns (uint256) {
+    return _allTokens.length;
   }
 
-  function _safeMint(address to, uint256 tokenId) internal virtual override {
-    require(totalSupply() + 1 <= cap(), "ERC20Capped: cap exceeded");
-    super._safeMint(to, tokenId);
+  function _mint(address account, uint256 tokenId) internal virtual override {
+    require(totalSupply() + 1 <= cap(), "ERC721Capped: cap exceeded");
+    _allTokens.push(tokenId);
+    super._mint(account, tokenId);
   }
 
-  function _beforeTokenTransfer(
-    address from,
-    address to,
-    uint256 tokenId
-  ) internal virtual override(ERC721Enumerable) {
-    require(super.totalSupply() <= _cap, "ERC721Impulse: cap exceeded");
-    super._beforeTokenTransfer(from, to, tokenId);
+  function _safeMint(address account, uint256 tokenId) internal virtual override {
+    require(totalSupply() + 1 <= cap(), "ERC721Capped: cap exceeded");
+    _allTokens.push(tokenId);
+    super._safeMint(account, tokenId);
   }
 }

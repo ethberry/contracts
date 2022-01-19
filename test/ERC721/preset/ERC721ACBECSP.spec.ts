@@ -3,12 +3,12 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { ERC721ACBECSP, ERC721ReceiverMock, ERC721NonReceiverMock } from "../../../typechain-types";
+import { ERC721ACBCESP, ERC721ReceiverMock, ERC721NonReceiverMock } from "../../../typechain-types";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
-describe("ERC721ACBECSP", function () {
+describe("ERC721ACBCESP", function () {
   let erc721: ContractFactory;
-  let erc721Instance: ERC721ACBECSP;
+  let erc721Instance: ERC721ACBCESP;
   let nftReceiver: ContractFactory;
   let nftReceiverInstance: ERC721ReceiverMock;
   let nftNonReceiver: ContractFactory;
@@ -17,12 +17,12 @@ describe("ERC721ACBECSP", function () {
   let receiver: SignerWithAddress;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721ACBECSP");
+    erc721 = await ethers.getContractFactory("ERC721ACBCESP");
     nftReceiver = await ethers.getContractFactory("ERC721ReceiverMock");
     nftNonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [owner, receiver] = await ethers.getSigners();
 
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBECSP;
+    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBCESP;
     nftReceiverInstance = (await nftReceiver.deploy()) as ERC721ReceiverMock;
     nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverMock;
   });
@@ -415,7 +415,7 @@ describe("ERC721ACBECSP", function () {
       expect(totalSupply).to.equal(2);
 
       const tx = erc721Instance.mint(owner.address);
-      await expect(tx).to.be.revertedWith(`ERC20Capped: cap exceeded`);
+      await expect(tx).to.be.revertedWith(`ERC721CappedEnumerable: cap exceeded`);
     });
   });
 

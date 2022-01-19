@@ -7,20 +7,18 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "../ERC721Capped.sol";
+import "../ERC721CappedEnumerable.sol";
 
-contract ERC721ACBECSP is
+contract ERC721ACBCESP is
   AccessControl,
   ERC721Burnable,
-  ERC721Enumerable,
-  ERC721Capped,
+  ERC721CappedEnumerable,
   ERC721URIStorage,
   ERC721Pausable
 {
@@ -38,7 +36,7 @@ contract ERC721ACBECSP is
     string memory symbol,
     string memory baseTokenURI,
     uint256 cap
-  ) ERC721(name, symbol) ERC721Capped(cap) {
+  ) ERC721(name, symbol) ERC721CappedEnumerable(cap) {
     _baseTokenURI = baseTokenURI;
 
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -130,11 +128,11 @@ contract ERC721ACBECSP is
     return _baseTokenURI;
   }
 
-  function _mint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721Capped) {
+  function _mint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721CappedEnumerable) {
     super._mint(account, tokenId);
   }
 
-  function _safeMint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721Capped) {
+  function _safeMint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721CappedEnumerable) {
     super._safeMint(account, tokenId);
   }
 
@@ -142,7 +140,7 @@ contract ERC721ACBECSP is
     address from,
     address to,
     uint256 tokenId
-  ) internal virtual override(ERC721, ERC721Enumerable, ERC721Pausable, ERC721Capped) {
+  ) internal virtual override(ERC721, ERC721Pausable, ERC721CappedEnumerable) {
     super._beforeTokenTransfer(from, to, tokenId);
   }
 }

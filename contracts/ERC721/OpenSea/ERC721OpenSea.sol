@@ -10,9 +10,9 @@ import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 
 import "./utils/ProxyRegistry.sol";
-import "../../ERC721/preset/ERC721ACBECS.sol";
+import "../../ERC721/preset/ERC721ACBCES.sol";
 
-abstract contract ERC721OpenSea is ERC721ACBECS, AccessControlEnumerable {
+abstract contract ERC721OpenSea is ERC721ACBCES, AccessControlEnumerable {
   event PermanentURI(string _value, uint256 indexed _id);
 
   using Address for address;
@@ -72,7 +72,7 @@ abstract contract ERC721OpenSea is ERC721ACBECS, AccessControlEnumerable {
     public
     view
     virtual
-    override(ERC721ACBECS, AccessControlEnumerable)
+    override(ERC721ACBCES, AccessControlEnumerable)
     returns (bool)
   {
     return super.supportsInterface(interfaceId);

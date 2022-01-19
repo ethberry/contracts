@@ -17,10 +17,10 @@ import "./interfaces/IERC998ERC721BottomUp.sol";
 import "./interfaces/IERC998ERC721TopDown.sol";
 import "./interfaces/IERC998ERC721TopDownEnumerable.sol";
 
-import "../ERC721/preset/ERC721ACBECS.sol";
+import "../ERC721/preset/ERC721ACBCES.sol";
 
 abstract contract ERC998TopDown is
-  ERC721ACBECS,
+  ERC721ACBCES,
   IERC998ERC721TopDown,
   IERC998ERC721TopDownEnumerable,
   IERC998ERC20TopDown,
@@ -44,7 +44,7 @@ abstract contract ERC998TopDown is
     string memory symbol,
     string memory baseTokenURI,
     uint256 cap
-  ) ERC721ACBECS(name, symbol, baseTokenURI, cap) {}
+  ) ERC721ACBCES(name, symbol, baseTokenURI, cap) {}
 
   bytes4 constant ALLOWANCE = bytes4(keccak256("allowance(address,address)"));
   bytes4 constant APPROVE = bytes4(keccak256("approve(address,uint256)"));

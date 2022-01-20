@@ -6,16 +6,5 @@
   "parserOptions": {
     "project": "./tsconfig.test.json"
   },
-  "root": true,
-  "rules": {
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": [
-          "**/test/**/*.{ts,tsx,js,jsx}",
-          "hardhat.config.{js,ts}"
-        ]
-      }
-    ]
-  }
+  "root": true
 }

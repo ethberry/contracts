@@ -6,5 +6,10 @@
   "parserOptions": {
     "project": "./tsconfig.test.json"
   },
-  "root": true
+  "root": true,
+  "rules": {
+    "mocha/no-exports": "off",
+    "mocha/no-setup-in-describe": "off",
+    "@typescript-eslint/restrict-template-expressions": "off"
+  }
 }

@@ -42,21 +42,18 @@ contract WhiteListChild {
         emit SetMaxChild(max);
     }
 
-    function getChildCount(address addr) public view returns (uint256) {
-        _whitelistChild(addr);
+    function getChildCount(address addr) public view onlyWhiteListed(addr) returns (uint256) {
         return _childContractsCounter[addr];
     }
 
-    function incrementCountWhiteList(address addr) public {
-        _whitelistChild(addr);
+    function incrementCountWhiteList(address addr) public onlyWhiteListed(addr) {
         if(_maxChildCount > 0){
             require(_childContractsCounter[addr] < _maxChildCount, "WhiteListChild: excess number of tokens");
         }
         _childContractsCounter[addr]++;
     }
 
-    function decrementCountWhiteList(address addr) public {
-        _whitelistChild(addr);
+    function decrementCountWhiteList(address addr) public onlyWhiteListed(addr) {
         if(_childContractsCounter[addr] > 0) {
             _childContractsCounter[addr]--;
         }

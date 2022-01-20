@@ -3,10 +3,15 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { ERC721NonReceiverTest, ERC721ReceiverTest, ERC721ACBEC, ERC998ERC721TopDownWhiteListChildTest } from "../../typechain-types";
+import {
+  ERC721NonReceiverTest,
+  ERC721ReceiverTest,
+  ERC721ACBEC,
+  ERC998ERC721TopDownWhiteListChildTest,
+} from "../../typechain-types";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
 
-describe("ERC998ERC721TopDownWhiteListChildTest", function () {
+describe.only("ERC998ERC721TopDownWhiteListChildTest", function () {
   let erc721: ContractFactory;
   let erc721Instance: ERC721ACBEC;
   let erc998: ContractFactory;
@@ -26,7 +31,12 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
     [owner, receiver] = await ethers.getSigners();
 
     erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBEC;
-    erc998Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ERC721TopDownWhiteListChildTest;
+    erc998Instance = (await erc998.deploy(
+      tokenName,
+      tokenSymbol,
+      baseTokenURI,
+      1000,
+    )) as ERC998ERC721TopDownWhiteListChildTest;
     nftReceiverInstance = (await nftReceiver.deploy()) as ERC721ReceiverTest;
     nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverTest;
   });
@@ -855,7 +865,7 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
       erc998Instance.whiteListChild(erc721Instance.address);
       const tx1 = await erc998Instance.isWhitelisted(erc721Instance.address);
       expect(tx1).to.equal(true);
-      
+
       erc998Instance.unWhitelistChild(erc721Instance.address);
       const tx2 = await erc998Instance.isWhitelisted(erc721Instance.address);
       expect(tx2).to.equal(false);
@@ -974,7 +984,7 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
       await erc721Instance.mint(owner.address);
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
-
+      
       const tx1 = erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
         owner.address,
         erc998Instance.address,
@@ -991,14 +1001,14 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
         erc998Instance.address,
         1, // erc721 tokenId
         "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
-      );            
+      );
       await expect(tx3).to.be.revertedWith(`WhiteListChild: excess number of tokens`);
     });
 
     it("should fail with excess number (with two contracts) for safeTransferFrom", async function () {
       erc998Instance.whiteListChild(erc721Instance.address);
       erc998Instance.setMaxChild(1);
-       erc998Instance.whiteListChild(erc998Instance.address);
+      erc998Instance.whiteListChild(erc998Instance.address);
       erc998Instance.setMaxChild(2);
       await erc721Instance.mint(owner.address);
       await erc721Instance.mint(owner.address);
@@ -1014,7 +1024,7 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
         "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
       );
       await expect(tx1).to.not.be.reverted;
-      
+
       const tx2 = await erc998Instance.getChildCount(erc721Instance.address);
       expect(tx2).to.equal(1);
 
@@ -1023,7 +1033,7 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
         erc998Instance.address,
         0, // erc721 tokenId
         "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
-      );       
+      );
       await expect(tx3).to.not.be.reverted;
 
       const tx4 = await erc998Instance.getChildCount(erc998Instance.address);
@@ -1034,7 +1044,7 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
         erc998Instance.address,
         2, // erc721 tokenId
         "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
-      );       
+      );
       await expect(tx5).to.not.be.reverted;
 
       const tx6 = await erc998Instance.getChildCount(erc998Instance.address);
@@ -1045,7 +1055,7 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
         erc998Instance.address,
         3, // erc721 tokenId
         "0x0000000000000000000000000000000000000000000000000000000000000001", // erc998 tokenId
-      );       
+      );
       await expect(tx7).to.be.revertedWith(`WhiteListChild: excess number of tokens`);
     });
 
@@ -1075,7 +1085,7 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
       );
       await expect(tx3)
         .to.emit(erc998Instance, "TransferChild")
-        .withArgs(1, receiver.address, erc721Instance.address, 0); 
+        .withArgs(1, receiver.address, erc721Instance.address, 0);
 
       const tx4 = await erc998Instance.getChildCount(erc721Instance.address);
       expect(tx4).to.equal(0);

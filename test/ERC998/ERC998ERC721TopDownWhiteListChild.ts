@@ -888,12 +888,6 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
       expect(tx1).to.equal(10);
     });
 
-    it("should change max", async function () {
-      await erc998Instance.setMaxChild(10);
-      const tx1 = await erc998Instance.getMaxChild();
-      expect(tx1).to.equal(10);
-    });
-
     it("should fail for wrong role (setMaxChild)", async function () {
       await erc998Instance.whiteListChild(erc721Instance.address);
       const tx1 = await erc998Instance.isWhitelisted(erc721Instance.address);

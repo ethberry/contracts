@@ -8,14 +8,8 @@
   },
   "root": true,
   "rules": {
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": [
-          "**/test/**/*.{ts,tsx,js,jsx}",
-          "hardhat.config.{js,ts}"
-        ]
-      }
-    ]
+    "mocha/no-exports": "off",
+    "mocha/no-setup-in-describe": "off",
+    "@typescript-eslint/restrict-template-expressions": "off"
   }
 }

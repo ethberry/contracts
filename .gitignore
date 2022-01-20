@@ -1,8 +1,8 @@
 # Project
-dist/
-coverage/
-typechain-types/
-besu/
+/typechain-types
+/besu
+/cache
+/artifacts
 
 # IDE
 .idea
@@ -20,9 +20,5 @@ yarn.lock
 /lerna-debug.log
 /report.*.json
 
-node_modules
 .env
 
-#Hardhat files
-cache
-artifacts

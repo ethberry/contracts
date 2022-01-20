@@ -3,32 +3,32 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { ERC721NonReceiverTest, ERC721ReceiverTest, ERC721ACBEC, ERC998ERC721TopDownTest } from "../../typechain-types";
+import { ERC721NonReceiverMock, ERC721ReceiverMock, ERC721ACBCE, ERC998ERC721TopDownTest } from "../../typechain-types";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 describe("ERC998ERC721TopDownTest", function () {
   let erc721: ContractFactory;
-  let erc721Instance: ERC721ACBEC;
+  let erc721Instance: ERC721ACBCE;
   let erc998: ContractFactory;
   let erc998Instance: ERC998ERC721TopDownTest;
   let nftReceiver: ContractFactory;
-  let nftReceiverInstance: ERC721ReceiverTest;
+  let nftReceiverInstance: ERC721ReceiverMock;
   let nftNonReceiver: ContractFactory;
-  let nftNonReceiverInstance: ERC721NonReceiverTest;
+  let nftNonReceiverInstance: ERC721NonReceiverMock;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721ACBEC");
+    erc721 = await ethers.getContractFactory("ERC721ACBCE");
     erc998 = await ethers.getContractFactory("ERC998ERC721TopDownTest");
-    nftReceiver = await ethers.getContractFactory("ERC721ReceiverTest");
-    nftNonReceiver = await ethers.getContractFactory("ERC721NonReceiverTest");
+    nftReceiver = await ethers.getContractFactory("ERC721ReceiverMock");
+    nftNonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [owner, receiver] = await ethers.getSigners();
 
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBEC;
+    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBCE;
     erc998Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ERC721TopDownTest;
-    nftReceiverInstance = (await nftReceiver.deploy()) as ERC721ReceiverTest;
-    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverTest;
+    nftReceiverInstance = (await nftReceiver.deploy()) as ERC721ReceiverMock;
+    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
   describe("constructor", function () {
@@ -388,7 +388,7 @@ describe("ERC998ERC721TopDownTest", function () {
       // TODO "ComposableTopDown: _transferFrom token is child of other top down composable"
     });
 
-    it.skip("should not transfer token to itself", async function () {
+    it("should not transfer token to itself", async function () {
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
 
@@ -398,7 +398,7 @@ describe("ERC998ERC721TopDownTest", function () {
         1,
         "0x0000000000000000000000000000000000000000000000000000000000000001",
       );
-      await expect(tx1).to.be.revertedWith(`ERC721: transfer caller is not owner nor approved`);
+      await expect(tx1).to.be.revertedWith(`ComposableTopDown: circular ownership is forbidden`);
     });
 
     it("should transfer tree of tokens to wallet", async function () {
@@ -457,7 +457,7 @@ describe("ERC998ERC721TopDownTest", function () {
       await expect(tx3).to.be.revertedWith(`ERC721: transfer caller is not owner nor approved`);
     });
 
-    it.skip("should not transfer token to its child token", async function () {
+    it("should not transfer token to its child token", async function () {
       await erc998Instance.mint(owner.address); // this is edge case
       await erc998Instance.mint(owner.address);
       await erc998Instance.mint(owner.address);
@@ -477,7 +477,7 @@ describe("ERC998ERC721TopDownTest", function () {
         "0x0000000000000000000000000000000000000000000000000000000000000001",
       );
       // DOUBLE CHECK
-      await expect(tx2).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
+      await expect(tx2).to.be.revertedWith(`ComposableTopDown: circular ownership is forbidden`);
     });
   });
 

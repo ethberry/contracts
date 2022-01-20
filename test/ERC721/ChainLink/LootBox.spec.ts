@@ -5,7 +5,7 @@ import { parseEther } from "ethers/lib/utils";
 import { ContractFactory, ContractTransaction } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { TokenTestLink, LootboxTestLink, LinkErc20, VRFCoordinatorMock } from "../../../typechain-types";
+import { ChainLinkTokenMock, ChainLinkLootboxMock, LINK, VRFCoordinatorMock } from "../../../typechain-types";
 import {
   baseTokenURI,
   decimals,
@@ -22,12 +22,12 @@ describe("LootBox", function () {
   let vrf: ContractFactory;
   let vrfInstance: VRFCoordinatorMock;
   let link: ContractFactory;
-  let linkInstance: LinkErc20;
+  let linkInstance: LINK;
 
   let nft: ContractFactory;
-  let nftInstance: TokenTestLink;
+  let nftInstance: ChainLinkTokenMock;
   let lootbox: ContractFactory;
-  let lootInstance: LootboxTestLink;
+  let lootInstance: ChainLinkLootboxMock;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
   this.timeout(42000);
@@ -35,14 +35,14 @@ describe("LootBox", function () {
   beforeEach(async function () {
     [owner, receiver] = await ethers.getSigners();
 
-    link = await ethers.getContractFactory("LinkErc20");
-    linkInstance = (await link.deploy(tokenName, tokenSymbol)) as LinkErc20;
+    link = await ethers.getContractFactory("LINK");
+    linkInstance = (await link.deploy(tokenName, tokenSymbol)) as LINK;
     await linkInstance.mint(owner.address, linkAmountInWei);
     vrf = await ethers.getContractFactory("VRFCoordinatorMock");
     vrfInstance = (await vrf.deploy(linkInstance.address)) as VRFCoordinatorMock;
 
-    nft = await ethers.getContractFactory("TokenTestLink");
-    lootbox = await ethers.getContractFactory("LootboxTestLink");
+    nft = await ethers.getContractFactory("ChainLinkTokenMock");
+    lootbox = await ethers.getContractFactory("ChainLinkLootboxMock");
 
     const keyHash = "0xcaf3c3727e033261d383b315559476f48034c13b18f8cafed4d871abe5049186";
     const fee = parseEther("0.1");
@@ -54,9 +54,9 @@ describe("LootBox", function () {
       linkInstance.address,
       keyHash,
       fee,
-    )) as TokenTestLink;
+    )) as ChainLinkTokenMock;
 
-    lootInstance = (await lootbox.deploy(tokenName, tokenSymbol, baseTokenURI)) as LootboxTestLink;
+    lootInstance = (await lootbox.deploy(tokenName, tokenSymbol, baseTokenURI)) as ChainLinkLootboxMock;
   });
 
   describe("Deployment", function () {

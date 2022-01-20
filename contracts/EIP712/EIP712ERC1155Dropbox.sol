@@ -12,7 +12,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 
-import "./IEIP712ERC1155Droppable.sol";
+import "./interfaces/IEIP712ERC1155Droppable.sol";
 
 /**
  * @dev {ERC721} token, including:

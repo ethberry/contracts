@@ -3,24 +3,24 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { ERC20ACBCS, ERC20NonReceiverTest } from "../../../typechain-types";
+import { ERC20ACBCS, ERC20NonReceiverMock } from "../../../typechain-types";
 import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, SNAPSHOT_ROLE, tokenName, tokenSymbol } from "../../constants";
 
 describe("ERC20ACBCS", function () {
   let erc20: ContractFactory;
   let erc20Instance: ERC20ACBCS;
   let coinNonReceiver: ContractFactory;
-  let coinNonReceiverInstance: ERC20NonReceiverTest;
+  let coinNonReceiverInstance: ERC20NonReceiverMock;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
 
   beforeEach(async function () {
     erc20 = await ethers.getContractFactory("ERC20ACBCS");
-    coinNonReceiver = await ethers.getContractFactory("ERC20NonReceiverTest");
+    coinNonReceiver = await ethers.getContractFactory("ERC20NonReceiverMock");
     [owner, receiver] = await ethers.getSigners();
 
     erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ACBCS;
-    coinNonReceiverInstance = (await coinNonReceiver.deploy()) as ERC20NonReceiverTest;
+    coinNonReceiverInstance = (await coinNonReceiver.deploy()) as ERC20NonReceiverMock;
   });
 
   describe("constructor", function () {

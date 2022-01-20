@@ -25,26 +25,28 @@ import "@openzeppelin/contracts/access/IAccessControlEnumerable.sol";
 
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 
-import "./Formatter.sol";
-import "./Convertor.sol";
-
-contract InterfaceIdCalculator is Formatter, Convertor {
+contract InterfaceIdCalculator {
   constructor() {
-    console.log(fromCode(bytes4ToBytes(type(IERC20).interfaceId)), "IERC20");
-    console.log(fromCode(bytes4ToBytes(type(IERC20Metadata).interfaceId)), "IERC20Metadata");
+    console.log("IERC20");
+    console.logBytes4(type(IERC20).interfaceId);
+    console.logBytes4(type(IERC20Metadata).interfaceId);
 
-    console.log(fromCode(bytes4ToBytes(type(IERC721).interfaceId)), "IERC721");
-    console.log(fromCode(bytes4ToBytes(type(IERC721Enumerable).interfaceId)), "IERC721Enumerable");
-    console.log(fromCode(bytes4ToBytes(type(IERC721Metadata).interfaceId)), "IERC721Metadata");
-    console.log(fromCode(bytes4ToBytes(type(IERC721Receiver).interfaceId)), "IERC721Receiver");
+    console.log("IERC165");
+    console.logBytes4(type(IERC165).interfaceId);
 
-    console.log(fromCode(bytes4ToBytes(type(IERC1155).interfaceId)), "IERC1155");
-    console.log(fromCode(bytes4ToBytes(type(IERC1155MetadataURI).interfaceId)), "IERC1155MetadataURI");
-    console.log(fromCode(bytes4ToBytes(type(IERC1155Receiver).interfaceId)), "IERC1155Receiver");
+    console.log("IERC721");
+    console.logBytes4(type(IERC721).interfaceId);
+    console.logBytes4(type(IERC721Enumerable).interfaceId);
+    console.logBytes4(type(IERC721Metadata).interfaceId);
+    console.logBytes4(type(IERC721Receiver).interfaceId);
 
-    console.log(fromCode(bytes4ToBytes(type(IAccessControl).interfaceId)), "IAccessControl");
-    console.log(fromCode(bytes4ToBytes(type(IAccessControlEnumerable).interfaceId)), "IAccessControlEnumerable");
+    console.log("IERC1155");
+    console.logBytes4(type(IERC1155).interfaceId);
+    console.logBytes4(type(IERC1155MetadataURI).interfaceId);
+    console.logBytes4(type(IERC1155Receiver).interfaceId);
 
-    console.log(fromCode(bytes4ToBytes(type(IERC165).interfaceId)), "IERC165");
+    console.log("IAccessControl");
+    console.logBytes4(type(IAccessControl).interfaceId);
+    console.logBytes4(type(IAccessControlEnumerable).interfaceId);
   }
 }

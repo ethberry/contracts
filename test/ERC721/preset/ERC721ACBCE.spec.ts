@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { expect } from "chai";
 
-import { ERC721ACBCES, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
+import { ERC721ACBCE, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI, tokenName, tokenSymbol } from "../../constants";
 
 import { shouldConstructor } from "../shared/constructor";
@@ -15,22 +15,21 @@ import { shouldBalanceOf } from "../shared/balanceOf1";
 import { shouldTransferFrom } from "../shared/transferFrom1";
 import { shouldSafeTransferFrom } from "../shared/safeTransferFrom1";
 import { shouldBurn } from "../shared/burn1";
-import { shouldTokenURI } from "../shared/tokenURI1";
 import { shouldTokenOfOwnerByIndex } from "../shared/tokenOfOwnerByIndex1";
 import { shouldCappedEnumerable } from "../shared/cappedEnumerable1";
 
-describe.only("ERC721ACBCES", function () {
+describe.only("ERC721ACBCE", function () {
   let erc721: ContractFactory;
   let nftReceiver: ContractFactory;
   let nftNonReceiver: ContractFactory;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721ACBCES");
+    erc721 = await ethers.getContractFactory("ERC721ACBCE");
     nftReceiver = await ethers.getContractFactory("ERC721ReceiverMock");
     nftNonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBCES;
+    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBCE;
     this.nftReceiverInstance = (await nftReceiver.deploy()) as ERC721ReceiverMock;
     this.nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverMock;
   });
@@ -45,7 +44,6 @@ describe.only("ERC721ACBCES", function () {
   shouldTransferFrom();
   shouldSafeTransferFrom();
   shouldBurn();
-  shouldTokenURI();
   shouldTokenOfOwnerByIndex();
   shouldCappedEnumerable();
 

@@ -1,8 +1,8 @@
 import { expect } from "chai";
 
-export const baseTokenURI = "http://localhost/";
+import { baseTokenURI } from "../../constants";
 
-export function shouldTokenURI() {
+export function shouldGetTokenURI() {
   describe("tokenURI", function () {
     it("should get default token URI", async function () {
       await this.erc721Instance.mint(this.owner.address);

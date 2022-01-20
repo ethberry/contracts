@@ -5,18 +5,18 @@ import { expect } from "chai";
 import { ERC721ACB, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldConstructor } from "../shared/constructor";
+import { shouldDeploy } from "../shared/constructor1";
 import { shouldMint } from "../shared/mint2";
 import { shouldSafeMint } from "../shared/safeMint2";
-import { shouldOwnerOf } from "../shared/ownerOf2";
+import { shouldGetOwnerOf } from "../shared/ownerOf2";
 import { shouldApprove } from "../shared/approve2";
 import { shouldSetApprovalForAll } from "../shared/setApprovalForAll2";
-import { shouldBalanceOf } from "../shared/balanceOf2";
+import { shouldGetBalanceOf } from "../shared/balanceOf2";
 import { shouldTransferFrom } from "../shared/transferFrom2";
 import { shouldSafeTransferFrom } from "../shared/safeTransferFrom2";
 import { shouldBurn } from "../shared/burn2";
 
-describe.only("ERC721ACB", function () {
+describe("ERC721ACB", function () {
   let erc721: ContractFactory;
   let nftReceiver: ContractFactory;
   let nftNonReceiver: ContractFactory;
@@ -32,13 +32,13 @@ describe.only("ERC721ACB", function () {
     this.nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
-  shouldConstructor();
+  shouldDeploy();
   shouldMint();
   shouldSafeMint();
-  shouldOwnerOf();
+  shouldGetOwnerOf();
   shouldApprove();
   shouldSetApprovalForAll();
-  shouldBalanceOf();
+  shouldGetBalanceOf();
   shouldTransferFrom();
   shouldSafeTransferFrom();
   shouldBurn();

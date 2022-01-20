@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-export function shouldOwnerOf() {
+export function shouldGetOwnerOf() {
   describe("ownerOf", function () {
     it("should get owner of token", async function () {
       await this.erc721Instance.mint(this.owner.address, 0);

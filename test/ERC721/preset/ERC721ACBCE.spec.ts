@@ -5,20 +5,20 @@ import { expect } from "chai";
 import { ERC721ACBCE, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldConstructor } from "../shared/constructor";
+import { shouldDeploy } from "../shared/constructor1";
 import { shouldMint } from "../shared/mint1";
 import { shouldSafeMint } from "../shared/safeMint1";
-import { shouldOwnerOf } from "../shared/ownerOf1";
+import { shouldGetOwnerOf } from "../shared/ownerOf1";
 import { shouldApprove } from "../shared/approve1";
 import { shouldSetApprovalForAll } from "../shared/setApprovalForAll1";
-import { shouldBalanceOf } from "../shared/balanceOf1";
+import { shouldGetBalanceOf } from "../shared/balanceOf1";
 import { shouldTransferFrom } from "../shared/transferFrom1";
 import { shouldSafeTransferFrom } from "../shared/safeTransferFrom1";
 import { shouldBurn } from "../shared/burn1";
-import { shouldTokenOfOwnerByIndex } from "../shared/tokenOfOwnerByIndex1";
-import { shouldCappedEnumerable } from "../shared/cappedEnumerable1";
+import { shouldGetTokenOfOwnerByIndex } from "../shared/tokenOfOwnerByIndex1";
+import { shouldGetCap } from "../shared/capped1";
 
-describe.only("ERC721ACBCE", function () {
+describe("ERC721ACBCE", function () {
   let erc721: ContractFactory;
   let nftReceiver: ContractFactory;
   let nftNonReceiver: ContractFactory;
@@ -34,18 +34,18 @@ describe.only("ERC721ACBCE", function () {
     this.nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
-  shouldConstructor();
+  shouldDeploy();
   shouldMint();
   shouldSafeMint();
-  shouldOwnerOf();
+  shouldGetOwnerOf();
   shouldApprove();
   shouldSetApprovalForAll();
-  shouldBalanceOf();
+  shouldGetBalanceOf();
   shouldTransferFrom();
   shouldSafeTransferFrom();
   shouldBurn();
-  shouldTokenOfOwnerByIndex();
-  shouldCappedEnumerable();
+  shouldGetTokenOfOwnerByIndex();
+  shouldGetCap();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

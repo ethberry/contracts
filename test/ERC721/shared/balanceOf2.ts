@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-export function shouldBalanceOf() {
+export function shouldGetBalanceOf() {
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
       const tx = this.erc721Instance.balanceOf(ethers.constants.AddressZero);

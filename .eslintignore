@@ -1,1 +1,4 @@
-dist
+/typechain-types
+/besu
+/cache
+/artifacts

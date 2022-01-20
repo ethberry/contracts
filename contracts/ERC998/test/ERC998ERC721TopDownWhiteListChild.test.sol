@@ -13,8 +13,8 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "../interfaces/IERC998ERC721TopDown.sol";
 import "../interfaces/IERC998ERC721TopDownEnumerable.sol";
 
+import "../WhiteListChild.sol";
 import "../../ERC721/preset/ERC721ACBECS.sol";
-import "../../AccessList/WhiteListChild.sol";
 
 contract ERC998ERC721TopDownWhiteListChildTest is ERC721ACBECS, IERC998ERC721TopDown, IERC998ERC721TopDownEnumerable, WhiteListChild {
   using Address for address;
@@ -314,7 +314,7 @@ contract ERC998ERC721TopDownWhiteListChildTest is ERC721ACBECS, IERC998ERC721Top
     uint256 _tokenId,
     address _childContract,
     uint256 _childTokenId
-  ) private onlyWhiteListedWhithDecrement(_childContract) {
+  ) private onlyWhiteListedWithDecrement(_childContract) {
     // remove child token
     uint256 lastTokenIndex = childTokens[_tokenId][_childContract].length() - 1;
     require(
@@ -337,7 +337,7 @@ contract ERC998ERC721TopDownWhiteListChildTest is ERC721ACBECS, IERC998ERC721Top
     uint256 _tokenId,
     address _childContract,
     uint256 _childTokenId
-  ) private onlyWhiteListedWhithIncrement(_childContract) {
+  ) private onlyWhiteListedWithIncrement(_childContract) {
     require(ownerOf(_tokenId) != address(0), "ComposableTopDown: receiveChild _tokenId does not exist.");
     // @dev this is edge case, _tokenId can't be 0
     require(

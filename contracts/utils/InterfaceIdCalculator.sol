@@ -25,6 +25,14 @@ import "@openzeppelin/contracts/access/IAccessControlEnumerable.sol";
 
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 
+import "../ERC998/interfaces/IERC998ERC20TopDown.sol";
+import "../ERC998/interfaces/IERC998ERC20TopDownEnumerable.sol";
+import "../ERC998/interfaces/IERC998ERC721TopDown.sol";
+import "../ERC998/interfaces/IERC998ERC721TopDownEnumerable.sol";
+import "../ERC998/interfaces/IERC998ERC1155TopDown.sol";
+import "../ERC998/interfaces/IERC998ERC721BottomUpEnumerable.sol";
+import "../ERC998/interfaces/IERC998ERC721BottomUp.sol";
+
 contract InterfaceIdCalculator {
   constructor() {
     console.log("IERC20");
@@ -39,6 +47,15 @@ contract InterfaceIdCalculator {
     console.logBytes4(type(IERC721Enumerable).interfaceId);
     console.logBytes4(type(IERC721Metadata).interfaceId);
     console.logBytes4(type(IERC721Receiver).interfaceId);
+
+    console.log("IERC998");
+    console.logBytes4(type(IERC998ERC20TopDown).interfaceId);
+    console.logBytes4(type(IERC998ERC20TopDownEnumerable).interfaceId);
+    console.logBytes4(type(IERC998ERC721TopDown).interfaceId);
+    console.logBytes4(type(IERC998ERC721TopDownEnumerable).interfaceId);
+    console.logBytes4(type(IERC998ERC1155TopDown).interfaceId);
+    console.logBytes4(type(IERC998ERC721BottomUp).interfaceId);
+    console.logBytes4(type(IERC998ERC721BottomUpEnumerable).interfaceId);
 
     console.log("IERC1155");
     console.logBytes4(type(IERC1155).interfaceId);

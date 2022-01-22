@@ -19,10 +19,10 @@ describe("ERC998ComposableBottomUp", function () {
   let erc721Instance: ERC721ACBCE;
   let erc998: ContractFactory;
   let erc998Instance: ERC998ComposableBottomUpTest;
-  let nftReceiver: ContractFactory;
-  let nftReceiverInstance: ERC721ReceiverMock;
-  let nftNonReceiver: ContractFactory;
-  let nftNonReceiverInstance: ERC721NonReceiverMock;
+  let erc721Receiver: ContractFactory;
+  let erc721ReceiverInstance: ERC721ReceiverMock;
+  let erc721NonReceiver: ContractFactory;
+  let erc721NonReceiverInstance: ERC721NonReceiverMock;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
 
@@ -30,15 +30,15 @@ describe("ERC998ComposableBottomUp", function () {
     erc20 = await ethers.getContractFactory("ERC20ACBCS");
     erc721 = await ethers.getContractFactory("ERC721ACBCE");
     erc998 = await ethers.getContractFactory("ERC998ComposableBottomUpTest");
-    nftReceiver = await ethers.getContractFactory("ERC721ReceiverMock");
-    nftNonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
+    erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
+    erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [owner, receiver] = await ethers.getSigners();
 
     erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ACBCS;
     erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBCE;
     erc998Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ComposableBottomUpTest;
-    nftReceiverInstance = (await nftReceiver.deploy()) as ERC721ReceiverMock;
-    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverMock;
+    erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
+    erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
 
     void erc20Instance;
     void erc721Instance;
@@ -70,17 +70,17 @@ describe("ERC998ComposableBottomUp", function () {
     });
 
     it("should fail to mint to non receiver", async function () {
-      const tx = erc998Instance.mint(nftNonReceiverInstance.address);
+      const tx = erc998Instance.mint(erc721NonReceiverInstance.address);
       await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
     });
 
     it("should mint to receiver", async function () {
-      const tx = erc998Instance.mint(nftReceiverInstance.address);
+      const tx = erc998Instance.mint(erc721ReceiverInstance.address);
       await expect(tx)
         .to.emit(erc998Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, nftReceiverInstance.address, 0);
+        .withArgs(ethers.constants.AddressZero, erc721ReceiverInstance.address, 0);
 
-      const balance = await erc998Instance.balanceOf(nftReceiverInstance.address);
+      const balance = await erc998Instance.balanceOf(erc721ReceiverInstance.address);
       expect(balance).to.equal(1);
     });
   });

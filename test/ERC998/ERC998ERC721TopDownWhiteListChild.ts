@@ -4,41 +4,41 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import {
-  ERC721NonReceiverTest,
-  ERC721ReceiverTest,
-  ERC721ACBEC,
+  ERC721NonReceiverMock,
+  ERC721ReceiverMock,
+  ERC721ACBCE,
   ERC998ERC721TopDownWhiteListChildTest,
 } from "../../typechain-types";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 describe("ERC998ERC721TopDownWhiteListChildTest", function () {
   let erc721: ContractFactory;
-  let erc721Instance: ERC721ACBEC;
+  let erc721Instance: ERC721ACBCE;
   let erc998: ContractFactory;
   let erc998Instance: ERC998ERC721TopDownWhiteListChildTest;
-  let nftReceiver: ContractFactory;
-  let nftReceiverInstance: ERC721ReceiverTest;
-  let nftNonReceiver: ContractFactory;
-  let nftNonReceiverInstance: ERC721NonReceiverTest;
+  let erc721Receiver: ContractFactory;
+  let erc721ReceiverInstance: ERC721ReceiverMock;
+  let erc721NonReceiver: ContractFactory;
+  let erc721NonReceiverInstance: ERC721NonReceiverMock;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721ACBEC");
+    erc721 = await ethers.getContractFactory("ERC721ACBCE");
     erc998 = await ethers.getContractFactory("ERC998ERC721TopDownWhiteListChildTest");
-    nftReceiver = await ethers.getContractFactory("ERC721ReceiverTest");
-    nftNonReceiver = await ethers.getContractFactory("ERC721NonReceiverTest");
+    erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
+    erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [owner, receiver] = await ethers.getSigners();
 
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBEC;
+    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBCE;
     erc998Instance = (await erc998.deploy(
       tokenName,
       tokenSymbol,
       baseTokenURI,
       1000,
     )) as ERC998ERC721TopDownWhiteListChildTest;
-    nftReceiverInstance = (await nftReceiver.deploy()) as ERC721ReceiverTest;
-    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverTest;
+    erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
+    erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
   describe("constructor", function () {
@@ -67,19 +67,19 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
     });
 
     it("should mint to non receiver", async function () {
-      const tx = erc998Instance.mint(nftNonReceiverInstance.address);
+      const tx = erc998Instance.mint(erc721NonReceiverInstance.address);
       await expect(tx)
         .to.emit(erc998Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, nftNonReceiverInstance.address, 0);
+        .withArgs(ethers.constants.AddressZero, erc721NonReceiverInstance.address, 0);
     });
 
     it("should mint to receiver", async function () {
-      const tx = erc998Instance.mint(nftReceiverInstance.address);
+      const tx = erc998Instance.mint(erc721ReceiverInstance.address);
       await expect(tx)
         .to.emit(erc998Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, nftReceiverInstance.address, 0);
+        .withArgs(ethers.constants.AddressZero, erc721ReceiverInstance.address, 0);
 
-      const balance = await erc998Instance.balanceOf(nftReceiverInstance.address);
+      const balance = await erc998Instance.balanceOf(erc721ReceiverInstance.address);
       expect(balance).to.equal(1);
     });
   });
@@ -101,17 +101,17 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
     });
 
     it("should fail to mint to non receiver", async function () {
-      const tx = erc998Instance.safeMint(nftNonReceiverInstance.address);
+      const tx = erc998Instance.safeMint(erc721NonReceiverInstance.address);
       await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
     });
 
     it("should mint to receiver", async function () {
-      const tx = erc998Instance.safeMint(nftReceiverInstance.address);
+      const tx = erc998Instance.safeMint(erc721ReceiverInstance.address);
       await expect(tx)
         .to.emit(erc998Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, nftReceiverInstance.address, 0);
+        .withArgs(ethers.constants.AddressZero, erc721ReceiverInstance.address, 0);
 
-      const balance = await erc998Instance.balanceOf(nftReceiverInstance.address);
+      const balance = await erc998Instance.balanceOf(erc721ReceiverInstance.address);
       expect(balance).to.equal(1);
     });
   });
@@ -324,19 +324,19 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
       await erc998Instance.mint(owner.address);
       const tx = erc998Instance["safeTransferFrom(address,address,uint256)"](
         owner.address,
-        nftReceiverInstance.address,
+        erc721ReceiverInstance.address,
         0,
       );
 
-      await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(owner.address, nftReceiverInstance.address, 0);
+      await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(owner.address, erc721ReceiverInstance.address, 0);
 
       const balanceOfOwner = await erc998Instance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
 
-      const balanceOfReceiver = await erc998Instance.balanceOf(nftReceiverInstance.address);
+      const balanceOfReceiver = await erc998Instance.balanceOf(erc721ReceiverInstance.address);
       expect(balanceOfReceiver).to.equal(1);
 
-      const item = await erc998Instance.tokenOfOwnerByIndex(nftReceiverInstance.address, 0);
+      const item = await erc998Instance.tokenOfOwnerByIndex(erc721ReceiverInstance.address, 0);
       expect(item).to.equal(0); // 0 is nft index
     });
 
@@ -344,7 +344,7 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
       await erc998Instance.mint(owner.address);
       const tx = erc998Instance["safeTransferFrom(address,address,uint256)"](
         owner.address,
-        nftNonReceiverInstance.address,
+        erc721NonReceiverInstance.address,
         0,
       );
       await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
@@ -356,17 +356,17 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
 
       const tx = erc998Instance
         .connect(receiver)
-        ["safeTransferFrom(address,address,uint256)"](owner.address, nftReceiverInstance.address, 0);
+        ["safeTransferFrom(address,address,uint256)"](owner.address, erc721ReceiverInstance.address, 0);
 
-      await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(owner.address, nftReceiverInstance.address, 0);
+      await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(owner.address, erc721ReceiverInstance.address, 0);
 
       const balanceOfOwner = await erc998Instance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
 
-      const balanceOfReceiver = await erc998Instance.balanceOf(nftReceiverInstance.address);
+      const balanceOfReceiver = await erc998Instance.balanceOf(erc721ReceiverInstance.address);
       expect(balanceOfReceiver).to.equal(1);
 
-      const item = await erc998Instance.tokenOfOwnerByIndex(nftReceiverInstance.address, 0);
+      const item = await erc998Instance.tokenOfOwnerByIndex(erc721ReceiverInstance.address, 0);
       expect(item).to.equal(0); // 0 is nft index
     });
 
@@ -376,7 +376,7 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
 
       const tx = erc998Instance
         .connect(receiver)
-        ["safeTransferFrom(address,address,uint256)"](owner.address, nftNonReceiverInstance.address, 0);
+        ["safeTransferFrom(address,address,uint256)"](owner.address, erc721NonReceiverInstance.address, 0);
       await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
     });
 
@@ -543,13 +543,13 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
 
       const tx2 = erc998Instance["safeTransferChild(uint256,address,address,uint256)"](
         1,
-        nftReceiverInstance.address,
+        erc721ReceiverInstance.address,
         erc721Instance.address,
         0,
       );
       await expect(tx2)
         .to.emit(erc998Instance, "TransferChild")
-        .withArgs(1, nftReceiverInstance.address, erc721Instance.address, 0);
+        .withArgs(1, erc721ReceiverInstance.address, erc721Instance.address, 0);
     });
 
     it("should non transfer 721 token owned by another token to the non receiver contract", async function () {
@@ -569,7 +569,7 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
 
       const tx2 = erc998Instance["safeTransferChild(uint256,address,address,uint256)"](
         1,
-        nftNonReceiverInstance.address,
+        erc721NonReceiverInstance.address,
         erc721Instance.address,
         0,
       );
@@ -657,10 +657,10 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
       );
       await expect(tx1).to.not.be.reverted;
 
-      const tx2 = erc998Instance.transferChild(1, nftReceiverInstance.address, erc721Instance.address, 0);
+      const tx2 = erc998Instance.transferChild(1, erc721ReceiverInstance.address, erc721Instance.address, 0);
       await expect(tx2)
         .to.emit(erc998Instance, "TransferChild")
-        .withArgs(1, nftReceiverInstance.address, erc721Instance.address, 0);
+        .withArgs(1, erc721ReceiverInstance.address, erc721Instance.address, 0);
     });
 
     it("should transfer token owned by another token to the non receiver contract", async function () {
@@ -678,10 +678,10 @@ describe("ERC998ERC721TopDownWhiteListChildTest", function () {
       );
       await expect(tx1).to.not.be.reverted;
 
-      const tx2 = erc998Instance.transferChild(1, nftNonReceiverInstance.address, erc721Instance.address, 0);
+      const tx2 = erc998Instance.transferChild(1, erc721NonReceiverInstance.address, erc721Instance.address, 0);
       await expect(tx2)
         .to.emit(erc998Instance, "TransferChild")
-        .withArgs(1, nftNonReceiverInstance.address, erc721Instance.address, 0);
+        .withArgs(1, erc721NonReceiverInstance.address, erc721Instance.address, 0);
     });
 
     it("should not transfer token which is not owned", async function () {

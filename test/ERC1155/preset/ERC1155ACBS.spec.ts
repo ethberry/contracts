@@ -9,26 +9,26 @@ import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenId } from "
 describe("ERC1155ACBS", function () {
   let erc1155: ContractFactory;
   let erc1155Instance: ERC1155ACBS;
-  let nftReceiver: ContractFactory;
-  let nftReceiverInstance: ERC1155ReceiverMock;
-  let nftNonReceiver: ContractFactory;
-  let nftNonReceiverInstance: ERC1155NonReceiverMock;
+  let erc1155Receiver: ContractFactory;
+  let erc1155ReceiverInstance: ERC1155ReceiverMock;
+  let erc1155NonReceiver: ContractFactory;
+  let erc1155NonReceiverInstance: ERC1155NonReceiverMock;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
 
   beforeEach(async function () {
     erc1155 = await ethers.getContractFactory("ERC1155ACBS");
-    nftReceiver = await ethers.getContractFactory("ERC1155ReceiverMock");
-    nftNonReceiver = await ethers.getContractFactory("ERC1155NonReceiverMock");
+    erc1155Receiver = await ethers.getContractFactory("ERC1155ReceiverMock");
+    erc1155NonReceiver = await ethers.getContractFactory("ERC1155NonReceiverMock");
     [owner, receiver] = await ethers.getSigners();
 
     erc1155Instance = (await erc1155.deploy(baseTokenURI)) as ERC1155ACBS;
-    nftReceiverInstance = (await nftReceiver.deploy()) as ERC1155ReceiverMock;
-    nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC1155NonReceiverMock;
+    erc1155ReceiverInstance = (await erc1155Receiver.deploy()) as ERC1155ReceiverMock;
+    erc1155NonReceiverInstance = (await erc1155NonReceiver.deploy()) as ERC1155NonReceiverMock;
 
     void receiver;
-    void nftReceiverInstance;
-    void nftNonReceiverInstance;
+    void erc1155ReceiverInstance;
+    void erc1155NonReceiverInstance;
   });
 
   describe("constructor", function () {
@@ -62,17 +62,17 @@ describe("ERC1155ACBS", function () {
     });
 
     it("should fail to mint to non receiver", async function () {
-      const tx = erc1155Instance.mint(nftNonReceiverInstance.address, tokenId, amount, "0x");
+      const tx = erc1155Instance.mint(erc1155NonReceiverInstance.address, tokenId, amount, "0x");
       await expect(tx).to.be.revertedWith(`ERC1155: transfer to non ERC1155Receiver implementer`);
     });
 
     it("should mint to receiver", async function () {
-      const tx = erc1155Instance.mint(nftReceiverInstance.address, tokenId, amount, "0x");
+      const tx = erc1155Instance.mint(erc1155ReceiverInstance.address, tokenId, amount, "0x");
       await expect(tx)
         .to.emit(erc1155Instance, "TransferSingle")
-        .withArgs(owner.address, ethers.constants.AddressZero, nftReceiverInstance.address, tokenId, amount);
+        .withArgs(owner.address, ethers.constants.AddressZero, erc1155ReceiverInstance.address, tokenId, amount);
 
-      const balance = await erc1155Instance.balanceOf(nftReceiverInstance.address, tokenId);
+      const balance = await erc1155Instance.balanceOf(erc1155ReceiverInstance.address, tokenId);
       expect(balance).to.equal(amount);
     });
   });
@@ -99,17 +99,17 @@ describe("ERC1155ACBS", function () {
     });
 
     it("should fail to mint to non receiver", async function () {
-      const tx = erc1155Instance.mintBatch(nftNonReceiverInstance.address, [tokenId], [amount], "0x");
+      const tx = erc1155Instance.mintBatch(erc1155NonReceiverInstance.address, [tokenId], [amount], "0x");
       await expect(tx).to.be.revertedWith(`ERC1155: transfer to non ERC1155Receiver implementer`);
     });
 
     it("should mint to receiver", async function () {
-      const tx = erc1155Instance.mintBatch(nftReceiverInstance.address, [tokenId], [amount], "0x");
+      const tx = erc1155Instance.mintBatch(erc1155ReceiverInstance.address, [tokenId], [amount], "0x");
       await expect(tx)
         .to.emit(erc1155Instance, "TransferBatch")
-        .withArgs(owner.address, ethers.constants.AddressZero, nftReceiverInstance.address, [tokenId], [amount]);
+        .withArgs(owner.address, ethers.constants.AddressZero, erc1155ReceiverInstance.address, [tokenId], [amount]);
 
-      const balance = await erc1155Instance.balanceOf(nftReceiverInstance.address, tokenId);
+      const balance = await erc1155Instance.balanceOf(erc1155ReceiverInstance.address, tokenId);
       expect(balance).to.equal(amount);
     });
   });

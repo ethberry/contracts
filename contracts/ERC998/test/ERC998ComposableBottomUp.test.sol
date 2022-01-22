@@ -13,5 +13,5 @@ contract ERC998ComposableBottomUpTest is ERC998BottomUp {
     string memory name,
     string memory symbol,
     string memory baseTokenURI
-  ) ERC998BottomUp(name, symbol, baseTokenURI, 1000) {}
+  ) ERC998BottomUp(name, symbol, baseTokenURI, 2) {}
 }

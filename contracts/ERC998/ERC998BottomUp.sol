@@ -61,11 +61,6 @@ contract ERC998BottomUp is ERC721ACBCES, IERC998ERC721BottomUp, IERC998ERC721Bot
     uint256 cap
   ) ERC721ACBCES(name, symbol, baseTokenURI, cap) {}
 
-  function mint(address to) public virtual override onlyRole(MINTER_ROLE) {
-    _safeMint(to, _tokenIdTracker.current());
-    _tokenIdTracker.increment();
-  }
-
   function _tokenOwnerOf(uint256 _tokenId)
     internal
     view

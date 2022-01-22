@@ -1,269 +1,73 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import {
-  ERC20ACBCS,
-  ERC721NonReceiverMock,
-  ERC721ReceiverMock,
-  ERC721ACBCE,
-  ERC998ComposableBottomUpTest,
-} from "../../typechain-types";
-import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
+import { ERC721NonReceiverMock, ERC721ReceiverMock, ERC998ComposableBottomUpTest } from "../../typechain-types";
+import { baseTokenURI, tokenName, tokenSymbol } from "../constants";
+
+import { shouldDeploy } from "../ERC721/shared/constructor1";
+import { shouldMint } from "../ERC721/shared/mint1";
+import { shouldSafeMint } from "../ERC721/shared/safeMint1";
+import { shouldGetOwnerOf } from "../ERC721/shared/ownerOf1";
+import { shouldApprove } from "../ERC721/shared/approve1";
+import { shouldSetApprovalForAll } from "../ERC721/shared/setApprovalForAll1";
+import { shouldGetBalanceOf } from "../ERC721/shared/balanceOf1";
+import { shouldTransferFrom } from "../ERC721/shared/transferFrom1";
+import { shouldSafeTransferFrom } from "../ERC721/shared/safeTransferFrom1";
+import { shouldBurn } from "../ERC721/shared/burn1";
+import { shouldGetTokenURI } from "../ERC721/shared/tokenURI1";
+import { shouldGetTokenOfOwnerByIndex } from "../ERC721/shared/tokenOfOwnerByIndex1";
+import { shouldGetCap } from "../ERC721/shared/capped1";
 
 describe("ERC998ComposableBottomUp", function () {
-  let erc20: ContractFactory;
-  let erc20Instance: ERC20ACBCS;
   let erc721: ContractFactory;
-  let erc721Instance: ERC721ACBCE;
-  let erc998: ContractFactory;
-  let erc998Instance: ERC998ComposableBottomUpTest;
   let erc721Receiver: ContractFactory;
-  let erc721ReceiverInstance: ERC721ReceiverMock;
   let erc721NonReceiver: ContractFactory;
-  let erc721NonReceiverInstance: ERC721NonReceiverMock;
-  let owner: SignerWithAddress;
-  let receiver: SignerWithAddress;
 
   beforeEach(async function () {
-    erc20 = await ethers.getContractFactory("ERC20ACBCS");
-    erc721 = await ethers.getContractFactory("ERC721ACBCE");
-    erc998 = await ethers.getContractFactory("ERC998ComposableBottomUpTest");
+    erc721 = await ethers.getContractFactory("ERC998ComposableBottomUpTest");
     erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
     erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
-    [owner, receiver] = await ethers.getSigners();
+    [this.owner, this.receiver] = await ethers.getSigners();
 
-    erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ACBCS;
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBCE;
-    erc998Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ComposableBottomUpTest;
-    erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
-    erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
-
-    void erc20Instance;
-    void erc721Instance;
+    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ComposableBottomUpTest;
+    this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
+    this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
-  describe("constructor", function () {
-    it("Should set the right roles to deployer", async function () {
-      const isAdmin = await erc998Instance.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
-      expect(isAdmin).to.equal(true);
-      const isMinter = await erc998Instance.hasRole(MINTER_ROLE, owner.address);
-      expect(isMinter).to.equal(true);
-    });
-  });
-
-  describe("mint", function () {
-    it("should fail for wrong role", async function () {
-      const tx = erc998Instance.connect(receiver).mint(receiver.address);
-      await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
-      );
-    });
-
-    it("should mint to wallet", async function () {
-      const tx = erc998Instance.mint(owner.address);
-      await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(ethers.constants.AddressZero, owner.address, 0);
-
-      const balance = await erc998Instance.balanceOf(owner.address);
-      expect(balance).to.equal(1);
-    });
-
-    it("should fail to mint to non receiver", async function () {
-      const tx = erc998Instance.mint(erc721NonReceiverInstance.address);
-      await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
-    });
-
-    it("should mint to receiver", async function () {
-      const tx = erc998Instance.mint(erc721ReceiverInstance.address);
-      await expect(tx)
-        .to.emit(erc998Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, erc721ReceiverInstance.address, 0);
-
-      const balance = await erc998Instance.balanceOf(erc721ReceiverInstance.address);
-      expect(balance).to.equal(1);
-    });
-  });
-
-  describe("balanceOf", function () {
-    it("should fail for zero addr", async function () {
-      const tx = erc998Instance.balanceOf(ethers.constants.AddressZero);
-      await expect(tx).to.be.revertedWith(`ERC721: balance query for the zero address`);
-    });
-
-    it("should get balance of owner", async function () {
-      await erc998Instance.mint(owner.address);
-      const balance = await erc998Instance.balanceOf(owner.address);
-      expect(balance).to.equal(1);
-    });
-
-    it("should get balance of not owner", async function () {
-      await erc998Instance.mint(owner.address);
-      const balance = await erc998Instance.balanceOf(receiver.address);
-      expect(balance).to.equal(0);
-    });
-  });
-
-  describe("ownerOf", function () {
-    it("should get owner of token", async function () {
-      await erc998Instance.mint(owner.address);
-      const ownerOfToken = await erc998Instance.ownerOf(0);
-      expect(ownerOfToken).to.equal(owner.address);
-    });
-
-    it("should get owner of burned token", async function () {
-      await erc998Instance.mint(owner.address);
-      const tx = erc998Instance.burn(0);
-      await expect(tx).to.not.be.reverted;
-      const balanceOfOwner = await erc998Instance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(0);
-      const tx2 = erc998Instance.ownerOf(0);
-      await expect(tx2).to.be.revertedWith(`ERC721: owner query for nonexistent token`);
-    });
-  });
-
-  describe("tokenURI", function () {
-    it("should get default token URI", async function () {
-      await erc998Instance.mint(owner.address);
-      const uri = await erc998Instance.tokenURI(0);
-      expect(uri).to.equal(`${baseTokenURI}0`);
-    });
-
-    it("should override token URI", async function () {
-      await erc998Instance.mint(owner.address);
-      await erc998Instance.setTokenURI(0, "newURI");
-      const uri = await erc998Instance.tokenURI(0);
-      expect(uri).to.equal(`${baseTokenURI}newURI`);
-    });
-  });
-
-  describe("approve", function () {
-    it("should fail: not an owner", async function () {
-      await erc998Instance.mint(owner.address);
-      const tx = erc998Instance.connect(receiver).approve(owner.address, 0);
-      await expect(tx).to.be.revertedWith(`ERC721: approval to current owner`);
-    });
-
-    it("should fail: approve to self", async function () {
-      await erc998Instance.mint(owner.address);
-      const tx = erc998Instance.approve(owner.address, 0);
-      await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
-    });
-
-    it("should approve", async function () {
-      await erc998Instance.mint(owner.address);
-      const tx = erc998Instance.approve(receiver.address, 0);
-
-      await expect(tx).to.emit(erc998Instance, "Approval").withArgs(owner.address, receiver.address, 0);
-
-      const approved = await erc998Instance.getApproved(0);
-      expect(approved).to.equal(receiver.address);
-
-      const tx1 = erc998Instance.connect(receiver).burn(0);
-      await expect(tx1).to.emit(erc998Instance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, 0);
-
-      const balanceOfOwner = await erc998Instance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(0);
-    });
-  });
-
-  describe("setApprovalForAll", function () {
-    it("should approve for all", async function () {
-      await erc998Instance.mint(owner.address);
-      await erc998Instance.mint(owner.address);
-
-      const balanceOfOwner = await erc998Instance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(2);
-
-      const tx1 = erc998Instance.setApprovalForAll(receiver.address, true);
-      await expect(tx1).to.not.be.reverted;
-
-      const approved1 = await erc998Instance.getApproved(0);
-      expect(approved1).to.equal(ethers.constants.AddressZero);
-
-      const isApproved1 = await erc998Instance.isApprovedForAll(owner.address, receiver.address);
-      expect(isApproved1).to.equal(true);
-
-      const tx2 = erc998Instance.setApprovalForAll(receiver.address, false);
-      await expect(tx2).to.not.be.reverted;
-
-      const approved3 = await erc998Instance.getApproved(0);
-      expect(approved3).to.equal(ethers.constants.AddressZero);
-
-      const isApproved2 = await erc998Instance.isApprovedForAll(owner.address, receiver.address);
-      expect(isApproved2).to.equal(false);
-    });
-  });
-
-  describe("transferFrom", function () {
-    it("should fail: not an owner", async function () {
-      await erc998Instance.mint(owner.address);
-      const tx = erc998Instance.connect(receiver).transferFrom(owner.address, receiver.address, 0);
-
-      await expect(tx).to.be.revertedWith("ERC721: transfer caller is not owner nor approved");
-    });
-
-    it("should fail: zero addr", async function () {
-      await erc998Instance.mint(owner.address);
-      const tx = erc998Instance.transferFrom(owner.address, ethers.constants.AddressZero, 0);
-
-      await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
-    });
-
-    it("should transfer own tokens to wallet", async function () {
-      await erc998Instance.mint(owner.address);
-      const tx = erc998Instance.transferFrom(owner.address, receiver.address, 0);
-
-      await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(owner.address, receiver.address, 0);
-
-      const balanceOfOwner = await erc998Instance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(0);
-
-      const balanceOfReceiver = await erc998Instance.balanceOf(receiver.address);
-      expect(balanceOfReceiver).to.equal(1);
-
-      const item = await erc998Instance.tokenOfOwnerByIndex(receiver.address, 0);
-      expect(item).to.equal(0); // 0 is nft index
-    });
-
-    it("should transfer approved tokens to wallet", async function () {
-      await erc998Instance.mint(owner.address);
-      await erc998Instance.approve(receiver.address, 0);
-
-      const tx = erc998Instance.connect(receiver).transferFrom(owner.address, receiver.address, 0);
-
-      await expect(tx).to.emit(erc998Instance, "Transfer").withArgs(owner.address, receiver.address, 0);
-
-      const balanceOfOwner = await erc998Instance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(0);
-
-      const balanceOfReceiver = await erc998Instance.balanceOf(receiver.address);
-      expect(balanceOfReceiver).to.equal(1);
-
-      const item = await erc998Instance.tokenOfOwnerByIndex(receiver.address, 0);
-      expect(item).to.equal(0); // 0 is nft index
-    });
-  });
+  shouldDeploy();
+  shouldMint();
+  shouldSafeMint();
+  shouldGetOwnerOf();
+  shouldApprove();
+  shouldSetApprovalForAll();
+  shouldGetBalanceOf();
+  shouldTransferFrom();
+  shouldSafeTransferFrom();
+  shouldBurn();
+  shouldGetTokenURI();
+  shouldGetTokenOfOwnerByIndex();
+  shouldGetCap();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {
-      const supportsIERC721 = await erc998Instance.supportsInterface("0x80ac58cd");
+      const supportsIERC721 = await this.erc721Instance.supportsInterface("0x80ac58cd");
       expect(supportsIERC721).to.equal(true);
-      const supportsIERC721Metadata = await erc998Instance.supportsInterface("0x5b5e139f");
+      const supportsIERC721Metadata = await this.erc721Instance.supportsInterface("0x5b5e139f");
       expect(supportsIERC721Metadata).to.equal(true);
-      const supportsIERC721Enumerable = await erc998Instance.supportsInterface("0x780e9d63");
+      const supportsIERC721Enumerable = await this.erc721Instance.supportsInterface("0x780e9d63");
       expect(supportsIERC721Enumerable).to.equal(true);
 
-      const supportsIERC165 = await erc998Instance.supportsInterface("0x01ffc9a7");
+      const supportsIERC165 = await this.erc721Instance.supportsInterface("0x01ffc9a7");
       expect(supportsIERC165).to.equal(true);
 
-      const supportsIAccessControl = await erc998Instance.supportsInterface("0x7965db0b");
+      const supportsIAccessControl = await this.erc721Instance.supportsInterface("0x7965db0b");
       expect(supportsIAccessControl).to.equal(true);
 
-      const supportsERC998 = await erc998Instance.supportsInterface("0xa1b23002");
+      const supportsERC998 = await this.erc721Instance.supportsInterface("0xa1b23002");
       expect(supportsERC998).to.equal(true);
 
-      const supportsInvalidInterface = await erc998Instance.supportsInterface("0xffffffff");
+      const supportsInvalidInterface = await this.erc721Instance.supportsInterface("0xffffffff");
       expect(supportsInvalidInterface).to.equal(false);
     });
   });

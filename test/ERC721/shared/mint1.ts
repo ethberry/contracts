@@ -23,19 +23,19 @@ export function shouldMint() {
     });
 
     it("should mint to non receiver", async function () {
-      const tx = this.erc721Instance.mint(this.nftNonReceiverInstance.address);
+      const tx = this.erc721Instance.mint(this.erc721NonReceiverInstance.address);
       await expect(tx)
         .to.emit(this.erc721Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, this.nftNonReceiverInstance.address, 0);
+        .withArgs(ethers.constants.AddressZero, this.erc721NonReceiverInstance.address, 0);
     });
 
     it("should mint to receiver", async function () {
-      const tx = this.erc721Instance.mint(this.nftReceiverInstance.address);
+      const tx = this.erc721Instance.mint(this.erc721ReceiverInstance.address);
       await expect(tx)
         .to.emit(this.erc721Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, this.nftReceiverInstance.address, 0);
+        .withArgs(ethers.constants.AddressZero, this.erc721ReceiverInstance.address, 0);
 
-      const balance = await this.erc721Instance.balanceOf(this.nftReceiverInstance.address);
+      const balance = await this.erc721Instance.balanceOf(this.erc721ReceiverInstance.address);
       expect(balance).to.equal(1);
     });
   });

@@ -23,17 +23,17 @@ export function shouldSafeMint() {
     });
 
     it("should fail to mint to non receiver", async function () {
-      const tx = this.erc721Instance.safeMint(this.nftNonReceiverInstance.address);
+      const tx = this.erc721Instance.safeMint(this.erc721NonReceiverInstance.address);
       await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
     });
 
     it("should mint to receiver", async function () {
-      const tx = this.erc721Instance.safeMint(this.nftReceiverInstance.address);
+      const tx = this.erc721Instance.safeMint(this.erc721ReceiverInstance.address);
       await expect(tx)
         .to.emit(this.erc721Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, this.nftReceiverInstance.address, 0);
+        .withArgs(ethers.constants.AddressZero, this.erc721ReceiverInstance.address, 0);
 
-      const balance = await this.erc721Instance.balanceOf(this.nftReceiverInstance.address);
+      const balance = await this.erc721Instance.balanceOf(this.erc721ReceiverInstance.address);
       expect(balance).to.equal(1);
     });
   });

@@ -18,18 +18,18 @@ import { shouldBurn } from "../shared/burn2";
 
 describe("ERC721ACB", function () {
   let erc721: ContractFactory;
-  let nftReceiver: ContractFactory;
-  let nftNonReceiver: ContractFactory;
+  let erc721Receiver: ContractFactory;
+  let erc721NonReceiver: ContractFactory;
 
   beforeEach(async function () {
     erc721 = await ethers.getContractFactory("ERC721ACB");
-    nftReceiver = await ethers.getContractFactory("ERC721ReceiverMock");
-    nftNonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
+    erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
+    erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
     this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721ACB;
-    this.nftReceiverInstance = (await nftReceiver.deploy()) as ERC721ReceiverMock;
-    this.nftNonReceiverInstance = (await nftNonReceiver.deploy()) as ERC721NonReceiverMock;
+    this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
+    this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
   shouldDeploy();

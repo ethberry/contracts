@@ -16,6 +16,7 @@ import {
 import { shouldMint } from "../shared/mint";
 import { shouldBalanceOf } from "../shared/balanceOf";
 import { shouldTransfer } from "../shared/transfer";
+import { shouldTransferFrom } from "../shared/transferFrom";
 import { shouldSnapshot } from "../shared/snapshot";
 import { shouldApprove } from "../shared/approve";
 import { shouldBurn } from "../shared/burn";
@@ -23,7 +24,7 @@ import { shouldBurnFrom } from "../shared/burnFrom";
 import { shouldPause } from "../shared/pause";
 import { shouldCap } from "../shared/cap";
 
-describe.only("ERC20ACBCSP", function () {
+describe("ERC20ACBCSP", function () {
   let erc20: ContractFactory;
   let coinNonReceiver: ContractFactory;
 
@@ -52,6 +53,7 @@ describe.only("ERC20ACBCSP", function () {
   shouldMint();
   shouldBalanceOf();
   shouldTransfer();
+  shouldTransferFrom();
   shouldSnapshot();
   shouldApprove();
   shouldBurn();

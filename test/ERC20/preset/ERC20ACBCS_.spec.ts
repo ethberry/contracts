@@ -8,6 +8,7 @@ import { amount, tokenName, tokenSymbol, DEFAULT_ADMIN_ROLE, MINTER_ROLE, SNAPSH
 import { shouldMint } from "../shared/mint";
 import { shouldBalanceOf } from "../shared/balanceOf";
 import { shouldTransfer } from "../shared/transfer";
+import { shouldTransferFrom } from "../shared/transferFrom";
 import { shouldSnapshot } from "../shared/snapshot";
 import { shouldApprove } from "../shared/approve";
 import { shouldBurn } from "../shared/burn";
@@ -41,6 +42,7 @@ describe("ERC20ACBCS", function () {
   shouldMint();
   shouldBalanceOf();
   shouldTransfer();
+  shouldTransferFrom();
   shouldSnapshot();
   shouldApprove();
   shouldBurn();

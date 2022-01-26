@@ -1,9 +1,16 @@
 import { expect } from "chai";
 
-import { amount } from "../../constants";
+import { amount, SNAPSHOT_ROLE } from "../../constants";
 
 export function shouldSnapshot() {
   describe("snapshot", function () {
+    it("should fail: must have snapshoter role", async function () {
+      const tx = this.erc20Instance.connect(this.receiver).snapshot();
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${SNAPSHOT_ROLE}`,
+      );
+    });
+
     it("should fail: nonexistent id", async function () {
       const tx = this.erc20Instance.snapshot();
       await expect(tx).to.emit(this.erc20Instance, "Snapshot").withArgs("1");

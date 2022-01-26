@@ -5,7 +5,7 @@ import { amount } from "../../constants";
 export function shouldTransfer() {
   describe("transfer", function () {
     it("should fail: transfer amount exceeds balance", async function () {
-      const tx = this.erc20Instance.connect(this.receiver).transfer(this.owner.address, amount);
+      const tx = this.erc20Instance.transfer(this.receiver.address, amount);
       await expect(tx).to.be.revertedWith("ERC20: transfer amount exceeds balance");
     });
 

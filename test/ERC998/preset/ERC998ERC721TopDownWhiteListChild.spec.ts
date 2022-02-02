@@ -63,7 +63,7 @@ describe("ERC998ERC721TopDownWhiteListChild", function () {
   shouldSetApprovalForAll();
   shouldTransferFrom();
   testsUsingWhiteListChild();
-  
+
   describe("getChild", function () {
     it("should get child", async function () {
       await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);

@@ -8,7 +8,6 @@ import { shouldTotalChildTokens } from "../totalChildTokens";
 import { shouldChildTokenByIndex } from "../childTokenByIndex";
 import { shouldChildContractsFor } from "../childContractsFor";
 
-
 export function testsUsingWhiteListChild() {
   describe("using WhiteListChild", function () {
     beforeEach(async function () {

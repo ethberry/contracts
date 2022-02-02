@@ -66,7 +66,7 @@ describe("ERC998ERC721TopDownTest", function () {
   shouldChildContractByIndex();
   shouldTotalChildTokens();
   shouldChildTokenByIndex();
- 
+
   describe("getChild", function () {
     it("should get child", async function () {
       await this.erc721InstanceMock.mint(this.owner.address);

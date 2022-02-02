@@ -2,7 +2,7 @@ import { expect } from "chai";
 
 export function shouldChildContractsFor() {
   describe("childContractsFor", function () {
-     it("should get array of child contracts by index", async function () {
+    it("should get array of child contracts by index", async function () {
       await this.erc721InstanceMock.mint(this.owner.address);
       await this.erc721Instance.mint(this.owner.address); // this is edge case
       await this.erc721Instance.mint(this.owner.address);
@@ -30,7 +30,7 @@ export function shouldChildContractsFor() {
       expect(tx4).to.equal(1);
 
       const tx5 = await this.erc721Instance.childContractsFor(1);
-      expect(tx5.toString()).equal([this.erc721InstanceMock.address, this.erc721Instance.address].toString());
+      expect(tx5).deep.equal([this.erc721InstanceMock.address, this.erc721Instance.address]);
     });
   });
 }

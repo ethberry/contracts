@@ -91,7 +91,7 @@ export function shouldSafeTransferChild() {
       await this.erc721Instance.mint(this.owner.address); // this is edge case
       await this.erc721Instance.mint(this.owner.address);
       await this.erc721Instance.mint(this.owner.address);
-  
+
       const tx1 = this.erc721Instance["safeTransferFrom(address,address,uint256,bytes)"](
         this.owner.address,
         this.erc721Instance.address,
@@ -99,7 +99,7 @@ export function shouldSafeTransferChild() {
         "0x0000000000000000000000000000000000000000000000000000000000000002", // erc998 tokenId
       );
       await expect(tx1).to.not.be.reverted;
-  
+
       const tx2 = this.erc721Instance["safeTransferChild(uint256,address,address,uint256)"](
         2,
         this.receiver.address,

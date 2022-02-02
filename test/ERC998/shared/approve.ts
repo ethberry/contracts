@@ -25,7 +25,9 @@ export function shouldApprove() {
       expect(approved).to.equal(this.receiver.address);
 
       const tx1 = this.erc721Instance.connect(this.receiver).burn(0);
-      await expect(tx1).to.emit(this.erc721Instance, "Transfer").withArgs(this.owner.address, ethers.constants.AddressZero, 0);
+      await expect(tx1)
+        .to.emit(this.erc721Instance, "Transfer")
+        .withArgs(this.owner.address, ethers.constants.AddressZero, 0);
 
       const balanceOfOwner = await this.erc721Instance.balanceOf(this.owner.address);
       expect(balanceOfOwner).to.equal(0);

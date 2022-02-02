@@ -13,7 +13,9 @@ export function shouldGetERC20() {
       await expect(tx1)
         .to.emit(this.erc721Instance, "ReceivedERC20")
         .withArgs(this.owner.address, 1, this.erc20Instance.address, amount);
-      await expect(tx1).to.emit(this.erc20Instance, "Transfer").withArgs(this.owner.address, this.erc721Instance.address, amount);
+      await expect(tx1)
+        .to.emit(this.erc20Instance, "Transfer")
+        .withArgs(this.owner.address, this.erc721Instance.address, amount);
     });
   });
 }

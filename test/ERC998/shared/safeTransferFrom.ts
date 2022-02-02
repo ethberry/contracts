@@ -51,7 +51,9 @@ export function shouldSafeTransferFrom() {
         0,
       );
 
-      await expect(tx).to.emit(this.erc721Instance, "Transfer").withArgs(this.owner.address, this.erc721ReceiverInstance.address, 0);
+      await expect(tx)
+        .to.emit(this.erc721Instance, "Transfer")
+        .withArgs(this.owner.address, this.erc721ReceiverInstance.address, 0);
 
       const balanceOfOwner = await this.erc721Instance.balanceOf(this.owner.address);
       expect(balanceOfOwner).to.equal(0);
@@ -81,7 +83,9 @@ export function shouldSafeTransferFrom() {
         .connect(this.receiver)
         ["safeTransferFrom(address,address,uint256)"](this.owner.address, this.erc721ReceiverInstance.address, 0);
 
-      await expect(tx).to.emit(this.erc721Instance, "Transfer").withArgs(this.owner.address, this.erc721ReceiverInstance.address, 0);
+      await expect(tx)
+        .to.emit(this.erc721Instance, "Transfer")
+        .withArgs(this.owner.address, this.erc721ReceiverInstance.address, 0);
 
       const balanceOfOwner = await this.erc721Instance.balanceOf(this.owner.address);
       expect(balanceOfOwner).to.equal(0);
@@ -114,8 +118,12 @@ export function shouldSafeTransferFrom() {
         0,
         "0x0000000000000000000000000000000000000000000000000000000000000001",
       );
-      await expect(tx1).to.emit(this.erc721Instance, "ReceivedChild").withArgs(this.owner.address, 1, this.erc721InstanceMock.address, 0);
-      await expect(tx1).to.emit(this.erc721InstanceMock, "Transfer").withArgs(this.owner.address, this.erc721Instance.address, 0);
+      await expect(tx1)
+        .to.emit(this.erc721Instance, "ReceivedChild")
+        .withArgs(this.owner.address, 1, this.erc721InstanceMock.address, 0);
+      await expect(tx1)
+        .to.emit(this.erc721InstanceMock, "Transfer")
+        .withArgs(this.owner.address, this.erc721Instance.address, 0);
 
       const balanceOfOwner = await this.erc721InstanceMock.balanceOf(this.erc721Instance.address);
       expect(balanceOfOwner).to.equal(1);
@@ -158,7 +166,11 @@ export function shouldSafeTransferFrom() {
       );
       await expect(tx2).to.not.be.reverted;
 
-      const tx3 = this.erc721Instance["safeTransferFrom(address,address,uint256)"](this.owner.address, this.receiver.address, 1);
+      const tx3 = this.erc721Instance["safeTransferFrom(address,address,uint256)"](
+        this.owner.address,
+        this.receiver.address,
+        1,
+      );
       await expect(tx3).to.not.be.reverted;
 
       const balance = await this.erc721Instance.balanceOf(this.receiver.address);
@@ -187,7 +199,11 @@ export function shouldSafeTransferFrom() {
       );
       await expect(tx2).to.not.be.reverted;
 
-      const tx3 = this.erc721Instance["safeTransferFrom(address,address,uint256)"](this.owner.address, this.receiver.address, 2);
+      const tx3 = this.erc721Instance["safeTransferFrom(address,address,uint256)"](
+        this.owner.address,
+        this.receiver.address,
+        2,
+      );
       // DOUBLE CHECK
       await expect(tx3).to.be.revertedWith(`ERC721: transfer caller is not owner nor approved`);
     });

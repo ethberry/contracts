@@ -34,7 +34,12 @@ export function shouldTransferChild() {
       );
       await expect(tx1).to.not.be.reverted;
 
-      const tx2 = this.erc721Instance.transferChild(1, this.erc721ReceiverInstance.address, this.erc721InstanceMock.address, 0);
+      const tx2 = this.erc721Instance.transferChild(
+        1,
+        this.erc721ReceiverInstance.address,
+        this.erc721InstanceMock.address,
+        0,
+      );
       await expect(tx2)
         .to.emit(this.erc721Instance, "TransferChild")
         .withArgs(1, this.erc721ReceiverInstance.address, this.erc721InstanceMock.address, 0);
@@ -53,7 +58,12 @@ export function shouldTransferChild() {
       );
       await expect(tx1).to.not.be.reverted;
 
-      const tx2 = this.erc721Instance.transferChild(1, this.erc721NonReceiverInstance.address, this.erc721InstanceMock.address, 0);
+      const tx2 = this.erc721Instance.transferChild(
+        1,
+        this.erc721NonReceiverInstance.address,
+        this.erc721InstanceMock.address,
+        0,
+      );
       await expect(tx2)
         .to.emit(this.erc721Instance, "TransferChild")
         .withArgs(1, this.erc721NonReceiverInstance.address, this.erc721InstanceMock.address, 0);

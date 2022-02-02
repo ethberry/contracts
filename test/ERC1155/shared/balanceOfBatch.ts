@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { BigNumber, ContractFactory } from "ethers";
+import { BigNumber } from "ethers";
 
 import { amount, tokenId } from "../../constants";
 
@@ -13,7 +13,10 @@ export function shouldBalanceOfBatch() {
 
     it("should get balance of owner", async function () {
       await this.erc1155Instance.mint(this.owner.address, tokenId, amount, "0x");
-      const balances = await this.erc1155Instance.balanceOfBatch([this.owner.address, this.receiver.address], [tokenId, 100]);
+      const balances = await this.erc1155Instance.balanceOfBatch(
+        [this.owner.address, this.receiver.address],
+        [tokenId, 100],
+      );
       expect(balances).to.deep.equal([BigNumber.from(amount), BigNumber.from(0)]);
     });
   });

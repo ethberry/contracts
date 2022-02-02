@@ -34,7 +34,13 @@ export function shouldMint() {
       const tx = this.erc1155Instance.mint(this.erc1155ReceiverInstance.address, tokenId, amount, "0x");
       await expect(tx)
         .to.emit(this.erc1155Instance, "TransferSingle")
-        .withArgs(this.owner.address, ethers.constants.AddressZero, this.erc1155ReceiverInstance.address, tokenId, amount);
+        .withArgs(
+          this.owner.address,
+          ethers.constants.AddressZero,
+          this.erc1155ReceiverInstance.address,
+          tokenId,
+          amount,
+        );
 
       const balance = await this.erc1155Instance.balanceOf(this.erc1155ReceiverInstance.address, tokenId);
       expect(balance).to.equal(amount);

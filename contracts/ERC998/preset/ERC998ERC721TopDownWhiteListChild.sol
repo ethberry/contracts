@@ -16,7 +16,7 @@ import "../interfaces/IERC998ERC721TopDownEnumerable.sol";
 import "../WhiteListChild.sol";
 import "../../ERC721/preset/ERC721ACBCES.sol";
 
-contract ERC998ERC721TopDownWhiteListChildTest is ERC721ACBCES, IERC998ERC721TopDown, IERC998ERC721TopDownEnumerable, WhiteListChild {
+contract ERC998ERC721TopDownWhiteListChild is ERC721ACBCES, IERC998ERC721TopDown, IERC998ERC721TopDownEnumerable, WhiteListChild {
   using Address for address;
   using Counters for Counters.Counter;
   using EnumerableSet for EnumerableSet.UintSet;
@@ -357,6 +357,19 @@ contract ERC998ERC721TopDownWhiteListChildTest is ERC721ACBCES, IERC998ERC721Top
     );
     childTokenOwner[_childContract][_childTokenId] = _tokenId;
     emit ReceivedChild(_from, _tokenId, _childContract, _childTokenId);
+  }
+
+  /**
+   * @dev Gives list of child contract where token ID has childs.
+   */
+  function childContractsFor(uint256 tokenId) external view returns (address[] memory) {
+    address[] memory _childContracts = new address[](childContracts[tokenId].length());
+
+    for (uint256 i = 0; i < childContracts[tokenId].length(); i++) {
+      _childContracts[i] = childContracts[tokenId].at(i);
+    }
+
+    return _childContracts;
   }
 
   function whiteListChild(address addr) public onlyRole(DEFAULT_ADMIN_ROLE){

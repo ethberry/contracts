@@ -25,6 +25,8 @@ import "@openzeppelin/contracts/access/IAccessControlEnumerable.sol";
 
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 
+import "@openzeppelin/contracts/token/common/ERC2981.sol";
+
 import "../ERC998/interfaces/IERC998ERC20TopDown.sol";
 import "../ERC998/interfaces/IERC998ERC20TopDownEnumerable.sol";
 import "../ERC998/interfaces/IERC998ERC721TopDown.sol";
@@ -61,6 +63,9 @@ contract InterfaceIdCalculator {
     console.logBytes4(type(IERC1155).interfaceId);
     console.logBytes4(type(IERC1155MetadataURI).interfaceId);
     console.logBytes4(type(IERC1155Receiver).interfaceId);
+
+    console.log("IERC2981");
+    console.logBytes4(type(IERC2981).interfaceId);
 
     console.log("IAccessControl");
     console.logBytes4(type(IAccessControl).interfaceId);

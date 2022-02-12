@@ -19,6 +19,8 @@ contract EIP712ERC721Dropbox is EIP712, Pausable, AccessControl {
 
   IEIP712ERC721Droppable _factory;
 
+  bytes32 private immutable PERMIT_SIGNATURE = keccak256("NFT(address account,uint256 tokenId)");
+
   constructor(string memory name) EIP712(name, "1.0.0") {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }
@@ -38,12 +40,13 @@ contract EIP712ERC721Dropbox is EIP712, Pausable, AccessControl {
     address signer,
     bytes calldata signature
   ) external {
+    // require(signature.length == 65, "EIP712ERC721Dropbox: Invalid signature");
     require(_verify(signer, _hash(account, tokenId), signature), "EIP712ERC721Dropbox: Invalid signature");
     _factory.mint(account, tokenId);
   }
 
   function _hash(address account, uint256 tokenId) internal view returns (bytes32) {
-    return _hashTypedDataV4(keccak256(abi.encode(keccak256("NFT(address account,uint256 tokenId)"), account, tokenId)));
+    return _hashTypedDataV4(keccak256(abi.encode(PERMIT_SIGNATURE, account, tokenId)));
   }
 
   function _verify(

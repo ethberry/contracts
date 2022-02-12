@@ -37,6 +37,8 @@ contract IEIP712ERC1155Dropbox is AccessControl, Pausable, EIP712 {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
+  bytes32 private immutable PERMIT_SIGNATURE = keccak256("NFT(address account,uint256[] tokenIds,uint256[] amounts)");
+
   /**
    * @dev Grants `DEFAULT_ADMIN_ROLE`, `MINTER_ROLE` and `PAUSER_ROLE` to the
    * account that deploys the contract.
@@ -56,7 +58,7 @@ contract IEIP712ERC1155Dropbox is AccessControl, Pausable, EIP712 {
     address signer,
     bytes calldata signature
   ) external {
-    require(_verify(signer, _hash(account, tokenIds, amounts), signature), "PostBattleLoot: Invalid signature");
+    require(_verify(signer, _hash(account, tokenIds, amounts), signature), "IEIP712ERC1155Dropbox: Invalid signature");
     _factory.mintBatch(account, tokenIds, amounts, "0x");
   }
 
@@ -69,7 +71,7 @@ contract IEIP712ERC1155Dropbox is AccessControl, Pausable, EIP712 {
       _hashTypedDataV4(
         keccak256(
           abi.encode(
-            keccak256("NFT(address account,uint256[] tokenIds,uint256[] amounts)"),
+            PERMIT_SIGNATURE,
             account,
             keccak256(abi.encodePacked(tokenIds)),
             keccak256(abi.encodePacked(amounts))
@@ -87,7 +89,7 @@ contract IEIP712ERC1155Dropbox is AccessControl, Pausable, EIP712 {
   }
 
   function setFactory(address factory) external onlyRole(DEFAULT_ADMIN_ROLE) {
-    require(factory.isContract(), "PostBattleLoot: the factory must be a deployed contract");
+    require(factory.isContract(), "IEIP712ERC1155Dropbox: the factory must be a deployed contract");
     _factory = IEIP712ERC1155Droppable(factory);
   }
 

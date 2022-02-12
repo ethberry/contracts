@@ -1,8 +1,10 @@
 besu
 dist
+coverage
 .dockerignore
 .gitignore
 npm-debug.log
 report.*.json
 renovate.json
+coverage.json
 

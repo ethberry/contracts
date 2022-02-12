@@ -23,7 +23,5 @@
     "strictPropertyInitialization": false,
     "target": "es2017"
   },
-  "exclude": ["node_modules", "./dist"],
-  "files": ["./hardhat.config.ts"],
-  "include": ["./scripts", "./test", "./typechain", "./deploy", "./tasks"]
+  "exclude": ["node_modules", "./dist"]
 }

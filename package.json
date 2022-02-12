@@ -22,6 +22,7 @@
     "prettier-plugin-solidity": "1.0.0-beta.19",
     "solhint": "3.3.7",
     "solhint-plugin-prettier": "0.0.5",
+    "solidity-coverage": "0.7.19",
     "web3": "1.7.0"
   },
   "description": "Collection of contracts and presets",
@@ -78,7 +79,8 @@
     "prebuild": "rimraf artifacts cache typechain-types",
     "preversion": "npm run build",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "test:coverage": "hardhat coverage"
   },
   "types": "./typechain-types/index.ts",
   "version": "0.0.16"

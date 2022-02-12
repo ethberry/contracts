@@ -3,6 +3,7 @@
 /besu
 /cache
 /artifacts
+/coverage
 
 # IDE
 .idea
@@ -21,4 +22,4 @@ yarn.lock
 /report.*.json
 
 .env
-
+coverage.json

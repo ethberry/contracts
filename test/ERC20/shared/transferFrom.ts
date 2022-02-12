@@ -53,7 +53,7 @@ export function shouldTransferFrom() {
       const tx1 = this.erc20Instance
         .connect(this.receiver)
         .transferFrom(this.owner.address, this.receiver.address, amount);
-      await expect(tx1).to.be.revertedWith(`ERC20: transfer amount exceeds allowance`);
+      await expect(tx1).to.be.revertedWith(`ERC20: insufficient allowance`);
     });
 
     it("should fail: transfer to the zero address", async function () {
@@ -78,7 +78,7 @@ export function shouldTransferFrom() {
       const tx = this.erc20Instance
         .connect(this.receiver)
         .transferFrom(this.owner.address, this.receiver.address, amount);
-      await expect(tx).to.be.revertedWith(`ERC20: transfer amount exceeds allowance`);
+      await expect(tx).to.be.revertedWith(`ERC20: insufficient allowance`);
     });
   });
 }

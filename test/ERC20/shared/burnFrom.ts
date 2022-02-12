@@ -7,7 +7,7 @@ export function shouldBurnFrom() {
   describe("burnFrom", function () {
     it("should fail: not allowed", async function () {
       const tx = this.erc20Instance.connect(this.receiver).burnFrom(this.owner.address, amount);
-      await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds allowance");
+      await expect(tx).to.be.revertedWith("ERC20: insufficient allowance");
     });
 
     it("should fail: insufficient balance", async function () {

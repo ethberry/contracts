@@ -5,28 +5,34 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 // @ts-ignore
 import { time } from "@openzeppelin/test-helpers";
 
-import { AuctionBidStep, ERC721ACBMock } from "../../typechain-types";
+import { Auction, ERC721ACB } from "../../typechain-types";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, tokenId, tokenName, tokenSymbol } from "../constants";
 
-describe("AuctionBidStep", function () {
+describe("Auction", function () {
   let auction: ContractFactory;
-  let auctionInstance: AuctionBidStep;
+  let auctionInstance: Auction;
   let erc721: ContractFactory;
-  let collectionInstance: ERC721ACBMock;
+  let collectionInstance: ERC721ACB;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
   let stranger: SignerWithAddress;
   let ownerNFTContract: SignerWithAddress;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721ACBMock");
-    auction = await ethers.getContractFactory("AuctionBidStep");
+    erc721 = await ethers.getContractFactory("ERC721ACB");
+    auction = await ethers.getContractFactory("Auction");
     [owner, receiver, stranger, ownerNFTContract] = await ethers.getSigners();
 
-    auctionInstance = (await auction.deploy()) as AuctionBidStep;
+    auctionInstance = (await auction.deploy()) as Auction;
     collectionInstance = (await erc721
       .connect(ownerNFTContract)
-      .deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721ACBMock;
+      .deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721ACB;
+
+    await collectionInstance.connect(ownerNFTContract).mint(ownerNFTContract.address, tokenId);
+    await collectionInstance.connect(ownerNFTContract).approve(auctionInstance.address, tokenId);
+
+    const approveAddress = await collectionInstance.getApproved(tokenId);
+    expect(auctionInstance.address).to.equal(approveAddress);
   });
 
   describe("Deployment", function () {
@@ -61,7 +67,31 @@ describe("AuctionBidStep", function () {
       expect(ownerOf).to.equal(auctionInstance.address);
     });
 
-    it("should start auction (not collection owner)", async function () {
+    it("should start auction (if startAuctionTimestamp == 0, startAuctionTimestamp should block.timestamp)", async function () {
+      const span = 24 * 60 * 60;
+      const timestamp: number = (await time.latest()).toNumber();
+
+      const tx = auctionInstance
+        .connect(ownerNFTContract)
+        .startAuction(collectionInstance.address, tokenId, 100000, 1000, 0, timestamp + span + span);
+      await expect(tx)
+        .to.emit(auctionInstance, "AuctionStart")
+        .withArgs(
+          0,
+          ownerNFTContract.address,
+          collectionInstance.address,
+          tokenId,
+          100000,
+          1000,
+          timestamp + 1,
+          timestamp + span + span,
+        );
+
+      const ownerOf = await collectionInstance.ownerOf(tokenId);
+      expect(ownerOf).to.equal(auctionInstance.address);
+    });
+
+    it("should fail: transfer from incorrect owner", async function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
@@ -73,21 +103,22 @@ describe("AuctionBidStep", function () {
         timestamp,
         timestamp + span + span,
       );
-      await expect(tx)
-        .to.emit(auctionInstance, "AuctionStart")
-        .withArgs(
-          0,
-          owner.address,
-          collectionInstance.address,
-          tokenId,
-          100000,
-          1000,
-          timestamp,
-          timestamp + span + span,
-        );
+      await expect(tx).to.be.revertedWith(`ERC721: transfer from incorrect owner`);
+    });
 
-      const ownerOf = await collectionInstance.ownerOf(tokenId);
-      expect(ownerOf).to.equal(auctionInstance.address);
+    it("should fail: operator query for nonexistent token", async function () {
+      const span = 24 * 60 * 60;
+      const timestamp: number = (await time.latest()).toNumber();
+
+      const tx = auctionInstance.startAuction(
+        collectionInstance.address,
+        tokenId + 1,
+        100000,
+        1000,
+        timestamp,
+        timestamp + span + span,
+      );
+      await expect(tx).to.be.revertedWith(`ERC721: operator query for nonexistent token`);
     });
 
     it("should fail: collection address cannot be zerro", async function () {
@@ -127,42 +158,6 @@ describe("AuctionBidStep", function () {
         .connect(ownerNFTContract)
         .startAuction(collectionInstance.address, tokenId, 100000, 1000, timestamp - 1000, timestamp - 100);
       await expect(tx).to.be.revertedWith(`Auction: auction should finished in future`);
-    });
-
-    it("should fail: resubmission of the auction (token already minted)", async function () {
-      const span = 24 * 60 * 60;
-      const timestamp: number = (await time.latest()).toNumber();
-
-      const tx = auctionInstance.startAuction(
-        collectionInstance.address,
-        tokenId,
-        100000,
-        1000,
-        timestamp,
-        timestamp + span + span,
-      );
-      await expect(tx)
-        .to.emit(auctionInstance, "AuctionStart")
-        .withArgs(
-          0,
-          owner.address,
-          collectionInstance.address,
-          tokenId,
-          100000,
-          1000,
-          timestamp,
-          timestamp + span + span,
-        );
-
-      const tx1 = auctionInstance.startAuction(
-        collectionInstance.address,
-        tokenId,
-        100000,
-        1000,
-        timestamp,
-        timestamp + span + span,
-      );
-      await expect(tx1).to.be.revertedWith(`ERC721: token already minted`);
     });
   });
 
@@ -637,6 +632,74 @@ describe("AuctionBidStep", function () {
 
       const finish = auctionInstance.connect(owner).finishAuction(0);
       await expect(finish).to.be.revertedWith(`Auction: auction is not finished`);
+    });
+  });
+
+  describe("pause", function () {
+    it("should fail: paase not admin", async function () {
+      const tx = auctionInstance.connect(receiver).pause();
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,
+      );
+    });
+
+    it("should fail: unpause not admin", async function () {
+      const tx = auctionInstance.connect(receiver).unpause();
+      await expect(tx).to.be.revertedWith(
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,
+      );
+    });
+
+    it("should pause/unpause", async function () {
+      const span = 300;
+      const timestamp: number = (await time.latest()).toNumber();
+
+      const tx = auctionInstance
+        .connect(ownerNFTContract)
+        .startAuction(collectionInstance.address, tokenId, 100000, 1000, timestamp, timestamp + span);
+      await expect(tx)
+        .to.emit(auctionInstance, "AuctionStart")
+        .withArgs(
+          0,
+          ownerNFTContract.address,
+          collectionInstance.address,
+          tokenId,
+          100000,
+          1000,
+          timestamp,
+          timestamp + span,
+        );
+
+      const tx2 = auctionInstance.connect(owner).pause();
+      await expect(tx2).to.emit(auctionInstance, "Paused").withArgs(owner.address);
+
+      const tokenId1 = tokenId + 1;
+      await collectionInstance.connect(ownerNFTContract).mint(ownerNFTContract.address, tokenId1);
+      await collectionInstance.connect(ownerNFTContract).approve(auctionInstance.address, tokenId1);
+
+      const tx3 = auctionInstance
+        .connect(ownerNFTContract)
+        .startAuction(collectionInstance.address, tokenId1, 100000, 1000, timestamp, timestamp + span);
+      await expect(tx3).to.be.revertedWith(`Pausable: paused`);
+
+      const tx4 = auctionInstance.connect(owner).unpause();
+      await expect(tx4).to.emit(auctionInstance, "Unpaused").withArgs(owner.address);
+
+      const tx5 = auctionInstance
+        .connect(ownerNFTContract)
+        .startAuction(collectionInstance.address, tokenId1, 100000, 1000, timestamp, timestamp + span);
+      await expect(tx5)
+        .to.emit(auctionInstance, "AuctionStart")
+        .withArgs(
+          1,
+          ownerNFTContract.address,
+          collectionInstance.address,
+          tokenId1,
+          100000,
+          1000,
+          timestamp,
+          timestamp + span,
+        );
     });
   });
 });

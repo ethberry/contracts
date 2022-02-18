@@ -13,9 +13,7 @@ import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "./interfaces/IERC721Mint.sol";
-
-contract AuctionBidStep is AccessControl, Pausable, ERC721Holder {
+contract Auction is AccessControl, Pausable, ERC721Holder {
   using Address for address;
   using Counters for Counters.Counter;
 
@@ -82,7 +80,7 @@ contract AuctionBidStep is AccessControl, Pausable, ERC721Holder {
     require(startPrice > 0, "Auction: auction start price should be positive");
     require(block.timestamp < finishAuctionTimestamp, "Auction: auction should finished in future");
 
-    IERC721Mint(collection).mint(address(this), tokenId);
+    IERC721(collection).safeTransferFrom(msg.sender, address(this), tokenId);
 
     uint256 auctionId = _auctionIdCounter.current();
     _auctionIdCounter.increment();
@@ -113,7 +111,7 @@ contract AuctionBidStep is AccessControl, Pausable, ERC721Holder {
       tokenId,
       startPrice,
       bidStep,
-      startAuctionTimestamp,
+      _startAuctionTimestamp,
       finishAuctionTimestamp
     );
   }
@@ -146,13 +144,6 @@ contract AuctionBidStep is AccessControl, Pausable, ERC721Holder {
 
     emit AuctionBid(auctionId, _msgSender(), auction._auctionTokenId, bid);
   }
-
-  /**
-   * @dev Метод завершения аукциона
-   * если время аукциона вышло, любой может инициировать завершение аукциона (например)
-   * если не была сделана ни одна ставка НФТ токен вернётся продавцу
-   * если хоть одна ставка была сделана НФТ токен уйдёт покупателю, а продавцу - денежки
-   */
 
   function finishAuction(
     uint256 auctionId // ид аукциона, который пытаемся завершить

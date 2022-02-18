@@ -2,7 +2,6 @@ import { expect } from "chai";
 import { ethers, web3 } from "hardhat";
 import { BigNumber, ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-// @ts-ignore
 import { time } from "@openzeppelin/test-helpers";
 
 import { Auction, ERC721ACB } from "../../typechain-types";

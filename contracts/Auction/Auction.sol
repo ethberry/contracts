@@ -47,10 +47,6 @@ contract Auction is AccessControl, Pausable, ERC721Holder {
   event AuctionBid(uint256 auctionId, address from, uint256 tokenId, uint256 amount);
   event AuctionFinish(uint256 auctionId, address from, uint256 tokenId, uint256 amount);
 
-  /*
-   * @dev Initialize this contract. Acts as a constructor
-   * @param _acceptedToken - Address of the ERC20 accepted for this drop
-   */
   constructor() {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }
@@ -63,10 +59,6 @@ contract Auction is AccessControl, Pausable, ERC721Holder {
     _unpause();
   }
 
-  /**
-   * @dev Метод создания аукциона
-   * транзакция возможна только от имени владельца токена
-   */
   function startAuction(
     address collection,
     uint256 tokenId,
@@ -116,10 +108,6 @@ contract Auction is AccessControl, Pausable, ERC721Holder {
     );
   }
 
-  /**
-   * @dev Bid method
-   * transaction takes current bid from bidder and returns last bid to previous bidder
-   */
   function makeBid(uint256 auctionId) public payable whenNotPaused {
     AuctionData storage auction = _auction[auctionId];
     require(auction._auctionCollection > address(0), "Auction: seems you tried wrong auction id");
@@ -146,7 +134,7 @@ contract Auction is AccessControl, Pausable, ERC721Holder {
   }
 
   function finishAuction(
-    uint256 auctionId // ид аукциона, который пытаемся завершить
+    uint256 auctionId
   ) public whenNotPaused {
     AuctionData storage auction = _auction[auctionId];
     require(auction._auctionCollection != address(0), "Auction: seems you tried wrong auction id");
@@ -156,7 +144,6 @@ contract Auction is AccessControl, Pausable, ERC721Holder {
     uint256 currentBid = auction._auctionCurrentBid;
     uint256 tokenId = auction._auctionTokenId;
 
-    // если ранее была сделана ставка, НФТ токена покупателю, деньги продавцу
     if (currentBid > 0) {
       payable(auction._auctionSeller).transfer(currentBid);
       IERC721(auction._auctionCollection).safeTransferFrom(address(this), auction._auctionCurrentBidder, tokenId);

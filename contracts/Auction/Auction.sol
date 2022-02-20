@@ -72,7 +72,7 @@ contract Auction is AccessControl, Pausable, ERC721Holder {
     require(startPrice > 0, "Auction: auction start price should be positive");
     require(block.timestamp < finishAuctionTimestamp, "Auction: auction should finished in future");
 
-    IERC721(collection).safeTransferFrom(msg.sender, address(this), tokenId);
+    IERC721(collection).safeTransferFrom(_msgSender(), address(this), tokenId);
 
     uint256 auctionId = _auctionIdCounter.current();
     _auctionIdCounter.increment();

@@ -112,6 +112,18 @@ contract ERC1155ACBSP is AccessControl, ERC1155Burnable, ERC1155Pausable, ERC115
     uint256[] memory amounts,
     bytes memory data
   ) internal virtual override(ERC1155, ERC1155Pausable, ERC1155Supply) {
+
+    /*
+    * It is necessary that OpenZeppelin ERC1155Supply does not return with the error
+    * "Arithmetic operation underflowed or overflowed outside of an unchecked block"
+    */
+    if (to == address(0)) {
+      for (uint256 i = 0; i < ids.length; ++i) {
+        uint256 fromBalance = balanceOf(from, ids[i]);
+        require(fromBalance >= amounts[i], "ERC1155: burn amount exceeds balance");
+      }
+    }
+
     super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
   }
 }

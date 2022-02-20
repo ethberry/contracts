@@ -14,6 +14,8 @@ import { shouldSetApprovalForAll } from "../shared/setApprovalForAll";
 import { shouldSafeTransferFrom } from "../shared/safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "../shared/safeBatchTransferFrom";
 import { shouldPause } from "../shared/pause";
+import { shouldBurn } from "../shared/burn";
+import { shouldBurnBatch } from "../shared/burnBatch";
 
 describe("ERC1155ACBSP", function () {
   let erc1155: ContractFactory;
@@ -50,6 +52,8 @@ describe("ERC1155ACBSP", function () {
   shouldSetApprovalForAll();
   shouldSafeTransferFrom();
   shouldSafeBatchTransferFrom();
+  shouldBurn();
+  shouldBurnBatch();
   shouldPause();
 
   describe("supportsInterface", function () {

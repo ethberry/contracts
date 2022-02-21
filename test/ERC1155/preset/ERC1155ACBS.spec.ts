@@ -13,6 +13,8 @@ import { shouldURI } from "../shared/uri";
 import { shouldSetApprovalForAll } from "../shared/setApprovalForAll";
 import { shouldSafeTransferFrom } from "../shared/safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "../shared/safeBatchTransferFrom";
+import { shouldBurn } from "../shared/burn";
+import { shouldBurnBatch } from "../shared/burnBatch";
 
 describe("ERC1155ACBS", function () {
   let erc1155: ContractFactory;
@@ -47,6 +49,8 @@ describe("ERC1155ACBS", function () {
   shouldSetApprovalForAll();
   shouldSafeTransferFrom();
   shouldSafeBatchTransferFrom();
+  shouldBurn();
+  shouldBurnBatch();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

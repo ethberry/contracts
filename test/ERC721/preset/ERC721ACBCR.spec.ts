@@ -16,6 +16,8 @@ import { shouldTransferFrom } from "../shared/transferFrom2";
 import { shouldSafeTransferFrom } from "../shared/safeTransferFrom2";
 import { shouldBurn } from "../shared/burn2";
 import { shouldCapped } from "../shared/capped2";
+import { shouldSetTokenRoyalty } from "../shared/setTokenRoyalty";
+import { shouldRoyaltyInfo } from "../shared/royaltyInfo";
 
 describe("ERC721ACBCR", function () {
   let erc721: ContractFactory;
@@ -44,23 +46,8 @@ describe("ERC721ACBCR", function () {
   shouldSafeTransferFrom();
   shouldBurn();
   shouldCapped();
-
-  describe("royaltyInfo", function () {
-    it("should get default royalty info", async function () {
-      const [receiver, amount] = await this.erc721Instance.royaltyInfo(tokenId, 1e6);
-      expect(receiver).to.equal(this.owner.address);
-      expect(amount).to.equal(10000);
-    });
-  });
-
-  describe("setTokenRoyalty", function () {
-    it("should set token royalty info", async function () {
-      await this.erc721Instance.setTokenRoyalty(tokenId, this.owner.address, 200);
-      const [receiver, amount] = await this.erc721Instance.royaltyInfo(tokenId, 1e6);
-      expect(receiver).to.equal(this.owner.address);
-      expect(amount).to.equal(20000);
-    });
-  });
+  shouldSetTokenRoyalty();
+  shouldRoyaltyInfo();
 
   describe("burn", function () {
     it("should reset token royalty info", async function () {

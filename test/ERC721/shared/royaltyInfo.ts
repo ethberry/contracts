@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-export function shouldRoyaltyInfo() {
+export function shouldGetRoyaltyInfo() {
   describe("royaltyInfo", function () {
     it("should get default royalty info", async function () {
       const amount = ethers.utils.parseUnits("1.00", "ether");

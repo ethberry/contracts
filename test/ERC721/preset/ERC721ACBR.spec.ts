@@ -16,7 +16,8 @@ import { shouldTransferFrom } from "../shared/transferFrom2";
 import { shouldSafeTransferFrom } from "../shared/safeTransferFrom2";
 import { shouldBurn } from "../shared/burn2";
 import { shouldSetTokenRoyalty } from "../shared/setTokenRoyalty";
-import { shouldRoyaltyInfo } from "../shared/royaltyInfo";
+import { shouldSetDefaultRoyalty } from "../shared/setDefaultRoyalty";
+import { shouldGetRoyaltyInfo } from "../shared/royaltyInfo";
 
 describe("ERC721ACBR", function () {
   let erc721: ContractFactory;
@@ -45,7 +46,8 @@ describe("ERC721ACBR", function () {
   shouldSafeTransferFrom();
   shouldBurn();
   shouldSetTokenRoyalty();
-  shouldRoyaltyInfo();
+  shouldSetDefaultRoyalty();
+  shouldGetRoyaltyInfo();
 
   describe("burn", function () {
     it("should reset token royalty info", async function () {

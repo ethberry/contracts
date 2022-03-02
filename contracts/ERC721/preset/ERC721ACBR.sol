@@ -16,18 +16,21 @@ contract ERC721ACBR is AccessControl, ERC721Burnable, ERC721Royalty {
 
   string internal _baseTokenURI;
 
+  event DefaultRoyaltyInfo(address receiver, uint96 royaltyNumerator);
+  event TokenRoyaltyInfo(uint256 tokenId, address receiver, uint96 royaltyNumerator);
+
   constructor(
     string memory name,
     string memory symbol,
     string memory baseTokenURI,
-    uint96 feeNumerator
+    uint96 royaltyNumerator
   ) ERC721(name, symbol) {
     _baseTokenURI = baseTokenURI;
 
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
 
-    _setDefaultRoyalty(_msgSender(), feeNumerator);
+    _setDefaultRoyalty(_msgSender(), royaltyNumerator);
   }
 
   function mint(address to, uint256 tokenId) public virtual onlyRole(MINTER_ROLE) {
@@ -38,12 +41,21 @@ contract ERC721ACBR is AccessControl, ERC721Burnable, ERC721Royalty {
     _safeMint(to, tokenId);
   }
 
+  function setDefaultRoyalty(
+    address receiver,
+    uint96 royaltyNumerator
+  ) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
+    super._setDefaultRoyalty(receiver, royaltyNumerator);
+    emit DefaultRoyaltyInfo(receiver, royaltyNumerator);
+  }
+
   function setTokenRoyalty(
     uint256 tokenId,
     address receiver,
-    uint96 feeNumerator
+    uint96 royaltyNumerator
   ) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
-    super._setTokenRoyalty(tokenId, receiver, feeNumerator);
+    super._setTokenRoyalty(tokenId, receiver, royaltyNumerator);
+    emit TokenRoyaltyInfo(tokenId, receiver, royaltyNumerator);
   }
 
   /**

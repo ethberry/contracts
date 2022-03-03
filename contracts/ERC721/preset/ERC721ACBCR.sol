@@ -19,8 +19,8 @@ contract ERC721ACBCR is AccessControl, ERC721Burnable, ERC721Capped, ERC721Royal
 
   string internal _baseTokenURI;
 
-  event DefaultRoyaltyInfo(address receiver, uint96 royaltyNumerator);
-  event TokenRoyaltyInfo(uint256 tokenId, address receiver, uint96 royaltyNumerator);
+  event DefaultRoyaltyInfo(address royaltyReceiver, uint96 royaltyNumerator);
+  event TokenRoyaltyInfo(uint256 tokenId, address royaltyReceiver, uint96 royaltyNumerator);
 
   constructor(
     string memory name,
@@ -46,20 +46,20 @@ contract ERC721ACBCR is AccessControl, ERC721Burnable, ERC721Capped, ERC721Royal
   }
 
   function setDefaultRoyalty(
-    address receiver,
+    address royaltyReceiver,
     uint96 royaltyNumerator
   ) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
-    super._setDefaultRoyalty(receiver, royaltyNumerator);
-    emit DefaultRoyaltyInfo(receiver, royaltyNumerator);
+    super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
+    emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
   }
 
   function setTokenRoyalty(
     uint256 tokenId,
-    address receiver,
+    address royaltyReceiver,
     uint96 royaltyNumerator
   ) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
-    super._setTokenRoyalty(tokenId, receiver, royaltyNumerator);
-    emit TokenRoyaltyInfo(tokenId, receiver, royaltyNumerator);
+    super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
+    emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }
 
   /**

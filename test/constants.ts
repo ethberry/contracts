@@ -14,7 +14,7 @@ export const PREDICATE_ROLE = ethers.utils.id("PREDICATE_ROLE");
 export const DEPOSITOR_ROLE = ethers.utils.id("DEPOSITOR_ROLE");
 
 export const decimals = ethers.BigNumber.from(10).pow(18);
-export const amount = 100;
+export const amount = 100000;
 
 export const addr = {
   hardhat: {

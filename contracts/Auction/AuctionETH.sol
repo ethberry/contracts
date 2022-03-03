@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract Auction is AccessControl, Pausable, ERC721Holder {
+contract AuctionETH is AccessControl, Pausable, ERC721Holder {
   using Address for address;
   using Counters for Counters.Counter;
 

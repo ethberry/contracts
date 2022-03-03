@@ -65,7 +65,7 @@ export function shouldBurnBatch() {
         .mintBatch(this.owner.address, [tokenId, tokenId1], [amount, amount], "0x");
       const tx = this.erc1155Instance
         .connect(this.receiver)
-        .burn(this.owner.address, [tokenId, tokenId1], [amount, amount]);
+        .burnBatch(this.owner.address, [tokenId, tokenId1], [amount, amount]);
 
       await expect(tx).to.be.revertedWith(`ERC1155: caller is not owner nor approved`);
     });

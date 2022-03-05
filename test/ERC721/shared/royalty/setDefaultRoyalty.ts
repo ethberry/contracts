@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { DEFAULT_ADMIN_ROLE } from "../../constants";
+import { DEFAULT_ADMIN_ROLE } from "../../../constants";
 
-export function shouldSetDefaultRoyalty() {
+export function shouldSetDefaultRoyalty(roles = false) {
   describe("setDefaultRoyalty", function () {
     it("should set token royalty", async function () {
       const royaltyNumerator = 5000;
@@ -32,7 +32,9 @@ export function shouldSetDefaultRoyalty() {
 
       const tx = this.erc721Instance.connect(this.receiver).setDefaultRoyalty(this.receiver.address, royaltyNumerator);
       await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,
+        roles
+          ? `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`
+          : "Ownable: caller is not the owner",
       );
     });
   });

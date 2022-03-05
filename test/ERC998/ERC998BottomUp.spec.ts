@@ -5,19 +5,19 @@ import { ContractFactory } from "ethers";
 import { ERC721NonReceiverMock, ERC721ReceiverMock, ERC998ComposableBottomUpTest } from "../../typechain-types";
 import { baseTokenURI, tokenName, tokenSymbol } from "../constants";
 
-import { shouldDeploy } from "../ERC721/shared/constructor1";
-import { shouldMint } from "../ERC721/shared/mint1";
-import { shouldSafeMint } from "../ERC721/shared/safeMint1";
-import { shouldGetOwnerOf } from "../ERC721/shared/ownerOf1";
-import { shouldApprove } from "../ERC721/shared/approve1";
-import { shouldSetApprovalForAll } from "../ERC721/shared/setApprovalForAll1";
-import { shouldGetBalanceOf } from "../ERC721/shared/balanceOf1";
-import { shouldTransferFrom } from "../ERC721/shared/transferFrom1";
-import { shouldSafeTransferFrom } from "../ERC721/shared/safeTransferFrom1";
-import { shouldBurn } from "../ERC721/shared/burn1";
-import { shouldGetTokenURI } from "../ERC721/shared/tokenURI1";
-import { shouldGetTokenOfOwnerByIndex } from "../ERC721/shared/tokenOfOwnerByIndex1";
-import { shouldGetCap } from "../ERC721/shared/capped1";
+import { shouldHasRole } from "../ERC721/shared/accessControl/hasRole";
+import { shouldMint } from "../ERC721/shared/enumerable/mint";
+import { shouldSafeMint } from "../ERC721/shared/enumerable/safeMint";
+import { shouldGetOwnerOf } from "../ERC721/shared/enumerable/ownerOf";
+import { shouldApprove } from "../ERC721/shared/enumerable/approve";
+import { shouldSetApprovalForAll } from "../ERC721/shared/enumerable/setApprovalForAll";
+import { shouldGetBalanceOf } from "../ERC721/shared/enumerable/balanceOf";
+import { shouldTransferFrom } from "../ERC721/shared/enumerable/transferFrom";
+import { shouldSafeTransferFrom } from "../ERC721/shared/enumerable/safeTransferFrom";
+import { shouldBurn } from "../ERC721/shared/enumerable/burn";
+import { shouldGetTokenURI } from "../ERC721/shared/enumerable/tokenURI";
+import { shouldGetTokenOfOwnerByIndex } from "../ERC721/shared/enumerable/tokenOfOwnerByIndex";
+import { shouldGetCap } from "../ERC721/shared/enumerable/capped";
 
 describe("ERC998ComposableBottomUp", function () {
   let erc721: ContractFactory;
@@ -35,9 +35,9 @@ describe("ERC998ComposableBottomUp", function () {
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
-  shouldDeploy();
-  shouldMint();
-  shouldSafeMint();
+  shouldHasRole();
+  shouldMint(true);
+  shouldSafeMint(true);
   shouldGetOwnerOf();
   shouldApprove();
   shouldSetApprovalForAll();

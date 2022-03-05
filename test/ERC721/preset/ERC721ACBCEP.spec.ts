@@ -5,19 +5,19 @@ import { expect } from "chai";
 import { ERC721ACBCEP, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldDeploy } from "../shared/constructor2";
-import { shouldMint } from "../shared/mint1";
-import { shouldSafeMint } from "../shared/safeMint1";
-import { shouldGetOwnerOf } from "../shared/ownerOf1";
-import { shouldApprove } from "../shared/approve1";
-import { shouldSetApprovalForAll } from "../shared/setApprovalForAll1";
-import { shouldGetBalanceOf } from "../shared/balanceOf1";
-import { shouldTransferFrom } from "../shared/transferFrom1";
-import { shouldSafeTransferFrom } from "../shared/safeTransferFrom1";
-import { shouldBurn } from "../shared/burn1";
-import { shouldGetTokenOfOwnerByIndex } from "../shared/tokenOfOwnerByIndex1";
-import { shouldGetCap } from "../shared/capped1";
-import { shouldPause } from "../shared/pausable1";
+import { shouldHasRole } from "../shared/accessControl/hasRole";
+import { shouldMint } from "../shared/enumerable/mint";
+import { shouldSafeMint } from "../shared/enumerable/safeMint";
+import { shouldGetOwnerOf } from "../shared/enumerable/ownerOf";
+import { shouldApprove } from "../shared/enumerable/approve";
+import { shouldSetApprovalForAll } from "../shared/enumerable/setApprovalForAll";
+import { shouldGetBalanceOf } from "../shared/enumerable/balanceOf";
+import { shouldTransferFrom } from "../shared/enumerable/transferFrom";
+import { shouldSafeTransferFrom } from "../shared/enumerable/safeTransferFrom";
+import { shouldBurn } from "../shared/enumerable/burn";
+import { shouldGetTokenOfOwnerByIndex } from "../shared/enumerable/tokenOfOwnerByIndex";
+import { shouldGetCap } from "../shared/enumerable/capped";
+import { shouldPause } from "../shared/enumerable/pausable";
 
 describe("ERC721ACBCEP", function () {
   let erc721: ContractFactory;
@@ -35,9 +35,9 @@ describe("ERC721ACBCEP", function () {
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
-  shouldDeploy();
-  shouldMint();
-  shouldSafeMint();
+  shouldHasRole(true);
+  shouldMint(true);
+  shouldSafeMint(true);
   shouldGetOwnerOf();
   shouldApprove();
   shouldSetApprovalForAll();

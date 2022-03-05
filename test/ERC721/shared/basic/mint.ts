@@ -1,19 +1,21 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { MINTER_ROLE } from "../../constants";
+import { MINTER_ROLE } from "../../../constants";
 
-export function shouldMint() {
+export function shouldMint(roles = false) {
   describe("mint", function () {
     it("should fail for wrong role", async function () {
-      const tx = this.erc721Instance.connect(this.receiver).mint(this.receiver.address);
+      const tx = this.erc721Instance.connect(this.receiver).mint(this.receiver.address, 0);
       await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
+        roles
+          ? `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`
+          : "Ownable: caller is not the owner",
       );
     });
 
     it("should mint to wallet", async function () {
-      const tx = this.erc721Instance.mint(this.owner.address);
+      const tx = this.erc721Instance.mint(this.owner.address, 0);
       await expect(tx)
         .to.emit(this.erc721Instance, "Transfer")
         .withArgs(ethers.constants.AddressZero, this.owner.address, 0);
@@ -23,14 +25,14 @@ export function shouldMint() {
     });
 
     it("should mint to non receiver", async function () {
-      const tx = this.erc721Instance.mint(this.erc721NonReceiverInstance.address);
+      const tx = this.erc721Instance.mint(this.erc721NonReceiverInstance.address, 0);
       await expect(tx)
         .to.emit(this.erc721Instance, "Transfer")
         .withArgs(ethers.constants.AddressZero, this.erc721NonReceiverInstance.address, 0);
     });
 
     it("should mint to receiver", async function () {
-      const tx = this.erc721Instance.mint(this.erc721ReceiverInstance.address);
+      const tx = this.erc721Instance.mint(this.erc721ReceiverInstance.address, 0);
       await expect(tx)
         .to.emit(this.erc721Instance, "Transfer")
         .withArgs(ethers.constants.AddressZero, this.erc721ReceiverInstance.address, 0);

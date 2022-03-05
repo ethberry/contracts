@@ -5,7 +5,7 @@ import { expect } from "chai";
 import { ERC721ACBR, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldHasRole } from "../shared/accessControl/hasRole";
+import { shouldBeOwner } from "../shared/ownable/owner";
 import { shouldMint } from "../shared/basic/mint";
 import { shouldSafeMint } from "../shared/basic/safeMint";
 import { shouldGetOwnerOf } from "../shared/basic/ownerOf";
@@ -20,13 +20,13 @@ import { shouldSetDefaultRoyalty } from "../shared/royalty/setDefaultRoyalty";
 import { shouldGetRoyaltyInfo } from "../shared/royalty/royaltyInfo";
 import { shouldBurnBasic } from "../shared/royalty/burnBasic";
 
-describe("ERC721ACBR", function () {
+describe("ERC721OBR", function () {
   let erc721: ContractFactory;
   let erc721Receiver: ContractFactory;
   let erc721NonReceiver: ContractFactory;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721ACBR");
+    erc721 = await ethers.getContractFactory("ERC721OBR");
     erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
     erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
@@ -36,9 +36,9 @@ describe("ERC721ACBR", function () {
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
-  shouldHasRole();
-  shouldMint(true);
-  shouldSafeMint(true);
+  shouldBeOwner();
+  shouldMint();
+  shouldSafeMint();
   shouldGetOwnerOf();
   shouldApprove();
   shouldSetApprovalForAll();
@@ -46,8 +46,8 @@ describe("ERC721ACBR", function () {
   shouldTransferFrom();
   shouldSafeTransferFrom();
   shouldBurn();
-  shouldSetTokenRoyalty(true);
-  shouldSetDefaultRoyalty(true);
+  shouldSetTokenRoyalty();
+  shouldSetDefaultRoyalty();
   shouldGetRoyaltyInfo();
   shouldBurnBasic();
 
@@ -61,8 +61,6 @@ describe("ERC721ACBR", function () {
       expect(supportsIERC721Royalty).to.equal(true);
       const supportsIERC165 = await this.erc721Instance.supportsInterface("0x01ffc9a7");
       expect(supportsIERC165).to.equal(true);
-      const supportsIAccessControl = await this.erc721Instance.supportsInterface("0x7965db0b");
-      expect(supportsIAccessControl).to.equal(true);
       const supportsInvalidInterface = await this.erc721Instance.supportsInterface("0xffffffff");
       expect(supportsInvalidInterface).to.equal(false);
     });

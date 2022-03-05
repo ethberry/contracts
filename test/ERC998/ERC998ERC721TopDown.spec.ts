@@ -5,14 +5,14 @@ import { ContractFactory } from "ethers";
 import { ERC721NonReceiverMock, ERC721ReceiverMock, ERC721ACBCE, ERC998ERC721TopDownTest } from "../../typechain-types";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
 
-import { shouldMint } from "../ERC721/shared/mint1";
-import { shouldSafeMint } from "../ERC721/shared/safeMint1";
-import { shouldGetBalanceOf } from "../ERC721/shared/balanceOf1";
-import { shouldGetOwnerOf } from "../ERC721/shared/ownerOf1";
-import { shouldGetTokenURI } from "../ERC721/shared/tokenURI1";
+import { shouldMint } from "../ERC721/shared/enumerable/mint";
+import { shouldSafeMint } from "../ERC721/shared/enumerable/safeMint";
+import { shouldGetBalanceOf } from "../ERC721/shared/enumerable/balanceOf";
+import { shouldGetOwnerOf } from "../ERC721/shared/enumerable/ownerOf";
+import { shouldGetTokenURI } from "../ERC721/shared/enumerable/tokenURI";
 import { shouldApprove } from "./shared/approve";
-import { shouldSetApprovalForAll } from "../ERC721/shared/setApprovalForAll1";
-import { shouldTransferFrom } from "../ERC721/shared/transferFrom1";
+import { shouldSetApprovalForAll } from "../ERC721/shared/enumerable/setApprovalForAll";
+import { shouldTransferFrom } from "../ERC721/shared/enumerable/transferFrom";
 import { shouldSafeTransferFrom } from "./shared/safeTransferFrom";
 import { shouldSafeTransferChild } from "./shared/safeTransferChild";
 import { shouldTransferChild } from "./shared/transferChild";
@@ -50,8 +50,8 @@ describe("ERC998ERC721TopDownTest", function () {
     });
   });
 
-  shouldMint();
-  shouldSafeMint();
+  shouldMint(true);
+  shouldSafeMint(true);
   shouldGetBalanceOf();
   shouldGetOwnerOf();
   shouldGetTokenURI();

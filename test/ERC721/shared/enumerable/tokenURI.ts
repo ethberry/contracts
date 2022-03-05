@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { baseTokenURI } from "../../constants";
+import { baseTokenURI } from "../../../constants";
 
 export function shouldGetTokenURI() {
   describe("tokenURI", function () {

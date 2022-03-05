@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { PAUSER_ROLE } from "../../constants";
+import { PAUSER_ROLE } from "../../../constants";
 
 export function shouldPause() {
   describe("pause", function () {

@@ -5,16 +5,16 @@ import { expect } from "chai";
 import { ERC721ACB, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldDeploy } from "../shared/constructor1";
-import { shouldMint } from "../shared/mint2";
-import { shouldSafeMint } from "../shared/safeMint2";
-import { shouldGetOwnerOf } from "../shared/ownerOf2";
-import { shouldApprove } from "../shared/approve2";
-import { shouldSetApprovalForAll } from "../shared/setApprovalForAll2";
-import { shouldGetBalanceOf } from "../shared/balanceOf2";
-import { shouldTransferFrom } from "../shared/transferFrom2";
-import { shouldSafeTransferFrom } from "../shared/safeTransferFrom2";
-import { shouldBurn } from "../shared/burn2";
+import { shouldHasRole } from "../shared/accessControl/hasRole";
+import { shouldMint } from "../shared/basic/mint";
+import { shouldSafeMint } from "../shared/basic/safeMint";
+import { shouldGetOwnerOf } from "../shared/basic/ownerOf";
+import { shouldApprove } from "../shared/basic/approve";
+import { shouldSetApprovalForAll } from "../shared/basic/setApprovalForAll";
+import { shouldGetBalanceOf } from "../shared/basic/balanceOf";
+import { shouldTransferFrom } from "../shared/basic/transferFrom";
+import { shouldSafeTransferFrom } from "../shared/basic/safeTransferFrom";
+import { shouldBurn } from "../shared/basic/burn";
 
 describe("ERC721ACB", function () {
   let erc721: ContractFactory;
@@ -32,9 +32,9 @@ describe("ERC721ACB", function () {
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
-  shouldDeploy();
-  shouldMint();
-  shouldSafeMint();
+  shouldHasRole();
+  shouldMint(true);
+  shouldSafeMint(true);
   shouldGetOwnerOf();
   shouldApprove();
   shouldSetApprovalForAll();

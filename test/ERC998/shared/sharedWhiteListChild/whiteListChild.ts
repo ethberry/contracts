@@ -10,7 +10,7 @@ export function shouldWhiteListChild() {
       expect(tx1).to.equal(true);
     });
 
-    it("should fail for wrong role (whiteListChild)", async function () {
+    it("should fail: wrong role (whiteListChild)", async function () {
       const tx = this.erc721Instance.connect(this.receiver).whiteListChild(this.erc721InstanceMock.address);
       await expect(tx).to.be.revertedWith(
         `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,
@@ -32,7 +32,7 @@ export function shouldWhiteListChild() {
       expect(tx2).to.equal(false);
     });
 
-    it("should fail for wrong role (unWhitelistChild)", async function () {
+    it("should fail: wrong role (unWhitelistChild)", async function () {
       await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
       const tx1 = await this.erc721Instance.isWhitelisted(this.erc721InstanceMock.address);
       expect(tx1).to.equal(true);
@@ -49,7 +49,7 @@ export function shouldWhiteListChild() {
       expect(tx1).to.equal(10);
     });
 
-    it("should fail for wrong role (setMaxChild)", async function () {
+    it("should fail: wrong role (setMaxChild)", async function () {
       await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
       const tx1 = await this.erc721Instance.isWhitelisted(this.erc721InstanceMock.address);
       expect(tx1).to.equal(true);

@@ -5,7 +5,7 @@ import { MINTER_ROLE } from "../../../constants";
 
 export function shouldMint(roles = false) {
   describe("mint", function () {
-    it("should fail for wrong role", async function () {
+    it("should fail: wrong role", async function () {
       const tx = this.erc721Instance.connect(this.receiver).mint(this.receiver.address);
       await expect(tx).to.be.revertedWith(
         roles

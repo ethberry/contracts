@@ -124,7 +124,7 @@ contract AuctionERC20 is AccessControl, Pausable, ERC721Holder {
     require(auction._auctionSeller != _msgSender(), "Auction: prevent bidding on own items");
 
     require(auction._auctionStartPrice <= bid, "Auction: proposed bid can not be less than start price");
-    require(auction._auctionCurrentBid < bid, "Auction: proposed bid must be larger than current bid");
+    require(auction._auctionCurrentBid < bid, "Auction: proposed bid must be bigger than current bid");
 
     uint256 currentBid = auction._auctionCurrentBid;
     address currentBidder = auction._auctionCurrentBidder;

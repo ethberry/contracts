@@ -217,7 +217,7 @@ describe("AuctionETH", function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
-      const tx = auctionInstance.startAuction(
+      const tx1 = auctionInstance.startAuction(
         erc721Instance.address,
         tokenId,
         amount,
@@ -225,22 +225,22 @@ describe("AuctionETH", function () {
         timestamp,
         timestamp + span + span,
       );
-      await expect(tx)
+      await expect(tx1)
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(0, owner.address, erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span + span);
 
       const amount_auction_before_bid = await ethers.provider.getBalance(auctionInstance.address);
       const amount_receiver_before_bid = await ethers.provider.getBalance(receiver.address);
 
-      const bid = await auctionInstance.connect(receiver).makeBid(0, { value: amount });
-      await expect(bid)
+      const tx2 = await auctionInstance.connect(receiver).makeBid(0, { value: amount });
+      await expect(tx2)
         .to.emit(auctionInstance, "AuctionBid")
         .withArgs(0, receiver.address, tokenId, BigNumber.from(amount));
 
       // @ts-ignore
-      const gas_price = BigNumber.from(bid.gasPrice);
+      const gas_price = BigNumber.from(tx2.gasPrice);
       // @ts-ignore
-      const bid1 = await bid.wait();
+      const bid1 = await tx2.wait();
       const used_gas = BigNumber.from(bid1.gasUsed);
       const amount_auction_after_bid = await ethers.provider.getBalance(auctionInstance.address);
       const amount_receiver_after_bid = await ethers.provider.getBalance(receiver.address);
@@ -253,13 +253,13 @@ describe("AuctionETH", function () {
       const amount_stranger_before_bid = await ethers.provider.getBalance(stranger.address);
       const amount_receiver_before_bid1 = await ethers.provider.getBalance(receiver.address);
 
-      const bid2 = await auctionInstance.connect(stranger).makeBid(0, { value: 110000 });
-      await expect(bid2)
+      const tx3 = await auctionInstance.connect(stranger).makeBid(0, { value: 110000 });
+      await expect(tx3)
         .to.emit(auctionInstance, "AuctionBid")
         .withArgs(0, stranger.address, tokenId, BigNumber.from(110000));
 
-      const gas_price1 = BigNumber.from(bid2.gasPrice);
-      const bid3 = await bid2.wait();
+      const gas_price1 = BigNumber.from(tx3.gasPrice);
+      const bid3 = await tx3.wait();
       const used_gas1 = BigNumber.from(bid3.gasUsed);
       const amount_auction_after_bid1 = await ethers.provider.getBalance(auctionInstance.address);
       const amount_stranger_after_bid = await ethers.provider.getBalance(stranger.address);
@@ -278,7 +278,7 @@ describe("AuctionETH", function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
-      const tx = auctionInstance.startAuction(
+      const tx1 = auctionInstance.startAuction(
         erc721Instance.address,
         tokenId,
         amount,
@@ -286,19 +286,19 @@ describe("AuctionETH", function () {
         timestamp,
         timestamp + span + span,
       );
-      await expect(tx)
+      await expect(tx1)
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(0, owner.address, erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span + span);
 
-      const bid = auctionInstance.connect(receiver).makeBid(1, { value: amount });
-      await expect(bid).to.be.revertedWith(`Auction: seems you tried wrong auction id`);
+      const tx2 = auctionInstance.connect(receiver).makeBid(1, { value: amount });
+      await expect(tx2).to.be.revertedWith(`Auction: seems you tried wrong auction id`);
     });
 
     it("should fail: auction is not yet started", async function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
-      const tx = auctionInstance.startAuction(
+      const tx1 = auctionInstance.startAuction(
         erc721Instance.address,
         tokenId,
         amount,
@@ -306,7 +306,7 @@ describe("AuctionETH", function () {
         timestamp + 1000,
         timestamp + span + span + 1000,
       );
-      await expect(tx)
+      await expect(tx1)
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
@@ -319,15 +319,15 @@ describe("AuctionETH", function () {
           timestamp + span + span + 1000,
         );
 
-      const bid = auctionInstance.connect(receiver).makeBid(0, { value: amount });
-      await expect(bid).to.be.revertedWith(`Auction: auction is not yet started`);
+      const tx2 = auctionInstance.connect(receiver).makeBid(0, { value: amount });
+      await expect(tx2).to.be.revertedWith(`Auction: auction is not yet started`);
     });
 
     it("should fail: auction is already finished", async function () {
       const span = 100;
       const timestamp: number = (await time.latest()).toNumber();
 
-      const tx = auctionInstance.startAuction(
+      const tx1 = auctionInstance.startAuction(
         erc721Instance.address,
         tokenId,
         amount,
@@ -335,22 +335,22 @@ describe("AuctionETH", function () {
         timestamp,
         timestamp + span,
       );
-      await expect(tx)
+      await expect(tx1)
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(0, owner.address, erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span);
 
       const current = await time.latestBlock();
       await time.advanceBlockTo(current.add(web3.utils.toBN(span)));
 
-      const bid = auctionInstance.connect(receiver).makeBid(0, { value: amount });
-      await expect(bid).to.be.revertedWith(`Auction: auction is already finished`);
+      const tx2 = auctionInstance.connect(receiver).makeBid(0, { value: amount });
+      await expect(tx2).to.be.revertedWith(`Auction: auction is already finished`);
     });
 
     it("should fail: prevent double spending", async function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
-      const tx = auctionInstance.startAuction(
+      const tx1 = auctionInstance.startAuction(
         erc721Instance.address,
         tokenId,
         amount,
@@ -358,24 +358,24 @@ describe("AuctionETH", function () {
         timestamp,
         timestamp + span + span,
       );
-      await expect(tx)
+      await expect(tx1)
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(0, owner.address, erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span + span);
 
-      const bid = auctionInstance.connect(receiver).makeBid(0, { value: amount });
-      await expect(bid)
+      const tx2 = auctionInstance.connect(receiver).makeBid(0, { value: amount });
+      await expect(tx2)
         .to.emit(auctionInstance, "AuctionBid")
         .withArgs(0, receiver.address, tokenId, BigNumber.from(amount));
 
-      const bid1 = auctionInstance.connect(receiver).makeBid(0, { value: 110000 });
-      await expect(bid1).to.be.revertedWith(`Auction: prevent double spending`);
+      const tx3 = auctionInstance.connect(receiver).makeBid(0, { value: 110000 });
+      await expect(tx3).to.be.revertedWith(`Auction: prevent double spending`);
     });
 
     it("should fail: prevent bidding on own items", async function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
-      const tx = auctionInstance.startAuction(
+      const tx1 = auctionInstance.startAuction(
         erc721Instance.address,
         tokenId,
         amount,
@@ -383,34 +383,19 @@ describe("AuctionETH", function () {
         timestamp,
         timestamp + span + span,
       );
-      await expect(tx)
+      await expect(tx1)
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(0, owner.address, erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span + span);
 
-      const bid1 = auctionInstance.connect(owner).makeBid(0, { value: amount });
-      await expect(bid1).to.be.revertedWith(`Auction: prevent bidding on own items`);
+      const tx2 = auctionInstance.makeBid(0, { value: amount });
+      await expect(tx2).to.be.revertedWith(`Auction: prevent bidding on own items`);
     });
 
     it("should fail: proposed bid can not be less than start price", async function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
-      const tx = auctionInstance
-        .connect(owner)
-        .startAuction(erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span + span);
-      await expect(tx)
-        .to.emit(auctionInstance, "AuctionStart")
-        .withArgs(0, owner.address, erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span + span);
-
-      const bid = auctionInstance.connect(receiver).makeBid(0, { value: 90000 });
-      await expect(bid).to.be.revertedWith(`Auction: proposed bid can not be less than start price`);
-    });
-
-    it("should fail: proposed bid must be larger than current bid", async function () {
-      const span = 24 * 60 * 60;
-      const timestamp: number = (await time.latest()).toNumber();
-
-      const tx = auctionInstance.startAuction(
+      const tx1 = auctionInstance.startAuction(
         erc721Instance.address,
         tokenId,
         amount,
@@ -418,24 +403,44 @@ describe("AuctionETH", function () {
         timestamp,
         timestamp + span + span,
       );
-      await expect(tx)
+      await expect(tx1)
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(0, owner.address, erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span + span);
 
-      const bid = auctionInstance.connect(receiver).makeBid(0, { value: amount });
-      await expect(bid)
+      const tx2 = auctionInstance.connect(receiver).makeBid(0, { value: amount / 2 });
+      await expect(tx2).to.be.revertedWith(`Auction: proposed bid can not be less than start price`);
+    });
+
+    it("should fail: proposed bid must be bigger than current bid", async function () {
+      const span = 24 * 60 * 60;
+      const timestamp: number = (await time.latest()).toNumber();
+
+      const tx1 = auctionInstance.startAuction(
+        erc721Instance.address,
+        tokenId,
+        amount,
+        1000,
+        timestamp,
+        timestamp + span + span,
+      );
+      await expect(tx1)
+        .to.emit(auctionInstance, "AuctionStart")
+        .withArgs(0, owner.address, erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span + span);
+
+      const tx2 = auctionInstance.connect(receiver).makeBid(0, { value: amount });
+      await expect(tx2)
         .to.emit(auctionInstance, "AuctionBid")
         .withArgs(0, receiver.address, tokenId, BigNumber.from(amount));
 
-      const bid1 = auctionInstance.connect(stranger).makeBid(0, { value: amount });
-      await expect(bid1).to.be.revertedWith(`Auction: proposed bid must be larger than current bid`);
+      const tx3 = auctionInstance.connect(stranger).makeBid(0, { value: amount });
+      await expect(tx3).to.be.revertedWith(`Auction: proposed bid must be bigger than current bid`);
     });
 
     it("should fail: bid must be a multiple of the bid step", async function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
-      const tx = auctionInstance.startAuction(
+      const tx1 = auctionInstance.startAuction(
         erc721Instance.address,
         tokenId,
         amount,
@@ -443,12 +448,12 @@ describe("AuctionETH", function () {
         timestamp,
         timestamp + span + span,
       );
-      await expect(tx)
+      await expect(tx1)
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(0, owner.address, erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span + span);
 
-      const bid = auctionInstance.connect(receiver).makeBid(0, { value: 100100 });
-      await expect(bid).to.be.revertedWith(`Auction: bid must be a multiple of the bid step`);
+      const tx2 = auctionInstance.connect(receiver).makeBid(0, { value: amount + 1 });
+      await expect(tx2).to.be.revertedWith(`Auction: bid must be a multiple of the bid step`);
     });
   });
 
@@ -475,7 +480,7 @@ describe("AuctionETH", function () {
       const current = await time.latestBlock();
       await time.advanceBlockTo(current.add(web3.utils.toBN(200)));
 
-      const finish = auctionInstance.connect(owner).finishAuction(0);
+      const finish = auctionInstance.finishAuction(0);
       await expect(finish).to.emit(auctionInstance, "AuctionFinish").withArgs(0, owner.address, tokenId, 0);
 
       const ownerOf1 = await erc721Instance.ownerOf(tokenId);
@@ -510,7 +515,7 @@ describe("AuctionETH", function () {
       await time.advanceBlockTo(current.add(web3.utils.toBN(300)));
 
       const amount_owner_before_bid = await ethers.provider.getBalance(owner.address);
-      const tx3 = await auctionInstance.connect(owner).finishAuction(0);
+      const tx3 = await auctionInstance.finishAuction(0);
       await expect(tx3).to.emit(auctionInstance, "AuctionFinish").withArgs(0, receiver.address, tokenId, amount);
 
       const tx4 = await tx3.wait();
@@ -539,7 +544,7 @@ describe("AuctionETH", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(0, owner.address, erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span);
 
-      const finish = auctionInstance.connect(owner).finishAuction(1);
+      const finish = auctionInstance.finishAuction(1);
       await expect(finish).to.be.revertedWith(`Auction: seems you tried wrong auction id`);
     });
 
@@ -568,7 +573,7 @@ describe("AuctionETH", function () {
           timestamp + span + span,
         );
 
-      const finish = auctionInstance.connect(owner).finishAuction(0);
+      const finish = auctionInstance.finishAuction(0);
       await expect(finish).to.be.revertedWith(`Auction: auction is not yet started`);
     });
 
@@ -588,7 +593,7 @@ describe("AuctionETH", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(0, owner.address, erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span + span);
 
-      const finish = auctionInstance.connect(owner).finishAuction(0);
+      const finish = auctionInstance.finishAuction(0);
       await expect(finish).to.be.revertedWith(`Auction: auction is not finished`);
     });
   });
@@ -624,7 +629,7 @@ describe("AuctionETH", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(0, owner.address, erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span);
 
-      const tx2 = auctionInstance.connect(owner).pause();
+      const tx2 = auctionInstance.pause();
       await expect(tx2).to.emit(auctionInstance, "Paused").withArgs(owner.address);
 
       const tokenId1 = tokenId + 1;
@@ -641,7 +646,7 @@ describe("AuctionETH", function () {
       );
       await expect(tx3).to.be.revertedWith(`Pausable: paused`);
 
-      const tx4 = auctionInstance.connect(owner).unpause();
+      const tx4 = auctionInstance.unpause();
       await expect(tx4).to.emit(auctionInstance, "Unpaused").withArgs(owner.address);
 
       const tx5 = auctionInstance.startAuction(

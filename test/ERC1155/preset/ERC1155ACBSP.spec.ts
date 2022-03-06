@@ -2,9 +2,10 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
-import { ERC1155ACBSP, ERC1155ReceiverMock, ERC1155NonReceiverMock } from "../../../typechain-types";
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../../constants";
+import { ERC1155ACBSP, ERC1155NonReceiverMock, ERC1155ReceiverMock } from "../../../typechain-types";
+import { baseTokenURI } from "../../constants";
 
+import { shouldHasRole } from "../shared/accessControl/hasRole";
 import { shouldMint } from "../shared/mint";
 import { shouldMintBatch } from "../shared/mintBatch";
 import { shouldBalanceOf } from "../shared/balanceOf";
@@ -33,17 +34,7 @@ describe("ERC1155ACBSP", function () {
     this.erc1155NonReceiverInstance = (await erc1155NonReceiver.deploy()) as ERC1155NonReceiverMock;
   });
 
-  describe("constructor", function () {
-    it("Should set the right roles to deployer", async function () {
-      const isAdmin = await this.erc1155Instance.hasRole(DEFAULT_ADMIN_ROLE, this.owner.address);
-      expect(isAdmin).to.equal(true);
-      const isMinter = await this.erc1155Instance.hasRole(MINTER_ROLE, this.owner.address);
-      expect(isMinter).to.equal(true);
-      const isPauser = await this.erc1155Instance.hasRole(PAUSER_ROLE, this.owner.address);
-      expect(isPauser).to.equal(true);
-    });
-  });
-
+  shouldHasRole(true);
   shouldMint();
   shouldMintBatch();
   shouldBalanceOf();

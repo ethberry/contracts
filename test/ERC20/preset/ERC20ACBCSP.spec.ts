@@ -3,16 +3,9 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
 import { ERC20ACBCSP, ERC20NonReceiverMock } from "../../../typechain-types";
-import {
-  amount,
-  DEFAULT_ADMIN_ROLE,
-  MINTER_ROLE,
-  PAUSER_ROLE,
-  SNAPSHOT_ROLE,
-  tokenName,
-  tokenSymbol,
-} from "../../constants";
+import { amount, tokenName, tokenSymbol } from "../../constants";
 
+import { shouldHasRole } from "../shared/accessControl/hasRole";
 import { shouldMint } from "../shared/mint";
 import { shouldBalanceOf } from "../shared/balanceOf";
 import { shouldTransfer } from "../shared/transfer";
@@ -37,19 +30,7 @@ describe("ERC20ACBCSP", function () {
     this.coinNonReceiverInstance = (await coinNonReceiver.deploy()) as ERC20NonReceiverMock;
   });
 
-  describe("constructor", function () {
-    it("should set the right roles to deployer", async function () {
-      const isAdmin = await this.erc20Instance.hasRole(DEFAULT_ADMIN_ROLE, this.owner.address);
-      expect(isAdmin).to.equal(true);
-      const isMinter = await this.erc20Instance.hasRole(MINTER_ROLE, this.owner.address);
-      expect(isMinter).to.equal(true);
-      const isPauser = await this.erc20Instance.hasRole(PAUSER_ROLE, this.owner.address);
-      expect(isPauser).to.equal(true);
-      const isSnapshoter = await this.erc20Instance.hasRole(SNAPSHOT_ROLE, this.owner.address);
-      expect(isSnapshoter).to.equal(true);
-    });
-  });
-
+  shouldHasRole(true);
   shouldMint();
   shouldBalanceOf();
   shouldTransfer();

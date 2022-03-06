@@ -3,12 +3,14 @@ import { ethers } from "hardhat";
 
 import { amount, MINTER_ROLE } from "../../constants";
 
-export function shouldMint() {
+export function shouldMint(role = false) {
   describe("mint", function () {
     it("should fail: must have minter role", async function () {
       const tx = this.erc20Instance.connect(this.receiver).mint(this.receiver.address, amount);
       await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
+        role
+          ? `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`
+          : "Ownable: caller is not the owner",
       );
     });
 

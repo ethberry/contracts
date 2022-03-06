@@ -30,11 +30,11 @@ describe("ERC20ACBCS", function () {
   });
 
   shouldHaveRole();
-  shouldMint();
+  shouldMint(true);
   shouldBalanceOf();
   shouldTransfer();
   shouldTransferFrom();
-  shouldSnapshot();
+  shouldSnapshot(true);
   shouldApprove();
   shouldBurn();
   shouldBurnFrom();

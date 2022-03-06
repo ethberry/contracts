@@ -1,11 +1,11 @@
-import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
+import { expect } from "chai";
 
-import { ERC20ACBCSP, ERC20NonReceiverMock } from "../../../typechain-types";
+import { ERC20OBCS, ERC20NonReceiverMock } from "../../../typechain-types";
 import { amount, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldHaveRole } from "../shared/accessControl/hasRole";
+import { shouldBeOwner } from "../shared/ownable/owner";
 import { shouldMint } from "../shared/mint";
 import { shouldBalanceOf } from "../shared/balanceOf";
 import { shouldTransfer } from "../shared/transfer";
@@ -14,32 +14,30 @@ import { shouldSnapshot } from "../shared/snapshot";
 import { shouldApprove } from "../shared/approve";
 import { shouldBurn } from "../shared/burn";
 import { shouldBurnFrom } from "../shared/burnFrom";
-import { shouldPause } from "../shared/pause";
 import { shouldCap } from "../shared/cap";
 
-describe("ERC20ACBCSP", function () {
+describe("ERC20OBCS", function () {
   let erc20: ContractFactory;
   let coinNonReceiver: ContractFactory;
 
   beforeEach(async function () {
-    erc20 = await ethers.getContractFactory("ERC20ACBCSP");
+    erc20 = await ethers.getContractFactory("ERC20OBCS");
     coinNonReceiver = await ethers.getContractFactory("ERC20NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ACBCSP;
+    this.erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20OBCS;
     this.coinNonReceiverInstance = (await coinNonReceiver.deploy()) as ERC20NonReceiverMock;
   });
 
-  shouldHaveRole(true);
-  shouldMint(true);
+  shouldBeOwner();
+  shouldMint();
   shouldBalanceOf();
   shouldTransfer();
   shouldTransferFrom();
-  shouldSnapshot(true);
+  shouldSnapshot();
   shouldApprove();
   shouldBurn();
   shouldBurnFrom();
-  shouldPause();
   shouldCap();
 
   describe("supportsInterface", function () {
@@ -50,8 +48,6 @@ describe("ERC20ACBCSP", function () {
       expect(supportsIERC20Metadata).to.equal(true);
       const supportsIERC165 = await this.erc20Instance.supportsInterface("0x01ffc9a7");
       expect(supportsIERC165).to.equal(true);
-      const supportsIAccessControl = await this.erc20Instance.supportsInterface("0x7965db0b");
-      expect(supportsIAccessControl).to.equal(true);
       const supportsInvalidInterface = await this.erc20Instance.supportsInterface("0xffffffff");
       expect(supportsInvalidInterface).to.equal(false);
     });

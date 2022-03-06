@@ -2,12 +2,14 @@ import { expect } from "chai";
 
 import { amount, SNAPSHOT_ROLE } from "../../constants";
 
-export function shouldSnapshot() {
+export function shouldSnapshot(role = false) {
   describe("snapshot", function () {
     it("should fail: must have snapshoter role", async function () {
       const tx = this.erc20Instance.connect(this.receiver).snapshot();
       await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${SNAPSHOT_ROLE}`,
+        role
+          ? `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${SNAPSHOT_ROLE}`
+          : "Ownable: caller is not the owner",
       );
     });
 

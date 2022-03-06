@@ -5,7 +5,7 @@ import { expect } from "chai";
 import { ERC721ACBCP, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldHasRole } from "../shared/accessControl/hasRole";
+import { shouldHaveRole } from "../shared/accessControl/hasRole";
 import { shouldMint } from "../shared/basic/mint";
 import { shouldSafeMint } from "../shared/basic/safeMint";
 import { shouldGetOwnerOf } from "../shared/basic/ownerOf";
@@ -34,7 +34,7 @@ describe("ERC721ACBCP", function () {
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
-  shouldHasRole(true);
+  shouldHaveRole(true);
   shouldMint(true);
   shouldSafeMint(true);
   shouldGetOwnerOf();

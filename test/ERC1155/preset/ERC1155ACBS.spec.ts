@@ -5,7 +5,7 @@ import { ContractFactory } from "ethers";
 import { ERC1155ACBS, ERC1155NonReceiverMock, ERC1155ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI } from "../../constants";
 
-import { shouldHasRole } from "../shared/accessControl/hasRole";
+import { shouldHaveRole } from "../shared/accessControl/hasRole";
 import { shouldMint } from "../shared/mint";
 import { shouldMintBatch } from "../shared/mintBatch";
 import { shouldBalanceOf } from "../shared/balanceOf";
@@ -33,7 +33,7 @@ describe("ERC1155ACBS", function () {
     this.erc1155NonReceiverInstance = (await erc1155NonReceiver.deploy()) as ERC1155NonReceiverMock;
   });
 
-  shouldHasRole();
+  shouldHaveRole();
   shouldMint();
   shouldMintBatch();
   shouldBalanceOf();

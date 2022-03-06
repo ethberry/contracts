@@ -5,7 +5,7 @@ import { expect } from "chai";
 import { ERC20ACBCS, ERC20NonReceiverMock } from "../../../typechain-types";
 import { amount, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldHasRole } from "../shared/accessControl/hasRole";
+import { shouldHaveRole } from "../shared/accessControl/hasRole";
 import { shouldMint } from "../shared/mint";
 import { shouldBalanceOf } from "../shared/balanceOf";
 import { shouldTransfer } from "../shared/transfer";
@@ -29,7 +29,7 @@ describe("ERC20ACBCS", function () {
     this.coinNonReceiverInstance = (await coinNonReceiver.deploy()) as ERC20NonReceiverMock;
   });
 
-  shouldHasRole();
+  shouldHaveRole();
   shouldMint();
   shouldBalanceOf();
   shouldTransfer();

@@ -5,7 +5,7 @@ import { ContractFactory } from "ethers";
 import { ERC721NonReceiverMock, ERC721ReceiverMock, ERC998ComposableBottomUpTest } from "../../typechain-types";
 import { baseTokenURI, tokenName, tokenSymbol } from "../constants";
 
-import { shouldHasRole } from "../ERC721/shared/accessControl/hasRole";
+import { shouldHaveRole } from "../ERC721/shared/accessControl/hasRole";
 import { shouldMint } from "../ERC721/shared/enumerable/mint";
 import { shouldSafeMint } from "../ERC721/shared/enumerable/safeMint";
 import { shouldGetOwnerOf } from "../ERC721/shared/enumerable/ownerOf";
@@ -35,7 +35,7 @@ describe("ERC998ComposableBottomUp", function () {
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
   });
 
-  shouldHasRole();
+  shouldHaveRole();
   shouldMint(true);
   shouldSafeMint(true);
   shouldGetOwnerOf();

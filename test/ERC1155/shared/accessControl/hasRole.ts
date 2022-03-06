@@ -2,7 +2,7 @@ import { expect } from "chai";
 
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../../../constants";
 
-export function shouldHasRole(pauser = false) {
+export function shouldHaveRole(pauser = false) {
   describe("hasRole", function () {
     it("Should set the right roles to deployer", async function () {
       const isAdmin = await this.erc1155Instance.hasRole(DEFAULT_ADMIN_ROLE, this.owner.address);

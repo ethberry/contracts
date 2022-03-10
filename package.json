@@ -23,7 +23,7 @@
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
-    "@gemunion/eslint-config": "1.0.3",
+    "@gemunion/eslint-config": "1.0.4",
     "@nomiclabs/hardhat-ethers": "2.0.5",
     "@openzeppelin/test-helpers": "0.5.15",
     "@typechain/ethers-v5": "9.0.0",

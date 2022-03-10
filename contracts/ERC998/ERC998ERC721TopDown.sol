@@ -317,7 +317,7 @@ abstract contract ERC998ERC721TopDown is ERC721ACBCES, IERC998ERC721TopDown, IER
     uint256 _tokenId,
     address _childContract,
     uint256 _childTokenId
-  ) private {
+  ) internal virtual {
     // remove child token
     uint256 lastTokenIndex = childTokens[_tokenId][_childContract].length() - 1;
     require(
@@ -340,7 +340,7 @@ abstract contract ERC998ERC721TopDown is ERC721ACBCES, IERC998ERC721TopDown, IER
     uint256 _tokenId,
     address _childContract,
     uint256 _childTokenId
-  ) private {
+  ) internal virtual {
     require(ownerOf(_tokenId) != address(0), "ComposableTopDown: receiveChild _tokenId does not exist.");
     // @dev this is edge case, _tokenId can't be 0
     require(

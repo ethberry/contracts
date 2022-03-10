@@ -54,7 +54,7 @@ describe("WhiteList", function () {
       expect(isWhiteListed).to.equal(false);
     });
 
-    it("should fail: test method", async function () {
+    it("should fail: tests method", async function () {
       const tx = contractInstance.connect(receiver).testMe();
       await expect(tx).to.be.revertedWith(`WhiteListError("${receiver.address}")`);
     });

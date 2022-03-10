@@ -43,20 +43,11 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
     uint256 startTimestamp,
     uint256 finishTimestamp
   );
-
   event AuctionBid(uint256 auctionId, address from, uint256 tokenId, uint256 amount);
   event AuctionFinish(uint256 auctionId, address from, uint256 tokenId, uint256 amount);
 
   constructor() {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-  }
-
-  function pause() public onlyRole(DEFAULT_ADMIN_ROLE) {
-    _pause();
-  }
-
-  function unpause() public onlyRole(DEFAULT_ADMIN_ROLE) {
-    _unpause();
   }
 
   function startAuction(
@@ -152,5 +143,17 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
       IERC721(auction._auctionCollection).safeTransferFrom(address(this), auction._auctionSeller, tokenId);
       emit AuctionFinish(auctionId, auction._auctionSeller, tokenId, 0);
     }
+  }
+
+  function pause() public onlyRole(DEFAULT_ADMIN_ROLE) {
+    _pause();
+  }
+
+  function unpause() public onlyRole(DEFAULT_ADMIN_ROLE) {
+    _unpause();
+  }
+
+  receive() external payable {
+    revert();
   }
 }

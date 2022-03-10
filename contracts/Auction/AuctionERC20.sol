@@ -74,7 +74,7 @@ contract AuctionERC20 is AccessControl, Pausable, ERC721Holder {
     uint256 startAuctionTimestamp,
     uint256 finishAuctionTimestamp
   ) public whenNotPaused {
-    require(collection != address(0), "Auction: collection address cannot be zerro");
+    require(collection != address(0), "Auction: collection address cannot be zero");
     require(startAuctionTimestamp < finishAuctionTimestamp, "Auction: auction start time should be less than end time");
     require(startPrice > 0, "Auction: auction start price should be positive");
     require(block.timestamp < finishAuctionTimestamp, "Auction: auction should finished in future");

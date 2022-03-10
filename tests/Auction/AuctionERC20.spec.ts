@@ -117,7 +117,7 @@ describe("AuctionERC20", function () {
       await expect(tx1).to.be.revertedWith(`ERC721: operator query for nonexistent token`);
     });
 
-    it("should fail: collection address cannot be zerro", async function () {
+    it("should fail: collection address cannot be zero", async function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
@@ -129,7 +129,7 @@ describe("AuctionERC20", function () {
         timestamp,
         timestamp + span + span,
       );
-      await expect(tx1).to.be.revertedWith(`Auction: collection address cannot be zerro`);
+      await expect(tx1).to.be.revertedWith(`Auction: collection address cannot be zero`);
     });
 
     it("should fail: auction start time should be less than end time", async function () {

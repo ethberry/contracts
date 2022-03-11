@@ -196,7 +196,7 @@ describe("AuctionETH", function () {
       const bid = await auctionInstance.connect(receiver).makeBid(0, { value: amount });
       await expect(bid)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, receiver.address, tokenId, BigNumber.from(amount));
+        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount);
 
       // @ts-ignore
       const gas_price = BigNumber.from(bid.gasPrice);
@@ -207,10 +207,8 @@ describe("AuctionETH", function () {
       const amount_auction_after_bid = await ethers.provider.getBalance(auctionInstance.address);
       const amount_receiver_after_bid = await ethers.provider.getBalance(receiver.address);
 
-      expect(amount_auction_after_bid).to.equal(amount_auction_before_bid.add(BigNumber.from(amount)));
-      expect(amount_receiver_after_bid).to.equal(
-        amount_receiver_before_bid.sub(used_gas.mul(gas_price)).sub(BigNumber.from(amount)),
-      );
+      expect(amount_auction_after_bid).to.equal(amount_auction_before_bid.add(amount));
+      expect(amount_receiver_after_bid).to.equal(amount_receiver_before_bid.sub(used_gas.mul(gas_price)).sub(amount));
     });
 
     it("should make another bid", async function () {
@@ -235,7 +233,7 @@ describe("AuctionETH", function () {
       const tx2 = await auctionInstance.connect(receiver).makeBid(0, { value: amount });
       await expect(tx2)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, receiver.address, tokenId, BigNumber.from(amount));
+        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount);
 
       // @ts-ignore
       const gas_price = BigNumber.from(tx2.gasPrice);
@@ -244,10 +242,8 @@ describe("AuctionETH", function () {
       const used_gas = BigNumber.from(bid1.gasUsed);
       const amount_auction_after_bid = await ethers.provider.getBalance(auctionInstance.address);
       const amount_receiver_after_bid = await ethers.provider.getBalance(receiver.address);
-      expect(amount_auction_after_bid).to.equal(amount_auction_before_bid.add(BigNumber.from(amount)));
-      expect(amount_receiver_after_bid).to.equal(
-        amount_receiver_before_bid.sub(used_gas.mul(gas_price)).sub(BigNumber.from(amount)),
-      );
+      expect(amount_auction_after_bid).to.equal(amount_auction_before_bid.add(amount));
+      expect(amount_receiver_after_bid).to.equal(amount_receiver_before_bid.sub(used_gas.mul(gas_price)).sub(amount));
 
       const amount_auction_before_bid1 = await ethers.provider.getBalance(auctionInstance.address);
       const amount_stranger_before_bid = await ethers.provider.getBalance(stranger.address);
@@ -256,7 +252,7 @@ describe("AuctionETH", function () {
       const tx3 = await auctionInstance.connect(stranger).makeBid(0, { value: 110000 });
       await expect(tx3)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, stranger.address, tokenId, BigNumber.from(110000));
+        .withArgs(0, stranger.address, erc721Instance.address, tokenId, 110000);
 
       const gas_price1 = BigNumber.from(tx3.gasPrice);
       const bid3 = await tx3.wait();
@@ -265,10 +261,8 @@ describe("AuctionETH", function () {
       const amount_stranger_after_bid = await ethers.provider.getBalance(stranger.address);
       const amount_receiver_after_bid1 = await ethers.provider.getBalance(receiver.address);
 
-      expect(amount_auction_after_bid1).to.equal(
-        amount_auction_before_bid1.add(BigNumber.from(110000)).sub(BigNumber.from(amount)),
-      );
-      expect(amount_receiver_after_bid1).to.equal(amount_receiver_before_bid1.add(BigNumber.from(amount)));
+      expect(amount_auction_after_bid1).to.equal(amount_auction_before_bid1.add(BigNumber.from(110000)).sub(amount));
+      expect(amount_receiver_after_bid1).to.equal(amount_receiver_before_bid1.add(amount));
       expect(amount_stranger_after_bid).to.equal(
         amount_stranger_before_bid.sub(used_gas1.mul(gas_price1)).sub(BigNumber.from(110000)),
       );
@@ -365,7 +359,7 @@ describe("AuctionETH", function () {
       const tx2 = auctionInstance.connect(receiver).makeBid(0, { value: amount });
       await expect(tx2)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, receiver.address, tokenId, BigNumber.from(amount));
+        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount);
 
       const tx3 = auctionInstance.connect(receiver).makeBid(0, { value: 110000 });
       await expect(tx3).to.be.revertedWith(`Auction: prevent double spending`);
@@ -430,7 +424,7 @@ describe("AuctionETH", function () {
       const tx2 = auctionInstance.connect(receiver).makeBid(0, { value: amount });
       await expect(tx2)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, receiver.address, tokenId, BigNumber.from(amount));
+        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount);
 
       const tx3 = auctionInstance.connect(stranger).makeBid(0, { value: amount });
       await expect(tx3).to.be.revertedWith(`Auction: proposed bid must be bigger than current bid`);
@@ -481,7 +475,9 @@ describe("AuctionETH", function () {
       await time.advanceBlockTo(current.add(web3.utils.toBN(200)));
 
       const finish = auctionInstance.finishAuction(0);
-      await expect(finish).to.emit(auctionInstance, "AuctionFinish").withArgs(0, owner.address, tokenId, 0);
+      await expect(finish)
+        .to.emit(auctionInstance, "AuctionFinish")
+        .withArgs(0, owner.address, erc721Instance.address, tokenId, 0);
 
       const ownerOf1 = await erc721Instance.ownerOf(tokenId);
       expect(ownerOf1).to.equal(owner.address);
@@ -509,14 +505,16 @@ describe("AuctionETH", function () {
       const tx2 = auctionInstance.connect(receiver).makeBid(0, { value: amount });
       await expect(tx2)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, receiver.address, tokenId, BigNumber.from(amount));
+        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount);
 
       const current = await time.latestBlock();
       await time.advanceBlockTo(current.add(web3.utils.toBN(300)));
 
       const amount_owner_before_bid = await ethers.provider.getBalance(owner.address);
       const tx3 = await auctionInstance.finishAuction(0);
-      await expect(tx3).to.emit(auctionInstance, "AuctionFinish").withArgs(0, receiver.address, tokenId, amount);
+      await expect(tx3)
+        .to.emit(auctionInstance, "AuctionFinish")
+        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount);
 
       const tx4 = await tx3.wait();
       const used_gas = BigNumber.from(tx4.gasUsed);

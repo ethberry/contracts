@@ -6,6 +6,7 @@ import { shouldTotalChildContracts } from "../totalChildContracts";
 import { shouldChildContractByIndex } from "../childContractByIndex";
 import { shouldTotalChildTokens } from "../totalChildTokens";
 import { shouldChildTokenByIndex } from "../childTokenByIndex";
+import { shouldChildContractsFor } from "../childContractsFor";
 
 export function testsUsingWhiteListChild() {
   describe("using WhiteListChild", function () {
@@ -24,5 +25,6 @@ export function testsUsingWhiteListChild() {
     shouldChildContractByIndex();
     shouldTotalChildTokens();
     shouldChildTokenByIndex();
+    shouldChildContractsFor();
   });
 }

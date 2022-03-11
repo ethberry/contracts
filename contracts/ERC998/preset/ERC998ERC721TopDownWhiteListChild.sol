@@ -46,22 +46,4 @@ contract ERC998ERC721TopDownWhiteListChild is ERC998ERC721TopDown, WhiteListChil
   function setMaxChild(uint256 max) public onlyRole(DEFAULT_ADMIN_ROLE) {
     _setMaxChild(max);
   }
-
-  ////////////////////////////////////////////////////////
-  // ERC165 implementation
-  ////////////////////////////////////////////////////////
-
-  /**
-   * @dev See {IERC165-supportsInterface}.
-   * The interface id 0x1bc995e4 is added. The spec claims it to be the interface id of IERC998ERC721TopDown.
-   * But it is not.
-   * It is added anyway in case some contract checks it being compliant with the spec.
-   */
-  /* function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
-    return
-      interfaceId == type(IERC998ERC721TopDown).interfaceId ||
-      interfaceId == type(IERC998ERC721TopDownEnumerable).interfaceId ||
-      interfaceId == 0x1bc995e4 ||
-      super.supportsInterface(interfaceId);
-  } */
 }

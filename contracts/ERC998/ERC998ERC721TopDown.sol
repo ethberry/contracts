@@ -359,6 +359,16 @@ abstract contract ERC998ERC721TopDown is ERC721ACBCES, IERC998ERC721TopDown, IER
     emit ReceivedChild(_from, _tokenId, _childContract, _childTokenId);
   }
 
+  function childContractsFor(uint256 tokenId) external view returns (address[] memory) {
+    address[] memory _childContracts = new address[](childContracts[tokenId].length());
+
+    for (uint256 i = 0; i < childContracts[tokenId].length(); i++) {
+      _childContracts[i] = childContracts[tokenId].at(i);
+    }
+
+    return _childContracts;
+  }
+
   ////////////////////////////////////////////////////////
   // ERC165 implementation
   ////////////////////////////////////////////////////////

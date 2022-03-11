@@ -47,8 +47,8 @@ contract AuctionERC20 is AccessControl, Pausable, ERC721Holder {
     uint256 startTimestamp,
     uint256 finishTimestamp
   );
-  event AuctionBid(uint256 auctionId, address from, uint256 tokenId, uint256 amount);
-  event AuctionFinish(uint256 auctionId, address from, uint256 tokenId, uint256 amount);
+  event AuctionBid(uint256 auctionId, address from, address collection, uint256 tokenId, uint256 amount);
+  event AuctionFinish(uint256 auctionId, address from, address collection, uint256 tokenId, uint256 amount);
 
   constructor(address acceptedToken) {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -64,7 +64,7 @@ contract AuctionERC20 is AccessControl, Pausable, ERC721Holder {
     uint256 bidStep,
     uint256 startAuctionTimestamp,
     uint256 finishAuctionTimestamp
-  ) public whenNotPaused {
+  ) public virtual whenNotPaused {
     require(collection != address(0), "Auction: collection address cannot be zero");
     require(startAuctionTimestamp < finishAuctionTimestamp, "Auction: auction start time should be less than end time");
     require(startPrice > 0, "Auction: auction start price should be positive");
@@ -106,7 +106,7 @@ contract AuctionERC20 is AccessControl, Pausable, ERC721Holder {
     );
   }
 
-  function makeBid(uint256 auctionId, uint256 bid) public whenNotPaused {
+  function makeBid(uint256 auctionId, uint256 bid) public virtual whenNotPaused {
     AuctionData storage auction = _auction[auctionId];
     require(auction._auctionCollection > address(0), "Auction: seems you tried wrong auction id");
     require(auction._auctionStartTimestamp <= block.timestamp, "Auction: auction is not yet started");
@@ -131,10 +131,10 @@ contract AuctionERC20 is AccessControl, Pausable, ERC721Holder {
       _acceptedToken.transfer(currentBidder, currentBid);
     }
 
-    emit AuctionBid(auctionId, _msgSender(), auction._auctionTokenId, bid);
+    emit AuctionBid(auctionId, _msgSender(), auction._auctionCollection, auction._auctionTokenId, bid);
   }
 
-  function finishAuction(uint256 auctionId) public whenNotPaused {
+  function finishAuction(uint256 auctionId) public virtual whenNotPaused {
     AuctionData storage auction = _auction[auctionId];
     require(auction._auctionCollection != address(0), "Auction: seems you tried wrong auction id");
     require(auction._auctionStartTimestamp < block.timestamp, "Auction: auction is not yet started");
@@ -146,10 +146,10 @@ contract AuctionERC20 is AccessControl, Pausable, ERC721Holder {
     if (currentBid > 0) {
       _acceptedToken.transfer(auction._auctionSeller, currentBid);
       IERC721(auction._auctionCollection).safeTransferFrom(address(this), auction._auctionCurrentBidder, tokenId);
-      emit AuctionFinish(auctionId, auction._auctionCurrentBidder, tokenId, currentBid);
+      emit AuctionFinish(auctionId, auction._auctionCurrentBidder, auction._auctionCollection, tokenId, currentBid);
     } else {
       IERC721(auction._auctionCollection).safeTransferFrom(address(this), auction._auctionSeller, tokenId);
-      emit AuctionFinish(auctionId, auction._auctionSeller, tokenId, 0);
+      emit AuctionFinish(auctionId, auction._auctionSeller, auction._auctionCollection, tokenId, 0);
     }
   }
 

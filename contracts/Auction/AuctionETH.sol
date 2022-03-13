@@ -22,6 +22,7 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
   struct AuctionData {
     address _auctionCollection;
     uint256 _auctionTokenId;
+    uint256 _auctionBuyoutPrice;
     uint256 _auctionStartPrice;
     uint256 _auctionBidStep;
     uint256 _auctionCurrentBid;
@@ -38,6 +39,7 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
     address owner,
     address collection,
     uint256 tokenId,
+    uint256 buyoutPrice,
     uint256 startPrice,
     uint256 bidStep,
     uint256 startTimestamp,
@@ -53,6 +55,7 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
   function startAuction(
     address collection,
     uint256 tokenId,
+    uint256 buyoutPrice,
     uint256 startPrice,
     uint256 bidStep,
     uint256 startAuctionTimestamp,
@@ -60,7 +63,8 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
   ) public virtual whenNotPaused {
     require(collection != address(0), "Auction: collection address cannot be zero");
     require(startAuctionTimestamp < finishAuctionTimestamp, "Auction: auction start time should be less than end time");
-    require(startPrice > 0, "Auction: auction start price should be positive");
+    require(startPrice > 0, "Auction: auction start price should be greater than zero");
+    require(startPrice < buyoutPrice, "Auction: auction start price should less than buyout price");
     require(block.timestamp < finishAuctionTimestamp, "Auction: auction should finished in future");
 
     IERC721(collection).safeTransferFrom(_msgSender(), address(this), tokenId);
@@ -78,6 +82,7 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
     _auction[auctionId] = AuctionData(
       collection,
       tokenId,
+      buyoutPrice,
       startPrice,
       bidStep,
       0,
@@ -92,6 +97,7 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
       _msgSender(),
       collection,
       tokenId,
+      buyoutPrice,
       startPrice,
       bidStep,
       _startAuctionTimestamp,
@@ -99,7 +105,7 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
     );
   }
 
-  function makeBid(uint256 auctionId) public virtual payable whenNotPaused {
+  function makeBid(uint256 auctionId) public payable virtual whenNotPaused {
     AuctionData storage auction = _auction[auctionId];
     require(auction._auctionCollection > address(0), "Auction: seems you tried wrong auction id");
     require(auction._auctionStartTimestamp <= block.timestamp, "Auction: auction is not yet started");
@@ -122,6 +128,10 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
     payable(currentBidder).transfer(currentBid);
 
     emit AuctionBid(auctionId, _msgSender(), auction._auctionCollection, auction._auctionTokenId, bid);
+
+    if (bid >= auction._auctionBuyoutPrice) {
+      _finish(auctionId);
+    }
   }
 
   function finishAuction(uint256 auctionId) public virtual whenNotPaused {
@@ -129,6 +139,12 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
     require(auction._auctionCollection != address(0), "Auction: seems you tried wrong auction id");
     require(auction._auctionStartTimestamp < block.timestamp, "Auction: auction is not yet started");
     require(auction._auctionFinishTimestamp <= block.timestamp, "Auction: auction is not finished");
+
+    _finish(auctionId);
+  }
+
+  function _finish(uint256 auctionId) internal virtual {
+    AuctionData storage auction = _auction[auctionId];
 
     uint256 currentBid = auction._auctionCurrentBid;
     uint256 tokenId = auction._auctionTokenId;

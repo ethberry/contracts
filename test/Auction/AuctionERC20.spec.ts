@@ -47,7 +47,7 @@ describe("AuctionERC20", function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
-      const tx1 = auctionInstance.startAuction(
+      const tx1 = await auctionInstance.startAuction(
         erc721Instance.address,
         tokenId,
         amount,
@@ -67,7 +67,7 @@ describe("AuctionERC20", function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
-      const tx1 = auctionInstance.startAuction(
+      const tx1 = await auctionInstance.startAuction(
         erc721Instance.address,
         tokenId,
         amount,
@@ -96,7 +96,7 @@ describe("AuctionERC20", function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
-      const tx1 = auctionInstance
+      const tx1 = await auctionInstance
         .connect(stranger)
         .startAuction(erc721Instance.address, tokenId, amount, 1000, timestamp, timestamp + span + span);
       await expect(tx1).to.be.revertedWith(`ERC721: transfer from incorrect owner`);

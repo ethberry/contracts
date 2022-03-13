@@ -43,7 +43,7 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-promise": "6.0.0",
-    "ethereum-waffle": "3.4.0",
+    "ethereum-waffle": "4.0.0-alpha.0",
     "husky": "4.3.8",
     "lint-staged": "12.3.5",
     "prettier": "2.5.1",

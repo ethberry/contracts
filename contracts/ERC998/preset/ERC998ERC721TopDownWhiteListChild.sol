@@ -43,7 +43,11 @@ contract ERC998ERC721TopDownWhiteListChild is ERC998ERC721TopDown, WhiteListChil
     _unWhitelistChild(addr);
   }
 
-  function setMaxChild(uint256 max) public onlyRole(DEFAULT_ADMIN_ROLE) {
-    _setMaxChild(max);
+  function setDefaultMaxChild(uint256 max) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    _setDefaultMaxChild(max);
+  }
+
+  function setMaxChild(address addr, uint256 max) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    _setMaxChild(addr, max);
   }
 }

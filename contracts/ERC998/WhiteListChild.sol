@@ -6,14 +6,17 @@
 
 pragma solidity ^0.8.4;
 
+import "hardhat/console.sol";
+
 contract WhiteListChild {
-  uint256 private _maxChildCount;
+  uint256 private _defaultMaxChildPerContract;
   mapping(address => bool) _whiteListChildAccess;
   mapping(address => uint256) private _childContractsCounter;
+  mapping(address => uint256) private _maxChildPerContract;
 
   event WhitelistedChild(address indexed addr);
   event UnWhitelistedChild(address indexed addr);
-  event SetMaxChild(uint256 maxCount);
+  event SetMaxChild(address indexed addr, uint256 maxCount);
 
   function _whiteListChild(address addr) internal {
     _whiteListChildAccess[addr] = true;
@@ -29,13 +32,21 @@ contract WhiteListChild {
     return _whiteListChildAccess[addr];
   }
 
-  function getMaxChild() public view returns (uint256) {
-    return _maxChildCount;
+  function getMaxChild(address addr) public view returns (uint256) {
+    if (_maxChildPerContract[addr] > 0) {
+      return _maxChildPerContract[addr];
+    }
+    return _defaultMaxChildPerContract;
   }
 
-  function _setMaxChild(uint256 max) internal {
-    _maxChildCount = max;
-    emit SetMaxChild(max);
+  function _setDefaultMaxChild(uint256 max) internal {
+    _defaultMaxChildPerContract = max;
+    emit SetMaxChild(address(0), max);
+  }
+
+  function _setMaxChild(address addr, uint256 max) internal {
+    _maxChildPerContract[addr] = max;
+    emit SetMaxChild(addr, max);
   }
 
   function getChildCount(address addr) public view onlyWhiteListed(addr) returns (uint256) {
@@ -43,8 +54,9 @@ contract WhiteListChild {
   }
 
   function incrementChildCount(address addr) public onlyWhiteListed(addr) {
-    if (_maxChildCount > 0) {
-      require(_childContractsCounter[addr] < _maxChildCount, "WhiteListChild: excess number of address");
+    uint256 max = _maxChildPerContract[addr] > 0 ? _maxChildPerContract[addr] : _defaultMaxChildPerContract;
+    if (max > 0) {
+      require(_childContractsCounter[addr] < max, "WhiteListChild: excess number of address");
     }
     _childContractsCounter[addr]++;
   }

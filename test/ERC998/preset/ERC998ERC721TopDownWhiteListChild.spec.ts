@@ -62,6 +62,7 @@ describe("ERC998ERC721TopDownWhiteListChild", function () {
   shouldApprove();
   shouldSetApprovalForAll();
   shouldTransferFrom();
+
   testsUsingWhiteListChild();
 
   describe("getChild", function () {

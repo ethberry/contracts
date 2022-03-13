@@ -68,7 +68,7 @@ describe("ERC998ERC721TopDownWhiteListChild", function () {
   describe("getChild", function () {
     it("should get child", async function () {
       await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
-      await this.erc721Instance.setMaxChild(0);
+      await this.erc721Instance.setDefaultMaxChild(0);
       await this.erc721InstanceMock.mint(this.owner.address);
       await this.erc721InstanceMock.approve(this.erc721Instance.address, 0);
       await this.erc721Instance.mint(this.owner.address); // this is edge case

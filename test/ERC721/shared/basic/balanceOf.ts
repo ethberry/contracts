@@ -1,6 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
+import { tokenId } from "../../../constants";
+
 export function shouldGetBalanceOf() {
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
@@ -9,13 +11,13 @@ export function shouldGetBalanceOf() {
     });
 
     it("should get balance of owner", async function () {
-      await this.erc721Instance.mint(this.owner.address, 0);
+      await this.erc721Instance.mint(this.owner.address, tokenId);
       const balance = await this.erc721Instance.balanceOf(this.owner.address);
       expect(balance).to.equal(1);
     });
 
     it("should get balance of not owner", async function () {
-      await this.erc721Instance.mint(this.owner.address, 0);
+      await this.erc721Instance.mint(this.owner.address, tokenId);
       const balance = await this.erc721Instance.balanceOf(this.receiver.address);
       expect(balance).to.equal(0);
     });

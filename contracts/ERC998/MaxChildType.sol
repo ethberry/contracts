@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 
-// Author: PavelZavadskiy
-// Email: pavelzavadsky@gmail.com
-// GitHub: https://github.com/PavelZavadskiy
+// Author: TrejGun
+// Email: trejgun+gemunion@gmail.com
+// Website: https://gemunion.io/
 
 pragma solidity ^0.8.4;
 

@@ -13,11 +13,12 @@ import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract AuctionETH is AccessControl, Pausable, ERC721Holder {
+contract AuctionERC721ETH is AccessControl, Pausable, ERC721Holder {
   using Address for address;
   using Counters for Counters.Counter;
 
   Counters.Counter private _auctionIdCounter;
+  bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
   struct AuctionData {
     address _auctionCollection;
@@ -50,6 +51,7 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
 
   constructor() {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _setupRole(PAUSER_ROLE, _msgSender());
   }
 
   function startAuction(
@@ -159,11 +161,11 @@ contract AuctionETH is AccessControl, Pausable, ERC721Holder {
     }
   }
 
-  function pause() public onlyRole(DEFAULT_ADMIN_ROLE) {
+  function pause() public onlyRole(PAUSER_ROLE) {
     _pause();
   }
 
-  function unpause() public onlyRole(DEFAULT_ADMIN_ROLE) {
+  function unpause() public onlyRole(PAUSER_ROLE) {
     _unpause();
   }
 

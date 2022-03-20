@@ -15,13 +15,13 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract AuctionERC20 is AccessControl, Pausable, ERC721Holder {
+contract AuctionERC721ERC20 is AccessControl, Pausable, ERC721Holder {
   using Address for address;
   using Counters for Counters.Counter;
 
   IERC20 private _acceptedToken;
-
   Counters.Counter private _auctionIdCounter;
+  bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
   struct AuctionData {
     address _auctionCollection;
@@ -54,8 +54,9 @@ contract AuctionERC20 is AccessControl, Pausable, ERC721Holder {
 
   constructor(address acceptedToken) {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _setupRole(PAUSER_ROLE, _msgSender());
 
-    require(acceptedToken.isContract(), "The accepted token address must be a deployed contract");
+    require(acceptedToken.isContract(), "Auction: The accepted token address must be a deployed contract");
     _acceptedToken = IERC20(acceptedToken);
   }
 
@@ -169,11 +170,11 @@ contract AuctionERC20 is AccessControl, Pausable, ERC721Holder {
     }
   }
 
-  function pause() public onlyRole(DEFAULT_ADMIN_ROLE) {
+  function pause() public onlyRole(PAUSER_ROLE) {
     _pause();
   }
 
-  function unpause() public onlyRole(DEFAULT_ADMIN_ROLE) {
+  function unpause() public onlyRole(PAUSER_ROLE) {
     _unpause();
   }
 

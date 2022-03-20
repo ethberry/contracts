@@ -5,7 +5,7 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { time } from "@openzeppelin/test-helpers";
 
 import { AuctionERC721ETH, ERC721ACB } from "../../typechain-types";
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, tokenId, tokenName, tokenSymbol, amount, PAUSER_ROLE } from "../constants";
+import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenId, tokenName, tokenSymbol } from "../constants";
 
 describe("AuctionERC721ETH", function () {
   let auction: ContractFactory;

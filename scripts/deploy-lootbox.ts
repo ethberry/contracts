@@ -2,7 +2,7 @@ import { ethers, run, network } from "hardhat";
 import { parseEther } from "ethers/lib/utils";
 import { ContractTransaction } from "ethers";
 
-import { MINTER_ROLE, tokenName, tokenSymbol, baseTokenURI, addr } from "../tests/constants";
+import { MINTER_ROLE, tokenName, tokenSymbol, baseTokenURI, addr } from "../test/constants";
 
 async function main() {
   await run("compile");

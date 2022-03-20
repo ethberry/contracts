@@ -28,12 +28,12 @@ export function shouldTransferFrom() {
 
       const tx = this.erc20Instance
         .connect(this.receiver)
-        .transferFrom(this.owner.address, this.coinNonReceiverInstance.address, amount);
+        .transferFrom(this.owner.address, this.erc20NonReceiverInstance.address, amount);
       await expect(tx)
         .to.emit(this.erc20Instance, "Transfer")
-        .withArgs(this.owner.address, this.coinNonReceiverInstance.address, amount);
+        .withArgs(this.owner.address, this.erc20NonReceiverInstance.address, amount);
 
-      const nonReceiverBalance = await this.erc20Instance.balanceOf(this.coinNonReceiverInstance.address);
+      const nonReceiverBalance = await this.erc20Instance.balanceOf(this.erc20NonReceiverInstance.address);
       expect(nonReceiverBalance).to.equal(amount);
       const balanceOfOwner = await this.erc20Instance.balanceOf(this.owner.address);
       expect(balanceOfOwner).to.equal(0);

@@ -12,9 +12,9 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "./interfaces/IERC721.sol";
+import "./interfaces/IERC20.sol";
 
-contract MarketplaceERC721ETH is AccessControl, Pausable {
+contract MarketplaceERC20ETH is AccessControl, Pausable {
   using Address for address;
 
   mapping(address => bool) internal _collections;
@@ -29,14 +29,17 @@ contract MarketplaceERC721ETH is AccessControl, Pausable {
     _collections[collection] = isEnabled;
   }
 
-  function buy(address collection, uint256 tokenId) public payable virtual whenNotPaused {
+  function buy(address collection, uint256 amount) public payable virtual whenNotPaused {
     require(_collections[collection], "Marketplace: collection is not enabled");
-    uint256 price = getPrice(collection, tokenId);
+    uint256 price = getPrice(collection, amount);
     require(price == msg.value, "Marketplace: price mismatch");
-    IERC721(collection).mint(_msgSender(), tokenId);
+    IERC20(collection).mint(_msgSender(), amount);
   }
 
-  function getPrice(address, uint256) internal pure virtual returns (uint256) {
+  function getPrice(
+    address,
+    uint256
+  ) internal pure virtual returns (uint256) {
     return 0.0000000000001 ether;
   }
 

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
-import { ERC1155ACBSP, ERC1155NonReceiverMock, ERC1155ReceiverMock } from "../../../typechain-types";
+import { ERC1155ACB, ERC1155NonReceiverMock, ERC1155ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI } from "../../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRole";
@@ -14,31 +14,28 @@ import { shouldURI } from "../shared/uri";
 import { shouldSetApprovalForAll } from "../shared/setApprovalForAll";
 import { shouldSafeTransferFrom } from "../shared/safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "../shared/safeBatchTransferFrom";
-import { shouldPause } from "../shared/pause";
 import { shouldBurn } from "../shared/burn";
 import { shouldBurnBatch } from "../shared/burnBatch";
-import { shouldGtTotalSupply } from "../shared/totalSupply";
 
-describe("ERC1155ACBSP", function () {
+describe("ERC1155ACB", function () {
   let erc1155: ContractFactory;
   let erc1155Receiver: ContractFactory;
   let erc1155NonReceiver: ContractFactory;
 
   beforeEach(async function () {
-    erc1155 = await ethers.getContractFactory("ERC1155ACBSP");
+    erc1155 = await ethers.getContractFactory("ERC1155ACB");
     erc1155Receiver = await ethers.getContractFactory("ERC1155ReceiverMock");
     erc1155NonReceiver = await ethers.getContractFactory("ERC1155NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc1155Instance = (await erc1155.deploy(baseTokenURI)) as ERC1155ACBSP;
+    this.erc1155Instance = (await erc1155.deploy(baseTokenURI)) as ERC1155ACB;
     this.erc1155ReceiverInstance = (await erc1155Receiver.deploy()) as ERC1155ReceiverMock;
     this.erc1155NonReceiverInstance = (await erc1155NonReceiver.deploy()) as ERC1155NonReceiverMock;
   });
 
-  shouldHaveRole(true);
+  shouldHaveRole();
   shouldMint();
   shouldMintBatch();
-  shouldGtTotalSupply();
   shouldBalanceOf();
   shouldBalanceOfBatch();
   shouldURI();
@@ -47,7 +44,6 @@ describe("ERC1155ACBSP", function () {
   shouldSafeBatchTransferFrom();
   shouldBurn();
   shouldBurnBatch();
-  shouldPause();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

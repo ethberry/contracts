@@ -41,7 +41,7 @@ contract MarketplaceERC721ERC20 is AccessControl, Pausable {
     IERC721(collection).mint(_msgSender(), tokenId);
   }
 
-  function getPrice(address, uint256) public pure returns (uint256) {
+  function getPrice(address, uint256) internal pure virtual returns (uint256) {
     return 0.0000000000001 ether;
   }
 

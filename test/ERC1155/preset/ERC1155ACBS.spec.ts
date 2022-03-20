@@ -16,6 +16,7 @@ import { shouldSafeTransferFrom } from "../shared/safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "../shared/safeBatchTransferFrom";
 import { shouldBurn } from "../shared/burn";
 import { shouldBurnBatch } from "../shared/burnBatch";
+import { shouldGtTotalSupply } from "../shared/totalSupply";
 
 describe("ERC1155ACBS", function () {
   let erc1155: ContractFactory;
@@ -36,6 +37,7 @@ describe("ERC1155ACBS", function () {
   shouldHaveRole();
   shouldMint();
   shouldMintBatch();
+  shouldGtTotalSupply();
   shouldBalanceOf();
   shouldBalanceOfBatch();
   shouldURI();

@@ -19,18 +19,18 @@ import { shouldCap } from "../shared/cap";
 
 describe("ERC20ACBCSP", function () {
   let erc20: ContractFactory;
-  let coinNonReceiver: ContractFactory;
+  let erc20NonReceiver: ContractFactory;
 
   beforeEach(async function () {
     erc20 = await ethers.getContractFactory("ERC20ACBCSP");
-    coinNonReceiver = await ethers.getContractFactory("ERC20NonReceiverMock");
+    erc20NonReceiver = await ethers.getContractFactory("ERC20NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
     this.erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ACBCSP;
-    this.coinNonReceiverInstance = (await coinNonReceiver.deploy()) as ERC20NonReceiverMock;
+    this.erc20NonReceiverInstance = (await erc20NonReceiver.deploy()) as ERC20NonReceiverMock;
   });
 
-  shouldHaveRole(true);
+  shouldHaveRole(true, true);
   shouldMint(true);
   shouldBalanceOf();
   shouldTransfer();

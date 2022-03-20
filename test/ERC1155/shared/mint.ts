@@ -13,9 +13,6 @@ export function shouldMint() {
 
       const balance = await this.erc1155Instance.balanceOf(this.receiver.address, tokenId);
       expect(balance).to.equal(amount);
-
-      const totalSupply = await this.erc1155Instance.totalSupply(tokenId);
-      expect(totalSupply).to.equal(amount);
     });
 
     it("should mint to receiver", async function () {

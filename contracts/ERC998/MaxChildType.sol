@@ -10,43 +10,63 @@ import "hardhat/console.sol";
 
 contract MaxChildType {
 
-  uint256 private _defaultMaxChildPerType = 1; // One Item per Hero's slot
-  mapping(uint256 /* ItemType */ => uint256 /* MaxChilds */) internal _maxChildTypes;
-  mapping(uint256 /* ItemType */ => uint256 /* NumChilds */) internal _numChildTypes;
+  uint256 private _defaultMaxChildPerClass = 1; // One Item per Hero's slot
+  mapping(uint256 /* ItemClass */ => uint256 /* Max Child */) internal _maxChildClass;
+  mapping(uint256 /* ItemClass */ => uint256 /* Num Child */) internal _numChildClass;
 
-  event SetMaxChild(uint256 childType, uint256 maxCount);
+  event SetMaxChild(uint256 childClass, uint256 maxCount);
 
-  function getMaxChild(uint256 childType) public view returns (uint256) {
-    if (_maxChildTypes[childType] > 1) {
-      return _maxChildTypes[childType];
+  bytes4 constant CHILD_CLASS = bytes4(keccak256("getClassByTokenId(uint256)"));
+
+  function getMaxChild(uint256 childClass) public view returns (uint256) {
+    if (_maxChildClass[childClass] > 1) {
+      return _maxChildClass[childClass];
     }
-    return _defaultMaxChildPerType;
+    return _defaultMaxChildPerClass;
   }
 
-  function _setMaxChild(uint256 childType, uint256 max) internal {
-    _maxChildTypes[childType] = max;
-    emit SetMaxChild(childType, max);
+  function _setMaxChild(uint256 childClass, uint256 max) internal {
+    _maxChildClass[childClass] = max;
+    emit SetMaxChild(childClass, max);
   }
 
-  function incrementChildCount(uint256 childType) public {
-    uint256 max = _maxChildTypes[childType] > 0 ? _maxChildTypes[childType] : _defaultMaxChildPerType;
-    require(_numChildTypes[childType] < max, "MaxChildType: excess number of child");
-    _numChildTypes[childType]++;
+  function incrementChildCount(address addr, uint256 tokenId) public {
+    uint256 childClass = classOfChild(addr, tokenId);
+    uint256 max = _maxChildClass[childClass] > 0 ? _maxChildClass[childClass] : _defaultMaxChildPerClass;
+    require(_numChildClass[childClass] < max, "MaxChildType: excess number of child");
+    _numChildClass[childClass]++;
   }
 
-  function decrementChildCount(uint256 childType) public {
-    if (_numChildTypes[childType] > 0) {
-      _numChildTypes[childType]--;
+  function decrementChildCount(address addr, uint256 tokenId) public {
+    uint256 childClass = classOfChild(addr, tokenId);
+    if (_numChildClass[childClass] > 0) {
+      _numChildClass[childClass]--;
     }
   }
 
-  modifier onlyChildTypeWithIncrement(uint256 childType) {
-    incrementChildCount(childType);
+  modifier onlyChildClassWithIncrement(address addr, uint256 tokenId) {
+    incrementChildCount(addr, tokenId);
     _;
   }
 
-  modifier onlyChildTypeWithDecrement(uint256 childType) {
-    decrementChildCount(childType);
+  modifier onlyChildClassWithDecrement(address addr, uint256 tokenId) {
+    decrementChildCount(addr, tokenId);
     _;
   }
+
+  // returns item class of child token
+  function classOfChild(address _childContract, uint256 _childTokenId)
+  public
+  view
+  returns (uint256 childClass)
+  {
+      bytes memory callData = abi.encodeWithSelector(CHILD_CLASS, _childTokenId);
+      address childAddress_ = _childContract;
+      (bool callSuccess, bytes memory data) = childAddress_.staticcall(callData);
+      require(callSuccess, "MaxChildClass: getClass failed");
+      assembly {
+        childClass := mload(add(data, 0x20))
+      }
+  }
+
 }

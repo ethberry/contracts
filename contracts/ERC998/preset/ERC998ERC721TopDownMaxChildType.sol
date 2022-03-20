@@ -21,9 +21,8 @@ contract ERC998ERC721TopDownMaxChildType is ERC998ERC721TopDown, MaxChildType {
   function removeChild(
     uint256 _tokenId,
     address _childContract,
-    uint256 _childType,
     uint256 _childTokenId
-  ) internal override onlyChildTypeWithDecrement(_childType) {
+  ) internal override onlyChildClassWithDecrement(_childContract, _childTokenId) {
     super.removeChild(_tokenId, _childContract, _childTokenId);
   }
 
@@ -31,9 +30,8 @@ contract ERC998ERC721TopDownMaxChildType is ERC998ERC721TopDown, MaxChildType {
     address _from,
     uint256 _tokenId,
     address _childContract,
-    uint256 _childType,
     uint256 _childTokenId
-  ) internal override onlyChildTypeWithIncrement(_childType) {
+  ) internal override onlyChildClassWithIncrement(_childContract, _childTokenId) {
     super.receiveChild(_from, _tokenId, _childContract, _childTokenId);
   }
 

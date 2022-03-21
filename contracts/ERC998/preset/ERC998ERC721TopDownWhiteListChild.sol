@@ -7,7 +7,7 @@
 pragma solidity ^0.8.4;
 
 import "../ERC998ERC721TopDown.sol";
-import "../WhiteListChild.sol";
+import "../extensions/WhiteListChild.sol";
 
 contract ERC998ERC721TopDownWhiteListChild is ERC998ERC721TopDown, WhiteListChild {
 

@@ -8,30 +8,30 @@ import {
   ERC721ReceiverMock,
   ERC721ACBCE,
   ERC998ComposableTopDownTest,
-} from "../../typechain-types";
-import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
+} from "../../../typechain-types";
+import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldMint } from "../ERC721/shared/enumerable/mint";
-import { shouldSafeMint } from "../ERC721/shared/enumerable/safeMint";
-import { shouldGetBalanceOf } from "../ERC721/shared/enumerable/balanceOf";
-import { shouldGetOwnerOf } from "../ERC721/shared/enumerable/ownerOf";
-import { shouldGetTokenURI } from "../ERC721/shared/enumerable/tokenURI";
-import { shouldApprove } from "./shared/approve";
-import { shouldSetApprovalForAll } from "../ERC721/shared/enumerable/setApprovalForAll";
-import { shouldTransferFrom } from "../ERC721/shared/enumerable/transferFrom";
-import { shouldSafeTransferFrom } from "./shared/safeTransferFrom";
-import { shouldSafeTransferChild } from "./shared/safeTransferChild";
-import { shouldTransferChild } from "./shared/transferChild";
-import { shouldChildExists } from "./shared/childExists";
-import { shouldTotalChildContracts } from "./shared/totalChildContracts";
-import { shouldChildContractByIndex } from "./shared/childContractByIndex";
-import { shouldTotalChildTokens } from "./shared/totalChildTokens";
-import { shouldChildTokenByIndex } from "./shared/childTokenByIndex";
-import { shouldGetChild } from "./shared/getChild";
-import { shouldGetERC20 } from "./shared/getERC20";
-import { shouldBalanceOfERC20 } from "./shared/balanceOfERC20";
-import { shouldErc20ContractByIndex } from "./shared/erc20ContractByIndex";
-import { shouldTotalERC20Contracts } from "./shared/totalERC20Contracts";
+import { shouldMint } from "../../ERC721/shared/enumerable/mint";
+import { shouldSafeMint } from "../../ERC721/shared/enumerable/safeMint";
+import { shouldGetBalanceOf } from "../../ERC721/shared/enumerable/balanceOf";
+import { shouldGetOwnerOf } from "../../ERC721/shared/enumerable/ownerOf";
+import { shouldGetTokenURI } from "../../ERC721/shared/enumerable/tokenURI";
+import { shouldApprove } from "../shared/approve";
+import { shouldSetApprovalForAll } from "../../ERC721/shared/enumerable/setApprovalForAll";
+import { shouldTransferFrom } from "../../ERC721/shared/enumerable/transferFrom";
+import { shouldSafeTransferFrom } from "../shared/safeTransferFrom";
+import { shouldSafeTransferChild } from "../shared/safeTransferChild";
+import { shouldTransferChild } from "../shared/transferChild";
+import { shouldChildExists } from "../shared/childExists";
+import { shouldTotalChildContracts } from "../shared/totalChildContracts";
+import { shouldChildContractByIndex } from "../shared/childContractByIndex";
+import { shouldTotalChildTokens } from "../shared/totalChildTokens";
+import { shouldChildTokenByIndex } from "../shared/childTokenByIndex";
+import { shouldGetChild } from "../shared/getChild";
+import { shouldGetERC20 } from "../shared/getERC20";
+import { shouldBalanceOfERC20 } from "../shared/balanceOfERC20";
+import { shouldErc20ContractByIndex } from "../shared/erc20ContractByIndex";
+import { shouldTotalERC20Contracts } from "../shared/totalERC20Contracts";
 
 describe("ERC998ComposableTopDown", function () {
   let erc20: ContractFactory;

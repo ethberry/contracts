@@ -10,16 +10,16 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "./interfaces/IERC20AndERC223.sol";
-import "./interfaces/IERC998ERC20TopDown.sol";
-import "./interfaces/IERC998ERC20TopDownEnumerable.sol";
-import "./interfaces/IERC998ERC721BottomUp.sol";
-import "./interfaces/IERC998ERC721TopDown.sol";
-import "./interfaces/IERC998ERC721TopDownEnumerable.sol";
+import "../interfaces/IERC20AndERC223.sol";
+import "../interfaces/IERC998ERC20TopDown.sol";
+import "../interfaces/IERC998ERC20TopDownEnumerable.sol";
+import "../interfaces/IERC998ERC721BottomUp.sol";
+import "../interfaces/IERC998ERC721TopDown.sol";
+import "../interfaces/IERC998ERC721TopDownEnumerable.sol";
 
-import "../ERC721/preset/ERC721ACBCES.sol";
+import "../../ERC721/preset/ERC721ACBCES.sol";
 
-abstract contract ERC998TopDown is
+abstract contract ERC998ERC20ERC721TopDown is
   ERC721ACBCES,
   IERC998ERC721TopDown,
   IERC998ERC721TopDownEnumerable,

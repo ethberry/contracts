@@ -19,7 +19,7 @@ import "../interfaces/IERC998ERC721TopDownEnumerable.sol";
 
 import "../../ERC721/preset/ERC721ACBCES.sol";
 
-abstract contract ERC998ERC20ERC721TopDown is
+contract ERC998ERC20ERC721TopDown is
   ERC721ACBCES,
   IERC998ERC721TopDown,
   IERC998ERC721TopDownEnumerable,

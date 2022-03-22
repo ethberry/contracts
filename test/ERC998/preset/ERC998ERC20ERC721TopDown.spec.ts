@@ -7,7 +7,7 @@ import {
   ERC721NonReceiverMock,
   ERC721ReceiverMock,
   ERC721ACBCE,
-  ERC998ComposableTopDownTest,
+  ERC998ERC20ERC721TopDown,
 } from "../../../typechain-types";
 import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
@@ -43,14 +43,14 @@ describe("ERC998ComposableTopDown", function () {
   beforeEach(async function () {
     erc20 = await ethers.getContractFactory("ERC20ACBCS");
     erc721 = await ethers.getContractFactory("ERC721ACBCE");
-    erc998 = await ethers.getContractFactory("ERC998ComposableTopDownTest");
+    erc998 = await ethers.getContractFactory("ERC998ERC20ERC721TopDown");
     erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
     erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
     this.erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ACBCS;
     this.erc721InstanceMock = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBCE;
-    this.erc721Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ComposableTopDownTest;
+    this.erc721Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI, 1000)) as ERC998ERC20ERC721TopDown;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
   });

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
-import { ERC721NonReceiverMock, ERC721ReceiverMock, ERC998ComposableBottomUpTest } from "../../typechain-types";
+import { ERC721NonReceiverMock, ERC721ReceiverMock, ERC998BottomUp } from "../../typechain-types";
 import { baseTokenURI, tokenName, tokenSymbol } from "../constants";
 
 import { shouldHaveRole } from "../ERC721/shared/accessControl/hasRole";
@@ -25,12 +25,12 @@ describe("ERC998ComposableBottomUp", function () {
   let erc721NonReceiver: ContractFactory;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC998ComposableBottomUpTest");
+    erc721 = await ethers.getContractFactory("ERC998BottomUp");
     erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
     erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC998ComposableBottomUpTest;
+    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC998BottomUp;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
   });

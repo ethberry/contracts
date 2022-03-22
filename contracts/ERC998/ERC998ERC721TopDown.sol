@@ -16,7 +16,7 @@ import "./interfaces/IERC998ERC721TopDownEnumerable.sol";
 
 import "../ERC721/preset/ERC721ACBCES.sol";
 
-abstract contract ERC998ERC721TopDown is ERC721ACBCES, IERC998ERC721TopDown, IERC998ERC721TopDownEnumerable {
+contract ERC998ERC721TopDown is ERC721ACBCES, IERC998ERC721TopDown, IERC998ERC721TopDownEnumerable {
   using Address for address;
   using Counters for Counters.Counter;
   using EnumerableSet for EnumerableSet.UintSet;

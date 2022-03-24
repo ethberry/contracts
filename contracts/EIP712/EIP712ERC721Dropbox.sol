@@ -19,19 +19,17 @@ contract EIP712ERC721Dropbox is EIP712, Pausable, AccessControl {
 
   IEIP712ERC721Droppable _factory;
 
+  bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
   bytes32 private immutable PERMIT_SIGNATURE = keccak256("NFT(address account,uint256 tokenId)");
 
   constructor(string memory name) EIP712(name, "1.0.0") {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _setupRole(PAUSER_ROLE, _msgSender());
   }
 
   function setFactory(address factory) external onlyRole(DEFAULT_ADMIN_ROLE) {
     require(factory.isContract(), "LootBox: the factory must be a deployed contract");
     _factory = IEIP712ERC721Droppable(factory);
-  }
-
-  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl) returns (bool) {
-    return super.supportsInterface(interfaceId);
   }
 
   function redeem(
@@ -55,5 +53,17 @@ contract EIP712ERC721Dropbox is EIP712, Pausable, AccessControl {
     bytes memory signature
   ) internal view returns (bool) {
     return SignatureChecker.isValidSignatureNow(signer, digest, signature);
+  }
+
+  function pause() public virtual onlyRole(PAUSER_ROLE) {
+    _pause();
+  }
+
+  function unpause() public virtual onlyRole(PAUSER_ROLE) {
+    _unpause();
+  }
+
+  receive() external payable {
+    revert();
   }
 }

@@ -518,7 +518,7 @@ describe("AuctionERC721ERC20", function () {
       await expect(tx3).to.be.revertedWith("ERC20: transfer amount exceeds balance");
     });
 
-    it("should fail: seems you tried wrong auction id", async function () {
+    it("should fail: wrong auction id", async function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
@@ -546,7 +546,7 @@ describe("AuctionERC721ERC20", function () {
         );
 
       const tx2 = auctionInstance.connect(receiver).makeBid(1, amount);
-      await expect(tx2).to.be.revertedWith("Auction: seems you tried wrong auction id");
+      await expect(tx2).to.be.revertedWith("Auction: wrong auction id");
     });
 
     it("should fail: auction is not yet started", async function () {
@@ -914,7 +914,7 @@ describe("AuctionERC721ERC20", function () {
       expect(balance2).to.equal(0);
     });
 
-    it("should fail: seems you tried wrong auction id", async function () {
+    it("should fail: wrong auction id", async function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
@@ -942,7 +942,7 @@ describe("AuctionERC721ERC20", function () {
         );
 
       const finish = auctionInstance.finishAuction(1);
-      await expect(finish).to.be.revertedWith("Auction: seems you tried wrong auction id");
+      await expect(finish).to.be.revertedWith("Auction: wrong auction id");
     });
 
     it("should fail: auction is not yet started", async function () {

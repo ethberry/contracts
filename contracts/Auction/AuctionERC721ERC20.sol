@@ -12,7 +12,6 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract AuctionERC721ERC20 is AccessControl, Pausable, ERC721Holder {
@@ -49,15 +48,15 @@ contract AuctionERC721ERC20 is AccessControl, Pausable, ERC721Holder {
     uint256 startTimestamp,
     uint256 finishTimestamp
   );
-  event AuctionBid(uint256 auctionId, address from, address collection, uint256 tokenId, uint256 amount);
-  event AuctionFinish(uint256 auctionId, address from, address collection, uint256 tokenId, uint256 amount);
+  event AuctionBid(uint256 auctionId, address owner, address collection, uint256 tokenId, uint256 amount);
+  event AuctionFinish(uint256 auctionId, address owner, address collection, uint256 tokenId, uint256 amount);
 
   constructor(address acceptedToken) {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    _setupRole(PAUSER_ROLE, _msgSender());
-
     require(acceptedToken.isContract(), "Auction: The accepted token address must be a deployed contract");
     _acceptedToken = IERC20(acceptedToken);
+
+    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _setupRole(PAUSER_ROLE, _msgSender());
   }
 
   function startAuction(
@@ -115,7 +114,7 @@ contract AuctionERC721ERC20 is AccessControl, Pausable, ERC721Holder {
 
   function makeBid(uint256 auctionId, uint256 bid) public virtual whenNotPaused {
     AuctionData storage auction = _auction[auctionId];
-    require(auction._auctionCollection > address(0), "Auction: seems you tried wrong auction id");
+    require(auction._auctionCollection > address(0), "Auction: wrong auction id");
     require(auction._auctionStartTimestamp <= block.timestamp, "Auction: auction is not yet started");
     require(auction._auctionFinishTimestamp >= block.timestamp, "Auction: auction is already finished");
     require(auction._auctionCurrentBidder != _msgSender(), "Auction: prevent double spending");
@@ -147,7 +146,7 @@ contract AuctionERC721ERC20 is AccessControl, Pausable, ERC721Holder {
 
   function finishAuction(uint256 auctionId) public virtual whenNotPaused {
     AuctionData storage auction = _auction[auctionId];
-    require(auction._auctionCollection != address(0), "Auction: seems you tried wrong auction id");
+    require(auction._auctionCollection != address(0), "Auction: wrong auction id");
     require(auction._auctionStartTimestamp < block.timestamp, "Auction: auction is not yet started");
     require(auction._auctionFinishTimestamp <= block.timestamp, "Auction: auction is not finished");
 

@@ -6,6 +6,6 @@
 
 pragma solidity ^0.8.4;
 
-interface IEIP712ERC721Droppable {
+interface IERC721Mintable {
   function mint(address to, uint256 tokenId) external;
 }

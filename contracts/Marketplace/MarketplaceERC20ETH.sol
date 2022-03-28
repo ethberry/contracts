@@ -12,7 +12,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "./interfaces/IERC20.sol";
+import "../interfaces/IERC20Mintable.sol";
 
 contract MarketplaceERC20ETH is AccessControl, Pausable {
   using Address for address;
@@ -33,7 +33,7 @@ contract MarketplaceERC20ETH is AccessControl, Pausable {
     require(_collections[collection], "Marketplace: collection is not enabled");
     uint256 price = getPrice(collection, amount);
     require(price == msg.value, "Marketplace: price mismatch");
-    IERC20(collection).mint(_msgSender(), amount);
+    IERC20Mintable(collection).mint(_msgSender(), amount);
   }
 
   function getPrice(

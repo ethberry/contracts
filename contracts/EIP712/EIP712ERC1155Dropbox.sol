@@ -12,7 +12,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 
-import "./interfaces/IEIP712ERC1155Droppable.sol";
+import "../interfaces/IERC1155Mintable.sol";
 
 /**
  * @dev {ERC721} token, including:
@@ -32,7 +32,7 @@ import "./interfaces/IEIP712ERC1155Droppable.sol";
 contract IEIP712ERC1155Dropbox is AccessControl, Pausable, EIP712 {
   using Address for address;
 
-  IEIP712ERC1155Droppable _factory;
+  IERC1155Mintable _factory;
 
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
   bytes32 private immutable PERMIT_SIGNATURE = keccak256("NFT(address account,uint256[] tokenIds,uint256[] amounts)");
@@ -81,7 +81,7 @@ contract IEIP712ERC1155Dropbox is AccessControl, Pausable, EIP712 {
 
   function setFactory(address factory) external onlyRole(DEFAULT_ADMIN_ROLE) {
     require(factory.isContract(), "IEIP712ERC1155Dropbox: the factory must be a deployed contract");
-    _factory = IEIP712ERC1155Droppable(factory);
+    _factory = IERC1155Mintable(factory);
   }
 
   function pause() public virtual onlyRole(PAUSER_ROLE) {

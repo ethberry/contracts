@@ -12,7 +12,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "./interfaces/IERC1155.sol";
+import "../interfaces/IERC1155Mintable.sol";
 
 contract MarketplaceERC1155ETH is AccessControl, Pausable {
   using Address for address;
@@ -43,7 +43,7 @@ contract MarketplaceERC1155ETH is AccessControl, Pausable {
     }
 
     require(price == msg.value, "Marketplace: price mismatch");
-    IERC1155(collection).mintBatch(_msgSender(), tokenIds, amounts, "0x");
+    IERC1155Mintable(collection).mintBatch(_msgSender(), tokenIds, amounts, "0x");
   }
 
   function getPrice(

@@ -12,18 +12,17 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "../interfaces/IERC20Mintable.sol";
+import "../interfaces/IERC721Enumerable.sol";
 
-contract StakingERC20ERC20 is AccessControl, Pausable {
+contract StakingERC20ERC721 is AccessControl, Pausable {
   using Address for address;
   using Counters for Counters.Counter;
 
   uint256[] private _periods; // seconds
   uint256[] private _amounts; // wei
-  uint256[] private _rewards; // wei
 
   IERC20 private _acceptedToken;
-  IERC20Mintable private _rewardToken;
+  IERC721Enumerable private _rewardToken;
 
   Counters.Counter private _stakeIdCounter;
 
@@ -34,56 +33,44 @@ contract StakingERC20ERC20 is AccessControl, Pausable {
     uint256 _startTimestamp;
     uint256 _period;
     uint256 _amount;
-    uint256 _reward;
   }
 
   mapping(uint256 => StakingData) private _stakes;
 
-  event StakingStart(
-    uint256 stakingId,
-    address owner,
-    uint256 startTimestamp,
-    uint256 periods,
-    uint256 amounts,
-    uint256 rewards
-  );
-  event StakingWithdraw(uint256 stakingId, address owner, uint256 withdrawTimestamp, uint256 reward);
+  event StakingStart(uint256 stakingId, address owner, uint256 startTimestamp, uint256 amount, uint256 period);
+  event StakingWithdraw(uint256 stakingId, address owner, uint256 withdrawTimestamp, uint256[] tokenIds);
   event StakingFinish(uint256 stakingId, address owner, uint256 finishTimestamp);
 
   constructor(
     address acceptedToken,
     address rewardToken,
     uint256[] memory periods,
-    uint256[] memory amounts,
-    uint256[] memory rewards
+    uint256[] memory amounts
   ) {
     require(acceptedToken.isContract(), "Staking: The accepted token address must be a deployed contract");
     _acceptedToken = IERC20(acceptedToken);
     require(rewardToken.isContract(), "Staking: The reward token address must be a deployed contract");
-    _rewardToken = IERC20Mintable(rewardToken);
+    _rewardToken = IERC721Enumerable(rewardToken);
 
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(PAUSER_ROLE, _msgSender());
 
-    setNewRules(periods, amounts, rewards);
+    setNewRules(periods, amounts);
   }
 
   function setNewRules(
     uint256[] memory periods,
-    uint256[] memory amounts,
-    uint256[] memory rewards
+    uint256[] memory amounts
   ) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
-    require(periods.length != amounts.length && amounts.length != rewards.length, "Staking: length doesn't match");
+    require(periods.length != amounts.length, "Staking: length doesn't match");
 
     for (uint256 i; i < periods.length; i++) {
       require(periods[i] != 0, "Staking: period length should greater than zero");
       require(amounts[i] != 0, "Staking: amount amount should greater than zero");
-      require(rewards[i] != 0, "Staking: reward amount should greater than zero");
     }
 
     _periods = periods;
     _amounts = amounts;
-    _rewards = rewards;
   }
 
   function deposit(uint256 level) public virtual whenNotPaused {
@@ -94,16 +81,16 @@ contract StakingERC20ERC20 is AccessControl, Pausable {
     uint256 stakeId = _stakeIdCounter.current();
     _stakeIdCounter.increment();
 
-    _stakes[stakeId] = StakingData(_msgSender(), block.timestamp, _periods[level], _amounts[level], _rewards[level]);
-    emit StakingStart(stakeId, _msgSender(), block.timestamp, _periods[level], _amounts[level], _rewards[level]);
+    _stakes[stakeId] = StakingData(_msgSender(), block.timestamp, _periods[level], _amounts[level]);
+    emit StakingStart(stakeId, _msgSender(), block.timestamp, _periods[level], _amounts[level]);
   }
 
   function _calculateRewardMultiplier(
     uint256 startTimestamp,
     uint256 finishTimestamp,
-    uint256 period
+    uint256 periodInSeconds
   ) internal pure virtual returns (uint256) {
-    return (finishTimestamp - startTimestamp) % period;
+    return (finishTimestamp - startTimestamp) % periodInSeconds;
   }
 
   function receiveReward(
@@ -137,7 +124,9 @@ contract StakingERC20ERC20 is AccessControl, Pausable {
     }
 
     if (multiplier != 0) {
-      _rewardToken.mint(stake._owner, stake._reward * multiplier);
+      for (uint256 i; i < multiplier; i++) {
+        _rewardToken.mint(_msgSender());
+      }
     }
   }
 

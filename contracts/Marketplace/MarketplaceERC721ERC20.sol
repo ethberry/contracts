@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "./interfaces/IERC721.sol";
+import "../interfaces/IERC721Mintable.sol";
 
 contract MarketplaceERC721ERC20 is AccessControl, Pausable {
   using Address for address;
@@ -38,7 +38,7 @@ contract MarketplaceERC721ERC20 is AccessControl, Pausable {
     require(_collections[collection], "Marketplace: collection is not enabled");
     uint256 price = getPrice(collection, tokenId);
     _acceptedToken.transferFrom(_msgSender(), address(this), price);
-    IERC721(collection).mint(_msgSender(), tokenId);
+    IERC721Mintable(collection).mint(_msgSender(), tokenId);
   }
 
   function getPrice(address, uint256) internal pure virtual returns (uint256) {

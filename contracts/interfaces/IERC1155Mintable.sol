@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.4;
 
-interface IEIP712ERC1155Droppable {
+interface IERC1155Mintable {
   function mintBatch(
     address to,
     uint256[] memory ids,

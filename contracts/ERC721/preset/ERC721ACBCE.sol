@@ -80,14 +80,6 @@ contract ERC721ACBCE is AccessControl, ERC721Burnable, ERC721CappedEnumerable {
     return _baseTokenURI;
   }
 
-  function _mint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721CappedEnumerable) {
-    super._mint(account, tokenId);
-  }
-
-  function _safeMint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721CappedEnumerable) {
-    super._safeMint(account, tokenId);
-  }
-
   function _beforeTokenTransfer(
     address from,
     address to,

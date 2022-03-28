@@ -77,19 +77,11 @@ contract ERC721ACBCP is AccessControl, ERC721Burnable, ERC721Capped, ERC721Pausa
     return _baseTokenURI;
   }
 
-  function _mint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721Capped) {
-    super._mint(account, tokenId);
-  }
-
-  function _safeMint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721Capped) {
-    super._safeMint(account, tokenId);
-  }
-
   function _beforeTokenTransfer(
     address from,
     address to,
     uint256 tokenId
-  ) internal virtual override(ERC721, ERC721Pausable) {
+  ) internal virtual override(ERC721, ERC721Capped, ERC721Pausable) {
     super._beforeTokenTransfer(from, to, tokenId);
   }
 }

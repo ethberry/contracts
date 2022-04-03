@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { expect } from "chai";
 
-import { ERC721ACBER, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
+import { ERC721ACBCER, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI, tokenName, tokenSymbol } from "../../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRole";
@@ -16,23 +16,24 @@ import { shouldTransferFrom } from "../shared/enumerable/transferFrom";
 import { shouldSafeTransferFrom } from "../shared/enumerable/safeTransferFrom";
 import { shouldBurn } from "../shared/enumerable/burn";
 import { shouldGetTokenOfOwnerByIndex } from "../shared/enumerable/tokenOfOwnerByIndex";
+import { shouldGetCap } from "../shared/enumerable/capped";
 import { shouldSetTokenRoyalty } from "../shared/royalty/setTokenRoyalty";
 import { shouldSetDefaultRoyalty } from "../shared/royalty/setDefaultRoyalty";
 import { shouldGetRoyaltyInfo } from "../shared/royalty/royaltyInfo";
 import { shouldBurnBasic } from "../shared/royalty/burnBasic";
 
-describe("ERC721ACBER", function () {
+describe("ERC721ACBCER", function () {
   let erc721: ContractFactory;
   let erc721Receiver: ContractFactory;
   let erc721NonReceiver: ContractFactory;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721ACBER");
+    erc721 = await ethers.getContractFactory("ERC721ACBCER");
     erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
     erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 100)) as ERC721ACBER;
+    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2, 100)) as ERC721ACBCER;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
   });
@@ -48,6 +49,7 @@ describe("ERC721ACBER", function () {
   shouldSafeTransferFrom();
   shouldBurn();
   shouldGetTokenOfOwnerByIndex();
+  shouldGetCap();
   shouldSetTokenRoyalty(true);
   shouldSetDefaultRoyalty(true);
   shouldGetRoyaltyInfo();

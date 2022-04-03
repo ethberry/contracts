@@ -2,10 +2,15 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { tokenId } from "../../../constants";
 
-export function shouldBurnBasic() {
+export function shouldBurnBasic(enumerable = false) {
   describe("burn (basic)", function () {
     it("should reset token royalty info", async function () {
-      await this.erc721Instance.mint(this.owner.address, tokenId);
+      if (enumerable) {
+        await this.erc721Instance.mint(this.owner.address); // 0
+        await this.erc721Instance.mint(this.owner.address); // 1
+      } else {
+        await this.erc721Instance.mint(this.owner.address, tokenId);
+      }
 
       await this.erc721Instance.setTokenRoyalty(tokenId, this.owner.address, 200);
       const [receiver, amount] = await this.erc721Instance.royaltyInfo(tokenId, 1e6);

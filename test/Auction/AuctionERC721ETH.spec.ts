@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { time } from "@openzeppelin/test-helpers";
 
-import { AuctionERC721ETH, ERC721ACB } from "../../typechain-types";
+import { AuctionERC721ETH, ERC721ACB, AuctionPaymentReverter } from "../../typechain-types";
 import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenId, tokenName, tokenSymbol } from "../constants";
 
 describe("AuctionERC721ETH", function () {
@@ -12,6 +12,8 @@ describe("AuctionERC721ETH", function () {
   let auctionInstance: AuctionERC721ETH;
   let erc721: ContractFactory;
   let erc721Instance: ERC721ACB;
+  let paymentReverter: ContractFactory;
+  let paymentReverterInstance: AuctionPaymentReverter;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
   let stranger: SignerWithAddress;
@@ -19,16 +21,18 @@ describe("AuctionERC721ETH", function () {
   beforeEach(async function () {
     erc721 = await ethers.getContractFactory("ERC721ACB");
     auction = await ethers.getContractFactory("AuctionERC721ETH");
+    paymentReverter = await ethers.getContractFactory("AuctionPaymentReverter");
     [owner, receiver, stranger] = await ethers.getSigners();
 
     erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721ACB;
     auctionInstance = (await auction.deploy()) as AuctionERC721ETH;
+    paymentReverterInstance = (await paymentReverter.deploy(auctionInstance.address)) as AuctionPaymentReverter;
 
     await erc721Instance.mint(owner.address, tokenId);
     await erc721Instance.approve(auctionInstance.address, tokenId);
   });
 
-  describe("Deployment", function () {
+  describe("hasRole", function () {
     it("should set the right roles to deployer", async function () {
       const isAdmin = await auctionInstance.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
       expect(isAdmin).to.equal(true);
@@ -886,6 +890,50 @@ describe("AuctionERC721ETH", function () {
         timestamp + span,
       );
       await expect(tx5).to.not.be.reverted;
+    });
+  });
+
+  describe("VULNERABILITIES", function () {
+    it("should not block auction", async function () {
+      const span = 24 * 60 * 60;
+      const timestamp: number = (await time.latest()).toNumber();
+
+      const tx1 = auctionInstance.startAuction(
+        erc721Instance.address,
+        tokenId,
+        amount * 3,
+        amount,
+        1000,
+        timestamp,
+        timestamp + span + span,
+      );
+      await expect(tx1)
+        .to.emit(auctionInstance, "AuctionStart")
+        .withArgs(
+          0,
+          owner.address,
+          erc721Instance.address,
+          tokenId,
+          amount * 3,
+          amount,
+          1000,
+          timestamp,
+          timestamp + span + span,
+        );
+
+      const tx2 = await paymentReverterInstance.connect(receiver).makeBid(0, { value: amount });
+      await expect(tx2)
+        .to.emit(auctionInstance, "AuctionBid")
+        .withArgs(0, paymentReverterInstance.address, erc721Instance.address, tokenId, amount);
+
+      await expect(tx2).to.changeEtherBalance(receiver, -amount);
+
+      const tx3 = await auctionInstance.connect(stranger).makeBid(0, { value: amount * 2 });
+      await expect(tx3)
+        .to.emit(auctionInstance, "AuctionBid")
+        .withArgs(0, stranger.address, erc721Instance.address, tokenId, amount * 2);
+
+      await expect(tx3).to.changeEtherBalances([owner, receiver, stranger], [0, 0, -amount * 2]);
     });
   });
 });

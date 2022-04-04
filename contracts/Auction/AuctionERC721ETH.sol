@@ -127,7 +127,7 @@ contract AuctionERC721ETH is AccessControl, Pausable, ERC721Holder {
     auction._auctionCurrentBid = bid;
     auction._auctionCurrentBidder = _msgSender();
 
-    payable(currentBidder).transfer(currentBid);
+    currentBidder.call{ value: currentBid }("");
 
     emit AuctionBid(auctionId, _msgSender(), auction._auctionCollection, auction._auctionTokenId, bid);
 
@@ -148,16 +148,19 @@ contract AuctionERC721ETH is AccessControl, Pausable, ERC721Holder {
   function _finish(uint256 auctionId) internal virtual {
     AuctionData storage auction = _auction[auctionId];
 
-    uint256 currentBid = auction._auctionCurrentBid;
+    address currentBidder = auction._auctionCurrentBidder;
+    address collection = auction._auctionCollection;
     uint256 tokenId = auction._auctionTokenId;
+    uint256 currentBid = auction._auctionCurrentBid;
+    address seller = auction._auctionSeller;
 
     if (currentBid > 0) {
-      payable(auction._auctionSeller).transfer(currentBid);
-      IERC721(auction._auctionCollection).safeTransferFrom(address(this), auction._auctionCurrentBidder, tokenId);
-      emit AuctionFinish(auctionId, auction._auctionCurrentBidder, auction._auctionCollection, tokenId, currentBid);
+      seller.call{ value: currentBid }("");
+      IERC721(collection).safeTransferFrom(address(this), currentBidder, tokenId);
+      emit AuctionFinish(auctionId, currentBidder, collection, tokenId, currentBid);
     } else {
-      IERC721(auction._auctionCollection).safeTransferFrom(address(this), auction._auctionSeller, tokenId);
-      emit AuctionFinish(auctionId, auction._auctionSeller, auction._auctionCollection, tokenId, 0);
+      IERC721(collection).safeTransferFrom(address(this), seller, tokenId);
+      emit AuctionFinish(auctionId, seller, collection, tokenId, 0);
     }
   }
 

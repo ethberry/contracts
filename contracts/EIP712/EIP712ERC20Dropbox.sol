@@ -12,56 +12,47 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 
-import "../interfaces/IERC1155Mintable.sol";
+import "../interfaces/IERC20Mintable.sol";
 
-contract EIP712ERC1155Dropbox is AccessControl, Pausable, EIP712 {
+contract EIP712ERC20Dropbox is EIP712, Pausable, AccessControl {
   using Address for address;
 
-  IERC1155Mintable _factory;
+  IERC20Mintable _factory;
 
   mapping(bytes32 => bool) private _expired;
 
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-  bytes32 private immutable PERMIT_SIGNATURE =
-    keccak256("NFT(bytes32 nonce,address account,uint256[] tokenIds,uint256[] amounts)");
+  bytes32 private immutable PERMIT_SIGNATURE = keccak256("NFT(bytes32 nonce,address account,uint256 amount)");
 
   constructor(string memory name) EIP712(name, "1.0.0") {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(PAUSER_ROLE, _msgSender());
   }
 
+  function setFactory(address factory) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    require(factory.isContract(), "EIP712ERC20Dropbox: the factory must be a deployed contract");
+    _factory = IERC20Mintable(factory);
+  }
+
   function redeem(
     bytes32 nonce,
     address account,
-    uint256[] memory tokenIds,
-    uint256[] memory amounts,
+    uint256 amount,
     address signer,
     bytes calldata signature
   ) external {
-    require(_verify(signer, _hash(nonce, account, tokenIds, amounts), signature), "EIP712ERC1155Dropbox: Invalid signature");
-    require(!_expired[nonce], "EIP712ERC1155Dropbox: Expired signature");
+    require(_verify(signer, _hash(nonce, account, amount), signature), "EIP712ERC20Dropbox: Invalid signature");
+    require(!_expired[nonce], "EIP712ERC20Dropbox: Expired signature");
     _expired[nonce] = true;
-    _factory.mintBatch(account, tokenIds, amounts, "0x");
+    _factory.mint(account, amount);
   }
 
   function _hash(
     bytes32 nonce,
     address account,
-    uint256[] memory tokenIds,
-    uint256[] memory amounts
+    uint256 amount
   ) internal view returns (bytes32) {
-    return
-      _hashTypedDataV4(
-        keccak256(
-          abi.encode(
-            PERMIT_SIGNATURE,
-            nonce,
-            account,
-            keccak256(abi.encodePacked(tokenIds)),
-            keccak256(abi.encodePacked(amounts))
-          )
-        )
-      );
+    return _hashTypedDataV4(keccak256(abi.encode(PERMIT_SIGNATURE, nonce, account, amount)));
   }
 
   function _verify(
@@ -70,11 +61,6 @@ contract EIP712ERC1155Dropbox is AccessControl, Pausable, EIP712 {
     bytes memory signature
   ) internal view returns (bool) {
     return SignatureChecker.isValidSignatureNow(signer, digest, signature);
-  }
-
-  function setFactory(address factory) external onlyRole(DEFAULT_ADMIN_ROLE) {
-    require(factory.isContract(), "EIP712ERC1155Dropbox: the factory must be a deployed contract");
-    _factory = IERC1155Mintable(factory);
   }
 
   function pause() public virtual onlyRole(PAUSER_ROLE) {

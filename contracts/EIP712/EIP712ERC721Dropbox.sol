@@ -19,8 +19,10 @@ contract EIP712ERC721Dropbox is EIP712, Pausable, AccessControl {
 
   IERC721Mintable _factory;
 
+  mapping(bytes32 => bool) private _expired;
+
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-  bytes32 private immutable PERMIT_SIGNATURE = keccak256("NFT(address account,uint256 tokenId)");
+  bytes32 private immutable PERMIT_SIGNATURE = keccak256("NFT(bytes32 nonce,address account,uint256 tokenId)");
 
   constructor(string memory name) EIP712(name, "1.0.0") {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -33,18 +35,24 @@ contract EIP712ERC721Dropbox is EIP712, Pausable, AccessControl {
   }
 
   function redeem(
+    bytes32 nonce,
     address account,
     uint256 tokenId,
     address signer,
     bytes calldata signature
   ) external {
-    // require(signature.length == 65, "EIP712ERC721Dropbox: Invalid signature");
-    require(_verify(signer, _hash(account, tokenId), signature), "EIP712ERC721Dropbox: Invalid signature");
+    require(_verify(signer, _hash(nonce, account, tokenId), signature), "EIP712ERC721Dropbox: Invalid signature");
+    require(!_expired[nonce], "EIP712ERC721Dropbox: Expired signature");
+    _expired[nonce] = true;
     _factory.mint(account, tokenId);
   }
 
-  function _hash(address account, uint256 tokenId) internal view returns (bytes32) {
-    return _hashTypedDataV4(keccak256(abi.encode(PERMIT_SIGNATURE, account, tokenId)));
+  function _hash(
+    bytes32 nonce,
+    address account,
+    uint256 tokenId
+  ) internal view returns (bytes32) {
+    return _hashTypedDataV4(keccak256(abi.encode(PERMIT_SIGNATURE, nonce, account, tokenId)));
   }
 
   function _verify(

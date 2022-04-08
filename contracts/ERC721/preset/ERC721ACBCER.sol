@@ -70,10 +70,11 @@ contract ERC721ACBCER is AccessControl, ERC721Burnable, ERC721CappedEnumerable, 
     return _tokenIdTracker.current();
   }
 
-  function setDefaultRoyalty(
-    address royaltyReceiver,
-    uint96 royaltyNumerator
-  ) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
+  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
+    public
+    virtual
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
     super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
     emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
   }
@@ -87,9 +88,6 @@ contract ERC721ACBCER is AccessControl, ERC721Burnable, ERC721CappedEnumerable, 
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }
 
-  /**
-   * @dev See {IERC165-supportsInterface}.
-   */
   function supportsInterface(bytes4 interfaceId)
     public
     view

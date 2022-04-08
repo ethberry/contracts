@@ -69,9 +69,7 @@ contract ERC1155ACBCS is AccessControl, ERC1155Burnable, ERC1155Capped {
     _mintBatch(to, ids, amounts, data);
   }
 
-  /**
-   * @dev See {IERC165-supportsInterface}.
-   */
+
   function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC1155) returns (bool) {
     return super.supportsInterface(interfaceId);
   }

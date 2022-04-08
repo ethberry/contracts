@@ -8,13 +8,13 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract ERC721ACBRS is AccessControl, ERC721Burnable, ERC721Royalty, ERC721URIStorage {
+contract ERC721ACBPR is AccessControl, ERC721Burnable, ERC721Pausable, ERC721Royalty {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+  bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
   string internal _baseTokenURI;
 
@@ -31,6 +31,7 @@ contract ERC721ACBRS is AccessControl, ERC721Burnable, ERC721Royalty, ERC721URIS
 
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
+    _setupRole(PAUSER_ROLE, _msgSender());
 
     _setDefaultRoyalty(_msgSender(), royaltyNumerator);
   }
@@ -41,6 +42,14 @@ contract ERC721ACBRS is AccessControl, ERC721Burnable, ERC721Royalty, ERC721URIS
 
   function safeMint(address to, uint256 tokenId) public virtual onlyRole(MINTER_ROLE) {
     _safeMint(to, tokenId);
+  }
+
+  function pause() public virtual onlyRole(PAUSER_ROLE) {
+    _pause();
+  }
+
+  function unpause() public virtual onlyRole(PAUSER_ROLE) {
+    _unpause();
   }
 
   function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
@@ -71,19 +80,19 @@ contract ERC721ACBRS is AccessControl, ERC721Burnable, ERC721Royalty, ERC721URIS
     return super.supportsInterface(interfaceId);
   }
 
-  function tokenURI(uint256 tokenId) public view virtual override(ERC721, ERC721URIStorage) returns (string memory) {
-    return super.tokenURI(tokenId);
-  }
-
-  function setTokenURI(uint256 tokenId, string memory _tokenURI) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
-    _setTokenURI(tokenId, _tokenURI);
-  }
-
   function _baseURI() internal view virtual override returns (string memory) {
     return _baseTokenURI;
   }
 
-  function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721Royalty, ERC721URIStorage) {
+  function _mint(address account, uint256 tokenId) internal virtual override(ERC721) {
+    super._mint(account, tokenId);
+  }
+
+  function _safeMint(address account, uint256 tokenId) internal virtual override(ERC721) {
+    super._safeMint(account, tokenId);
+  }
+
+  function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721Royalty) {
     super._burn(tokenId);
   }
 
@@ -91,7 +100,7 @@ contract ERC721ACBRS is AccessControl, ERC721Burnable, ERC721Royalty, ERC721URIS
     address from,
     address to,
     uint256 tokenId
-  ) internal virtual override(ERC721) {
+  ) internal virtual override(ERC721, ERC721Pausable) {
     super._beforeTokenTransfer(from, to, tokenId);
   }
 }

@@ -45,10 +45,11 @@ contract ERC721ACBCR is AccessControl, ERC721Burnable, ERC721Capped, ERC721Royal
     _safeMint(to, tokenId);
   }
 
-  function setDefaultRoyalty(
-    address royaltyReceiver,
-    uint96 royaltyNumerator
-  ) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
+  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
+    public
+    virtual
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
     super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
     emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
   }
@@ -62,9 +63,6 @@ contract ERC721ACBCR is AccessControl, ERC721Burnable, ERC721Capped, ERC721Royal
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }
 
-  /**
-   * @dev See {IERC165-supportsInterface}.
-   */
   function supportsInterface(bytes4 interfaceId)
     public
     view

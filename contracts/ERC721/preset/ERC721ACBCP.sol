@@ -40,35 +40,14 @@ contract ERC721ACBCP is AccessControl, ERC721Burnable, ERC721Capped, ERC721Pausa
     _safeMint(to, tokenId);
   }
 
-  /**
-   * @dev Pauses all token transfers.
-   *
-   * See {ERC721Pausable} and {Pausable-_pause}.
-   *
-   * Requirements:
-   *
-   * - the caller must have the `PAUSER_ROLE`.
-   */
   function pause() public virtual onlyRole(PAUSER_ROLE) {
     _pause();
   }
 
-  /**
-   * @dev Unpauses all token transfers.
-   *
-   * See {ERC721Pausable} and {Pausable-_unpause}.
-   *
-   * Requirements:
-   *
-   * - the caller must have the `PAUSER_ROLE`.
-   */
   function unpause() public virtual onlyRole(PAUSER_ROLE) {
     _unpause();
   }
 
-  /**
-   * @dev See {IERC165-supportsInterface}.
-   */
   function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC721) returns (bool) {
     return super.supportsInterface(interfaceId);
   }

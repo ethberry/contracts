@@ -63,9 +63,6 @@ contract ERC721ACBCE is AccessControl, ERC721Burnable, ERC721CappedEnumerable {
     return _tokenIdTracker.current();
   }
 
-  /**
-   * @dev See {IERC165-supportsInterface}.
-   */
   function supportsInterface(bytes4 interfaceId)
     public
     view

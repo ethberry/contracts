@@ -65,9 +65,7 @@ abstract contract ERC721OpenSea is ERC721ACBCES, AccessControlEnumerable {
     super._revokeRole(role, account);
   }
 
-  /**
-   * @dev See {IERC165-supportsInterface}.
-   */
+
   function supportsInterface(bytes4 interfaceId)
     public
     view

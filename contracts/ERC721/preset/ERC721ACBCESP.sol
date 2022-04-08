@@ -15,13 +15,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "../ERC721CappedEnumerable.sol";
 
-contract ERC721ACBCESP is
-  AccessControl,
-  ERC721Burnable,
-  ERC721CappedEnumerable,
-  ERC721URIStorage,
-  ERC721Pausable
-{
+contract ERC721ACBCESP is AccessControl, ERC721Burnable, ERC721CappedEnumerable, ERC721URIStorage, ERC721Pausable {
   using Counters for Counters.Counter;
 
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -73,35 +67,14 @@ contract ERC721ACBCESP is
     return _tokenIdTracker.current();
   }
 
-  /**
-   * @dev Pauses all token transfers.
-   *
-   * See {ERC721Pausable} and {Pausable-_pause}.
-   *
-   * Requirements:
-   *
-   * - the caller must have the `PAUSER_ROLE`.
-   */
   function pause() public virtual onlyRole(PAUSER_ROLE) {
     _pause();
   }
 
-  /**
-   * @dev Unpauses all token transfers.
-   *
-   * See {ERC721Pausable} and {Pausable-_unpause}.
-   *
-   * Requirements:
-   *
-   * - the caller must have the `PAUSER_ROLE`.
-   */
   function unpause() public virtual onlyRole(PAUSER_ROLE) {
     _unpause();
   }
 
-  /**
-   * @dev See {IERC165-supportsInterface}.
-   */
   function supportsInterface(bytes4 interfaceId)
     public
     view

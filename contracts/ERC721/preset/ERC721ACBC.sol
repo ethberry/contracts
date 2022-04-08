@@ -38,16 +38,7 @@ contract ERC721ACBC is AccessControl, ERC721Burnable, ERC721Capped {
     _safeMint(to, tokenId);
   }
 
-  /**
-   * @dev See {IERC165-supportsInterface}.
-   */
-  function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    virtual
-    override(AccessControl, ERC721)
-    returns (bool)
-  {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC721) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 

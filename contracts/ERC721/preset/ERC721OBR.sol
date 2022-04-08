@@ -36,10 +36,7 @@ contract ERC721OBR is Ownable, ERC721Burnable, ERC721Royalty {
     _safeMint(to, tokenId);
   }
 
-  function setDefaultRoyalty(
-    address royaltyReceiver,
-    uint96 royaltyNumerator
-  ) public virtual onlyOwner {
+  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator) public virtual onlyOwner {
     super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
     emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
   }
@@ -53,13 +50,7 @@ contract ERC721OBR is Ownable, ERC721Burnable, ERC721Royalty {
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }
 
-  function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    virtual
-    override(ERC721, ERC721Royalty)
-    returns (bool)
-  {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721Royalty) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 

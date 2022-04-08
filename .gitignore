@@ -15,10 +15,8 @@
 # NODE
 node_modules/
 npm-debug.log
-package.json.lerna_backup
 package-lock.json
 yarn.lock
-/lerna-debug.log
 /report.*.json
 
 .env

@@ -1,67 +1,67 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { BlackListTest } from "../../typechain-types";
 import { DEFAULT_ADMIN_ROLE } from "../constants";
+import { shouldHaveRole } from "../shared/accessControl/hasRoles";
+import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
+import { shouldGrantRole } from "../shared/accessControl/grantRole";
+import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
+import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
 
 describe("BlackList", function () {
   let contract: ContractFactory;
-  let contractInstance: BlackListTest;
-  let owner: SignerWithAddress;
-  let receiver: SignerWithAddress;
 
   beforeEach(async function () {
     contract = await ethers.getContractFactory("BlackListTest");
-    [owner, receiver] = await ethers.getSigners();
+    [this.owner, this.receiver] = await ethers.getSigners();
 
-    contractInstance = (await contract.deploy()) as BlackListTest;
+    this.contractInstance = (await contract.deploy()) as BlackListTest;
   });
 
-  describe("constructor", function () {
-    it("should set the right roles to deployer", async function () {
-      const isAdmin = await contractInstance.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
-      expect(isAdmin).to.equal(true);
-    });
-  });
+  shouldHaveRole(DEFAULT_ADMIN_ROLE);
+  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE);
+  shouldGrantRole();
+  shouldRevokeRole();
+  shouldRenounceRole();
 
   describe("Black list", function () {
     it("should fail: no admin role", async function () {
-      const tx = contractInstance.connect(receiver).blacklist(receiver.address);
+      const tx = this.contractInstance.connect(this.receiver).blacklist(this.receiver.address);
       await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,
+        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,
       );
     });
 
     it("should check black list", async function () {
-      const isBlackListed = await contractInstance.isBlacklisted(receiver.address);
+      const isBlackListed = await this.contractInstance.isBlacklisted(this.receiver.address);
       expect(isBlackListed).to.equal(false);
     });
 
     it("should add to black list", async function () {
-      const tx = contractInstance.blacklist(receiver.address);
-      await expect(tx).to.emit(contractInstance, "Blacklisted").withArgs(receiver.address);
-      const isBlackListed = await contractInstance.isBlacklisted(receiver.address);
+      const tx = this.contractInstance.blacklist(this.receiver.address);
+      await expect(tx).to.emit(this.contractInstance, "Blacklisted").withArgs(this.receiver.address);
+      const isBlackListed = await this.contractInstance.isBlacklisted(this.receiver.address);
       expect(isBlackListed).to.equal(true);
     });
 
     it("should delete from black list", async function () {
-      await contractInstance.blacklist(receiver.address);
-      const tx = contractInstance.unBlacklist(receiver.address);
-      await expect(tx).to.emit(contractInstance, "UnBlacklisted").withArgs(receiver.address);
-      const isBlackListed = await contractInstance.isBlacklisted(receiver.address);
+      await this.contractInstance.blacklist(this.receiver.address);
+      const tx = this.contractInstance.unBlacklist(this.receiver.address);
+      await expect(tx).to.emit(this.contractInstance, "UnBlacklisted").withArgs(this.receiver.address);
+      const isBlackListed = await this.contractInstance.isBlacklisted(this.receiver.address);
       expect(isBlackListed).to.equal(false);
     });
 
     it("should fail: blacklisted", async function () {
-      await contractInstance.blacklist(receiver.address);
-      const tx = contractInstance.connect(receiver).testMe();
-      await expect(tx).to.be.revertedWith(`BlackListError("${receiver.address}")`);
+      await this.contractInstance.blacklist(this.receiver.address);
+      const tx = this.contractInstance.connect(this.receiver).testMe();
+      await expect(tx).to.be.revertedWith(`BlackListError("${this.receiver.address}")`);
     });
 
     it("should pass", async function () {
-      const result = await contractInstance.connect(receiver).testMe();
+      const result = await this.contractInstance.connect(this.receiver).testMe();
       expect(result).to.equal(true);
     });
   });

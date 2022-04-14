@@ -1,67 +1,68 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { WhiteListTest } from "../../typechain-types";
 import { DEFAULT_ADMIN_ROLE } from "../constants";
 
+import { shouldHaveRole } from "../shared/accessControl/hasRoles";
+import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
+import { shouldGrantRole } from "../shared/accessControl/grantRole";
+import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
+import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
+
 describe("WhiteList", function () {
   let contract: ContractFactory;
-  let contractInstance: WhiteListTest;
-  let owner: SignerWithAddress;
-  let receiver: SignerWithAddress;
 
   beforeEach(async function () {
     contract = await ethers.getContractFactory("WhiteListTest");
-    [owner, receiver] = await ethers.getSigners();
+    [this.owner, this.receiver] = await ethers.getSigners();
 
-    contractInstance = (await contract.deploy()) as WhiteListTest;
+    this.contractInstance = (await contract.deploy()) as WhiteListTest;
   });
 
-  describe("Deployment", function () {
-    it("should set the right roles to deployer", async function () {
-      const isAdmin = await contractInstance.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
-      expect(isAdmin).to.equal(true);
-    });
-  });
+  shouldHaveRole(DEFAULT_ADMIN_ROLE);
+  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE);
+  shouldGrantRole();
+  shouldRevokeRole();
+  shouldRenounceRole();
 
   describe("White list", function () {
     it("should fail: no admin role", async function () {
-      const tx = contractInstance.connect(receiver).whitelist(receiver.address);
+      const tx = this.contractInstance.connect(this.receiver).whitelist(this.receiver.address);
       await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,
+        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,
       );
     });
 
     it("should check white list", async function () {
-      const isBlackListed = await contractInstance.isWhitelisted(receiver.address);
+      const isBlackListed = await this.contractInstance.isWhitelisted(this.receiver.address);
       expect(isBlackListed).to.equal(false);
     });
 
     it("should add to white list", async function () {
-      const tx = contractInstance.whitelist(receiver.address);
-      await expect(tx).to.emit(contractInstance, "Whitelisted").withArgs(receiver.address);
-      const isBlackListed = await contractInstance.isWhitelisted(receiver.address);
+      const tx = this.contractInstance.whitelist(this.receiver.address);
+      await expect(tx).to.emit(this.contractInstance, "Whitelisted").withArgs(this.receiver.address);
+      const isBlackListed = await this.contractInstance.isWhitelisted(this.receiver.address);
       expect(isBlackListed).to.equal(true);
     });
 
     it("should delete from black list", async function () {
-      await contractInstance.whitelist(receiver.address);
-      const tx = contractInstance.unWhitelist(receiver.address);
-      await expect(tx).to.emit(contractInstance, "UnWhitelisted").withArgs(receiver.address);
-      const isWhiteListed = await contractInstance.isWhitelisted(receiver.address);
+      await this.contractInstance.whitelist(this.receiver.address);
+      const tx = this.contractInstance.unWhitelist(this.receiver.address);
+      await expect(tx).to.emit(this.contractInstance, "UnWhitelisted").withArgs(this.receiver.address);
+      const isWhiteListed = await this.contractInstance.isWhitelisted(this.receiver.address);
       expect(isWhiteListed).to.equal(false);
     });
 
     it("should fail: tests method", async function () {
-      const tx = contractInstance.connect(receiver).testMe();
-      await expect(tx).to.be.revertedWith(`WhiteListError("${receiver.address}")`);
+      const tx = this.contractInstance.connect(this.receiver).testMe();
+      await expect(tx).to.be.revertedWith(`WhiteListError("${this.receiver.address}")`);
     });
 
     it("should pass", async function () {
-      await contractInstance.whitelist(receiver.address);
-      const result = await contractInstance.connect(receiver).testMe();
+      await this.contractInstance.whitelist(this.receiver.address);
+      const result = await this.contractInstance.connect(this.receiver).testMe();
       expect(result).to.equal(true);
     });
   });

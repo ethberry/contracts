@@ -3,9 +3,13 @@ import { ContractFactory } from "ethers";
 import { expect } from "chai";
 
 import { ERC721ACBCR, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
-import { baseTokenURI, tokenName, tokenSymbol } from "../../constants";
+import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldHaveRole } from "../shared/accessControl/hasRole";
+import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
+import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
+import { shouldGrantRole } from "../../shared/accessControl/grantRole";
+import { shouldRevokeRole } from "../../shared/accessControl/revokeRole";
+import { shouldRenounceRole } from "../../shared/accessControl/renounceRole";
 import { shouldMint } from "../shared/basic/mint";
 import { shouldSafeMint } from "../shared/basic/safeMint";
 import { shouldGetOwnerOf } from "../shared/basic/ownerOf";
@@ -35,9 +39,15 @@ describe("ERC721ACBCR", function () {
     this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2, 100)) as ERC721ACBCR;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
+
+    this.contractInstance = this.erc721Instance;
   });
 
-  shouldHaveRole();
+  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldGrantRole();
+  shouldRevokeRole();
+  shouldRenounceRole();
   shouldMint(true);
   shouldSafeMint(true);
   shouldGetOwnerOf();

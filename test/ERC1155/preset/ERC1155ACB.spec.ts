@@ -3,9 +3,13 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
 import { ERC1155ACB, ERC1155NonReceiverMock, ERC1155ReceiverMock } from "../../../typechain-types";
-import { baseTokenURI } from "../../constants";
+import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
 
-import { shouldHaveRole } from "../shared/accessControl/hasRole";
+import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
+import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
+import { shouldGrantRole } from "../../shared/accessControl/grantRole";
+import { shouldRevokeRole } from "../../shared/accessControl/revokeRole";
+import { shouldRenounceRole } from "../../shared/accessControl/renounceRole";
 import { shouldMint } from "../shared/mint";
 import { shouldMintBatch } from "../shared/mintBatch";
 import { shouldBalanceOf } from "../shared/balanceOf";
@@ -31,9 +35,15 @@ describe("ERC1155ACB", function () {
     this.erc1155Instance = (await erc1155.deploy(baseTokenURI)) as ERC1155ACB;
     this.erc1155ReceiverInstance = (await erc1155Receiver.deploy()) as ERC1155ReceiverMock;
     this.erc1155NonReceiverInstance = (await erc1155NonReceiver.deploy()) as ERC1155NonReceiverMock;
+
+    this.contractInstance = this.erc1155Instance;
   });
 
-  shouldHaveRole();
+  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldGrantRole();
+  shouldRevokeRole();
+  shouldRenounceRole();
   shouldMint();
   shouldMintBatch();
   shouldBalanceOf();

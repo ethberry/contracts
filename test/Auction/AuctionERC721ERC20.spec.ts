@@ -1,11 +1,16 @@
 import { expect } from "chai";
 import { ethers, web3 } from "hardhat";
 import { ContractFactory } from "ethers";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { time } from "@openzeppelin/test-helpers";
 
 import { AuctionERC721ERC20, ERC20ACBCS, ERC721ACB } from "../../typechain-types";
 import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenId, tokenName, tokenSymbol } from "../constants";
+
+import { shouldHaveRole } from "../shared/accessControl/hasRoles";
+import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
+import { shouldGrantRole } from "../shared/accessControl/grantRole";
+import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
+import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
 
 describe("AuctionERC721ERC20", function () {
   let auction: ContractFactory;
@@ -14,35 +19,31 @@ describe("AuctionERC721ERC20", function () {
   let erc20Instance: ERC20ACBCS;
   let erc721: ContractFactory;
   let erc721Instance: ERC721ACB;
-  let owner: SignerWithAddress;
-  let receiver: SignerWithAddress;
-  let stranger: SignerWithAddress;
 
   beforeEach(async function () {
     erc20 = await ethers.getContractFactory("ERC20ACBCS");
     erc721 = await ethers.getContractFactory("ERC721ACB");
     auction = await ethers.getContractFactory("AuctionERC721ERC20");
-    [owner, receiver, stranger] = await ethers.getSigners();
+    [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
     erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount * 10)) as ERC20ACBCS;
     erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721ACB;
     auctionInstance = (await auction.deploy(erc20Instance.address)) as AuctionERC721ERC20;
 
-    await erc721Instance.mint(owner.address, tokenId);
+    await erc721Instance.mint(this.owner.address, tokenId);
     await erc721Instance.approve(auctionInstance.address, tokenId);
+
+    this.contractInstance = auctionInstance;
   });
 
-  describe("Deployment", function () {
-    it("should set the right roles to deployer", async function () {
-      const isAdmin = await auctionInstance.hasRole(DEFAULT_ADMIN_ROLE, owner.address);
-      expect(isAdmin).to.equal(true);
-      const isPauser = await auctionInstance.hasRole(PAUSER_ROLE, owner.address);
-      expect(isPauser).to.equal(true);
-    });
-  });
+  shouldHaveRole(DEFAULT_ADMIN_ROLE, PAUSER_ROLE);
+  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, PAUSER_ROLE);
+  shouldGrantRole();
+  shouldRevokeRole();
+  shouldRenounceRole();
 
   describe("startAuction", function () {
-    it("should start auction (collection owner)", async function () {
+    it("should start auction (collection this.owner)", async function () {
       const span = 24 * 60 * 60;
       const timestamp: number = (await time.latest()).toNumber();
 
@@ -59,7 +60,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -90,7 +91,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -109,7 +110,7 @@ describe("AuctionERC721ERC20", function () {
       const timestamp: number = (await time.latest()).toNumber();
 
       const tx1 = auctionInstance
-        .connect(stranger)
+        .connect(this.stranger)
         .startAuction(erc721Instance.address, tokenId, amount * 3, amount, 1000, timestamp, timestamp + span + span);
       await expect(tx1).to.be.revertedWith("ERC721: transfer from incorrect owner");
     });
@@ -228,7 +229,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -238,26 +239,28 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span + span,
         );
 
-      const tx2 = erc20Instance.mint(receiver.address, amount);
+      const tx2 = erc20Instance.mint(this.receiver.address, amount);
       await expect(tx2)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, receiver.address, amount);
+        .withArgs(ethers.constants.AddressZero, this.receiver.address, amount);
 
-      const tx3 = erc20Instance.connect(receiver).approve(auctionInstance.address, amount);
-      await expect(tx3).to.emit(erc20Instance, "Approval").withArgs(receiver.address, auctionInstance.address, amount);
+      const tx3 = erc20Instance.connect(this.receiver).approve(auctionInstance.address, amount);
+      await expect(tx3)
+        .to.emit(erc20Instance, "Approval")
+        .withArgs(this.receiver.address, auctionInstance.address, amount);
 
-      const tx4 = await auctionInstance.connect(receiver).makeBid(0, amount);
+      const tx4 = await auctionInstance.connect(this.receiver).makeBid(0, amount);
       await expect(tx4)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount);
+        .withArgs(0, this.receiver.address, erc721Instance.address, tokenId, amount);
 
       const balance = await erc20Instance.balanceOf(auctionInstance.address);
       expect(balance).to.equal(amount);
 
-      const balance1 = await erc20Instance.balanceOf(owner.address);
+      const balance1 = await erc20Instance.balanceOf(this.owner.address);
       expect(balance1).to.equal(0);
 
-      const balance2 = await erc20Instance.balanceOf(receiver.address);
+      const balance2 = await erc20Instance.balanceOf(this.receiver.address);
       expect(balance2).to.equal(0);
     });
 
@@ -278,7 +281,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -288,44 +291,46 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span + span,
         );
 
-      const tx2 = erc20Instance.mint(receiver.address, amount);
+      const tx2 = erc20Instance.mint(this.receiver.address, amount);
       await expect(tx2)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, receiver.address, amount);
+        .withArgs(ethers.constants.AddressZero, this.receiver.address, amount);
 
-      const tx3 = erc20Instance.connect(receiver).approve(auctionInstance.address, amount);
-      await expect(tx3).to.emit(erc20Instance, "Approval").withArgs(receiver.address, auctionInstance.address, amount);
+      const tx3 = erc20Instance.connect(this.receiver).approve(auctionInstance.address, amount);
+      await expect(tx3)
+        .to.emit(erc20Instance, "Approval")
+        .withArgs(this.receiver.address, auctionInstance.address, amount);
 
-      const tx4 = auctionInstance.connect(receiver).makeBid(0, amount);
+      const tx4 = auctionInstance.connect(this.receiver).makeBid(0, amount);
       await expect(tx4)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount);
+        .withArgs(0, this.receiver.address, erc721Instance.address, tokenId, amount);
 
-      const tx5 = erc20Instance.mint(stranger.address, amount * 2);
+      const tx5 = erc20Instance.mint(this.stranger.address, amount * 2);
       await expect(tx5)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, stranger.address, amount * 2);
+        .withArgs(ethers.constants.AddressZero, this.stranger.address, amount * 2);
 
-      const tx6 = erc20Instance.connect(stranger).approve(auctionInstance.address, amount * 2);
+      const tx6 = erc20Instance.connect(this.stranger).approve(auctionInstance.address, amount * 2);
       await expect(tx6)
         .to.emit(erc20Instance, "Approval")
-        .withArgs(stranger.address, auctionInstance.address, amount * 2);
+        .withArgs(this.stranger.address, auctionInstance.address, amount * 2);
 
-      const tx7 = auctionInstance.connect(stranger).makeBid(0, amount * 2);
+      const tx7 = auctionInstance.connect(this.stranger).makeBid(0, amount * 2);
       await expect(tx7)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, stranger.address, erc721Instance.address, tokenId, amount * 2);
+        .withArgs(0, this.stranger.address, erc721Instance.address, tokenId, amount * 2);
 
       const balance = await erc20Instance.balanceOf(auctionInstance.address);
       expect(balance).to.equal(amount * 2);
 
-      const balance1 = await erc20Instance.balanceOf(owner.address);
+      const balance1 = await erc20Instance.balanceOf(this.owner.address);
       expect(balance1).to.equal(0);
 
-      const balance2 = await erc20Instance.balanceOf(receiver.address);
+      const balance2 = await erc20Instance.balanceOf(this.receiver.address);
       expect(balance2).to.equal(amount);
 
-      const balance3 = await erc20Instance.balanceOf(stranger.address);
+      const balance3 = await erc20Instance.balanceOf(this.stranger.address);
       expect(balance3).to.equal(0);
     });
 
@@ -346,7 +351,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -356,30 +361,30 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span + span,
         );
 
-      const tx2 = erc20Instance.mint(receiver.address, amount * 3);
+      const tx2 = erc20Instance.mint(this.receiver.address, amount * 3);
       await expect(tx2)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, receiver.address, amount * 3);
+        .withArgs(ethers.constants.AddressZero, this.receiver.address, amount * 3);
 
-      const tx3 = erc20Instance.connect(receiver).approve(auctionInstance.address, amount * 3);
+      const tx3 = erc20Instance.connect(this.receiver).approve(auctionInstance.address, amount * 3);
       await expect(tx3)
         .to.emit(erc20Instance, "Approval")
-        .withArgs(receiver.address, auctionInstance.address, amount * 3);
+        .withArgs(this.receiver.address, auctionInstance.address, amount * 3);
 
-      const tx4 = await auctionInstance.connect(receiver).makeBid(0, amount * 3);
+      const tx4 = await auctionInstance.connect(this.receiver).makeBid(0, amount * 3);
       await expect(tx4)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount * 3)
+        .withArgs(0, this.receiver.address, erc721Instance.address, tokenId, amount * 3)
         .to.emit(auctionInstance, "AuctionFinish")
-        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount * 3);
+        .withArgs(0, this.receiver.address, erc721Instance.address, tokenId, amount * 3);
 
       const balance = await erc20Instance.balanceOf(auctionInstance.address);
       expect(balance).to.equal(0);
 
-      const balance1 = await erc20Instance.balanceOf(owner.address);
+      const balance1 = await erc20Instance.balanceOf(this.owner.address);
       expect(balance1).to.equal(amount * 3);
 
-      const balance2 = await erc20Instance.balanceOf(receiver.address);
+      const balance2 = await erc20Instance.balanceOf(this.receiver.address);
       expect(balance2).to.equal(0);
     });
 
@@ -400,7 +405,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -410,46 +415,48 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span + span,
         );
 
-      const tx2 = erc20Instance.mint(receiver.address, amount);
+      const tx2 = erc20Instance.mint(this.receiver.address, amount);
       await expect(tx2)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, receiver.address, amount);
+        .withArgs(ethers.constants.AddressZero, this.receiver.address, amount);
 
-      const tx3 = erc20Instance.connect(receiver).approve(auctionInstance.address, amount);
-      await expect(tx3).to.emit(erc20Instance, "Approval").withArgs(receiver.address, auctionInstance.address, amount);
+      const tx3 = erc20Instance.connect(this.receiver).approve(auctionInstance.address, amount);
+      await expect(tx3)
+        .to.emit(erc20Instance, "Approval")
+        .withArgs(this.receiver.address, auctionInstance.address, amount);
 
-      const tx4 = auctionInstance.connect(receiver).makeBid(0, amount);
+      const tx4 = auctionInstance.connect(this.receiver).makeBid(0, amount);
       await expect(tx4)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount);
+        .withArgs(0, this.receiver.address, erc721Instance.address, tokenId, amount);
 
-      const tx5 = erc20Instance.mint(stranger.address, amount * 3);
+      const tx5 = erc20Instance.mint(this.stranger.address, amount * 3);
       await expect(tx5)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, stranger.address, amount * 3);
+        .withArgs(ethers.constants.AddressZero, this.stranger.address, amount * 3);
 
-      const tx6 = erc20Instance.connect(stranger).approve(auctionInstance.address, amount * 3);
+      const tx6 = erc20Instance.connect(this.stranger).approve(auctionInstance.address, amount * 3);
       await expect(tx6)
         .to.emit(erc20Instance, "Approval")
-        .withArgs(stranger.address, auctionInstance.address, amount * 3);
+        .withArgs(this.stranger.address, auctionInstance.address, amount * 3);
 
-      const tx7 = auctionInstance.connect(stranger).makeBid(0, amount * 3);
+      const tx7 = auctionInstance.connect(this.stranger).makeBid(0, amount * 3);
       await expect(tx7)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, stranger.address, erc721Instance.address, tokenId, amount * 3)
+        .withArgs(0, this.stranger.address, erc721Instance.address, tokenId, amount * 3)
         .to.emit(auctionInstance, "AuctionFinish")
-        .withArgs(0, stranger.address, erc721Instance.address, tokenId, amount * 3);
+        .withArgs(0, this.stranger.address, erc721Instance.address, tokenId, amount * 3);
 
       const balance = await erc20Instance.balanceOf(auctionInstance.address);
       expect(balance).to.equal(0);
 
-      const balance1 = await erc20Instance.balanceOf(owner.address);
+      const balance1 = await erc20Instance.balanceOf(this.owner.address);
       expect(balance1).to.equal(amount * 3);
 
-      const balance2 = await erc20Instance.balanceOf(receiver.address);
+      const balance2 = await erc20Instance.balanceOf(this.receiver.address);
       expect(balance2).to.equal(amount);
 
-      const balance3 = await erc20Instance.balanceOf(stranger.address);
+      const balance3 = await erc20Instance.balanceOf(this.stranger.address);
       expect(balance3).to.equal(0);
     });
 
@@ -470,7 +477,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -480,7 +487,7 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span + span,
         );
 
-      const tx2 = auctionInstance.connect(receiver).makeBid(0, amount);
+      const tx2 = auctionInstance.connect(this.receiver).makeBid(0, amount);
       await expect(tx2).to.be.revertedWith("ERC20: insufficient allowance");
     });
 
@@ -501,7 +508,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -511,10 +518,12 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span + span,
         );
 
-      const tx2 = erc20Instance.connect(receiver).approve(auctionInstance.address, amount);
-      await expect(tx2).to.emit(erc20Instance, "Approval").withArgs(receiver.address, auctionInstance.address, amount);
+      const tx2 = erc20Instance.connect(this.receiver).approve(auctionInstance.address, amount);
+      await expect(tx2)
+        .to.emit(erc20Instance, "Approval")
+        .withArgs(this.receiver.address, auctionInstance.address, amount);
 
-      const tx3 = auctionInstance.connect(receiver).makeBid(0, amount);
+      const tx3 = auctionInstance.connect(this.receiver).makeBid(0, amount);
       await expect(tx3).to.be.revertedWith("ERC20: transfer amount exceeds balance");
     });
 
@@ -535,7 +544,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -545,7 +554,7 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span + span,
         );
 
-      const tx2 = auctionInstance.connect(receiver).makeBid(1, amount);
+      const tx2 = auctionInstance.connect(this.receiver).makeBid(1, amount);
       await expect(tx2).to.be.revertedWith("Auction: wrong auction id");
     });
 
@@ -566,7 +575,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -576,7 +585,7 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span + span + 1000,
         );
 
-      const bid = auctionInstance.connect(receiver).makeBid(0, amount);
+      const bid = auctionInstance.connect(this.receiver).makeBid(0, amount);
       await expect(bid).to.be.revertedWith("Auction: auction is not yet started");
     });
 
@@ -597,7 +606,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -610,7 +619,7 @@ describe("AuctionERC721ERC20", function () {
       const current = await time.latestBlock();
       await time.advanceBlockTo(current.add(web3.utils.toBN(span)));
 
-      const bid = auctionInstance.connect(receiver).makeBid(0, amount);
+      const bid = auctionInstance.connect(this.receiver).makeBid(0, amount);
       await expect(bid).to.be.revertedWith("Auction: auction is already finished");
     });
 
@@ -631,7 +640,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -641,22 +650,22 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span + span,
         );
 
-      const tx2 = erc20Instance.mint(receiver.address, amount * 3);
+      const tx2 = erc20Instance.mint(this.receiver.address, amount * 3);
       await expect(tx2)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, receiver.address, amount * 3);
+        .withArgs(ethers.constants.AddressZero, this.receiver.address, amount * 3);
 
-      const tx3 = erc20Instance.connect(receiver).approve(auctionInstance.address, amount * 3);
+      const tx3 = erc20Instance.connect(this.receiver).approve(auctionInstance.address, amount * 3);
       await expect(tx3)
         .to.emit(erc20Instance, "Approval")
-        .withArgs(receiver.address, auctionInstance.address, amount * 3);
+        .withArgs(this.receiver.address, auctionInstance.address, amount * 3);
 
-      const tx4 = auctionInstance.connect(receiver).makeBid(0, amount);
+      const tx4 = auctionInstance.connect(this.receiver).makeBid(0, amount);
       await expect(tx4)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount);
+        .withArgs(0, this.receiver.address, erc721Instance.address, tokenId, amount);
 
-      const bid1 = auctionInstance.connect(receiver).makeBid(0, amount * 2);
+      const bid1 = auctionInstance.connect(this.receiver).makeBid(0, amount * 2);
       await expect(bid1).to.be.revertedWith("Auction: prevent double spending");
     });
 
@@ -677,7 +686,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -708,7 +717,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -718,7 +727,7 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span + span,
         );
 
-      const tx2 = auctionInstance.connect(receiver).makeBid(0, amount / 2);
+      const tx2 = auctionInstance.connect(this.receiver).makeBid(0, amount / 2);
       await expect(tx2).to.be.revertedWith("Auction: proposed bid can not be less than start price");
     });
 
@@ -739,7 +748,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -749,32 +758,32 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span + span,
         );
 
-      const tx2 = erc20Instance.mint(receiver.address, amount * 3);
+      const tx2 = erc20Instance.mint(this.receiver.address, amount * 3);
       await expect(tx2)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, receiver.address, amount * 3);
+        .withArgs(ethers.constants.AddressZero, this.receiver.address, amount * 3);
 
-      const tx3 = erc20Instance.connect(receiver).approve(auctionInstance.address, amount * 3);
+      const tx3 = erc20Instance.connect(this.receiver).approve(auctionInstance.address, amount * 3);
       await expect(tx3)
         .to.emit(erc20Instance, "Approval")
-        .withArgs(receiver.address, auctionInstance.address, amount * 3);
+        .withArgs(this.receiver.address, auctionInstance.address, amount * 3);
 
-      const tx4 = await auctionInstance.connect(receiver).makeBid(0, amount * 3);
+      const tx4 = await auctionInstance.connect(this.receiver).makeBid(0, amount * 3);
       await expect(tx4)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount * 3);
+        .withArgs(0, this.receiver.address, erc721Instance.address, tokenId, amount * 3);
 
-      const tx5 = erc20Instance.mint(stranger.address, amount * 2);
+      const tx5 = erc20Instance.mint(this.stranger.address, amount * 2);
       await expect(tx5)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, stranger.address, amount * 2);
+        .withArgs(ethers.constants.AddressZero, this.stranger.address, amount * 2);
 
-      const tx6 = erc20Instance.connect(stranger).approve(auctionInstance.address, amount * 2);
+      const tx6 = erc20Instance.connect(this.stranger).approve(auctionInstance.address, amount * 2);
       await expect(tx6)
         .to.emit(erc20Instance, "Approval")
-        .withArgs(stranger.address, auctionInstance.address, amount * 2);
+        .withArgs(this.stranger.address, auctionInstance.address, amount * 2);
 
-      const tx7 = auctionInstance.connect(stranger).makeBid(0, amount * 2);
+      const tx7 = auctionInstance.connect(this.stranger).makeBid(0, amount * 2);
       await expect(tx7).to.be.revertedWith("Auction: proposed bid must be bigger than current bid");
     });
 
@@ -795,7 +804,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -805,7 +814,7 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span + span,
         );
 
-      const tx2 = auctionInstance.connect(receiver).makeBid(0, amount + 1);
+      const tx2 = auctionInstance.connect(this.receiver).makeBid(0, amount + 1);
       await expect(tx2).to.be.revertedWith("Auction: bid must be a multiple of the bid step");
     });
   });
@@ -828,7 +837,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -847,10 +856,10 @@ describe("AuctionERC721ERC20", function () {
       const finish = auctionInstance.finishAuction(0);
       await expect(finish)
         .to.emit(auctionInstance, "AuctionFinish")
-        .withArgs(0, owner.address, erc721Instance.address, tokenId, 0);
+        .withArgs(0, this.owner.address, erc721Instance.address, tokenId, 0);
 
       const ownerOf1 = await erc721Instance.ownerOf(tokenId);
-      expect(ownerOf1).to.equal(owner.address);
+      expect(ownerOf1).to.equal(this.owner.address);
     });
 
     it("should finish auction with bid", async function () {
@@ -870,7 +879,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -880,18 +889,20 @@ describe("AuctionERC721ERC20", function () {
           timestamp + span,
         );
 
-      const tx2 = erc20Instance.mint(receiver.address, amount);
+      const tx2 = erc20Instance.mint(this.receiver.address, amount);
       await expect(tx2)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, receiver.address, amount);
+        .withArgs(ethers.constants.AddressZero, this.receiver.address, amount);
 
-      const tx3 = erc20Instance.connect(receiver).approve(auctionInstance.address, amount);
-      await expect(tx3).to.emit(erc20Instance, "Approval").withArgs(receiver.address, auctionInstance.address, amount);
+      const tx3 = erc20Instance.connect(this.receiver).approve(auctionInstance.address, amount);
+      await expect(tx3)
+        .to.emit(erc20Instance, "Approval")
+        .withArgs(this.receiver.address, auctionInstance.address, amount);
 
-      const tx4 = auctionInstance.connect(receiver).makeBid(0, amount);
+      const tx4 = auctionInstance.connect(this.receiver).makeBid(0, amount);
       await expect(tx4)
         .to.emit(auctionInstance, "AuctionBid")
-        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount);
+        .withArgs(0, this.receiver.address, erc721Instance.address, tokenId, amount);
 
       const current = await time.latestBlock();
       await time.advanceBlockTo(current.add(web3.utils.toBN(300)));
@@ -899,18 +910,18 @@ describe("AuctionERC721ERC20", function () {
       const tx5 = await auctionInstance.finishAuction(0);
       await expect(tx5)
         .to.emit(auctionInstance, "AuctionFinish")
-        .withArgs(0, receiver.address, erc721Instance.address, tokenId, amount);
+        .withArgs(0, this.receiver.address, erc721Instance.address, tokenId, amount);
 
       const ownerOf1 = await erc721Instance.ownerOf(tokenId);
-      expect(ownerOf1).to.equal(receiver.address);
+      expect(ownerOf1).to.equal(this.receiver.address);
 
       const balance = await erc20Instance.balanceOf(auctionInstance.address);
       expect(balance).to.equal(0);
 
-      const balance1 = await erc20Instance.balanceOf(owner.address);
+      const balance1 = await erc20Instance.balanceOf(this.owner.address);
       expect(balance1).to.equal(amount);
 
-      const balance2 = await erc20Instance.balanceOf(receiver.address);
+      const balance2 = await erc20Instance.balanceOf(this.receiver.address);
       expect(balance2).to.equal(0);
     });
 
@@ -931,7 +942,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -962,7 +973,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -993,7 +1004,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -1010,16 +1021,16 @@ describe("AuctionERC721ERC20", function () {
 
   describe("pause", function () {
     it("should fail: paase not admin", async function () {
-      const tx = auctionInstance.connect(receiver).pause();
+      const tx = auctionInstance.connect(this.receiver).pause();
       await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
+        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
       );
     });
 
     it("should fail: unpause not admin", async function () {
-      const tx = auctionInstance.connect(receiver).unpause();
+      const tx = auctionInstance.connect(this.receiver).unpause();
       await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
+        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
       );
     });
 
@@ -1040,7 +1051,7 @@ describe("AuctionERC721ERC20", function () {
         .to.emit(auctionInstance, "AuctionStart")
         .withArgs(
           0,
-          owner.address,
+          this.owner.address,
           erc721Instance.address,
           tokenId,
           amount * 3,
@@ -1051,10 +1062,10 @@ describe("AuctionERC721ERC20", function () {
         );
 
       const tx2 = auctionInstance.pause();
-      await expect(tx2).to.emit(auctionInstance, "Paused").withArgs(owner.address);
+      await expect(tx2).to.emit(auctionInstance, "Paused").withArgs(this.owner.address);
 
       const tokenId1 = tokenId + 1;
-      await erc721Instance.mint(owner.address, tokenId1);
+      await erc721Instance.mint(this.owner.address, tokenId1);
       await erc721Instance.approve(auctionInstance.address, tokenId1);
 
       const tx3 = auctionInstance.startAuction(
@@ -1069,7 +1080,7 @@ describe("AuctionERC721ERC20", function () {
       await expect(tx3).to.be.revertedWith(`Pausable: paused`);
 
       const tx4 = auctionInstance.unpause();
-      await expect(tx4).to.emit(auctionInstance, "Unpaused").withArgs(owner.address);
+      await expect(tx4).to.emit(auctionInstance, "Unpaused").withArgs(this.owner.address);
 
       const tx5 = auctionInstance.startAuction(
         erc721Instance.address,

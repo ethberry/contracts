@@ -5,6 +5,11 @@ import { ContractFactory } from "ethers";
 import { ERC721NonReceiverMock, ERC721ReceiverMock, ERC721ACBCE, ERC998ERC721TopDown } from "../../typechain-types";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
 
+import { shouldHaveRole } from "../shared/accessControl/hasRoles";
+import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
+import { shouldGrantRole } from "../shared/accessControl/grantRole";
+import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
+import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
 import { shouldMint } from "../ERC721/shared/enumerable/mint";
 import { shouldSafeMint } from "../ERC721/shared/enumerable/safeMint";
 import { shouldGetBalanceOf } from "../ERC721/shared/enumerable/balanceOf";
@@ -39,17 +44,15 @@ describe("ERC998ERC721TopDown", function () {
     this.erc721Instance = (await erc998.deploy(tokenName, tokenSymbol, baseTokenURI, 1000)) as ERC998ERC721TopDown;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
+
+    this.contractInstance = this.erc721Instance;
   });
 
-  describe("constructor", function () {
-    it("Should set the right roles to deployer", async function () {
-      const isAdmin = await this.erc721Instance.hasRole(DEFAULT_ADMIN_ROLE, this.owner.address);
-      expect(isAdmin).to.equal(true);
-      const isMinter = await this.erc721Instance.hasRole(MINTER_ROLE, this.owner.address);
-      expect(isMinter).to.equal(true);
-    });
-  });
-
+  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldGrantRole();
+  shouldRevokeRole();
+  shouldRenounceRole();
   shouldMint(true);
   shouldSafeMint(true);
   shouldGetBalanceOf();

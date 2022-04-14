@@ -5,7 +5,7 @@ import { expect } from "chai";
 import { ERC721ACBR, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldBeOwner } from "../shared/ownable/owner";
+import { shouldHaveOwner } from "../../shared/ownable/owner";
 import { shouldMint } from "../shared/basic/mint";
 import { shouldSafeMint } from "../shared/basic/safeMint";
 import { shouldGetOwnerOf } from "../shared/basic/ownerOf";
@@ -19,6 +19,8 @@ import { shouldSetTokenRoyalty } from "../shared/royalty/setTokenRoyalty";
 import { shouldSetDefaultRoyalty } from "../shared/royalty/setDefaultRoyalty";
 import { shouldGetRoyaltyInfo } from "../shared/royalty/royaltyInfo";
 import { shouldBurnBasic } from "../shared/royalty/burnBasic";
+import { shouldTransferOwnership } from "../../shared/ownable/transferOwnership";
+import { shouldRenounceOwnership } from "../../shared/ownable/renounceOwnership";
 
 describe("ERC721OBR", function () {
   let erc721: ContractFactory;
@@ -34,9 +36,13 @@ describe("ERC721OBR", function () {
     this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 100)) as ERC721ACBR;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
+
+    this.contractInstance = this.erc721Instance;
   });
 
-  shouldBeOwner();
+  shouldHaveOwner();
+  shouldTransferOwnership();
+  shouldRenounceOwnership();
   shouldMint();
   shouldSafeMint();
   shouldGetOwnerOf();

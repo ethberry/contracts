@@ -5,7 +5,9 @@ import { expect } from "chai";
 import { ERC20OBCS, ERC20NonReceiverMock } from "../../../typechain-types";
 import { amount, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldBeOwner } from "../shared/ownable/owner";
+import { shouldHaveOwner } from "../../shared/ownable/owner";
+import { shouldTransferOwnership } from "../../shared/ownable/transferOwnership";
+import { shouldRenounceOwnership } from "../../shared/ownable/renounceOwnership";
 import { shouldMint } from "../shared/mint";
 import { shouldBalanceOf } from "../shared/balanceOf";
 import { shouldTransfer } from "../shared/transfer";
@@ -27,9 +29,13 @@ describe("ERC20OBCS", function () {
 
     this.erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20OBCS;
     this.erc20NonReceiverInstance = (await erc20NonReceiver.deploy()) as ERC20NonReceiverMock;
+
+    this.contractInstance = this.erc20Instance;
   });
 
-  shouldBeOwner();
+  shouldHaveOwner();
+  shouldTransferOwnership();
+  shouldRenounceOwnership();
   shouldMint();
   shouldBalanceOf();
   shouldTransfer();

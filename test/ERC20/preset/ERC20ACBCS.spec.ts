@@ -3,9 +3,13 @@ import { ContractFactory } from "ethers";
 import { expect } from "chai";
 
 import { ERC20ACBCS, ERC20NonReceiverMock } from "../../../typechain-types";
-import { amount, tokenName, tokenSymbol } from "../../constants";
+import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, SNAPSHOT_ROLE, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldHaveRole } from "../shared/accessControl/hasRole";
+import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
+import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
+import { shouldGrantRole } from "../../shared/accessControl/grantRole";
+import { shouldRevokeRole } from "../../shared/accessControl/revokeRole";
+import { shouldRenounceRole } from "../../shared/accessControl/renounceRole";
 import { shouldMint } from "../shared/mint";
 import { shouldBalanceOf } from "../shared/balanceOf";
 import { shouldTransfer } from "../shared/transfer";
@@ -27,9 +31,15 @@ describe("ERC20ACBCS", function () {
 
     this.erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ACBCS;
     this.erc20NonReceiverInstance = (await erc20NonReceiver.deploy()) as ERC20NonReceiverMock;
+
+    this.contractInstance = this.erc20Instance;
   });
 
-  shouldHaveRole(false, true);
+  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE, SNAPSHOT_ROLE);
+  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE, SNAPSHOT_ROLE);
+  shouldGrantRole();
+  shouldRevokeRole();
+  shouldRenounceRole();
   shouldMint(true);
   shouldBalanceOf();
   shouldTransfer();

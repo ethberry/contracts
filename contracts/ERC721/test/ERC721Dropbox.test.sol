@@ -6,15 +6,15 @@
 
 pragma solidity ^0.8.4;
 
-import "../ERC721/ERC721Dropbox.sol";
-import "../ERC721/preset/ERC721ACB.sol";
+import "../ERC721Dropbox.sol";
+import "../preset/ERC721ACBP.sol";
 
-contract ERC721DropboxMock is ERC721Dropbox, ERC721ACB {
+contract ERC721DropboxTest is ERC721Dropbox, ERC721ACBP {
   constructor(
     string memory name,
     string memory symbol,
     string memory baseTokenURI
-  ) ERC721ACB(name, symbol, baseTokenURI) ERC721Dropbox(name) {}
+  ) ERC721ACBP(name, symbol, baseTokenURI) ERC721Dropbox(name) {}
 
   function redeem(
     address account,

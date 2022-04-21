@@ -10,22 +10,25 @@ import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 
 abstract contract ERC721Dropbox is EIP712 {
+  event Redeem(address account, uint256 tokenId);
+
   constructor(string memory name) EIP712(name, "1.0.0") {}
 
   function _safeMint(address account, uint256 tokenId) internal virtual;
 
   function _redeem(
-    address to,
+    address account,
     uint256 tokenId,
     address signer,
     bytes calldata signature
   ) internal {
-    require(_verify(signer, _hash(to, tokenId), signature), "ERC721Dropbox: Invalid signature");
-    _safeMint(to, tokenId);
+    require(_verify(signer, _hash(account, tokenId), signature), "ERC721Dropbox: Invalid signature");
+    _safeMint(account, tokenId);
+    emit Redeem(account, tokenId);
   }
 
   function _hash(address account, uint256 tokenId) internal view returns (bytes32) {
-    return _hashTypedDataV4(keccak256(abi.encode(keccak256("NFT(address account,uint256 tokenId)"), account, tokenId)));
+    return _hashTypedDataV4(keccak256(abi.encode(keccak256("EIP712(address account,uint256 tokenId)"), account, tokenId)));
   }
 
   function _verify(

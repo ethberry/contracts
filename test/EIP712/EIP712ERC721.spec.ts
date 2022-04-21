@@ -4,29 +4,29 @@ import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { EIP712ERC20Dropbox, ERC20ACB } from "../../typechain-types";
-import { amount, MINTER_ROLE, nonce, tokenName, tokenSymbol } from "../constants";
+import { EIP712ERC721, ERC721ACB } from "../../typechain-types";
+import { baseTokenURI, MINTER_ROLE, nonce, tokenId, tokenName, tokenSymbol } from "../constants";
 
-describe("EIP712ERC20Dropbox", function () {
-  let erc20: ContractFactory;
-  let erc20Instance: ERC20ACB;
+describe("EIP712ERC721", function () {
+  let erc721: ContractFactory;
+  let erc721Instance: ERC721ACB;
   let dropbox: ContractFactory;
-  let dropboxInstance: EIP712ERC20Dropbox;
+  let dropboxInstance: EIP712ERC721;
   let owner: SignerWithAddress;
   let receiver: SignerWithAddress;
   let stranger: SignerWithAddress;
   let network: Network;
 
   beforeEach(async function () {
-    erc20 = await ethers.getContractFactory("ERC20ACB");
-    dropbox = await ethers.getContractFactory("EIP712ERC20Dropbox");
+    erc721 = await ethers.getContractFactory("ERC721ACB");
+    dropbox = await ethers.getContractFactory("EIP712ERC721");
     [owner, receiver, stranger] = await ethers.getSigners();
 
-    erc20Instance = (await erc20.deploy(tokenName, tokenSymbol)) as ERC20ACB;
-    dropboxInstance = (await dropbox.deploy(tokenName)) as EIP712ERC20Dropbox;
+    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721ACB;
+    dropboxInstance = (await dropbox.deploy(tokenName)) as EIP712ERC721;
 
-    await dropboxInstance.setFactory(erc20Instance.address);
-    await erc20Instance.grantRole(MINTER_ROLE, dropboxInstance.address);
+    await dropboxInstance.setFactory(erc721Instance.address);
+    await erc721Instance.grantRole(MINTER_ROLE, dropboxInstance.address);
 
     network = await ethers.provider.getNetwork();
   });
@@ -43,24 +43,24 @@ describe("EIP712ERC20Dropbox", function () {
         },
         // Types
         {
-          NFT: [
+          EIP712: [
             { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
-            { name: "amount", type: "uint256" },
+            { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
         {
           nonce,
           account: receiver.address,
-          amount,
+          tokenId,
         },
       );
 
-      const tx1 = dropboxInstance.connect(stranger).redeem(nonce, receiver.address, amount, owner.address, signature);
+      const tx1 = dropboxInstance.connect(stranger).redeem(nonce, receiver.address, tokenId, owner.address, signature);
       await expect(tx1)
-        .to.emit(erc20Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, receiver.address, amount);
+        .to.emit(erc721Instance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, receiver.address, tokenId);
     });
 
     it("should fail: duplicate mint", async function () {
@@ -74,27 +74,27 @@ describe("EIP712ERC20Dropbox", function () {
         },
         // Types
         {
-          NFT: [
+          EIP712: [
             { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
-            { name: "amount", type: "uint256" },
+            { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
         {
           nonce,
           account: receiver.address,
-          amount,
+          tokenId,
         },
       );
 
-      const tx1 = dropboxInstance.connect(stranger).redeem(nonce, receiver.address, amount, owner.address, signature);
+      const tx1 = dropboxInstance.connect(stranger).redeem(nonce, receiver.address, tokenId, owner.address, signature);
       await expect(tx1)
-        .to.emit(erc20Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, receiver.address, amount);
+        .to.emit(erc721Instance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, receiver.address, tokenId);
 
-      const tx2 = dropboxInstance.connect(stranger).redeem(nonce, receiver.address, amount, owner.address, signature);
-      await expect(tx2).to.be.revertedWith("EIP712ERC20Dropbox: Expired signature");
+      const tx2 = dropboxInstance.connect(stranger).redeem(nonce, receiver.address, tokenId, owner.address, signature);
+      await expect(tx2).to.be.revertedWith("EIP712ERC721: Expired signature");
     });
 
     it("should fail: invalid signature", async function () {
@@ -108,24 +108,24 @@ describe("EIP712ERC20Dropbox", function () {
         },
         // Types
         {
-          NFT: [
+          EIP712: [
             { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
-            { name: "amount", type: "uint256" },
+            { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
         {
           nonce,
           account: receiver.address,
-          amount,
+          tokenId,
         },
       );
 
       const tx1 = dropboxInstance
         .connect(stranger)
-        .redeem(nonce, receiver.address, amount, stranger.address, signature);
-      await expect(tx1).to.be.revertedWith("EIP712ERC20Dropbox: Invalid signature");
+        .redeem(nonce, receiver.address, tokenId, stranger.address, signature);
+      await expect(tx1).to.be.revertedWith("EIP712ERC721: Invalid signature");
     });
   });
 });

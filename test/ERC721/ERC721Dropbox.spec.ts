@@ -2,115 +2,189 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import tokens from "./tokens.json";
 
-import { ERC721DropboxMock } from "../../typechain-types";
-import { MINTER_ROLE, tokenName, tokenSymbol, baseTokenURI } from "../constants";
+import { ERC721DropboxTest } from "../../typechain-types";
+import { MINTER_ROLE, tokenName, tokenSymbol, baseTokenURI, DEFAULT_ADMIN_ROLE, tokenId } from "../constants";
+import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 
 describe("ERC721Dropbox", function () {
   let erc721: ContractFactory;
-  let erc721Instance: ERC721DropboxMock;
-  let owner: SignerWithAddress;
-  let receiver: SignerWithAddress;
-  let addr2: SignerWithAddress;
   let network: Network;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721DropboxMock");
-    [owner, receiver, addr2] = await ethers.getSigners();
+    erc721 = await ethers.getContractFactory("ERC721DropboxTest");
+    [this.owner, this.receiver] = await ethers.getSigners();
 
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721DropboxMock;
-
-    await erc721Instance.grantRole(MINTER_ROLE, receiver.address);
+    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721DropboxTest;
 
     network = await ethers.provider.getNetwork();
+
+    this.contractInstance = this.erc721Instance;
   });
 
-  describe("Mint all elements", function () {
-    it("element", async function () {
-      for (const [tokenId, account] of Object.entries(tokens)) {
-        const signature = await receiver._signTypedData(
-          // Domain
-          {
-            name: tokenName,
-            version: "1.0.0",
-            chainId: network.chainId,
-            verifyingContract: erc721Instance.address,
-          },
-          // Types
-          {
-            NFT: [
-              { name: "account", type: "address" },
-              { name: "tokenId", type: "uint256" },
-            ],
-          },
-          // Value
-          { account, tokenId },
-        );
+  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
 
-        const tx = erc721Instance.connect(addr2).redeem(account, tokenId, receiver.address, signature);
-        await expect(tx).to.emit(erc721Instance, "Transfer").withArgs(ethers.constants.AddressZero, account, tokenId);
-      }
-    });
-  });
-
-  describe("Duplicate mint", function () {
-    it("element", async function () {
-      const tokenId = Object.keys(tokens)[0];
-      const account = Object.values(tokens)[0];
-      const signature = await receiver._signTypedData(
+  describe("redeem", function () {
+    it("should redeem", async function () {
+      const signature = await this.owner._signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: erc721Instance.address,
+          verifyingContract: this.erc721Instance.address,
         },
         // Types
         {
-          NFT: [
+          EIP712: [
             { name: "account", type: "address" },
             { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
-        { account, tokenId },
+        {
+          account: this.receiver.address,
+          tokenId,
+        },
       );
 
-      const tx1 = erc721Instance.redeem(account, tokenId, receiver.address, signature);
-      await expect(tx1).to.emit(erc721Instance, "Transfer").withArgs(ethers.constants.AddressZero, account, tokenId);
+      const tx1 = this.erc721Instance
+        .connect(this.receiver)
+        .redeem(this.receiver.address, tokenId, this.owner.address, signature);
+      await expect(tx1).to.emit(this.erc721Instance, "Redeem").withArgs(this.receiver.address, tokenId);
 
-      const tx2 = erc721Instance.redeem(account, tokenId, receiver.address, signature);
+      const ownerOf = await this.erc721Instance.ownerOf(tokenId);
+      expect(ownerOf).to.equal(this.receiver.address);
+    });
+
+    it("should fail: wrong signer", async function () {
+      const signature = await this.owner._signTypedData(
+        // Domain
+        {
+          name: tokenName,
+          version: "1.0.0",
+          chainId: network.chainId,
+          verifyingContract: this.erc721Instance.address,
+        },
+        // Types
+        {
+          EIP712: [
+            { name: "account", type: "address" },
+            { name: "tokenId", type: "uint256" },
+          ],
+        },
+        // Value
+        {
+          account: this.receiver.address,
+          tokenId,
+        },
+      );
+
+      const tx1 = this.erc721Instance
+        .connect(this.receiver)
+        .redeem(this.receiver.address, tokenId, this.receiver.address, signature);
+      await expect(tx1).to.be.revertedWith(
+        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
+      );
+    });
+
+    it("should fail: invalid signature", async function () {
+      const tx1 = this.erc721Instance
+        .connect(this.receiver)
+        .redeem(this.receiver.address, tokenId, this.owner.address, ethers.utils.formatBytes32String("signature"));
+      await expect(tx1).to.be.revertedWith("ERC721Dropbox: Invalid signature");
+    });
+
+    it("should fail: token already minted", async function () {
+      const signature = await this.owner._signTypedData(
+        // Domain
+        {
+          name: tokenName,
+          version: "1.0.0",
+          chainId: network.chainId,
+          verifyingContract: this.erc721Instance.address,
+        },
+        // Types
+        {
+          EIP712: [
+            { name: "account", type: "address" },
+            { name: "tokenId", type: "uint256" },
+          ],
+        },
+        // Value
+        {
+          account: this.receiver.address,
+          tokenId,
+        },
+      );
+
+      const tx1 = this.erc721Instance
+        .connect(this.receiver)
+        .redeem(this.receiver.address, tokenId, this.owner.address, signature);
+      await expect(tx1).to.emit(this.erc721Instance, "Redeem").withArgs(this.receiver.address, tokenId);
+
+      const tx2 = this.erc721Instance
+        .connect(this.receiver)
+        .redeem(this.receiver.address, tokenId, this.owner.address, signature);
       await expect(tx2).to.be.revertedWith("ERC721: token already minted");
     });
-  });
 
-  describe("Frontrun", function () {
-    it("element", async function () {
-      const tokenId = Object.keys(tokens)[0];
-      const account = Object.values(tokens)[0];
-      const signature = await receiver._signTypedData(
+    it("should fail: cap exceeded", async function () {
+      const signature = await this.owner._signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: erc721Instance.address,
+          verifyingContract: this.erc721Instance.address,
         },
         // Types
         {
-          NFT: [
+          EIP712: [
             { name: "account", type: "address" },
             { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
-        { account, tokenId },
+        {
+          account: this.receiver.address,
+          tokenId,
+        },
       );
 
-      const tx = erc721Instance.redeem(owner.address, tokenId, receiver.address, signature);
-      await expect(tx).to.be.revertedWith("ERC721Dropbox: Invalid signature");
+      const tx1 = this.erc721Instance
+        .connect(this.receiver)
+        .redeem(this.receiver.address, tokenId, this.owner.address, signature);
+      await expect(tx1).to.emit(this.erc721Instance, "Redeem").withArgs(this.receiver.address, tokenId);
+
+      const newTokenId = 2;
+
+      const signature2 = await this.owner._signTypedData(
+        // Domain
+        {
+          name: tokenName,
+          version: "1.0.0",
+          chainId: network.chainId,
+          verifyingContract: this.erc721Instance.address,
+        },
+        // Types
+        {
+          EIP712: [
+            { name: "account", type: "address" },
+            { name: "tokenId", type: "uint256" },
+          ],
+        },
+        // Value
+        {
+          account: this.receiver.address,
+          tokenId: newTokenId,
+        },
+      );
+
+      const tx2 = this.erc721Instance
+        .connect(this.receiver)
+        .redeem(this.receiver.address, newTokenId, this.owner.address, signature2);
+      await expect(tx2).to.be.revertedWith("ERC721Dropbox: cap exceeded");
     });
   });
 });

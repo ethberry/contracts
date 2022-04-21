@@ -3,7 +3,14 @@ import { ContractFactory } from "ethers";
 import { expect } from "chai";
 
 import { ERC721ACBR, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
+import {
+  baseTokenURI,
+  DEFAULT_ADMIN_ROLE,
+  MINTER_ROLE,
+  royaltyNumerator,
+  tokenName,
+  tokenSymbol,
+} from "../../constants";
 
 import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
@@ -35,7 +42,7 @@ describe("ERC721ACBR", function () {
     erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 100)) as ERC721ACBR;
+    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, royaltyNumerator)) as ERC721ACBR;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
 

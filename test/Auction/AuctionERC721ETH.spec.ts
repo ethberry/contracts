@@ -11,6 +11,7 @@ import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
 import { shouldGrantRole } from "../shared/accessControl/grantRole";
 import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
+import { shouldPause } from "../shared/pausable";
 
 describe("AuctionERC721ETH", function () {
   let auction: ContractFactory;
@@ -41,6 +42,7 @@ describe("AuctionERC721ETH", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
+  shouldPause(true);
 
   describe("startAuction", function () {
     it("should start auction (collection this.owner)", async function () {
@@ -822,21 +824,7 @@ describe("AuctionERC721ETH", function () {
   });
 
   describe("pause", function () {
-    it("should fail: paase not admin", async function () {
-      const tx = auctionInstance.connect(this.receiver).pause();
-      await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
-      );
-    });
-
-    it("should fail: unpause not admin", async function () {
-      const tx = auctionInstance.connect(this.receiver).unpause();
-      await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
-      );
-    });
-
-    it("should pause/unpause", async function () {
+    it("startAuction should respect pause", async function () {
       const span = 300;
       const timestamp: number = (await time.latest()).toNumber();
 

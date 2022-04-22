@@ -10,6 +10,7 @@ import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
 import { shouldGrantRole } from "../shared/accessControl/grantRole";
 import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
+import { shouldPause } from "../shared/pausable";
 
 describe("MarketplaceERC1155ETH", function () {
   let marketplace: ContractFactory;
@@ -36,6 +37,7 @@ describe("MarketplaceERC1155ETH", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
+  shouldPause(true);
 
   describe("buy", function () {
     it("should buy", async function () {
@@ -78,21 +80,7 @@ describe("MarketplaceERC1155ETH", function () {
   });
 
   describe("pause", function () {
-    it("should fail: paase not admin", async function () {
-      const tx = marketplaceInstance.connect(this.receiver).pause();
-      await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
-      );
-    });
-
-    it("should fail: unpause not admin", async function () {
-      const tx = marketplaceInstance.connect(this.receiver).unpause();
-      await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,
-      );
-    });
-
-    it("should pause/unpause", async function () {
+    it("buy should respect", async function () {
       const tx1 = marketplaceInstance.pause();
       await expect(tx1).to.emit(marketplaceInstance, "Paused").withArgs(this.owner.address);
 

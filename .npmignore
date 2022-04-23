@@ -2,10 +2,8 @@
 /tasks
 /test
 /coverage
-
 /artifacts
 /cache
-
 /besu
 
 DOCKER.md
@@ -21,3 +19,5 @@ coverage.json
 .idea
 .vscode
 .github
+
+contracts/ERC998

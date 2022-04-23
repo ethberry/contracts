@@ -36,7 +36,6 @@ contract ERC1155ACB is AccessControl, ERC1155Burnable {
     _mintBatch(to, ids, amounts, data);
   }
 
-
   function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC1155) returns (bool) {
     return super.supportsInterface(interfaceId);
   }

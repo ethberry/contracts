@@ -49,7 +49,7 @@ contract ERC20ACBCSP is AccessControl, ERC20Burnable, ERC20Pausable, ERC20Capped
   }
 
   function snapshot() public onlyRole(SNAPSHOT_ROLE) {
-    super._snapshot();
+    _snapshot();
   }
 
   /**

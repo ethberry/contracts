@@ -46,7 +46,7 @@ contract ERC20ACBCS is AccessControl, ERC20Burnable, ERC20Capped, ERC20Snapshot 
   }
 
   function snapshot() public onlyRole(SNAPSHOT_ROLE) {
-    super._snapshot();
+    _snapshot();
   }
 
   /**

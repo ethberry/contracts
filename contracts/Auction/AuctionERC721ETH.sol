@@ -109,7 +109,7 @@ contract AuctionERC721ETH is AccessControl, Pausable, ERC721Holder {
 
   function makeBid(uint256 auctionId) public payable virtual whenNotPaused {
     AuctionData storage auction = _auction[auctionId];
-    require(auction._auctionCollection > address(0), "Auction: wrong auction id");
+    require(auction._auctionCollection != address(0), "Auction: wrong auction id");
     require(auction._auctionStartTimestamp <= block.timestamp, "Auction: auction is not yet started");
     require(auction._auctionFinishTimestamp >= block.timestamp, "Auction: auction is already finished");
     require(auction._auctionCurrentBidder != _msgSender(), "Auction: prevent double spending");

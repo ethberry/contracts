@@ -8,8 +8,16 @@
   },
   "root": true,
   "rules": {
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/*"
+        ]
+      }
+    ],
     "mocha/no-exports": "off",
-    "mocha/no-setup-in-describe": "off",
-    "@typescript-eslint/restrict-template-expressions": "off"
+    "mocha/no-setup-in-describe": "off"
   }
 }

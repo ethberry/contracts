@@ -30,21 +30,21 @@ abstract contract ERC721OpenSea is ERC721ACBCES, AccessControlEnumerable {
   /**
    * @dev Set a static URI for a token
    */
-  function setTokenURI(uint256 tokenId, string memory _tokenURI) public override onlyRole(DEFAULT_ADMIN_ROLE) {
-    _setTokenURI(tokenId, _tokenURI);
-    emit PermanentURI(_tokenURI, tokenId);
+  function setTokenURI(uint256 tokenId, string memory tokenURI) public override onlyRole(DEFAULT_ADMIN_ROLE) {
+    _setTokenURI(tokenId, tokenURI);
+    emit PermanentURI(tokenURI, tokenId);
   }
 
   /**
    * Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
    */
-  function isApprovedForAll(address owner_, address operator_) public view virtual override(ERC721) returns (bool) {
+  function isApprovedForAll(address owner, address operator) public view virtual override(ERC721) returns (bool) {
     // Whitelist OpenSea proxy contract for easy trading.
-    if (address(_proxyRegistry.proxies(owner_)) == operator_) {
+    if (address(_proxyRegistry.proxies(owner)) == operator) {
       return true;
     }
 
-    return super.isApprovedForAll(owner_, operator_);
+    return super.isApprovedForAll(owner, operator);
   }
 
   /**

@@ -7,12 +7,15 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 
-import "../../ERC721/preset/ERC721ACBCEP.sol";
+import "../../ERC721/preset/ERC721ACBCE.sol";
 import "../../ERC721/ChainLink/interfaces/IERC721ChainLink.sol";
 
-contract ChainLinkLootboxMock is ERC721ACBCEP {
+contract ChainLinkLootboxMock is ERC721ACBCE, Pausable {
   using Address for address;
+
+  bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
   IERC721ChainLink _factory;
 
@@ -20,7 +23,9 @@ contract ChainLinkLootboxMock is ERC721ACBCEP {
     string memory name,
     string memory symbol,
     string memory baseTokenURI
-  ) ERC721ACBCEP(name, symbol, baseTokenURI, 1000) {}
+  ) ERC721ACBCE(name, symbol, baseTokenURI, 1000) {
+    _setupRole(PAUSER_ROLE, _msgSender());
+  }
 
   receive() external payable {
     revert();
@@ -35,5 +40,13 @@ contract ChainLinkLootboxMock is ERC721ACBCEP {
     require(_isApprovedOrOwner(_msgSender(), _tokenId), "LootBox: unpack caller is not owner nor approved");
     _factory.mintRandom(_msgSender());
     _burn(_tokenId);
+  }
+
+  function pause() public virtual onlyRole(PAUSER_ROLE) {
+    _pause();
+  }
+
+  function unpause() public virtual onlyRole(PAUSER_ROLE) {
+    _unpause();
   }
 }

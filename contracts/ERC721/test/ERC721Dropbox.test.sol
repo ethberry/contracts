@@ -6,15 +6,21 @@
 
 pragma solidity ^0.8.4;
 
-import "../ERC721Dropbox.sol";
-import "../preset/ERC721ACBP.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 
-contract ERC721DropboxTest is ERC721Dropbox, ERC721ACBP {
+import "../ERC721Dropbox.sol";
+import "../preset/ERC721ACB.sol";
+
+contract ERC721DropboxTest is ERC721Dropbox, ERC721ACB, Pausable {
+  bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
+
   constructor(
     string memory name,
     string memory symbol,
     string memory baseTokenURI
-  ) ERC721ACBP(name, symbol, baseTokenURI) ERC721Dropbox(name) {}
+  ) ERC721ACB(name, symbol, baseTokenURI) ERC721Dropbox(name) {
+    _setupRole(PAUSER_ROLE, _msgSender());
+  }
 
   function redeem(
     address account,
@@ -28,5 +34,13 @@ contract ERC721DropboxTest is ERC721Dropbox, ERC721ACBP {
 
   function _safeMint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721Dropbox) {
     super._safeMint(account, tokenId);
+  }
+
+  function pause() public virtual onlyRole(PAUSER_ROLE) {
+    _pause();
+  }
+
+  function unpause() public virtual onlyRole(PAUSER_ROLE) {
+    _unpause();
   }
 }

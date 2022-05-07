@@ -11,7 +11,9 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract ERC721ACBR is AccessControl, ERC721Burnable, ERC721Royalty {
+import "../interfaces/IERC721Royalty.sol";
+
+contract ERC721ACBR is AccessControl, ERC721Burnable, IERC721Royalty, ERC721Royalty {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
   string internal _baseTokenURI;
@@ -44,6 +46,7 @@ contract ERC721ACBR is AccessControl, ERC721Burnable, ERC721Royalty {
   function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
     public
     virtual
+  override
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
@@ -54,7 +57,7 @@ contract ERC721ACBR is AccessControl, ERC721Burnable, ERC721Royalty {
     uint256 tokenId,
     address royaltyReceiver,
     uint96 royaltyNumerator
-  ) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
+  ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
     super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }
@@ -71,14 +74,6 @@ contract ERC721ACBR is AccessControl, ERC721Burnable, ERC721Royalty {
 
   function _baseURI() internal view virtual override returns (string memory) {
     return _baseTokenURI;
-  }
-
-  function _mint(address account, uint256 tokenId) internal virtual override(ERC721) {
-    super._mint(account, tokenId);
-  }
-
-  function _safeMint(address account, uint256 tokenId) internal virtual override(ERC721) {
-    super._safeMint(account, tokenId);
   }
 
   function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721Royalty) {

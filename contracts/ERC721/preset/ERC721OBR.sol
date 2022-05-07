@@ -11,7 +11,9 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract ERC721OBR is Ownable, ERC721Burnable, ERC721Royalty {
+import "../interfaces/IERC721Royalty.sol";
+
+contract ERC721OBR is Ownable, ERC721Burnable, IERC721Royalty, ERC721Royalty {
   string internal _baseTokenURI;
 
   event DefaultRoyaltyInfo(address royaltyReceiver, uint96 royaltyNumerator);
@@ -36,7 +38,7 @@ contract ERC721OBR is Ownable, ERC721Burnable, ERC721Royalty {
     _safeMint(to, tokenId);
   }
 
-  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator) public virtual onlyOwner {
+  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator) public virtual override onlyOwner {
     super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
     emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
   }
@@ -45,7 +47,7 @@ contract ERC721OBR is Ownable, ERC721Burnable, ERC721Royalty {
     uint256 tokenId,
     address royaltyReceiver,
     uint96 royaltyNumerator
-  ) public virtual onlyOwner {
+  ) public virtual override onlyOwner {
     super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }

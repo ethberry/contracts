@@ -13,8 +13,9 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "../ERC721CappedEnumerable.sol";
+import "../interfaces/IERC721Royalty.sol";
 
-contract ERC721ACBCER is AccessControl, ERC721Burnable, ERC721CappedEnumerable, ERC721Royalty {
+contract ERC721ACBCER is AccessControl, ERC721Burnable, ERC721CappedEnumerable, IERC721Royalty, ERC721Royalty {
   using Counters for Counters.Counter;
 
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -73,6 +74,7 @@ contract ERC721ACBCER is AccessControl, ERC721Burnable, ERC721CappedEnumerable, 
   function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
     public
     virtual
+    override
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
@@ -83,7 +85,7 @@ contract ERC721ACBCER is AccessControl, ERC721Burnable, ERC721CappedEnumerable, 
     uint256 tokenId,
     address royaltyReceiver,
     uint96 royaltyNumerator
-  ) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
+  ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
     super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }

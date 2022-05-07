@@ -13,7 +13,9 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract ERC721ACBRS is AccessControl, ERC721Burnable, ERC721Royalty, ERC721URIStorage {
+import "../interfaces/IERC721Royalty.sol";
+
+contract ERC721ACBRS is AccessControl, ERC721Burnable, IERC721Royalty, ERC721Royalty, ERC721URIStorage {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
   string internal _baseTokenURI;
@@ -46,6 +48,7 @@ contract ERC721ACBRS is AccessControl, ERC721Burnable, ERC721Royalty, ERC721URIS
   function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
     public
     virtual
+  override
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
@@ -56,7 +59,7 @@ contract ERC721ACBRS is AccessControl, ERC721Burnable, ERC721Royalty, ERC721URIS
     uint256 tokenId,
     address royaltyReceiver,
     uint96 royaltyNumerator
-  ) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
+  ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
     super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }

@@ -10,9 +10,9 @@ import "../ERC1155BaseUrl.sol";
 import "../preset/ERC1155ACB.sol";
 
 contract ERC1155BaseUrlTest is ERC1155BaseUrl, ERC1155ACB {
-  constructor(string memory uri) ERC1155ACB(uri) {}
+  constructor(string memory url) ERC1155ACB(url) {}
 
   function uri(uint256 tokenId) public view virtual override returns (string memory) {
-    return uri(super.uri(tokenId));
+    return url(super.uri(tokenId));
   }
 }

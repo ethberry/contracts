@@ -6,61 +6,54 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
 
 import "./FlatVesting.sol";
 
-contract VestingFactory is AccessControl, Pausable {
+abstract contract VestingFactory is Context {
   using SafeERC20 for IERC20;
-
-  bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
   address[] private _vesting;
 
-  event FlatVestingCreated(
+  event VestingDeployed(
     address vesting,
-    address owner,
+    string template,
     address token,
     uint256 amount,
     address beneficiary,
-    uint64 startTimestamp,
-    uint64 durationSeconds
+    uint64 startTimestamp, // in seconds
+    uint64 duration // in seconds
   );
 
-  constructor() {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    _setupRole(PAUSER_ROLE, _msgSender());
-  }
-
-  function createFlatVesting(
+  function _deployVesting(
+    string calldata template,
     address token,
     uint256 amount,
     address beneficiary,
     uint64 startTimestamp,
-    uint64 durationSeconds
-  ) public whenNotPaused returns (address vesting) {
-    FlatVesting instance = new FlatVesting(beneficiary, startTimestamp, durationSeconds);
+    uint64 duration
+  ) internal returns (address addr) {
+    if (keccak256(bytes(template)) == keccak256(bytes("FLAT"))) {
+      addr = address(new FlatVesting(beneficiary, startTimestamp, duration));
+    } else {
+      revert("ContractManager: unknown template");
+    }
 
-    vesting = address(instance);
-    _vesting.push(vesting);
+    _vesting.push(addr);
 
-    emit FlatVestingCreated(vesting, _msgSender(), token, amount, beneficiary, startTimestamp, durationSeconds);
+    emit VestingDeployed(addr, template, token, amount, beneficiary, startTimestamp, duration);
 
-    SafeERC20.safeTransferFrom(IERC20(token), _msgSender(), vesting, amount);
+    if (token != address(0)) {
+      SafeERC20.safeTransferFrom(IERC20(token), _msgSender(), addr, amount);
+    } else {
+      (bool success, ) = addr.call{ value: amount }("");
+      require(success, "ContractManager: can't transfer to vesting contract");
+    }
   }
 
   function allVesting() public view returns (address[] memory) {
     return _vesting;
-  }
-
-  function pause() public onlyRole(PAUSER_ROLE) {
-    _pause();
-  }
-
-  function unpause() public onlyRole(PAUSER_ROLE) {
-    _unpause();
   }
 }

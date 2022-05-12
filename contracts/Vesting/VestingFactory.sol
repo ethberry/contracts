@@ -11,6 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 
 import "./FlatVesting.sol";
+import "./LinearVesting.sol";
 
 abstract contract VestingFactory is Context {
   using SafeERC20 for IERC20;
@@ -37,8 +38,10 @@ abstract contract VestingFactory is Context {
   ) internal returns (address addr) {
     if (keccak256(bytes(template)) == keccak256(bytes("FLAT"))) {
       addr = address(new FlatVesting(beneficiary, startTimestamp, duration));
+    } else if (keccak256(bytes(template)) == keccak256(bytes("LINEAR"))) {
+      addr = address(new LinearVesting(beneficiary, startTimestamp, duration));
     } else {
-      revert("ContractManager: unknown template");
+      revert("VestingFactory: unknown template");
     }
 
     _vesting.push(addr);
@@ -49,7 +52,7 @@ abstract contract VestingFactory is Context {
       SafeERC20.safeTransferFrom(IERC20(token), _msgSender(), addr, amount);
     } else {
       (bool success, ) = addr.call{ value: amount }("");
-      require(success, "ContractManager: can't transfer to vesting contract");
+      require(success, "VestingFactory: can't transfer to vesting contract");
     }
   }
 

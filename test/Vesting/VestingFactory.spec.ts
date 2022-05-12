@@ -39,7 +39,7 @@ describe("VestingFactory", function () {
   shouldRenounceRole();
 
   describe("deployVesting", function () {
-    it("should create vesting (FLAT + ETH)", async function () {
+    it("should deploy contract (FLAT + ETH)", async function () {
       const span = 300;
       const timestamp: number = (await time.latest()).toNumber();
 
@@ -58,9 +58,11 @@ describe("VestingFactory", function () {
       await expect(tx)
         .to.emit(factoryInstance, "VestingDeployed")
         .withArgs(vesting, "FLAT", ethers.constants.AddressZero, amount, this.receiver.address, timestamp, span);
+
+      await expect(tx).to.changeEtherBalance(this.owner, -amount);
     });
 
-    it("should create vesting (FLAT + ERC20)", async function () {
+    it("should deploy contract (FLAT + ERC20)", async function () {
       const span = 300;
       const timestamp: number = (await time.latest()).toNumber();
 
@@ -77,7 +79,9 @@ describe("VestingFactory", function () {
 
       await expect(tx)
         .to.emit(factoryInstance, "VestingDeployed")
-        .withArgs(vesting, "FLAT", erc20Instance.address, amount, this.receiver.address, timestamp, span);
+        .withArgs(vesting, "FLAT", erc20Instance.address, amount, this.receiver.address, timestamp, span)
+        .to.emit(erc20Instance, "Transfer")
+        .withArgs(this.owner.address, vesting, amount);
     });
 
     it("should fail: amount must be greater than 0 (FLAT + ETH)", async function () {
@@ -113,6 +117,28 @@ describe("VestingFactory", function () {
       await expect(tx).to.be.revertedWith("ContractManager: vesting amount must be greater than zero");
     });
 
+    it("should deploy contract (LINEAR + ERC20)", async function () {
+      const span = 300;
+      const timestamp: number = (await time.latest()).toNumber();
+
+      const tx = await factoryInstance.deployVesting(
+        "LINEAR",
+        erc20Instance.address,
+        amount,
+        this.receiver.address,
+        timestamp,
+        span,
+      );
+
+      const [vesting] = await factoryInstance.allVesting();
+
+      await expect(tx)
+        .to.emit(factoryInstance, "VestingDeployed")
+        .withArgs(vesting, "LINEAR", erc20Instance.address, amount, this.receiver.address, timestamp, span)
+        .to.emit(erc20Instance, "Transfer")
+        .withArgs(this.owner.address, vesting, amount);
+    });
+
     it("should fail: unknown template", async function () {
       const span = 300;
       const timestamp: number = (await time.latest()).toNumber();
@@ -126,7 +152,7 @@ describe("VestingFactory", function () {
         span,
       );
 
-      await expect(tx).to.be.revertedWith("ContractManager: unknown template");
+      await expect(tx).to.be.revertedWith("VestingFactory: unknown template");
     });
   });
 });

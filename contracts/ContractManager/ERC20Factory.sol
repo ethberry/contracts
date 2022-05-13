@@ -6,25 +6,29 @@
 
 pragma solidity ^0.8.4;
 
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/access/IAccessControl.sol";
 
-import "./preset/ERC20ACBCS.sol";
-import "./preset/ERC20ACBCSP.sol";
+import "../ERC20/preset/ERC20ACBCS.sol";
+import "../ERC20/preset/ERC20ACBCSP.sol";
 
-abstract contract ERC20Factory is Context {
+contract ERC20Factory is AccessControl {
   address[] private _erc20_tokens;
 
   event ERC20Deployed(address token, string template, string name, string symbol, uint256 cap);
 
-  function _deployERC20Token(
+  constructor() {
+    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+  }
+
+  function deployERC20Token(
     string calldata template,
     string memory name,
     string memory symbol,
     uint256 cap
-  ) internal returns (address addr) {
+  ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     IAccessControl token;
 
     if (keccak256(bytes(template)) == keccak256(bytes("SIMPLE"))) {
@@ -45,7 +49,7 @@ abstract contract ERC20Factory is Context {
     token.renounceRole(0x00, address(this));
   }
 
-  function allERC20Tokens() public view returns (address[] memory) {
+  function allERC20Tokens() external view returns (address[] memory) {
     return _erc20_tokens;
   }
 }

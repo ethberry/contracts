@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
-import { ERC20FactoryTest } from "../../typechain-types";
+import { ERC20Factory } from "../../typechain-types";
 import { amount, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
@@ -14,14 +14,14 @@ import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
 describe("ERC20Factory", function () {
   let erc20: ContractFactory;
   let factory: ContractFactory;
-  let factoryInstance: ERC20FactoryTest;
+  let factoryInstance: ERC20Factory;
 
   beforeEach(async function () {
     erc20 = await ethers.getContractFactory("ERC20ACBCS");
-    factory = await ethers.getContractFactory("ERC20FactoryTest");
+    factory = await ethers.getContractFactory("ERC20Factory");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
-    factoryInstance = (await factory.deploy()) as ERC20FactoryTest;
+    factoryInstance = (await factory.deploy()) as ERC20Factory;
 
     this.contractInstance = factoryInstance;
   });

@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
-import { VestingFactoryTest, ERC20ACB } from "../../typechain-types";
+import { VestingFactory, ERC20ACB } from "../../typechain-types";
 import { amount, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
@@ -14,16 +14,16 @@ import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
 
 describe("VestingFactory", function () {
   let factory: ContractFactory;
-  let factoryInstance: VestingFactoryTest;
+  let factoryInstance: VestingFactory;
   let erc20: ContractFactory;
   let erc20Instance: ERC20ACB;
 
   beforeEach(async function () {
-    factory = await ethers.getContractFactory("VestingFactoryTest");
+    factory = await ethers.getContractFactory("VestingFactory");
     erc20 = await ethers.getContractFactory("ERC20ACB");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
-    factoryInstance = (await factory.deploy()) as VestingFactoryTest;
+    factoryInstance = (await factory.deploy()) as VestingFactory;
     erc20Instance = (await erc20.deploy(tokenName, tokenSymbol)) as ERC20ACB;
 
     await erc20Instance.mint(this.owner.address, amount);
@@ -98,7 +98,7 @@ describe("VestingFactory", function () {
         { value: 0 },
       );
 
-      await expect(tx).to.be.revertedWith("ContractManager: vesting amount must be greater than zero");
+      await expect(tx).to.be.revertedWith("VestingFactory: vesting amount must be greater than zero");
     });
 
     it("should fail: amount must be greater than 0 (FLAT + ERC20)", async function () {
@@ -114,7 +114,7 @@ describe("VestingFactory", function () {
         span,
       );
 
-      await expect(tx).to.be.revertedWith("ContractManager: vesting amount must be greater than zero");
+      await expect(tx).to.be.revertedWith("VestingFactory: vesting amount must be greater than zero");
     });
 
     it("should deploy contract (LINEAR + ERC20)", async function () {

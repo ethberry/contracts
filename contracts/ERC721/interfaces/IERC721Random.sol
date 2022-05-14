@@ -7,13 +7,6 @@
 pragma solidity ^0.8.4;
 
 interface IERC721Random {
-  struct Data {
-    uint256 templateId;
-    uint256 rarity;
-  }
-
-  function getDataByTokenId(uint256 tokenId) external view returns (Data memory);
-
   function mintRandom(
     address to,
     uint256 templateId,

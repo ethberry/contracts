@@ -8,11 +8,12 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+import "../../utils/GeneralizedCollection.sol";
 import "../interfaces/IERC721Simple.sol";
 import "../preset/ERC721ACBER.sol";
 import "../ERC721BaseUrl.sol";
 
-contract ERC721Simple is IERC721Simple, ERC721ACBER, ERC721BaseUrl {
+contract ERC721Simple is IERC721Simple, ERC721ACBER, ERC721BaseUrl, GeneralizedCollection {
   using Counters for Counters.Counter;
 
   struct Request {
@@ -20,8 +21,6 @@ contract ERC721Simple is IERC721Simple, ERC721ACBER, ERC721BaseUrl {
     uint256 templateId;
     uint256 dropboxId;
   }
-
-  mapping(uint256 => Data) internal _data;
 
   uint256 private _maxTemplateId = 0;
 
@@ -31,7 +30,7 @@ contract ERC721Simple is IERC721Simple, ERC721ACBER, ERC721BaseUrl {
     string memory baseTokenURI,
     uint96 royaltyNumerator
   ) ERC721ACBER(name, symbol, baseTokenURI, royaltyNumerator) {
-    _tokenIdTracker.increment();
+    // _tokenIdTracker.increment();
     // should start from 1
   }
 
@@ -39,13 +38,8 @@ contract ERC721Simple is IERC721Simple, ERC721ACBER, ERC721BaseUrl {
     require(templateId != 0, "ERC721Simple: wrong type");
     require(templateId <= _maxTemplateId, "ERC721Simple: wrong type");
     tokenId = _tokenIdTracker.current();
-    _data[tokenId] = Data(templateId);
+    upsertRecordField(tokenId, keccak256(bytes("templateId")), templateId);
     safeMint(to);
-  }
-
-  function getDataByTokenId(uint256 tokenId) public view override returns (Data memory) {
-    require(_exists(tokenId), "ERC721Simple: token does not exist");
-    return _data[tokenId];
   }
 
   function setMaxTemplateId(uint256 maxTemplateId) public onlyRole(DEFAULT_ADMIN_ROLE) {

@@ -8,13 +8,14 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+import "../../utils/GeneralizedCollection.sol";
 import "../interfaces/IERC721Random.sol";
 import "../ChainLink/ERC721ChainLinkBinance.sol";
 import "../preset/ERC721ACBER.sol";
 import "../ERC721BaseUrl.sol";
 
 
-contract ERC721Random is IERC721Random, ERC721ChainLinkBinance, ERC721ACBER, ERC721BaseUrl {
+contract ERC721Random is IERC721Random, ERC721ChainLinkBinance, ERC721ACBER, ERC721BaseUrl, GeneralizedCollection {
   using Counters for Counters.Counter;
 
   struct Request {
@@ -26,7 +27,6 @@ contract ERC721Random is IERC721Random, ERC721ChainLinkBinance, ERC721ACBER, ERC
   event MintRandom(address to, uint256 tokenId, uint256 templateId, uint256 rarity, uint256 dropboxId);
 
   mapping(bytes32 => Request) internal _queue;
-  mapping(uint256 => Data) internal _data;
 
   uint256 private _maxTemplateId = 0;
 
@@ -53,21 +53,25 @@ contract ERC721Random is IERC721Random, ERC721ChainLinkBinance, ERC721ACBER, ERC
   function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
     uint256 tokenId = _tokenIdTracker.current();
     uint256 rarity = _getDispersion(randomness);
-    Request memory dataR = _queue[requestId];
+    Request memory request = _queue[requestId];
 
-    _data[tokenId] = Data(dataR.templateId, rarity);
+    upsertRecordField(tokenId, keccak256(bytes("templateId")), request.templateId);
+    upsertRecordField(tokenId, keccak256(bytes("rarity")), rarity);
 
-    emit MintRandom(dataR.owner, tokenId, dataR.templateId, rarity, dataR.dropboxId);
+    emit MintRandom(request.owner, tokenId, request.templateId, rarity, request.dropboxId);
 
     delete _queue[requestId];
-    safeMint(dataR.owner);
+    safeMint(request.owner);
   }
 
   function mintCommon(address to, uint256 templateId) public override onlyRole(MINTER_ROLE) returns (uint256 tokenId) {
     require(templateId != 0, "ERC721Random: wrong type");
     require(templateId <= _maxTemplateId, "ERC721Random: wrong type");
     tokenId = _tokenIdTracker.current();
-    _data[tokenId] = Data(templateId, 1);
+
+    upsertRecordField(tokenId, keccak256(bytes("templateId")), templateId);
+    upsertRecordField(tokenId, keccak256(bytes("rarity")), 1);
+
     safeMint(to);
   }
 
@@ -85,11 +89,6 @@ contract ERC721Random is IERC721Random, ERC721ChainLinkBinance, ERC721ACBER, ERC
 
     // common
     return 1;
-  }
-
-  function getDataByTokenId(uint256 tokenId) public view override returns (Data memory) {
-    require(_exists(tokenId), "ERC721Random: token does not exist");
-    return _data[tokenId];
   }
 
   function setMaxTemplateId(uint256 maxTemplateId) public onlyRole(DEFAULT_ADMIN_ROLE) {

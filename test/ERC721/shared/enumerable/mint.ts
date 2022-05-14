@@ -15,12 +15,12 @@ export function shouldMint(roles = false) {
     });
 
     it("should mint to wallet", async function () {
-      const tx = this.erc721Instance.mint(this.owner.address);
+      const tx = this.erc721Instance.mint(this.receiver.address);
       await expect(tx)
         .to.emit(this.erc721Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, this.owner.address, 0);
+        .withArgs(ethers.constants.AddressZero, this.receiver.address, 0);
 
-      const balance = await this.erc721Instance.balanceOf(this.owner.address);
+      const balance = await this.erc721Instance.balanceOf(this.receiver.address);
       expect(balance).to.equal(1);
     });
 

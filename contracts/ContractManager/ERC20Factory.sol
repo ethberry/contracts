@@ -6,47 +6,33 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/access/IAccessControl.sol";
+import "./AbstractFactory.sol";
 
-import "../ERC20/preset/ERC20ACBCS.sol";
-import "../ERC20/preset/ERC20ACBCSP.sol";
-
-contract ERC20Factory is AccessControl {
+contract ERC20Factory is AbstractFactory {
   address[] private _erc20_tokens;
 
-  event ERC20Deployed(address token, string template, string name, string symbol, uint256 cap);
+  event ERC20Deployed(address token, string name, string symbol, uint256 cap);
 
   constructor() {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }
 
   function deployERC20Token(
-    string calldata template,
+    bytes calldata bytecode,
     string memory name,
     string memory symbol,
     uint256 cap
   ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
-    IAccessControl token;
-
-    if (keccak256(bytes(template)) == keccak256(bytes("SIMPLE"))) {
-      token = new ERC20ACBCS(name, symbol, cap);
-      addr = address(token);
-    } else if (keccak256(bytes(template)) == keccak256(bytes("PERMIT"))) {
-      token = new ERC20ACBCSP(name, symbol, cap);
-      addr = address(token);
-    } else {
-      revert("ERC20Factory: unknown template");
-    }
-
+    addr = deploy(bytecode, abi.encode(name, symbol, cap));
     _erc20_tokens.push(addr);
+    emit ERC20Deployed(addr, name, symbol, cap);
 
-    emit ERC20Deployed(addr, template, name, symbol, cap);
+    bytes32[] memory roles = new bytes32[](3);
+    roles[0] = keccak256("MINTER_ROLE");
+    roles[1] = keccak256("SNAPSHOT_ROLE");
+    roles[2] = 0x00;
 
-    token.grantRole(0x00, _msgSender());
-    token.renounceRole(0x00, address(this));
+    fixPermissions(addr, roles);
   }
 
   function allERC20Tokens() external view returns (address[] memory) {

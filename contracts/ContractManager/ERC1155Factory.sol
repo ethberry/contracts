@@ -6,41 +6,31 @@
 
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/access/IAccessControl.sol";
+import "./AbstractFactory.sol";
 
-import "../ERC1155/templates/ERC1155Simple.sol";
-
-contract ERC1155Factory is AccessControl {
+contract ERC1155Factory is AbstractFactory {
   address[] private _erc1155_tokens;
 
-  event ERC1155Deployed(address token, string template, string baseTokenURI);
+  event ERC1155Deployed(address token, string baseTokenURI);
 
   constructor() {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }
 
-  function deployERC1155Token(
-    string calldata template,
-    string memory baseTokenURI
-  ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
-    IAccessControl token;
-
-    if (keccak256(bytes(template)) == keccak256(bytes("SIMPLE"))) {
-      token = new ERC1155Simple(baseTokenURI);
-      addr = address(token);
-    } else {
-      revert("ERC1155Factory: unknown template");
-    }
-
+  function deployERC1155Token(bytes calldata bytecode, string memory baseTokenURI)
+    external
+    onlyRole(DEFAULT_ADMIN_ROLE)
+    returns (address addr)
+  {
+    addr = deploy(bytecode, abi.encode(baseTokenURI));
     _erc1155_tokens.push(addr);
+    emit ERC1155Deployed(addr, baseTokenURI);
 
-    emit ERC1155Deployed(addr, template, baseTokenURI);
+    bytes32[] memory roles = new bytes32[](2);
+    roles[0] = keccak256("MINTER_ROLE");
+    roles[1] = 0x00;
 
-    token.grantRole(0x00, _msgSender());
-    token.renounceRole(0x00, address(this));
+    fixPermissions(addr, roles);
   }
 
   function allERC1155Tokens() external view returns (address[] memory) {

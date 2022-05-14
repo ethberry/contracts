@@ -33,44 +33,28 @@ describe("ERC20Factory", function () {
   shouldRenounceRole();
 
   describe("deployERC20Token", function () {
-    it("should deploy contract SIMPLE", async function () {
-      const tx = await factoryInstance.deployERC20Token("SIMPLE", tokenName, tokenSymbol, amount);
+    it("should deploy contract", async function () {
+      const tx = await factoryInstance.deployERC20Token(erc20.bytecode, tokenName, tokenSymbol, amount);
 
-      const [token] = await factoryInstance.allERC20Tokens();
+      const [addr] = await factoryInstance.allERC20Tokens();
 
-      await expect(tx)
-        .to.emit(factoryInstance, "ERC20Deployed")
-        .withArgs(token, "SIMPLE", tokenName, tokenSymbol, amount);
+      await expect(tx).to.emit(factoryInstance, "ERC20Deployed").withArgs(addr, tokenName, tokenSymbol, amount);
 
-      const erc20Instance = erc20.attach(token);
+      const erc20Instance = erc20.attach(addr);
 
       const hasRole1 = await erc20Instance.hasRole(DEFAULT_ADMIN_ROLE, factoryInstance.address);
       expect(hasRole1).to.equal(false);
 
       const hasRole2 = await erc20Instance.hasRole(DEFAULT_ADMIN_ROLE, this.owner.address);
       expect(hasRole2).to.equal(true);
-    });
 
-    it("should deploy contract PERMIT", async function () {
-      const tx = await factoryInstance.deployERC20Token("PERMIT", tokenName, tokenSymbol, amount);
+      const tx2 = erc20Instance.mint(this.receiver.address, amount);
+      await expect(tx2)
+        .to.emit(erc20Instance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, this.receiver.address, amount);
 
-      const [token] = await factoryInstance.allERC20Tokens();
-
-      await expect(tx)
-        .to.emit(factoryInstance, "ERC20Deployed")
-        .withArgs(token, "PERMIT", tokenName, tokenSymbol, amount);
-    });
-
-    it("should fail: cap is 0", async function () {
-      const tx = factoryInstance.deployERC20Token("SIMPLE", tokenName, tokenSymbol, amount);
-
-      await expect(tx).to.be.revertedWith("ERC20Capped: cap is 0");
-    });
-
-    it("should fail: unknown template", async function () {
-      const tx = factoryInstance.deployERC20Token("UNKNOWN", tokenName, tokenSymbol, amount);
-
-      await expect(tx).to.be.revertedWith("ERC20Factory: unknown template");
+      const balance = await erc20Instance.balanceOf(this.receiver.address);
+      expect(balance).to.equal(amount);
     });
   });
 });

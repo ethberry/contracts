@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
 import { ERC1155Factory } from "../../typechain-types";
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, PAUSER_ROLE } from "../constants";
+import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenId } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
@@ -33,26 +33,31 @@ describe("ERC1155Factory", function () {
   shouldRenounceRole();
 
   describe("deployERC1155Token", function () {
-    it("should deploy contract SIMPLE", async function () {
-      const tx = await factoryInstance.deployERC1155Token("SIMPLE", baseTokenURI);
+    it("should deploy contract", async function () {
+      const tx = await factoryInstance.deployERC1155Token(erc1155.bytecode, baseTokenURI);
 
-      const [token] = await factoryInstance.allERC1155Tokens();
+      const [addr] = await factoryInstance.allERC1155Tokens();
 
-      await expect(tx).to.emit(factoryInstance, "ERC1155Deployed").withArgs(token, "SIMPLE", baseTokenURI);
+      await expect(tx).to.emit(factoryInstance, "ERC1155Deployed").withArgs(addr, baseTokenURI);
 
-      const erc1155Instance = erc1155.attach(token);
+      const erc1155Instance = erc1155.attach(addr);
 
       const hasRole1 = await erc1155Instance.hasRole(DEFAULT_ADMIN_ROLE, factoryInstance.address);
       expect(hasRole1).to.equal(false);
 
       const hasRole2 = await erc1155Instance.hasRole(DEFAULT_ADMIN_ROLE, this.owner.address);
       expect(hasRole2).to.equal(true);
-    });
 
-    it("should fail: unknown template", async function () {
-      const tx = factoryInstance.deployERC1155Token("UNKNOWN", baseTokenURI);
+      const tx2 = erc1155Instance.mint(this.receiver.address, tokenId, amount, "0x");
+      await expect(tx2)
+        .to.emit(erc1155Instance, "TransferSingle")
+        .withArgs(this.owner.address, ethers.constants.AddressZero, this.receiver.address, tokenId, amount);
 
-      await expect(tx).to.be.revertedWith("ERC1155Factory: unknown template");
+      const balance = await erc1155Instance.balanceOf(this.receiver.address, tokenId);
+      expect(balance).to.equal(amount);
+
+      const uri = await erc1155Instance.uri(0);
+      expect(uri).to.equal(baseTokenURI);
     });
   });
 });

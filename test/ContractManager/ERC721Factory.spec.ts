@@ -33,50 +33,39 @@ describe("ERC721Factory", function () {
   shouldRenounceRole();
 
   describe("deployERC721Token", function () {
-    it("should deploy contract SIMPLE", async function () {
+    it("should deploy contract", async function () {
       const tx = await factoryInstance.deployERC721Token(
-        "SIMPLE",
+        erc721.bytecode,
         tokenName,
         tokenSymbol,
         baseTokenURI,
         royaltyNumerator,
       );
 
-      const [token] = await factoryInstance.allERC721Tokens();
+      const [addr] = await factoryInstance.allERC721Tokens();
 
       await expect(tx)
         .to.emit(factoryInstance, "ERC721Deployed")
-        .withArgs(token, "SIMPLE", tokenName, tokenSymbol, baseTokenURI, royaltyNumerator);
+        .withArgs(addr, tokenName, tokenSymbol, baseTokenURI, royaltyNumerator);
 
-      const erc721Instance = erc721.attach(token);
+      const erc721Instance = erc721.attach(addr);
 
       const hasRole1 = await erc721Instance.hasRole(DEFAULT_ADMIN_ROLE, factoryInstance.address);
       expect(hasRole1).to.equal(false);
 
       const hasRole2 = await erc721Instance.hasRole(DEFAULT_ADMIN_ROLE, this.owner.address);
       expect(hasRole2).to.equal(true);
-    });
 
-    it("should deploy contract RANDOM", async function () {
-      const tx = await factoryInstance.deployERC721Token(
-        "RANDOM",
-        tokenName,
-        tokenSymbol,
-        baseTokenURI,
-        royaltyNumerator,
-      );
+      const tx2 = erc721Instance.safeMint(this.receiver.address);
+      await expect(tx2)
+        .to.emit(erc721Instance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, this.receiver.address, 0);
 
-      const [token] = await factoryInstance.allERC721Tokens();
+      const balance = await erc721Instance.balanceOf(this.receiver.address);
+      expect(balance).to.equal(1);
 
-      await expect(tx)
-        .to.emit(factoryInstance, "ERC721Deployed")
-        .withArgs(token, "RANDOM", tokenName, tokenSymbol, baseTokenURI, royaltyNumerator);
-    });
-
-    it("should fail: unknown template", async function () {
-      const tx = factoryInstance.deployERC721Token("UNKNOWN", tokenName, tokenSymbol, baseTokenURI, royaltyNumerator);
-
-      await expect(tx).to.be.revertedWith("ERC721Factory: unknown template");
+      const uri = await erc721Instance.tokenURI(0);
+      expect(uri).to.equal(`${baseTokenURI}0`);
     });
   });
 });

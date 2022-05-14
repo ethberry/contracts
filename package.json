@@ -88,5 +88,5 @@
     "test:coverage": "hardhat coverage"
   },
   "types": "./typechain-types/index.ts",
-  "version": "0.3.0"
+  "version": "0.4.0"
 }

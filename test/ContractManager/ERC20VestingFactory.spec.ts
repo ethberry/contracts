@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 import { Network } from "@ethersproject/networks";
 
-import { VestingFactory } from "../../typechain-types";
+import { ERC20VestingFactory } from "../../typechain-types";
 import { DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
@@ -16,15 +16,15 @@ import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
 describe("VestingFactory", function () {
   let vesting: ContractFactory;
   let factory: ContractFactory;
-  let factoryInstance: VestingFactory;
+  let factoryInstance: ERC20VestingFactory;
   let network: Network;
 
   beforeEach(async function () {
     vesting = await ethers.getContractFactory("FlatVesting");
-    factory = await ethers.getContractFactory("VestingFactory");
+    factory = await ethers.getContractFactory("ERC20VestingFactory");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
-    factoryInstance = (await factory.deploy()) as VestingFactory;
+    factoryInstance = (await factory.deploy()) as ERC20VestingFactory;
 
     network = await ethers.provider.getNetwork();
 
@@ -37,7 +37,7 @@ describe("VestingFactory", function () {
   shouldRevokeRole();
   shouldRenounceRole();
 
-  describe("deployVesting", function () {
+  describe("deployERC20Vesting", function () {
     it("should deploy contract", async function () {
       const span = 300;
       const timestamp: number = (await time.latest()).toNumber();
@@ -70,7 +70,7 @@ describe("VestingFactory", function () {
         },
       );
 
-      const tx = await factoryInstance.deployVesting(
+      const tx = await factoryInstance.deployERC20Vesting(
         nonce,
         vesting.bytecode,
         this.receiver.address,

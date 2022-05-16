@@ -8,7 +8,7 @@ pragma solidity ^0.8.4;
 
 import "./AbstractFactory.sol";
 
-contract VestingFactory is AbstractFactory {
+contract ERC20VestingFactory is AbstractFactory {
   bytes32 private immutable VESTING_PERMIT_SIGNATURE =
     keccak256("EIP712(bytes32 nonce,bytes bytecode,address beneficiary,uint64 startTimestamp,uint64 duration)");
 
@@ -21,7 +21,7 @@ contract VestingFactory is AbstractFactory {
     uint64 duration // in seconds
   );
 
-  function deployVesting(
+  function deployERC20Vesting(
     bytes32 nonce,
     bytes calldata bytecode,
     address beneficiary,

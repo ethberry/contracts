@@ -6,11 +6,11 @@
 
 pragma solidity ^0.8.4;
 
-import "./VestingFactory.sol";
-import "./ERC20Factory.sol";
-import "./ERC721Factory.sol";
-import "./ERC1155Factory.sol";
+import "./ERC20VestingFactory.sol";
+import "./ERC20TokenFactory.sol";
+import "./ERC721TokenFactory.sol";
+import "./ERC1155TokenFactory.sol";
 
-contract ContractManager is VestingFactory, ERC20Factory, ERC721Factory, ERC1155Factory {
+contract ContractManager is ERC20VestingFactory, ERC20TokenFactory, ERC721TokenFactory, ERC1155TokenFactory {
 
 }

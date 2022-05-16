@@ -82,7 +82,7 @@ describe("ERC721TokenFactory", function () {
       const [address] = await factoryInstance.allERC721Tokens();
 
       await expect(tx)
-        .to.emit(factoryInstance, "ERC721Deployed")
+        .to.emit(factoryInstance, "ERC721TokenDeployed")
         .withArgs(address, tokenName, tokenSymbol, baseTokenURI, royalty);
 
       const erc721Instance = erc721.attach(address);

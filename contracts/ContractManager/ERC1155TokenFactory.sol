@@ -14,7 +14,7 @@ contract ERC1155TokenFactory is AbstractFactory {
 
   address[] private _erc1155_tokens;
 
-  event ERC1155Deployed(address token, string baseTokenURI);
+  event ERC1155TokenDeployed(address addr, string baseTokenURI);
 
   function deployERC1155Token(
     bytes32 nonce,
@@ -22,7 +22,7 @@ contract ERC1155TokenFactory is AbstractFactory {
     string memory baseTokenURI,
     address signer,
     bytes calldata signature
-  ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address token) {
+  ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
     bytes32 digest = _hash(nonce, bytecode, baseTokenURI);
@@ -30,16 +30,16 @@ contract ERC1155TokenFactory is AbstractFactory {
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
 
-    token = deploy(bytecode, abi.encode(baseTokenURI));
-    _erc1155_tokens.push(token);
+    addr = deploy(bytecode, abi.encode(baseTokenURI));
+    _erc1155_tokens.push(addr);
 
-    emit ERC1155Deployed(token, baseTokenURI);
+    emit ERC1155TokenDeployed(addr, baseTokenURI);
 
     bytes32[] memory roles = new bytes32[](2);
     roles[0] = MINTER_ROLE;
     roles[1] = DEFAULT_ADMIN_ROLE;
 
-    fixPermissions(token, roles);
+    fixPermissions(addr, roles);
   }
 
   function _hash(

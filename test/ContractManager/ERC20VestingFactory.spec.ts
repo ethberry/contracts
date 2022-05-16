@@ -83,7 +83,7 @@ describe("VestingFactory", function () {
       const [address] = await factoryInstance.allVesting();
 
       await expect(tx)
-        .to.emit(factoryInstance, "VestingDeployed")
+        .to.emit(factoryInstance, "ERC20VestingDeployed")
         .withArgs(address, this.receiver.address, timestamp, span);
     });
   });

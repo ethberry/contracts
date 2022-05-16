@@ -14,7 +14,7 @@ contract ERC20TokenFactory is AbstractFactory {
 
   address[] private _erc20_tokens;
 
-  event ERC20Deployed(address token, string name, string symbol, uint256 cap);
+  event ERC20TokenDeployed(address addr, string name, string symbol, uint256 cap);
 
   function deployERC20Token(
     bytes32 nonce,
@@ -24,7 +24,7 @@ contract ERC20TokenFactory is AbstractFactory {
     uint256 cap,
     address signer,
     bytes calldata signature
-  ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address token) {
+  ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
     bytes32 digest = _hash(nonce, bytecode, name, symbol, cap);
@@ -32,17 +32,17 @@ contract ERC20TokenFactory is AbstractFactory {
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
 
-    token = deploy(bytecode, abi.encode(name, symbol, cap));
-    _erc20_tokens.push(token);
+    addr = deploy(bytecode, abi.encode(name, symbol, cap));
+    _erc20_tokens.push(addr);
 
-    emit ERC20Deployed(token, name, symbol, cap);
+    emit ERC20TokenDeployed(addr, name, symbol, cap);
 
     bytes32[] memory roles = new bytes32[](3);
     roles[0] = MINTER_ROLE;
     roles[1] = SNAPSHOT_ROLE;
     roles[2] = DEFAULT_ADMIN_ROLE;
 
-    fixPermissions(token, roles);
+    fixPermissions(addr, roles);
   }
 
   function _hash(

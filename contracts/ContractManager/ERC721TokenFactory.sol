@@ -14,7 +14,7 @@ contract ERC721TokenFactory is AbstractFactory {
 
   address[] private _erc721_tokens;
 
-  event ERC721Deployed(address token, string name, string symbol, string baseTokenURI, uint96 royalty);
+  event ERC721TokenDeployed(address addr, string name, string symbol, string baseTokenURI, uint96 royalty);
 
   function deployERC721Token(
     bytes32 nonce,
@@ -25,7 +25,7 @@ contract ERC721TokenFactory is AbstractFactory {
     uint96 royalty,
     address signer,
     bytes calldata signature
-  ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address token) {
+  ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
     bytes32 digest = _hash(nonce, bytecode, name, symbol, baseTokenURI, royalty);
@@ -33,16 +33,16 @@ contract ERC721TokenFactory is AbstractFactory {
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
 
-    token = deploy(bytecode, abi.encode(name, symbol, baseTokenURI, royalty));
-    _erc721_tokens.push(token);
+    addr = deploy(bytecode, abi.encode(name, symbol, baseTokenURI, royalty));
+    _erc721_tokens.push(addr);
 
-    emit ERC721Deployed(token, name, symbol, baseTokenURI, royalty);
+    emit ERC721TokenDeployed(addr, name, symbol, baseTokenURI, royalty);
 
     bytes32[] memory roles = new bytes32[](2);
     roles[0] = MINTER_ROLE;
     roles[1] = DEFAULT_ADMIN_ROLE;
 
-    fixPermissions(token, roles);
+    fixPermissions(addr, roles);
   }
 
   function _hash(

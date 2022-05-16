@@ -12,9 +12,9 @@ contract ERC20VestingFactory is AbstractFactory {
   bytes32 private immutable VESTING_PERMIT_SIGNATURE =
     keccak256("EIP712(bytes32 nonce,bytes bytecode,address beneficiary,uint64 startTimestamp,uint64 duration)");
 
-  address[] private _vesting;
+  address[] private _erc20_vesting;
 
-  event VestingDeployed(
+  event ERC20VestingDeployed(
     address addr,
     address beneficiary,
     uint64 startTimestamp, // in seconds
@@ -29,7 +29,7 @@ contract ERC20VestingFactory is AbstractFactory {
     uint64 duration,
     address signer,
     bytes calldata signature
-  ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address token) {
+  ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
     bytes32 digest = _hash(nonce, bytecode, beneficiary, startTimestamp, duration);
@@ -37,10 +37,10 @@ contract ERC20VestingFactory is AbstractFactory {
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
 
-    token = deploy(bytecode, abi.encode(beneficiary, startTimestamp, duration));
-    _vesting.push(token);
+    addr = deploy(bytecode, abi.encode(beneficiary, startTimestamp, duration));
+    _erc20_vesting.push(addr);
 
-    emit VestingDeployed(token, beneficiary, startTimestamp, duration);
+    emit ERC20VestingDeployed(addr, beneficiary, startTimestamp, duration);
   }
 
   function _hash(
@@ -66,6 +66,6 @@ contract ERC20VestingFactory is AbstractFactory {
   }
 
   function allVesting() external view returns (address[] memory) {
-    return _vesting;
+    return _erc20_vesting;
   }
 }

@@ -81,7 +81,7 @@
     "deploy:polygon": "hardhat --network polygon deploy",
     "deploy:rinkeby": "hardhat --network rinkeby deploy",
     "lint": "eslint . --fix",
-    "prebuild": "rimraf artifacts cache typechain-types",
+    "prebuild": "hardhat clean",
     "preversion": "npm run build",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test",

@@ -8,8 +8,8 @@ import { EIP712ERC1155, ERC1155ACB } from "../../typechain-types";
 import { amount, baseTokenURI, MINTER_ROLE, nonce, tokenId, tokenName } from "../constants";
 
 describe("EIP712ERC1155", function () {
-  let erc721: ContractFactory;
-  let erc721Instance: ERC1155ACB;
+  let erc1155: ContractFactory;
+  let erc1155Instance: ERC1155ACB;
   let dropbox: ContractFactory;
   let dropboxInstance: EIP712ERC1155;
   let owner: SignerWithAddress;
@@ -18,15 +18,14 @@ describe("EIP712ERC1155", function () {
   let network: Network;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC1155ACB");
+    erc1155 = await ethers.getContractFactory("ERC1155ACB");
     dropbox = await ethers.getContractFactory("EIP712ERC1155");
     [owner, receiver, stranger] = await ethers.getSigners();
 
-    erc721Instance = (await erc721.deploy(baseTokenURI)) as ERC1155ACB;
+    erc1155Instance = (await erc1155.deploy(baseTokenURI)) as ERC1155ACB;
     dropboxInstance = (await dropbox.deploy(tokenName)) as EIP712ERC1155;
 
-    await dropboxInstance.setFactory(erc721Instance.address);
-    await erc721Instance.grantRole(MINTER_ROLE, dropboxInstance.address);
+    await erc1155Instance.grantRole(MINTER_ROLE, dropboxInstance.address);
 
     network = await ethers.provider.getNetwork();
   });
@@ -46,6 +45,7 @@ describe("EIP712ERC1155", function () {
           EIP712: [
             { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
+            { name: "token", type: "address" },
             { name: "tokenIds", type: "uint256[]" },
             { name: "amounts", type: "uint256[]" },
           ],
@@ -54,6 +54,7 @@ describe("EIP712ERC1155", function () {
         {
           nonce,
           account: receiver.address,
+          token: erc1155Instance.address,
           tokenIds: [tokenId],
           amounts: [amount],
         },
@@ -61,9 +62,9 @@ describe("EIP712ERC1155", function () {
 
       const tx1 = dropboxInstance
         .connect(stranger)
-        .redeem(nonce, receiver.address, [tokenId], [amount], owner.address, signature);
+        .redeem(nonce, receiver.address, erc1155Instance.address, [tokenId], [amount], owner.address, signature);
       await expect(tx1)
-        .to.emit(erc721Instance, "TransferBatch")
+        .to.emit(erc1155Instance, "TransferBatch")
         .withArgs(dropboxInstance.address, ethers.constants.AddressZero, receiver.address, [tokenId], [amount]);
     });
 
@@ -81,6 +82,7 @@ describe("EIP712ERC1155", function () {
           EIP712: [
             { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
+            { name: "token", type: "address" },
             { name: "tokenIds", type: "uint256[]" },
             { name: "amounts", type: "uint256[]" },
           ],
@@ -89,6 +91,7 @@ describe("EIP712ERC1155", function () {
         {
           nonce,
           account: receiver.address,
+          token: erc1155Instance.address,
           tokenIds: [tokenId],
           amounts: [amount],
         },
@@ -96,14 +99,14 @@ describe("EIP712ERC1155", function () {
 
       const tx1 = dropboxInstance
         .connect(stranger)
-        .redeem(nonce, receiver.address, [tokenId], [amount], owner.address, signature);
+        .redeem(nonce, receiver.address, erc1155Instance.address, [tokenId], [amount], owner.address, signature);
       await expect(tx1)
-        .to.emit(erc721Instance, "TransferBatch")
+        .to.emit(erc1155Instance, "TransferBatch")
         .withArgs(dropboxInstance.address, ethers.constants.AddressZero, receiver.address, [tokenId], [amount]);
 
       const tx2 = dropboxInstance
         .connect(stranger)
-        .redeem(nonce, receiver.address, [tokenId], [amount], owner.address, signature);
+        .redeem(nonce, receiver.address, erc1155Instance.address, [tokenId], [amount], owner.address, signature);
       await expect(tx2).to.be.revertedWith("EIP712ERC1155: Expired signature");
     });
 
@@ -121,6 +124,7 @@ describe("EIP712ERC1155", function () {
           EIP712: [
             { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
+            { name: "token", type: "address" },
             { name: "tokenIds", type: "uint256[]" },
             { name: "amounts", type: "uint256[]" },
           ],
@@ -129,6 +133,7 @@ describe("EIP712ERC1155", function () {
         {
           nonce,
           account: receiver.address,
+          token: erc1155Instance.address,
           tokenIds: [tokenId],
           amounts: [amount],
         },
@@ -136,7 +141,7 @@ describe("EIP712ERC1155", function () {
 
       const tx1 = dropboxInstance
         .connect(stranger)
-        .redeem(nonce, receiver.address, [tokenId], [amount], stranger.address, signature);
+        .redeem(nonce, receiver.address, erc1155Instance.address, [tokenId], [amount], stranger.address, signature);
       await expect(tx1).to.be.revertedWith("EIP712ERC1155: Invalid signature");
     });
   });

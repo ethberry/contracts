@@ -42,13 +42,13 @@ describe("ERC721Factory", function () {
         royaltyNumerator,
       );
 
-      const [addr] = await factoryInstance.allERC721Tokens();
+      const [address] = await factoryInstance.allERC721Tokens();
 
       await expect(tx)
         .to.emit(factoryInstance, "ERC721Deployed")
-        .withArgs(addr, tokenName, tokenSymbol, baseTokenURI, royaltyNumerator);
+        .withArgs(address, tokenName, tokenSymbol, baseTokenURI, royaltyNumerator);
 
-      const erc721Instance = erc721.attach(addr);
+      const erc721Instance = erc721.attach(address);
 
       const hasRole1 = await erc721Instance.hasRole(DEFAULT_ADMIN_ROLE, factoryInstance.address);
       expect(hasRole1).to.equal(false);

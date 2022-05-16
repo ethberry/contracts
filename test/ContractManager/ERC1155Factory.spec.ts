@@ -36,11 +36,11 @@ describe("ERC1155Factory", function () {
     it("should deploy contract", async function () {
       const tx = await factoryInstance.deployERC1155Token(erc1155.bytecode, baseTokenURI);
 
-      const [addr] = await factoryInstance.allERC1155Tokens();
+      const [address] = await factoryInstance.allERC1155Tokens();
 
-      await expect(tx).to.emit(factoryInstance, "ERC1155Deployed").withArgs(addr, baseTokenURI);
+      await expect(tx).to.emit(factoryInstance, "ERC1155Deployed").withArgs(address, baseTokenURI);
 
-      const erc1155Instance = erc1155.attach(addr);
+      const erc1155Instance = erc1155.attach(address);
 
       const hasRole1 = await erc1155Instance.hasRole(DEFAULT_ADMIN_ROLE, factoryInstance.address);
       expect(hasRole1).to.equal(false);

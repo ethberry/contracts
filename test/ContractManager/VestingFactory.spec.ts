@@ -47,11 +47,11 @@ describe("VestingFactory", function () {
 
       const tx = await factoryInstance.deployVesting(vesting.bytecode, this.receiver.address, timestamp, span);
 
-      const [addr] = await factoryInstance.allVesting();
+      const [address] = await factoryInstance.allVesting();
 
       await expect(tx)
         .to.emit(factoryInstance, "VestingDeployed")
-        .withArgs(addr, this.receiver.address, timestamp, span);
+        .withArgs(address, this.receiver.address, timestamp, span);
     });
   });
 });

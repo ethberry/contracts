@@ -17,13 +17,11 @@ import "../interfaces/IERC1155Mintable.sol";
 contract EIP712ERC1155 is AccessControl, Pausable, EIP712 {
   using Address for address;
 
-  IERC1155Mintable _factory;
-
   mapping(bytes32 => bool) private _expired;
 
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
   bytes32 private immutable PERMIT_SIGNATURE =
-    keccak256("EIP712(bytes32 nonce,address account,uint256[] tokenIds,uint256[] amounts)");
+    keccak256("EIP712(bytes32 nonce,address account,address token,uint256[] tokenIds,uint256[] amounts)");
 
   constructor(string memory name) EIP712(name, "1.0.0") {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -33,20 +31,27 @@ contract EIP712ERC1155 is AccessControl, Pausable, EIP712 {
   function redeem(
     bytes32 nonce,
     address account,
+    address token,
     uint256[] memory tokenIds,
     uint256[] memory amounts,
     address signer,
     bytes calldata signature
   ) external {
-    require(_verify(signer, _hash(nonce, account, tokenIds, amounts), signature), "EIP712ERC1155: Invalid signature");
+    require(
+      _verify(signer, _hash(nonce, account, token, tokenIds, amounts), signature),
+      "EIP712ERC1155: Invalid signature"
+    );
+
     require(!_expired[nonce], "EIP712ERC1155: Expired signature");
     _expired[nonce] = true;
-    _factory.mintBatch(account, tokenIds, amounts, "0x");
+
+    IERC1155Mintable(token).mintBatch(account, tokenIds, amounts, "0x");
   }
 
   function _hash(
     bytes32 nonce,
     address account,
+    address token,
     uint256[] memory tokenIds,
     uint256[] memory amounts
   ) internal view returns (bytes32) {
@@ -57,6 +62,7 @@ contract EIP712ERC1155 is AccessControl, Pausable, EIP712 {
             PERMIT_SIGNATURE,
             nonce,
             account,
+            token,
             keccak256(abi.encodePacked(tokenIds)),
             keccak256(abi.encodePacked(amounts))
           )
@@ -70,11 +76,6 @@ contract EIP712ERC1155 is AccessControl, Pausable, EIP712 {
     bytes memory signature
   ) internal view returns (bool) {
     return SignatureChecker.isValidSignatureNow(signer, digest, signature);
-  }
-
-  function setFactory(address factory) external onlyRole(DEFAULT_ADMIN_ROLE) {
-    require(factory.isContract(), "EIP712ERC1155: the factory must be a deployed contract");
-    _factory = IERC1155Mintable(factory);
   }
 
   function pause() public virtual onlyRole(PAUSER_ROLE) {

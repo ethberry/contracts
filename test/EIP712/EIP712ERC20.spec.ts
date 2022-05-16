@@ -25,7 +25,6 @@ describe("EIP712ERC20", function () {
     erc20Instance = (await erc20.deploy(tokenName, tokenSymbol)) as ERC20ACB;
     dropboxInstance = (await dropbox.deploy(tokenName)) as EIP712ERC20;
 
-    await dropboxInstance.setFactory(erc20Instance.address);
     await erc20Instance.grantRole(MINTER_ROLE, dropboxInstance.address);
 
     network = await ethers.provider.getNetwork();
@@ -46,6 +45,7 @@ describe("EIP712ERC20", function () {
           EIP712: [
             { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
+            { name: "token", type: "address" },
             { name: "amount", type: "uint256" },
           ],
         },
@@ -53,11 +53,14 @@ describe("EIP712ERC20", function () {
         {
           nonce,
           account: receiver.address,
+          token: erc20Instance.address,
           amount,
         },
       );
 
-      const tx1 = dropboxInstance.connect(stranger).redeem(nonce, receiver.address, amount, owner.address, signature);
+      const tx1 = dropboxInstance
+        .connect(stranger)
+        .redeem(nonce, receiver.address, erc20Instance.address, amount, owner.address, signature);
       await expect(tx1)
         .to.emit(erc20Instance, "Transfer")
         .withArgs(ethers.constants.AddressZero, receiver.address, amount);
@@ -77,6 +80,7 @@ describe("EIP712ERC20", function () {
           EIP712: [
             { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
+            { name: "token", type: "address" },
             { name: "amount", type: "uint256" },
           ],
         },
@@ -84,16 +88,21 @@ describe("EIP712ERC20", function () {
         {
           nonce,
           account: receiver.address,
+          token: erc20Instance.address,
           amount,
         },
       );
 
-      const tx1 = dropboxInstance.connect(stranger).redeem(nonce, receiver.address, amount, owner.address, signature);
+      const tx1 = dropboxInstance
+        .connect(stranger)
+        .redeem(nonce, receiver.address, erc20Instance.address, amount, owner.address, signature);
       await expect(tx1)
         .to.emit(erc20Instance, "Transfer")
         .withArgs(ethers.constants.AddressZero, receiver.address, amount);
 
-      const tx2 = dropboxInstance.connect(stranger).redeem(nonce, receiver.address, amount, owner.address, signature);
+      const tx2 = dropboxInstance
+        .connect(stranger)
+        .redeem(nonce, receiver.address, erc20Instance.address, amount, owner.address, signature);
       await expect(tx2).to.be.revertedWith("EIP712ERC20: Expired signature");
     });
 
@@ -111,6 +120,7 @@ describe("EIP712ERC20", function () {
           EIP712: [
             { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
+            { name: "token", type: "address" },
             { name: "amount", type: "uint256" },
           ],
         },
@@ -118,13 +128,14 @@ describe("EIP712ERC20", function () {
         {
           nonce,
           account: receiver.address,
+          token: erc20Instance.address,
           amount,
         },
       );
 
       const tx1 = dropboxInstance
         .connect(stranger)
-        .redeem(nonce, receiver.address, amount, stranger.address, signature);
+        .redeem(nonce, receiver.address, erc20Instance.address, amount, stranger.address, signature);
       await expect(tx1).to.be.revertedWith("EIP712ERC20: Invalid signature");
     });
   });

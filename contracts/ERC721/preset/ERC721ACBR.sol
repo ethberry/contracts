@@ -18,21 +18,18 @@ contract ERC721ACBR is AccessControl, ERC721Burnable, IERC721Royalty, ERC721Roya
 
   string internal _baseTokenURI;
 
-  event DefaultRoyaltyInfo(address royaltyReceiver, uint96 royalty);
-  event TokenRoyaltyInfo(uint256 tokenId, address royaltyReceiver, uint96 royalty);
-
   constructor(
     string memory name,
     string memory symbol,
     string memory baseTokenURI,
-    uint96 royalty
+    uint96 royaltyNumerator
   ) ERC721(name, symbol) {
     _baseTokenURI = baseTokenURI;
 
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
 
-    _setDefaultRoyalty(_msgSender(), royalty);
+    _setDefaultRoyalty(_msgSender(), royaltyNumerator);
   }
 
   function mint(address to, uint256 tokenId) public virtual onlyRole(MINTER_ROLE) {
@@ -43,23 +40,23 @@ contract ERC721ACBR is AccessControl, ERC721Burnable, IERC721Royalty, ERC721Roya
     _safeMint(to, tokenId);
   }
 
-  function setDefaultRoyalty(address royaltyReceiver, uint96 royalty)
+  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
     public
     virtual
   override
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
-    super._setDefaultRoyalty(royaltyReceiver, royalty);
-    emit DefaultRoyaltyInfo(royaltyReceiver, royalty);
+    super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
+    emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
   }
 
   function setTokenRoyalty(
     uint256 tokenId,
     address royaltyReceiver,
-    uint96 royalty
+    uint96 royaltyNumerator
   ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
-    super._setTokenRoyalty(tokenId, royaltyReceiver, royalty);
-    emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royalty);
+    super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
+    emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }
 
   function supportsInterface(bytes4 interfaceId)

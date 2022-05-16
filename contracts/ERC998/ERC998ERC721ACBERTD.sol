@@ -34,8 +34,8 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
     string memory name,
     string memory symbol,
     string memory baseTokenURI,
-    uint96 royaltyNumerator
-  ) ERC721ACBER(name, symbol, baseTokenURI, royaltyNumerator) {
+    uint96 royalty
+  ) ERC721ACBER(name, symbol, baseTokenURI, royalty) {
     // burn first token because of reasons
     // mint(0x000000000000000000000000000000000000dead);
   }

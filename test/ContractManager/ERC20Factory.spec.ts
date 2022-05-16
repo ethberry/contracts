@@ -3,18 +3,20 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
 import { ERC20Factory } from "../../typechain-types";
-import { amount, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenName, tokenSymbol } from "../constants";
+import { amount, DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
 import { shouldGrantRole } from "../shared/accessControl/grantRole";
 import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
+import { Network } from "@ethersproject/networks";
 
 describe("ERC20Factory", function () {
   let erc20: ContractFactory;
   let factory: ContractFactory;
   let factoryInstance: ERC20Factory;
+  let network: Network;
 
   beforeEach(async function () {
     erc20 = await ethers.getContractFactory("ERC20ACBCS");
@@ -22,6 +24,8 @@ describe("ERC20Factory", function () {
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
     factoryInstance = (await factory.deploy()) as ERC20Factory;
+
+    network = await ethers.provider.getNetwork();
 
     this.contractInstance = factoryInstance;
   });
@@ -34,7 +38,43 @@ describe("ERC20Factory", function () {
 
   describe("deployERC20Token", function () {
     it("should deploy contract", async function () {
-      const tx = await factoryInstance.deployERC20Token(erc20.bytecode, tokenName, tokenSymbol, amount);
+      const signature = await this.owner._signTypedData(
+        // Domain
+        {
+          name: "ContractManager",
+          version: "1.0.0",
+          chainId: network.chainId,
+          verifyingContract: factoryInstance.address,
+        },
+        // Types
+        {
+          EIP712: [
+            { name: "nonce", type: "bytes32" },
+            { name: "bytecode", type: "bytes" },
+            { name: "name", type: "string" },
+            { name: "symbol", type: "string" },
+            { name: "cap", type: "uint256" },
+          ],
+        },
+        // Value
+        {
+          nonce,
+          bytecode: erc20.bytecode,
+          name: tokenName,
+          symbol: tokenSymbol,
+          cap: amount,
+        },
+      );
+
+      const tx = await factoryInstance.deployERC20Token(
+        nonce,
+        erc20.bytecode,
+        tokenName,
+        tokenSymbol,
+        amount,
+        this.owner.address,
+        signature,
+      );
 
       const [address] = await factoryInstance.allERC20Tokens();
 

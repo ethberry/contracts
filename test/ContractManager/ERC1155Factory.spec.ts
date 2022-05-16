@@ -1,9 +1,10 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
+import { Network } from "@ethersproject/networks";
 
 import { ERC1155Factory } from "../../typechain-types";
-import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenId } from "../constants";
+import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, tokenId } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
@@ -15,6 +16,7 @@ describe("ERC1155Factory", function () {
   let erc1155: ContractFactory;
   let factory: ContractFactory;
   let factoryInstance: ERC1155Factory;
+  let network: Network;
 
   beforeEach(async function () {
     erc1155 = await ethers.getContractFactory("ERC1155ACBS");
@@ -22,6 +24,8 @@ describe("ERC1155Factory", function () {
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
     factoryInstance = (await factory.deploy()) as ERC1155Factory;
+
+    network = await ethers.provider.getNetwork();
 
     this.contractInstance = factoryInstance;
   });
@@ -34,7 +38,37 @@ describe("ERC1155Factory", function () {
 
   describe("deployERC1155Token", function () {
     it("should deploy contract", async function () {
-      const tx = await factoryInstance.deployERC1155Token(erc1155.bytecode, baseTokenURI);
+      const signature = await this.owner._signTypedData(
+        // Domain
+        {
+          name: "ContractManager",
+          version: "1.0.0",
+          chainId: network.chainId,
+          verifyingContract: factoryInstance.address,
+        },
+        // Types
+        {
+          EIP712: [
+            { name: "nonce", type: "bytes32" },
+            { name: "bytecode", type: "bytes" },
+            { name: "baseTokenURI", type: "string" },
+          ],
+        },
+        // Value
+        {
+          nonce,
+          bytecode: erc1155.bytecode,
+          baseTokenURI,
+        },
+      );
+
+      const tx = await factoryInstance.deployERC1155Token(
+        nonce,
+        erc1155.bytecode,
+        baseTokenURI,
+        this.owner.address,
+        signature,
+      );
 
       const [address] = await factoryInstance.allERC1155Tokens();
 

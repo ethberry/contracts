@@ -19,12 +19,14 @@ contract EIP712ERC1155 is AccessControl, Pausable, EIP712 {
 
   mapping(bytes32 => bool) private _expired;
 
+  bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
   bytes32 private immutable PERMIT_SIGNATURE =
     keccak256("EIP712(bytes32 nonce,address account,address token,uint256[] tokenIds,uint256[] amounts)");
 
   constructor(string memory name) EIP712(name, "1.0.0") {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _setupRole(MINTER_ROLE, _msgSender());
     _setupRole(PAUSER_ROLE, _msgSender());
   }
 
@@ -37,6 +39,8 @@ contract EIP712ERC1155 is AccessControl, Pausable, EIP712 {
     address signer,
     bytes calldata signature
   ) external {
+    require(hasRole(MINTER_ROLE, signer), "EIP712ERC1155: Wrong signer");
+
     require(
       _verify(signer, _hash(nonce, account, token, tokenIds, amounts), signature),
       "EIP712ERC1155: Invalid signature"

@@ -2,9 +2,10 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
+import { Network } from "@ethersproject/networks";
 
-import { ERC20ACB, VestingFactory } from "../../typechain-types";
-import { amount, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenName, tokenSymbol } from "../constants";
+import { VestingFactory } from "../../typechain-types";
+import { DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
@@ -16,20 +17,16 @@ describe("VestingFactory", function () {
   let vesting: ContractFactory;
   let factory: ContractFactory;
   let factoryInstance: VestingFactory;
-  let erc20: ContractFactory;
-  let erc20Instance: ERC20ACB;
+  let network: Network;
 
   beforeEach(async function () {
     vesting = await ethers.getContractFactory("FlatVesting");
     factory = await ethers.getContractFactory("VestingFactory");
-    erc20 = await ethers.getContractFactory("ERC20ACB");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
     factoryInstance = (await factory.deploy()) as VestingFactory;
-    erc20Instance = (await erc20.deploy(tokenName, tokenSymbol)) as ERC20ACB;
 
-    await erc20Instance.mint(this.owner.address, amount);
-    await erc20Instance.approve(factoryInstance.address, amount);
+    network = await ethers.provider.getNetwork();
 
     this.contractInstance = factoryInstance;
   });
@@ -45,7 +42,43 @@ describe("VestingFactory", function () {
       const span = 300;
       const timestamp: number = (await time.latest()).toNumber();
 
-      const tx = await factoryInstance.deployVesting(vesting.bytecode, this.receiver.address, timestamp, span);
+      const signature = await this.owner._signTypedData(
+        // Domain
+        {
+          name: "ContractManager",
+          version: "1.0.0",
+          chainId: network.chainId,
+          verifyingContract: factoryInstance.address,
+        },
+        // Types
+        {
+          EIP712: [
+            { name: "nonce", type: "bytes32" },
+            { name: "bytecode", type: "bytes" },
+            { name: "beneficiary", type: "address" },
+            { name: "startTimestamp", type: "uint64" },
+            { name: "duration", type: "uint64" },
+          ],
+        },
+        // Value
+        {
+          nonce,
+          bytecode: vesting.bytecode,
+          beneficiary: this.receiver.address,
+          startTimestamp: timestamp,
+          duration: span,
+        },
+      );
+
+      const tx = await factoryInstance.deployVesting(
+        nonce,
+        vesting.bytecode,
+        this.receiver.address,
+        timestamp,
+        span,
+        this.owner.address,
+        signature,
+      );
 
       const [address] = await factoryInstance.allVesting();
 

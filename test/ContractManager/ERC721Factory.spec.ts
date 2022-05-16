@@ -1,9 +1,10 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
+import { Network } from "@ethersproject/networks";
 
 import { ERC721Factory } from "../../typechain-types";
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, royaltyNumerator, tokenName, tokenSymbol } from "../constants";
+import { baseTokenURI, DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, royalty, tokenName, tokenSymbol } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
@@ -15,6 +16,7 @@ describe("ERC721Factory", function () {
   let erc721: ContractFactory;
   let factory: ContractFactory;
   let factoryInstance: ERC721Factory;
+  let network: Network;
 
   beforeEach(async function () {
     erc721 = await ethers.getContractFactory("ERC721ACBER");
@@ -22,6 +24,8 @@ describe("ERC721Factory", function () {
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
     factoryInstance = (await factory.deploy()) as ERC721Factory;
+
+    network = await ethers.provider.getNetwork();
 
     this.contractInstance = factoryInstance;
   });
@@ -34,19 +38,52 @@ describe("ERC721Factory", function () {
 
   describe("deployERC721Token", function () {
     it("should deploy contract", async function () {
+      const signature = await this.owner._signTypedData(
+        // Domain
+        {
+          name: "ContractManager",
+          version: "1.0.0",
+          chainId: network.chainId,
+          verifyingContract: factoryInstance.address,
+        },
+        // Types
+        {
+          EIP712: [
+            { name: "nonce", type: "bytes32" },
+            { name: "bytecode", type: "bytes" },
+            { name: "name", type: "string" },
+            { name: "symbol", type: "string" },
+            { name: "baseTokenURI", type: "string" },
+            { name: "royalty", type: "uint96" },
+          ],
+        },
+        // Value
+        {
+          nonce,
+          bytecode: erc721.bytecode,
+          name: tokenName,
+          symbol: tokenSymbol,
+          baseTokenURI,
+          royalty,
+        },
+      );
+
       const tx = await factoryInstance.deployERC721Token(
+        nonce,
         erc721.bytecode,
         tokenName,
         tokenSymbol,
         baseTokenURI,
-        royaltyNumerator,
+        royalty,
+        this.owner.address,
+        signature,
       );
 
       const [address] = await factoryInstance.allERC721Tokens();
 
       await expect(tx)
         .to.emit(factoryInstance, "ERC721Deployed")
-        .withArgs(address, tokenName, tokenSymbol, baseTokenURI, royaltyNumerator);
+        .withArgs(address, tokenName, tokenSymbol, baseTokenURI, royalty);
 
       const erc721Instance = erc721.attach(address);
 

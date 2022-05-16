@@ -2,13 +2,12 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
 import { ContractManager } from "../../typechain-types";
-import { DEFAULT_ADMIN_ROLE, PAUSER_ROLE } from "../constants";
+import { DEFAULT_ADMIN_ROLE } from "../constants";
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
 import { shouldGrantRole } from "../shared/accessControl/grantRole";
 import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
-import { shouldPause } from "../shared/pausable";
 
 describe("ContractManager", function () {
   let manager: ContractFactory;
@@ -23,10 +22,9 @@ describe("ContractManager", function () {
     this.contractInstance = managerInstance;
   });
 
-  shouldHaveRole(DEFAULT_ADMIN_ROLE, PAUSER_ROLE);
-  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, PAUSER_ROLE);
+  shouldHaveRole(DEFAULT_ADMIN_ROLE);
+  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE);
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldPause(true);
 });

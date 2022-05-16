@@ -25,6 +25,7 @@ describe("EIP712ERC721", function () {
     erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721ACB;
     dropboxInstance = (await dropbox.deploy(tokenName)) as EIP712ERC721;
 
+    await dropboxInstance.grantRole(MINTER_ROLE, owner.address);
     await erc721Instance.grantRole(MINTER_ROLE, dropboxInstance.address);
 
     network = await ethers.provider.getNetwork();
@@ -106,8 +107,46 @@ describe("EIP712ERC721", function () {
       await expect(tx2).to.be.revertedWith("EIP712ERC721: Expired signature");
     });
 
-    it("should fail: invalid signature", async function () {
+    it("should fail: Invalid signature", async function () {
       const signature = await owner._signTypedData(
+        // Domain
+        {
+          name: tokenName,
+          version: "1.0.0",
+          chainId: network.chainId,
+          verifyingContract: dropboxInstance.address,
+        },
+        // Types
+        {
+          EIP712: [
+            { name: "nonce", type: "bytes32" },
+            { name: "account", type: "address" },
+            { name: "token", type: "address" },
+            { name: "tokenId", type: "uint256" },
+          ],
+        },
+        // Value
+        {
+          nonce,
+          account: receiver.address,
+          token: erc721Instance.address,
+          tokenId,
+        },
+      );
+
+      const tx1 = dropboxInstance.redeem(
+        nonce,
+        stranger.address,
+        erc721Instance.address,
+        tokenId,
+        owner.address,
+        signature,
+      );
+      await expect(tx1).to.be.revertedWith("EIP712ERC721: Invalid signature");
+    });
+
+    it("should fail: Wrong signer", async function () {
+      const signature = await stranger._signTypedData(
         // Domain
         {
           name: tokenName,
@@ -136,7 +175,7 @@ describe("EIP712ERC721", function () {
       const tx1 = dropboxInstance
         .connect(stranger)
         .redeem(nonce, receiver.address, erc721Instance.address, tokenId, stranger.address, signature);
-      await expect(tx1).to.be.revertedWith("EIP712ERC721: Invalid signature");
+      await expect(tx1).to.be.revertedWith("EIP712ERC721: Wrong signer");
     });
   });
 });

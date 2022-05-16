@@ -16,18 +16,18 @@ import "../interfaces/IERC721Royalty.sol";
 contract ERC721OBR is Ownable, ERC721Burnable, IERC721Royalty, ERC721Royalty {
   string internal _baseTokenURI;
 
-  event DefaultRoyaltyInfo(address royaltyReceiver, uint96 royaltyNumerator);
-  event TokenRoyaltyInfo(uint256 tokenId, address royaltyReceiver, uint96 royaltyNumerator);
+  event DefaultRoyaltyInfo(address royaltyReceiver, uint96 royalty);
+  event TokenRoyaltyInfo(uint256 tokenId, address royaltyReceiver, uint96 royalty);
 
   constructor(
     string memory name,
     string memory symbol,
     string memory baseTokenURI,
-    uint96 royaltyNumerator
+    uint96 royalty
   ) ERC721(name, symbol) {
     _baseTokenURI = baseTokenURI;
 
-    _setDefaultRoyalty(_msgSender(), royaltyNumerator);
+    _setDefaultRoyalty(_msgSender(), royalty);
   }
 
   function mint(address to, uint256 tokenId) public virtual onlyOwner {
@@ -38,18 +38,18 @@ contract ERC721OBR is Ownable, ERC721Burnable, IERC721Royalty, ERC721Royalty {
     _safeMint(to, tokenId);
   }
 
-  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator) public virtual override onlyOwner {
-    super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
-    emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
+  function setDefaultRoyalty(address royaltyReceiver, uint96 royalty) public virtual override onlyOwner {
+    super._setDefaultRoyalty(royaltyReceiver, royalty);
+    emit DefaultRoyaltyInfo(royaltyReceiver, royalty);
   }
 
   function setTokenRoyalty(
     uint256 tokenId,
     address royaltyReceiver,
-    uint96 royaltyNumerator
+    uint96 royalty
   ) public virtual override onlyOwner {
-    super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
-    emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
+    super._setTokenRoyalty(tokenId, royaltyReceiver, royalty);
+    emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royalty);
   }
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721Royalty) returns (bool) {

@@ -4,7 +4,7 @@ export const baseTokenURI = "http://localhost/";
 export const tokenSymbol = "SYMBOL";
 export const tokenName = "Lorem ipsum...";
 export const tokenId = 1;
-export const royaltyNumerator = 100;
+export const royalty = 100;
 export const nonce = "0x6c00000000000000000000000000000000000000000000000000000000000000";
 
 export const DEFAULT_ADMIN_ROLE = "0x0000000000000000000000000000000000000000000000000000000000000000";

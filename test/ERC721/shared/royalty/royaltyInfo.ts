@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { royaltyNumerator } from "../../../constants";
+import { royalty } from "../../../constants";
 
 export function shouldGetRoyaltyInfo() {
   describe("royaltyInfo", function () {
@@ -16,7 +16,7 @@ export function shouldGetRoyaltyInfo() {
       const amount = ethers.utils.parseUnits("1.00", "ether");
       const royaltyAmount = ethers.utils.parseUnits("0.02", "ether");
 
-      await this.erc721Instance.setTokenRoyalty(0, this.receiver.address, royaltyNumerator * 2);
+      await this.erc721Instance.setTokenRoyalty(0, this.receiver.address, royalty * 2);
 
       const tx = await this.erc721Instance.royaltyInfo(0, amount);
       expect(tx).deep.equal([this.receiver.address, royaltyAmount]);

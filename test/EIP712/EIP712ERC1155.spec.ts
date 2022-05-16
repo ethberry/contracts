@@ -25,6 +25,7 @@ describe("EIP712ERC1155", function () {
     erc1155Instance = (await erc1155.deploy(baseTokenURI)) as ERC1155ACB;
     dropboxInstance = (await dropbox.deploy(tokenName)) as EIP712ERC1155;
 
+    await dropboxInstance.grantRole(MINTER_ROLE, owner.address);
     await erc1155Instance.grantRole(MINTER_ROLE, dropboxInstance.address);
 
     network = await ethers.provider.getNetwork();
@@ -110,8 +111,49 @@ describe("EIP712ERC1155", function () {
       await expect(tx2).to.be.revertedWith("EIP712ERC1155: Expired signature");
     });
 
-    it("should fail: invalid signature", async function () {
+    it("should fail: Invalid signature", async function () {
       const signature = await owner._signTypedData(
+        // Domain
+        {
+          name: tokenName,
+          version: "1.0.0",
+          chainId: network.chainId,
+          verifyingContract: dropboxInstance.address,
+        },
+        // Types
+        {
+          EIP712: [
+            { name: "nonce", type: "bytes32" },
+            { name: "account", type: "address" },
+            { name: "token", type: "address" },
+            { name: "tokenIds", type: "uint256[]" },
+            { name: "amounts", type: "uint256[]" },
+          ],
+        },
+        // Value
+        {
+          nonce,
+          account: receiver.address,
+          token: erc1155Instance.address,
+          tokenIds: [tokenId],
+          amounts: [amount],
+        },
+      );
+
+      const tx1 = dropboxInstance.redeem(
+        nonce,
+        stranger.address,
+        erc1155Instance.address,
+        [tokenId],
+        [amount],
+        owner.address,
+        signature,
+      );
+      await expect(tx1).to.be.revertedWith("EIP712ERC1155: Invalid signature");
+    });
+
+    it("should fail: Wrong signer", async function () {
+      const signature = await stranger._signTypedData(
         // Domain
         {
           name: tokenName,
@@ -142,7 +184,7 @@ describe("EIP712ERC1155", function () {
       const tx1 = dropboxInstance
         .connect(stranger)
         .redeem(nonce, receiver.address, erc1155Instance.address, [tokenId], [amount], stranger.address, signature);
-      await expect(tx1).to.be.revertedWith("EIP712ERC1155: Invalid signature");
+      await expect(tx1).to.be.revertedWith("EIP712ERC1155: Wrong signer");
     });
   });
 });

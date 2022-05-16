@@ -25,21 +25,21 @@ contract ERC721ACBER is AccessControl, ERC721Burnable, ERC721Enumerable, IERC721
 
   string internal _baseTokenURI;
 
-  event DefaultRoyaltyInfo(address royaltyReceiver, uint96 royaltyNumerator);
-  event TokenRoyaltyInfo(uint256 tokenId, address royaltyReceiver, uint96 royaltyNumerator);
+  event DefaultRoyaltyInfo(address royaltyReceiver, uint96 royalty);
+  event TokenRoyaltyInfo(uint256 tokenId, address royaltyReceiver, uint96 royalty);
 
   constructor(
     string memory name,
     string memory symbol,
     string memory baseTokenURI,
-    uint96 royaltyNumerator
+    uint96 royalty
   ) ERC721(name, symbol) {
     _baseTokenURI = baseTokenURI;
 
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
 
-    _setDefaultRoyalty(_msgSender(), royaltyNumerator);
+    _setDefaultRoyalty(_msgSender(), royalty);
   }
 
   function mint(address to) public virtual onlyRole(MINTER_ROLE) {
@@ -56,23 +56,23 @@ contract ERC721ACBER is AccessControl, ERC721Burnable, ERC721Enumerable, IERC721
     _tokenIdTracker.increment();
   }
 
-  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
+  function setDefaultRoyalty(address royaltyReceiver, uint96 royalty)
     public
     virtual
     override
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
-    super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
-    emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
+    super._setDefaultRoyalty(royaltyReceiver, royalty);
+    emit DefaultRoyaltyInfo(royaltyReceiver, royalty);
   }
 
   function setTokenRoyalty(
     uint256 tokenId,
     address royaltyReceiver,
-    uint96 royaltyNumerator
+    uint96 royalty
   ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
-    super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
-    emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
+    super._setTokenRoyalty(tokenId, royaltyReceiver, royalty);
+    emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royalty);
   }
 
   function supportsInterface(bytes4 interfaceId)

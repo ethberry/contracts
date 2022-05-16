@@ -7,9 +7,18 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
+import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 
-contract AbstractFactory is AccessControl {
+abstract contract AbstractFactory is EIP712, AccessControl {
+  mapping(bytes32 => bool) private _expired;
+
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+  bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
+
+  constructor() EIP712("ContractManager", "1.0.0") {
+    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+  }
 
   function deploy(bytes calldata bytecode, bytes memory arguments) internal returns (address addr) {
     bytes memory _bytecode = abi.encodePacked(bytecode, arguments);
@@ -28,5 +37,26 @@ contract AbstractFactory is AccessControl {
       instance.grantRole(roles[i], _msgSender());
       instance.renounceRole(roles[i], address(this));
     }
+  }
+
+  function _checkSignature(
+    address signer,
+    bytes32 digest,
+    bytes calldata signature
+  ) internal view {
+    require(_verify(signer, digest, signature), "ContractManager: Invalid signature");
+  }
+
+  function _checkNonce(bytes32 nonce) internal {
+    require(!_expired[nonce], "ContractManager: Expired signature");
+    _expired[nonce] = true;
+  }
+
+  function _verify(
+    address signer,
+    bytes32 digest,
+    bytes memory signature
+  ) internal view returns (bool) {
+    return SignatureChecker.isValidSignatureNow(signer, digest, signature);
   }
 }

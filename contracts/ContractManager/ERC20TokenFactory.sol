@@ -10,11 +10,11 @@ import "./AbstractFactory.sol";
 
 contract ERC20TokenFactory is AbstractFactory {
   bytes32 private immutable ERC20_PERMIT_SIGNATURE =
-  keccak256("EIP712(bytes32 nonce,bytes bytecode,string name,string symbol,uint256 cap)");
+  keccak256("EIP712(bytes32 nonce,bytes bytecode,string name,string symbol,uint256 cap,uint256 templateId)");
 
   address[] private _erc20_tokens;
 
-  event ERC20TokenDeployed(address addr, string name, string symbol, uint256 cap);
+  event ERC20TokenDeployed(address addr, string name, string symbol, uint256 cap, uint256 templateId);
 
   function deployERC20Token(
     bytes32 nonce,
@@ -22,12 +22,13 @@ contract ERC20TokenFactory is AbstractFactory {
     string memory name,
     string memory symbol,
     uint256 cap,
+    uint256 templateId,
     address signer,
     bytes calldata signature
   ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
-    bytes32 digest = _hash(nonce, bytecode, name, symbol, cap);
+    bytes32 digest = _hash(nonce, bytecode, name, symbol, cap, templateId);
 
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
@@ -35,7 +36,7 @@ contract ERC20TokenFactory is AbstractFactory {
     addr = deploy(bytecode, abi.encode(name, symbol, cap));
     _erc20_tokens.push(addr);
 
-    emit ERC20TokenDeployed(addr, name, symbol, cap);
+    emit ERC20TokenDeployed(addr, name, symbol, cap, templateId);
 
     bytes32[] memory roles = new bytes32[](3);
     roles[0] = MINTER_ROLE;
@@ -50,7 +51,8 @@ contract ERC20TokenFactory is AbstractFactory {
     bytes calldata bytecode,
     string memory name,
     string memory symbol,
-    uint256 cap
+    uint256 cap,
+    uint256 templateId
   ) internal view returns (bytes32) {
     return
     _hashTypedDataV4(
@@ -61,8 +63,9 @@ contract ERC20TokenFactory is AbstractFactory {
           keccak256(abi.encodePacked(bytecode)),
           keccak256(abi.encodePacked(name)),
           keccak256(abi.encodePacked(symbol)),
-          cap
-        )
+          cap,
+          templateId
+    )
       )
     );
   }

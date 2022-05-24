@@ -10,11 +10,11 @@ import "./AbstractFactory.sol";
 
 contract ERC721TokenFactory is AbstractFactory {
   bytes32 private immutable ERC721_PERMIT_SIGNATURE =
-    keccak256("EIP712(bytes32 nonce,bytes bytecode,string name,string symbol,string baseTokenURI,uint96 royalty)");
+    keccak256("EIP712(bytes32 nonce,bytes bytecode,string name,string symbol,string baseTokenURI,uint96 royalty,uint256 templateId)");
 
   address[] private _erc721_tokens;
 
-  event ERC721TokenDeployed(address addr, string name, string symbol, string baseTokenURI, uint96 royalty);
+  event ERC721TokenDeployed(address addr, string name, string symbol, string baseTokenURI, uint96 royalty, uint256 templateId);
 
   function deployERC721Token(
     bytes32 nonce,
@@ -23,20 +23,21 @@ contract ERC721TokenFactory is AbstractFactory {
     string memory symbol,
     string memory baseTokenURI,
     uint96 royalty,
+    uint256 templateId,
     address signer,
     bytes calldata signature
   ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
-    bytes32 digest = _hash(nonce, bytecode, name, symbol, baseTokenURI, royalty);
+    bytes32 digest = _hash(nonce, bytecode, name, symbol, baseTokenURI, royalty, templateId);
 
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
 
-    addr = deploy(bytecode, abi.encode(name, symbol, baseTokenURI, royalty));
+    addr = deploy(bytecode, abi.encode(name, symbol, baseTokenURI, royalty, templateId));
     _erc721_tokens.push(addr);
 
-    emit ERC721TokenDeployed(addr, name, symbol, baseTokenURI, royalty);
+    emit ERC721TokenDeployed(addr, name, symbol, baseTokenURI, royalty, templateId);
 
     bytes32[] memory roles = new bytes32[](2);
     roles[0] = MINTER_ROLE;
@@ -51,7 +52,8 @@ contract ERC721TokenFactory is AbstractFactory {
     string memory name,
     string memory symbol,
     string memory baseTokenURI,
-    uint96 royalty
+    uint96 royalty,
+    uint256 templateId
   ) internal view returns (bytes32) {
     return
       _hashTypedDataV4(
@@ -63,7 +65,8 @@ contract ERC721TokenFactory is AbstractFactory {
             keccak256(abi.encodePacked(name)),
             keccak256(abi.encodePacked(symbol)),
             keccak256(abi.encodePacked(baseTokenURI)),
-            royalty
+            royalty,
+            templateId
           )
         )
       );

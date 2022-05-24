@@ -10,22 +10,23 @@ import "./AbstractFactory.sol";
 
 contract ERC1155TokenFactory is AbstractFactory {
   bytes32 private immutable ERC1155_PERMIT_SIGNATURE =
-    keccak256("EIP712(bytes32 nonce,bytes bytecode,string baseTokenURI)");
+    keccak256("EIP712(bytes32 nonce,bytes bytecode,string baseTokenURI,uint256 templateId)");
 
   address[] private _erc1155_tokens;
 
-  event ERC1155TokenDeployed(address addr, string baseTokenURI);
+  event ERC1155TokenDeployed(address addr, string baseTokenURI, uint256 templateId);
 
   function deployERC1155Token(
     bytes32 nonce,
     bytes calldata bytecode,
     string memory baseTokenURI,
+    uint256 templateId,
     address signer,
     bytes calldata signature
   ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
-    bytes32 digest = _hash(nonce, bytecode, baseTokenURI);
+    bytes32 digest = _hash(nonce, bytecode, baseTokenURI, templateId);
 
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
@@ -33,7 +34,7 @@ contract ERC1155TokenFactory is AbstractFactory {
     addr = deploy(bytecode, abi.encode(baseTokenURI));
     _erc1155_tokens.push(addr);
 
-    emit ERC1155TokenDeployed(addr, baseTokenURI);
+    emit ERC1155TokenDeployed(addr, baseTokenURI, templateId);
 
     bytes32[] memory roles = new bytes32[](2);
     roles[0] = MINTER_ROLE;
@@ -45,7 +46,8 @@ contract ERC1155TokenFactory is AbstractFactory {
   function _hash(
     bytes32 nonce,
     bytes calldata bytecode,
-    string memory baseTokenURI
+    string memory baseTokenURI,
+    uint256 templateId
   ) internal view returns (bytes32) {
     return
       _hashTypedDataV4(
@@ -54,7 +56,8 @@ contract ERC1155TokenFactory is AbstractFactory {
             ERC1155_PERMIT_SIGNATURE,
             nonce,
             keccak256(abi.encodePacked(bytecode)),
-            keccak256(abi.encodePacked(baseTokenURI))
+            keccak256(abi.encodePacked(baseTokenURI)),
+            templateId
           )
         )
       );

@@ -54,8 +54,8 @@ describe("ERC1155ACBS", function () {
   shouldSetApprovalForAll();
   shouldSafeTransferFrom();
   shouldSafeBatchTransferFrom();
-  shouldBurn();
-  shouldBurnBatch();
+  shouldBurn(true);
+  shouldBurnBatch(true);
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

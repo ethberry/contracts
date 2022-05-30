@@ -54,8 +54,8 @@ describe("ERC1155ACBCS", function () {
   shouldSetApprovalForAll();
   shouldSafeTransferFrom();
   shouldSafeBatchTransferFrom();
-  shouldBurn();
-  shouldBurnBatch();
+  shouldBurn(true);
+  shouldBurnBatch(true);
 
   describe("mint", function () {
     it("should fail: double mint", async function () {

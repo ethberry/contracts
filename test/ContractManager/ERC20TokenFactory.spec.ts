@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
 import { ERC20TokenFactory } from "../../typechain-types";
-import { amount, DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, tokenName, tokenSymbol } from "../constants";
+import { amount, DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, templateId, tokenName, tokenSymbol } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
@@ -72,6 +72,7 @@ describe("ERC20TokenFactory", function () {
         tokenName,
         tokenSymbol,
         amount,
+        templateId,
         this.owner.address,
         signature,
       );

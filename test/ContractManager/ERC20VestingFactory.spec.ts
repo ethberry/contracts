@@ -5,7 +5,7 @@ import { time } from "@openzeppelin/test-helpers";
 import { Network } from "@ethersproject/networks";
 
 import { ERC20VestingFactory } from "../../typechain-types";
-import { DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE } from "../constants";
+import { DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, templateId } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
@@ -76,6 +76,7 @@ describe("VestingFactory", function () {
         this.receiver.address,
         timestamp,
         span,
+        templateId,
         this.owner.address,
         signature,
       );

@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
 
 import { ERC1155TokenFactory } from "../../typechain-types";
-import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, tokenId } from "../constants";
+import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, templateId, tokenId } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
@@ -66,6 +66,7 @@ describe("ERC1155TokenFactory", function () {
         nonce,
         erc1155.bytecode,
         baseTokenURI,
+        templateId,
         this.owner.address,
         signature,
       );

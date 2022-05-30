@@ -4,7 +4,16 @@ import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
 
 import { ERC721TokenFactory } from "../../typechain-types";
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, royalty, tokenName, tokenSymbol } from "../constants";
+import {
+  baseTokenURI,
+  DEFAULT_ADMIN_ROLE,
+  nonce,
+  PAUSER_ROLE,
+  royalty,
+  templateId,
+  tokenName,
+  tokenSymbol,
+} from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
@@ -75,6 +84,7 @@ describe("ERC721TokenFactory", function () {
         tokenSymbol,
         baseTokenURI,
         royalty,
+        templateId,
         this.owner.address,
         signature,
       );

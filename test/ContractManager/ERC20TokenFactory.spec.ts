@@ -54,6 +54,7 @@ describe("ERC20TokenFactory", function () {
             { name: "name", type: "string" },
             { name: "symbol", type: "string" },
             { name: "cap", type: "uint256" },
+            { name: "templateId", type: "uint256" },
           ],
         },
         // Value
@@ -63,6 +64,7 @@ describe("ERC20TokenFactory", function () {
           name: tokenName,
           symbol: tokenSymbol,
           cap: amount,
+          templateId,
         },
       );
 
@@ -79,7 +81,9 @@ describe("ERC20TokenFactory", function () {
 
       const [address] = await factoryInstance.allERC20Tokens();
 
-      await expect(tx).to.emit(factoryInstance, "ERC20TokenDeployed").withArgs(address, tokenName, tokenSymbol, amount);
+      await expect(tx)
+        .to.emit(factoryInstance, "ERC20TokenDeployed")
+        .withArgs(address, tokenName, tokenSymbol, amount, templateId);
 
       const erc20Instance = erc20.attach(address);
 

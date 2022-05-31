@@ -64,6 +64,7 @@ describe("ERC721TokenFactory", function () {
             { name: "symbol", type: "string" },
             { name: "baseTokenURI", type: "string" },
             { name: "royalty", type: "uint96" },
+            { name: "templateId", type: "uint256" },
           ],
         },
         // Value
@@ -74,6 +75,7 @@ describe("ERC721TokenFactory", function () {
           symbol: tokenSymbol,
           baseTokenURI,
           royalty,
+          templateId,
         },
       );
 
@@ -93,7 +95,7 @@ describe("ERC721TokenFactory", function () {
 
       await expect(tx)
         .to.emit(factoryInstance, "ERC721TokenDeployed")
-        .withArgs(address, tokenName, tokenSymbol, baseTokenURI, royalty);
+        .withArgs(address, tokenName, tokenSymbol, baseTokenURI, royalty, templateId);
 
       const erc721Instance = erc721.attach(address);
 

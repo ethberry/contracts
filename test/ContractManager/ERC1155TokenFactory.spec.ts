@@ -52,6 +52,7 @@ describe("ERC1155TokenFactory", function () {
             { name: "nonce", type: "bytes32" },
             { name: "bytecode", type: "bytes" },
             { name: "baseTokenURI", type: "string" },
+            { name: "templateId", type: "uint256" },
           ],
         },
         // Value
@@ -59,6 +60,7 @@ describe("ERC1155TokenFactory", function () {
           nonce,
           bytecode: erc1155.bytecode,
           baseTokenURI,
+          templateId,
         },
       );
 
@@ -73,7 +75,7 @@ describe("ERC1155TokenFactory", function () {
 
       const [address] = await factoryInstance.allERC1155Tokens();
 
-      await expect(tx).to.emit(factoryInstance, "ERC1155TokenDeployed").withArgs(address, baseTokenURI);
+      await expect(tx).to.emit(factoryInstance, "ERC1155TokenDeployed").withArgs(address, baseTokenURI, templateId);
 
       const erc1155Instance = erc1155.attach(address);
 

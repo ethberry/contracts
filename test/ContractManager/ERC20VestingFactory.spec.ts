@@ -58,6 +58,7 @@ describe("VestingFactory", function () {
             { name: "beneficiary", type: "address" },
             { name: "startTimestamp", type: "uint64" },
             { name: "duration", type: "uint64" },
+            { name: "templateId", type: "uint256" },
           ],
         },
         // Value
@@ -67,6 +68,7 @@ describe("VestingFactory", function () {
           beneficiary: this.receiver.address,
           startTimestamp: timestamp,
           duration: span,
+          templateId,
         },
       );
 
@@ -85,7 +87,7 @@ describe("VestingFactory", function () {
 
       await expect(tx)
         .to.emit(factoryInstance, "ERC20VestingDeployed")
-        .withArgs(address, this.receiver.address, timestamp, span);
+        .withArgs(address, this.receiver.address, timestamp, span, templateId);
     });
   });
 });

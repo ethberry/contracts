@@ -38,4 +38,10 @@ contract ERC20ACBCP is AccessControl, ERC20Burnable, ERC20Capped, ERC20Permit {
   function _mint(address account, uint256 amount) internal virtual override(ERC20, ERC20Capped) {
     super._mint(account, amount);
   }
+
+  // this function exist because of ganache bug
+  // See https://github.com/trufflesuite/ganache-core/issues/515
+  function getChainId() external view returns (uint256) {
+    return block.chainid;
+  }
 }

@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { TypedDataUtils } from "eth-sig-util";
 import { constants, utils } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 import { Network } from "@ethersproject/networks";
@@ -21,32 +20,14 @@ export function shouldPermit() {
     });
 
     it("domain separator", async function () {
-      function domainSeparator(name: string, version: string, chainId: number, verifyingContract: string) {
-        return (
-          "0x" +
-          TypedDataUtils.hashStruct(
-            "EIP712Domain",
-            {
-              name,
-              version,
-              chainId,
-              verifyingContract,
-            },
-            {
-              EIP712Domain: [
-                { name: "name", type: "string" },
-                { name: "version", type: "string" },
-                { name: "chainId", type: "uint256" },
-                { name: "verifyingContract", type: "address" },
-              ],
-            },
-          ).toString("hex")
-        );
-      }
-
+      const chainId = await this.erc20Instance.getChainId();
       const actual = await this.erc20Instance.DOMAIN_SEPARATOR();
-      const expected = domainSeparator(tokenName, "1", network.chainId, this.erc20Instance.address);
-
+      const expected = ethers.utils._TypedDataEncoder.hashDomain({
+        name: tokenName,
+        version: "1",
+        chainId,
+        verifyingContract: this.erc20Instance.address,
+      });
       expect(actual).to.equal(expected);
     });
 
@@ -82,7 +63,18 @@ export function shouldPermit() {
       );
       const { v, r, s } = utils.splitSignature(signature);
 
-      await this.erc20Instance.permit(this.owner.address, this.receiver.address, amount, constants.MaxUint256, v, r, s);
+      const tx = await this.erc20Instance.permit(
+        this.owner.address,
+        this.receiver.address,
+        amount,
+        constants.MaxUint256,
+        v,
+        r,
+        s,
+      );
+
+      // besu
+      await tx.wait();
 
       expect(await this.erc20Instance.nonces(this.owner.address)).to.equal(1);
       expect(await this.erc20Instance.allowance(this.owner.address, this.receiver.address)).to.equal(amount);

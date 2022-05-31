@@ -52,4 +52,10 @@ contract ERC20ACBCSP is AccessControl, ERC20Burnable, ERC20Capped, ERC20Snapshot
   ) internal virtual override(ERC20, ERC20Snapshot) {
     super._beforeTokenTransfer(from, to, amount);
   }
+
+  // this function exist because of ganache bug
+  // See https://github.com/trufflesuite/ganache-core/issues/515
+  function getChainId() external view returns (uint256) {
+    return block.chainid;
+  }
 }

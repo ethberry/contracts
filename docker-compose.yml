@@ -33,8 +33,8 @@ services:
       BINANCE_RPC_URL: "${BINANCE_RPC_URL}"
       BESU_RPC_URL: "${BESU_RPC_URL}"
 
-  besu-test:
-    container_name: besu-test
+  besu:
+    container_name: besu
     restart: "on-failure"
     image: hyperledger/besu:latest
     environment:
@@ -46,6 +46,8 @@ services:
       BESU_RPC_HTTP_HOST: 0.0.0.0
       BESU_RPC_HTTP_ENABLED: "true"
       BESU_RPC_HTTP_CORS_ORIGINS: "*"
+      BESU_RPC_HTTP_API: "ADMIN,ETH,NET,WEB3,MINER,IBFT"
+      BESU_RPC_WS_API: "ADMIN,ETH,NET,WEB3,MINER,IBFT"
       BESU_MINER_ENABLED: "true"
       BESU_MINER_COINBASE: fe3b557e8fb62b89f4916b721be55ceb828dbd73
     volumes:
@@ -57,8 +59,8 @@ services:
       - "${GRAPHQL_PORT}:8547"
       - "${P2P_PORT}:30303"
 
-  besu-explorer:
-    container_name: besu-explorer
+  explorer:
+    container_name: explorer
     restart: "on-failure"
     image: alethio/ethereum-lite-explorer
     environment:
@@ -66,6 +68,6 @@ services:
     ports:
       - 8080:80
     depends_on:
-      - besu-test
+      - besu
 
 

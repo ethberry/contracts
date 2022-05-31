@@ -32,4 +32,10 @@ contract ERC20ACBP is AccessControl, ERC20Burnable, ERC20Permit {
       interfaceId == type(IERC20Metadata).interfaceId ||
       super.supportsInterface(interfaceId);
   }
+
+  // this function exist because of ganache bug
+  // See https://github.com/trufflesuite/ganache-core/issues/515
+  function getChainId() external view returns (uint256) {
+    return block.chainid;
+  }
 }

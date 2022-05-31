@@ -42,7 +42,7 @@ describe("ERC20ACBCSP", function () {
   shouldRevokeRole();
   shouldRenounceRole();
   shouldMint(true);
-  shouldBalanceOf();
+  shouldBalanceOf(true);
   shouldTransfer();
   shouldTransferFrom();
   shouldSnapshot(true);

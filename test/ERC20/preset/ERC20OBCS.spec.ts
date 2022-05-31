@@ -37,7 +37,7 @@ describe("ERC20OBCS", function () {
   shouldTransferOwnership();
   shouldRenounceOwnership();
   shouldMint();
-  shouldBalanceOf();
+  shouldBalanceOf(true);
   shouldTransfer();
   shouldTransferFrom();
   shouldSnapshot();

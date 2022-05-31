@@ -39,7 +39,7 @@ describe("ERC20ACBP", function () {
   shouldRevokeRole();
   shouldRenounceRole();
   shouldMint(true);
-  shouldBalanceOf();
+  shouldBalanceOf(true);
   shouldTransfer();
   shouldTransferFrom();
   shouldApprove();

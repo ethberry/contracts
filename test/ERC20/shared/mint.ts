@@ -5,7 +5,7 @@ import { amount, MINTER_ROLE } from "../../constants";
 
 export function shouldMint(role = false) {
   describe("mint", function () {
-    it("should fail: must have minter role", async function () {
+    it("should fail: insufficient permissions", async function () {
       const tx = this.erc20Instance.connect(this.receiver).mint(this.receiver.address, amount);
       await expect(tx).to.be.revertedWith(
         role

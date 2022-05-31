@@ -4,7 +4,7 @@ import { amount, SNAPSHOT_ROLE } from "../../constants";
 
 export function shouldSnapshot(role = false) {
   describe("snapshot", function () {
-    it("should fail: must have snapshoter role", async function () {
+    it("should fail: insufficient permissions", async function () {
       const tx = this.erc20Instance.connect(this.receiver).snapshot();
       await expect(tx).to.be.revertedWith(
         role

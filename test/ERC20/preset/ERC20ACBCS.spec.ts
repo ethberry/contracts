@@ -41,7 +41,7 @@ describe("ERC20ACBCS", function () {
   shouldRevokeRole();
   shouldRenounceRole();
   shouldMint(true);
-  shouldBalanceOf();
+  shouldBalanceOf(true);
   shouldTransfer();
   shouldTransferFrom();
   shouldSnapshot(true);

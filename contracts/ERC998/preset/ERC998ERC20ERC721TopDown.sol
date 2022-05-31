@@ -105,7 +105,7 @@ contract ERC998ERC20ERC721TopDown is
 
   // returns the owner at the top of the tree of composables
 
-  function approve(address to, uint256 _tokenId) public virtual override {
+  function approve(address to, uint256 _tokenId) public virtual override(IERC721, ERC721) {
     address rootOwner = address(uint160(uint256(rootOwnerOf(_tokenId))));
     require(to != rootOwner, "ComposableTopDown: approval to current owner");
 
@@ -117,7 +117,7 @@ contract ERC998ERC20ERC721TopDown is
     emit Approval(rootOwner, to, _tokenId);
   }
 
-  function getApproved(uint256 _tokenId) public view virtual override returns (address) {
+  function getApproved(uint256 _tokenId) public view virtual override(IERC721, ERC721) returns (address) {
     address rootOwner = address(uint160(uint256(rootOwnerOf(_tokenId))));
     return rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId];
   }

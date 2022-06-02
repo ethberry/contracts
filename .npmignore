@@ -5,6 +5,8 @@
 /artifacts
 /cache
 /besu
+/@types
+/.openzeppelin
 
 DOCKER.md
 HARDHAT.md
@@ -19,5 +21,14 @@ coverage.json
 .idea
 .vscode
 .github
+.dockerignore
+.editorconfig
+.env
+.eslintignore
+.eslintrc
+.huskyrc
+.lintstagedrc
+.prettierrc
+.solhint.json
 
 contracts/ERC998

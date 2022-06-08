@@ -27,9 +27,8 @@ contract ERC998ERC20TopDown is ERC721ACBCES, IERC998ERC20TopDown, IERC998ERC20To
   constructor(
     string memory name,
     string memory symbol,
-    string memory baseTokenURI,
     uint256 cap
-  ) ERC721ACBCES(name, symbol, baseTokenURI, cap) {}
+  ) ERC721ACBCES(name, symbol, cap) {}
 
   function mint(address to) public virtual override onlyRole(MINTER_ROLE) {
     _mint(to, _tokenIdTracker.current());

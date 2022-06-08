@@ -57,9 +57,8 @@ contract ERC998BottomUp is ERC721ACBCES, IERC998ERC721BottomUp, IERC998ERC721Bot
   constructor(
     string memory name,
     string memory symbol,
-    string memory baseTokenURI,
     uint256 cap
-  ) ERC721ACBCES(name, symbol, baseTokenURI, cap) {}
+  ) ERC721ACBCES(name, symbol, cap) {}
 
   function _tokenOwnerOf(uint256 _tokenId)
     internal

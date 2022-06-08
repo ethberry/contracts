@@ -14,16 +14,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interfaces/IERC721Royalty.sol";
 
 contract ERC721OBR is Ownable, ERC721Burnable, IERC721Royalty, ERC721Royalty {
-  string internal _baseTokenURI;
-
   constructor(
     string memory name,
     string memory symbol,
-    string memory baseTokenURI,
     uint96 royaltyNumerator
   ) ERC721(name, symbol) {
-    _baseTokenURI = baseTokenURI;
-
     _setDefaultRoyalty(_msgSender(), royaltyNumerator);
   }
 
@@ -51,10 +46,6 @@ contract ERC721OBR is Ownable, ERC721Burnable, IERC721Royalty, ERC721Royalty {
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721Royalty) returns (bool) {
     return super.supportsInterface(interfaceId);
-  }
-
-  function _baseURI() internal view virtual override returns (string memory) {
-    return _baseTokenURI;
   }
 
   function _mint(address account, uint256 tokenId) internal virtual override(ERC721) {

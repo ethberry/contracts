@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
 import { AuctionERC721ETHTemplate, ERC721ACB } from "../../typechain-types";
-import { amount, baseTokenURI, tokenId, tokenName, tokenSymbol } from "../constants";
+import { amount, tokenId, tokenName, tokenSymbol } from "../constants";
 
 import { shouldHaveOwner } from "../shared/ownable/owner";
 import { shouldTransferOwnership } from "../shared/ownable/transferOwnership";
@@ -21,7 +21,7 @@ describe("AuctionERC721ETHTemplate", function () {
     template = await ethers.getContractFactory("AuctionERC721ETHTemplate");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721ACB;
+    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol)) as ERC721ACB;
 
     const span = 300;
     const timestamp: number = (await time.latest()).toNumber();

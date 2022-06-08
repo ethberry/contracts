@@ -8,7 +8,7 @@ import {
   ERC721ACBCE,
   ERC998ERC721TopDownWhiteListChild,
 } from "../../../typechain-types";
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
+import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
 import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
@@ -39,13 +39,8 @@ describe("ERC998ERC721TopDownWhiteListChild", function () {
     erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc721InstanceMock = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI, 2)) as ERC721ACBCE;
-    this.erc721Instance = (await erc998.deploy(
-      tokenName,
-      tokenSymbol,
-      baseTokenURI,
-      1000,
-    )) as ERC998ERC721TopDownWhiteListChild;
+    this.erc721InstanceMock = (await erc721.deploy(tokenName, tokenSymbol, 2)) as ERC721ACBCE;
+    this.erc721Instance = (await erc998.deploy(tokenName, tokenSymbol, 1000)) as ERC998ERC721TopDownWhiteListChild;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
 

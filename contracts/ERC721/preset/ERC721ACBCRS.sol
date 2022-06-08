@@ -19,17 +19,12 @@ import "../interfaces/IERC721Royalty.sol";
 contract ERC721ACBCRS is AccessControl, ERC721Burnable, ERC721Capped, IERC721Royalty, ERC721Royalty, ERC721URIStorage {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-  string internal _baseTokenURI;
-
   constructor(
     string memory name,
     string memory symbol,
-    string memory baseTokenURI,
     uint256 cap,
     uint96 royaltyNumerator
   ) ERC721(name, symbol) ERC721Capped(cap) {
-    _baseTokenURI = baseTokenURI;
-
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
 
@@ -79,10 +74,6 @@ contract ERC721ACBCRS is AccessControl, ERC721Burnable, ERC721Capped, IERC721Roy
 
   function setTokenURI(uint256 tokenId, string memory _tokenURI) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
     _setTokenURI(tokenId, _tokenURI);
-  }
-
-  function _baseURI() internal view virtual override returns (string memory) {
-    return _baseTokenURI;
   }
 
   function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721Royalty, ERC721URIStorage) {

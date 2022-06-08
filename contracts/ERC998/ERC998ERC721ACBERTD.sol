@@ -15,6 +15,7 @@ import "./interfaces/IERC998ERC721TopDown.sol";
 import "./interfaces/IERC998ERC721TopDownEnumerable.sol";
 
 import "../ERC721/preset/ERC721ACBER.sol";
+import "../ERC721/ERC721BaseUrl.sol";
 
 contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721TopDownEnumerable {
   using Address for address;
@@ -33,9 +34,8 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
   constructor(
     string memory name,
     string memory symbol,
-    string memory baseTokenURI,
     uint96 royalty
-  ) ERC721ACBER(name, symbol, baseTokenURI, royalty) {
+  ) ERC721ACBER(name, symbol, royalty) {
     // burn first token because of reasons
     // mint(0x000000000000000000000000000000000000dead);
   }
@@ -70,7 +70,10 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
     uint256 childTokenId_ = _childTokenId;
     while (rootOwnerAddress == address(this)) {
       (rootOwnerAddress, _childTokenId) = _ownerOfChild(rootOwnerAddress, _childTokenId);
-      require( !(rootOwnerAddress_ == rootOwnerAddress && childTokenId_ == _childTokenId), "ComposableTopDown: circular ownership is forbidden" );
+      require(
+        !(rootOwnerAddress_ == rootOwnerAddress && childTokenId_ == _childTokenId),
+        "ComposableTopDown: circular ownership is forbidden"
+      );
     }
     bytes memory callData = abi.encodeWithSelector(ROOT_OWNER_OF_CHILD, address(this), _childTokenId);
     (bool callSuccess, bytes memory data) = rootOwnerAddress.staticcall(callData);

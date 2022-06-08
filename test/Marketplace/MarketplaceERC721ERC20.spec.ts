@@ -3,16 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
 import { ERC20ACBCS, ERC721ACB, MarketplaceERC721ERC20 } from "../../typechain-types";
-import {
-  amount,
-  baseTokenURI,
-  DEFAULT_ADMIN_ROLE,
-  MINTER_ROLE,
-  PAUSER_ROLE,
-  tokenId,
-  tokenName,
-  tokenSymbol,
-} from "../constants";
+import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenId, tokenName, tokenSymbol } from "../constants";
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
 import { shouldGrantRole } from "../shared/accessControl/grantRole";
@@ -35,7 +26,7 @@ describe("MarketplaceERC721ERC20", function () {
     [this.owner, this.receiver] = await ethers.getSigners();
 
     erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount * 10)) as ERC20ACBCS;
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721ACB;
+    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol)) as ERC721ACB;
     marketplaceInstance = (await marketplace.deploy(erc20Instance.address)) as MarketplaceERC721ERC20;
 
     await marketplaceInstance.updateFactory(erc721Instance.address, true);

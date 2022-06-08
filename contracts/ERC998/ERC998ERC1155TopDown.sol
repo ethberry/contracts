@@ -23,9 +23,8 @@ contract ERC998ERC1155TopDown is ERC721ACBCES, ERC1155Receiver, IERC998ERC1155To
   constructor(
     string memory name,
     string memory symbol,
-    string memory baseTokenURI,
     uint256 cap
-  ) ERC721ACBCES(name, symbol, baseTokenURI, cap) {}
+  ) ERC721ACBCES(name, symbol, cap) {}
 
   /**
    * @dev Gives child balance for a specific child contract and child id .
@@ -243,7 +242,13 @@ contract ERC998ERC1155TopDown is ERC721ACBCES, ERC1155Receiver, IERC998ERC1155To
    * But it is not.
    * It is added anyway in case some contract checks it being compliant with the spec.
    */
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC1155Receiver, ERC721ACBCES, IERC165) returns (bool) {
+  function supportsInterface(bytes4 interfaceId)
+    public
+    view
+    virtual
+    override(ERC1155Receiver, ERC721ACBCES, IERC165)
+    returns (bool)
+  {
     return
       interfaceId == type(IERC998ERC1155TopDown).interfaceId ||
       interfaceId == 0x1bc995e4 ||

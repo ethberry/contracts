@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
 
 import { ERC721DropboxTest } from "../../typechain-types";
-import { MINTER_ROLE, tokenName, tokenSymbol, baseTokenURI, DEFAULT_ADMIN_ROLE, tokenId } from "../constants";
+import { MINTER_ROLE, tokenName, tokenSymbol, DEFAULT_ADMIN_ROLE, tokenId } from "../constants";
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 
 describe("ERC721Dropbox", function () {
@@ -15,7 +15,7 @@ describe("ERC721Dropbox", function () {
     erc721 = await ethers.getContractFactory("ERC721DropboxTest");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721DropboxTest;
+    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol)) as ERC721DropboxTest;
 
     network = await ethers.provider.getNetwork();
 

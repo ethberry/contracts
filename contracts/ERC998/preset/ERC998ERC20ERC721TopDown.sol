@@ -42,9 +42,8 @@ contract ERC998ERC20ERC721TopDown is
   constructor(
     string memory name,
     string memory symbol,
-    string memory baseTokenURI,
     uint256 cap
-  ) ERC721ACBCES(name, symbol, baseTokenURI, cap) {}
+  ) ERC721ACBCES(name, symbol, cap) {}
 
   bytes4 constant ALLOWANCE = bytes4(keccak256("allowance(address,address)"));
   bytes4 constant APPROVE = bytes4(keccak256("approve(address,uint256)"));
@@ -77,7 +76,10 @@ contract ERC998ERC20ERC721TopDown is
     uint256 childTokenId_ = _childTokenId;
     while (rootOwnerAddress == address(this)) {
       (rootOwnerAddress, _childTokenId) = _ownerOfChild(rootOwnerAddress, _childTokenId);
-      require( !(rootOwnerAddress_ == rootOwnerAddress && childTokenId_ == _childTokenId), "ComposableTopDown: circular ownership is forbidden" );
+      require(
+        !(rootOwnerAddress_ == rootOwnerAddress && childTokenId_ == _childTokenId),
+        "ComposableTopDown: circular ownership is forbidden"
+      );
     }
     bytes memory callData = abi.encodeWithSelector(ROOT_OWNER_OF_CHILD, address(this), _childTokenId);
     (bool callSuccess, bytes memory data) = rootOwnerAddress.staticcall(callData);

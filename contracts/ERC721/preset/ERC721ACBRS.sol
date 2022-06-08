@@ -18,16 +18,11 @@ import "../interfaces/IERC721Royalty.sol";
 contract ERC721ACBRS is AccessControl, ERC721Burnable, IERC721Royalty, ERC721Royalty, ERC721URIStorage {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-  string internal _baseTokenURI;
-
   constructor(
     string memory name,
     string memory symbol,
-    string memory baseTokenURI,
     uint96 royaltyNumerator
   ) ERC721(name, symbol) {
-    _baseTokenURI = baseTokenURI;
-
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
 
@@ -45,7 +40,7 @@ contract ERC721ACBRS is AccessControl, ERC721Burnable, IERC721Royalty, ERC721Roy
   function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
     public
     virtual
-  override
+    override
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
@@ -77,10 +72,6 @@ contract ERC721ACBRS is AccessControl, ERC721Burnable, IERC721Royalty, ERC721Roy
 
   function setTokenURI(uint256 tokenId, string memory _tokenURI) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
     _setTokenURI(tokenId, _tokenURI);
-  }
-
-  function _baseURI() internal view virtual override returns (string memory) {
-    return _baseTokenURI;
   }
 
   function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721Royalty, ERC721URIStorage) {

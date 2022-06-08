@@ -3,7 +3,7 @@ import { ContractFactory } from "ethers";
 import { expect } from "chai";
 
 import { ERC721ACB, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
-import { baseTokenURI, tokenName, tokenSymbol } from "../../constants";
+import { tokenName, tokenSymbol } from "../../constants";
 
 import { shouldHaveOwner } from "../../shared/ownable/owner";
 import { shouldMint } from "../shared/basic/mint";
@@ -29,7 +29,7 @@ describe("ERC721OB", function () {
     erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721ACB;
+    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol)) as ERC721ACB;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
 

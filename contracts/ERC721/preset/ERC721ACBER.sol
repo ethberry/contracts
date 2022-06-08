@@ -23,16 +23,11 @@ contract ERC721ACBER is AccessControl, ERC721Burnable, ERC721Enumerable, IERC721
 
   Counters.Counter internal _tokenIdTracker;
 
-  string internal _baseTokenURI;
-
   constructor(
     string memory name,
     string memory symbol,
-    string memory baseTokenURI,
     uint96 royaltyNumerator
   ) ERC721(name, symbol) {
-    _baseTokenURI = baseTokenURI;
-
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
 
@@ -80,10 +75,6 @@ contract ERC721ACBER is AccessControl, ERC721Burnable, ERC721Enumerable, IERC721
     returns (bool)
   {
     return super.supportsInterface(interfaceId);
-  }
-
-  function _baseURI() internal view virtual override returns (string memory) {
-    return _baseTokenURI;
   }
 
   function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721Royalty) {

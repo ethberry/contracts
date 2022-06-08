@@ -10,13 +10,11 @@ import "../ERC998ERC721TopDown.sol";
 import "../WhiteListChild.sol";
 
 contract ERC998ERC721TopDownWhiteListChild is ERC998ERC721TopDown, WhiteListChild {
-
   constructor(
     string memory name,
     string memory symbol,
-    string memory baseTokenURI,
     uint256 cap
-  ) ERC998ERC721TopDown(name, symbol, baseTokenURI, cap) {}
+  ) ERC998ERC721TopDown(name, symbol, cap) {}
 
   function removeChild(
     uint256 _tokenId,

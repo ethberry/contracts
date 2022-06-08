@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
 import { AuctionFactory, ERC721ACB } from "../../typechain-types";
-import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenId, tokenName, tokenSymbol } from "../constants";
+import { amount, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenId, tokenName, tokenSymbol } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
@@ -25,7 +25,7 @@ describe("AuctionFactory", function () {
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
     factoryInstance = (await factory.deploy()) as AuctionFactory;
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, baseTokenURI)) as ERC721ACB;
+    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol)) as ERC721ACB;
 
     await erc721Instance.mint(this.owner.address, tokenId);
     await erc721Instance.approve(factoryInstance.address, tokenId);

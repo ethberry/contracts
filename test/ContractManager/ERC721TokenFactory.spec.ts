@@ -11,6 +11,7 @@ import {
   PAUSER_ROLE,
   royalty,
   templateId,
+  tokenId,
   tokenName,
   tokenSymbol,
 } from "../constants";
@@ -28,7 +29,7 @@ describe("ERC721TokenFactory", function () {
   let network: Network;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721ACBER");
+    erc721 = await ethers.getContractFactory("ERC721BaseUrlTest");
     factory = await ethers.getContractFactory("ERC721TokenFactory");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
@@ -62,8 +63,8 @@ describe("ERC721TokenFactory", function () {
             { name: "bytecode", type: "bytes" },
             { name: "name", type: "string" },
             { name: "symbol", type: "string" },
-            { name: "baseTokenURI", type: "string" },
             { name: "royalty", type: "uint96" },
+            { name: "baseTokenURI", type: "string" },
             { name: "templateId", type: "uint256" },
           ],
         },
@@ -73,8 +74,8 @@ describe("ERC721TokenFactory", function () {
           bytecode: erc721.bytecode,
           name: tokenName,
           symbol: tokenSymbol,
-          baseTokenURI,
           royalty,
+          baseTokenURI,
           templateId,
         },
       );
@@ -84,8 +85,8 @@ describe("ERC721TokenFactory", function () {
         erc721.bytecode,
         tokenName,
         tokenSymbol,
-        baseTokenURI,
         royalty,
+        baseTokenURI,
         templateId,
         this.owner.address,
         signature,
@@ -95,7 +96,7 @@ describe("ERC721TokenFactory", function () {
 
       await expect(tx)
         .to.emit(factoryInstance, "ERC721TokenDeployed")
-        .withArgs(address, tokenName, tokenSymbol, baseTokenURI, royalty, templateId);
+        .withArgs(address, tokenName, tokenSymbol, royalty, baseTokenURI, templateId);
 
       const erc721Instance = erc721.attach(address);
 
@@ -105,16 +106,16 @@ describe("ERC721TokenFactory", function () {
       const hasRole2 = await erc721Instance.hasRole(DEFAULT_ADMIN_ROLE, this.owner.address);
       expect(hasRole2).to.equal(true);
 
-      const tx2 = erc721Instance.safeMint(this.receiver.address);
+      const tx2 = erc721Instance.safeMint(this.receiver.address, tokenId);
       await expect(tx2)
         .to.emit(erc721Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, this.receiver.address, 0);
+        .withArgs(ethers.constants.AddressZero, this.receiver.address, tokenId);
 
       const balance = await erc721Instance.balanceOf(this.receiver.address);
       expect(balance).to.equal(1);
 
-      const uri = await erc721Instance.tokenURI(0);
-      expect(uri).to.equal(`${baseTokenURI}0`);
+      const uri = await erc721Instance.tokenURI(tokenId);
+      expect(uri).to.equal(`${baseTokenURI}${erc721Instance.address.toLowerCase()}/${tokenId}`);
     });
   });
 });

@@ -16,9 +16,8 @@ contract ERC721DropboxTest is ERC721Dropbox, ERC721ACB, Pausable {
 
   constructor(
     string memory name,
-    string memory symbol,
-    string memory baseTokenURI
-  ) ERC721ACB(name, symbol, baseTokenURI) ERC721Dropbox(name) {
+    string memory symbol
+  ) ERC721ACB(name, symbol) ERC721Dropbox(name) {
     _setupRole(PAUSER_ROLE, _msgSender());
   }
 

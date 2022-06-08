@@ -5,15 +5,7 @@ import { parseEther } from "ethers/lib/utils";
 import { ContractFactory, ContractTransaction } from "ethers";
 
 import { ChainLinkLootboxMock, ChainLinkTokenMock, LINK, VRFCoordinatorMock } from "../../../typechain-types";
-import {
-  baseTokenURI,
-  decimals,
-  DEFAULT_ADMIN_ROLE,
-  MINTER_ROLE,
-  PAUSER_ROLE,
-  tokenName,
-  tokenSymbol,
-} from "../../constants";
+import { decimals, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
 import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
@@ -52,14 +44,13 @@ describe("LootBox", function () {
     nftInstance = (await nft.deploy(
       tokenName,
       tokenSymbol,
-      baseTokenURI,
       vrfInstance.address,
       linkInstance.address,
       keyHash,
       fee,
     )) as ChainLinkTokenMock;
 
-    lootInstance = (await lootbox.deploy(tokenName, tokenSymbol, baseTokenURI)) as ChainLinkLootboxMock;
+    lootInstance = (await lootbox.deploy(tokenName, tokenSymbol)) as ChainLinkLootboxMock;
 
     this.contractInstance = lootInstance;
   });

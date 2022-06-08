@@ -13,15 +13,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 contract ERC721ACB is AccessControl, ERC721Burnable {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-  string internal _baseTokenURI;
-
-  constructor(
-    string memory name,
-    string memory symbol,
-    string memory baseTokenURI
-  ) ERC721(name, symbol) {
-    _baseTokenURI = baseTokenURI;
-
+  constructor(string memory name, string memory symbol) ERC721(name, symbol) {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
   }
@@ -36,9 +28,5 @@ contract ERC721ACB is AccessControl, ERC721Burnable {
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC721) returns (bool) {
     return super.supportsInterface(interfaceId);
-  }
-
-  function _baseURI() internal view virtual override returns (string memory) {
-    return _baseTokenURI;
   }
 }

@@ -129,8 +129,9 @@ contract StakingERC20ERC20 is AccessControl, Pausable {
     }
 
     if (withdrawDeposit) {
-      _acceptedToken.transfer(stake._owner, stake._amount);
+      uint256 amount = stake._amount;
       stake._amount = 0;
+      _acceptedToken.transfer(stake._owner, amount);
     } else {
       stake._startTimestamp = block.timestamp;
       // stake._startTimestamp = stake._startTimestamp + stake._period * stake._period

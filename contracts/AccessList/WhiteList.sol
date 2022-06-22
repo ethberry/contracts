@@ -13,8 +13,8 @@ abstract contract WhiteList is AccessControl {
 
   mapping(address => bool) whiteList;
 
-  event Whitelisted(address indexed addr);
-  event UnWhitelisted(address indexed addr);
+  event Whitelisted(address indexed account);
+  event UnWhitelisted(address indexed account);
 
   function whitelist(address addr) public onlyRole(DEFAULT_ADMIN_ROLE) {
     whiteList[addr] = true;

@@ -13,8 +13,8 @@ abstract contract BlackList is AccessControl {
 
   mapping(address => bool) blackList;
 
-  event Blacklisted(address indexed addr);
-  event UnBlacklisted(address indexed addr);
+  event Blacklisted(address indexed account);
+  event UnBlacklisted(address indexed account);
 
   function blacklist(address addr) public onlyRole(DEFAULT_ADMIN_ROLE) {
     blackList[addr] = true;

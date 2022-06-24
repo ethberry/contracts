@@ -4,7 +4,7 @@
 // Email: trejgun+gemunion@gmail.com
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20FlashMint.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";

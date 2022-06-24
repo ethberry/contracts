@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.9;
 
 /// @title ERC998ERC721 Bottom-Up Composable Non-Fungible Token
 /// @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-998.md

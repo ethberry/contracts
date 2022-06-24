@@ -4,7 +4,7 @@
 // Email: pavelzavadsky@gmail.com
 // GitHub: https://github.com/PavelZavadskiy
 
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.9;
 
 contract WhiteListChild {
   uint256 private _defaultMaxChildPerContract;

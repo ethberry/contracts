@@ -18,7 +18,7 @@ describe("ERC1155BaseUrl", function () {
   describe("uri", function () {
     it("should get token uri", async function () {
       const uri2 = await erc1155Instance.uri(tokenId);
-      expect(uri2).to.equal(`${baseTokenURI}${erc1155Instance.address.toLowerCase()}/{id}`);
+      expect(uri2).to.equal(`${baseTokenURI}/${erc1155Instance.address.toLowerCase()}/{id}`);
     });
   });
 });

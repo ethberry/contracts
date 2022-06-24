@@ -22,7 +22,7 @@ describe("ERC721BaseUrl", function () {
     it("should get token uri", async function () {
       await erc721Instance.mint(owner.address, tokenId);
       const uri = await erc721Instance.tokenURI(tokenId);
-      expect(uri).to.equal(`${baseTokenURI}${erc721Instance.address.toLowerCase()}/${tokenId}`);
+      expect(uri).to.equal(`${baseTokenURI}/${erc721Instance.address.toLowerCase()}/${tokenId}`);
     });
 
     it("should fail: URI query for nonexistent token", async function () {
@@ -37,7 +37,7 @@ describe("ERC721BaseUrl", function () {
       await erc721Instance.mint(owner.address, tokenId);
       await erc721Instance.setBaseURI(newURI);
       const uri = await erc721Instance.tokenURI(tokenId);
-      expect(uri).to.equal(`${newURI}${erc721Instance.address.toLowerCase()}/${tokenId}`);
+      expect(uri).to.equal(`${newURI}/${erc721Instance.address.toLowerCase()}/${tokenId}`);
     });
   });
 });

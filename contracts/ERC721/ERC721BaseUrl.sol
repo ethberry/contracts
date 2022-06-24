@@ -16,7 +16,7 @@ abstract contract ERC721BaseUrl {
   }
 
   function _baseURI(string memory baseTokenURI) internal view virtual returns (string memory) {
-    return string(abi.encodePacked(baseTokenURI, Strings.toHexString(uint160(address(this)), 20), "/"));
+    return string(abi.encodePacked(baseTokenURI, "/", Strings.toHexString(uint160(address(this)), 20), "/"));
   }
 
   function _setBaseURI(string memory baseTokenURI) internal virtual {

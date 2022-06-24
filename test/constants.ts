@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 
-export const baseTokenURI = "http://localhost/";
+export const baseTokenURI = "http://localhost:3000"; // no trailing slash
 export const tokenSymbol = "SYMBOL";
 export const tokenName = "Lorem ipsum...";
 export const tokenId = 1;

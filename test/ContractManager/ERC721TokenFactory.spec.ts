@@ -115,7 +115,7 @@ describe("ERC721TokenFactory", function () {
       expect(balance).to.equal(1);
 
       const uri = await erc721Instance.tokenURI(tokenId);
-      expect(uri).to.equal(`${baseTokenURI}${erc721Instance.address.toLowerCase()}/${tokenId}`);
+      expect(uri).to.equal(`${baseTokenURI}/${erc721Instance.address.toLowerCase()}/${tokenId}`);
     });
   });
 });

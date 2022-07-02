@@ -7,7 +7,7 @@ export function shouldTransferFrom() {
       await this.erc721Instance.mint(this.owner.address);
       const tx = this.erc721Instance.connect(this.receiver).transferFrom(this.owner.address, this.receiver.address, 0);
 
-      await expect(tx).to.be.revertedWith(`ERC721: transfer caller is not owner nor approved`);
+      await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner nor approved`);
     });
 
     it("should fail: zero addr", async function () {

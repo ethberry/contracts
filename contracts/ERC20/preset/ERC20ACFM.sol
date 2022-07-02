@@ -41,7 +41,7 @@ contract ERC20ACFM is AccessControl, ERC20FlashMint {
     return _flashFeeReceiver();
   }
 
-  function _flashFeeReceiver() internal view returns (address) {
+  function _flashFeeReceiver() internal view override returns (address) {
     return _flashFeeReceiverAddress;
   }
 

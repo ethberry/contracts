@@ -8,7 +8,7 @@ export function shouldSafeTransferFrom() {
         .connect(this.receiver)
         ["safeTransferFrom(address,address,uint256)"](this.owner.address, this.receiver.address, 0);
 
-      await expect(tx).to.be.revertedWith(`ERC721: transfer caller is not owner nor approved`);
+      await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner nor approved`);
     });
 
     it("should transfer own tokens to receiver contract", async function () {

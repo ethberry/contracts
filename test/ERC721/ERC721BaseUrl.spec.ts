@@ -27,7 +27,7 @@ describe("ERC721BaseUrl", function () {
 
     it("should fail: URI query for nonexistent token", async function () {
       const uri = erc721Instance.tokenURI(tokenId);
-      await expect(uri).to.be.revertedWith("ERC721Metadata: URI query for nonexistent token");
+      await expect(uri).to.be.revertedWith("ERC721: invalid token ID");
     });
   });
 

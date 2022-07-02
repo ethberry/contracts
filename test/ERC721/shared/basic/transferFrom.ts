@@ -10,7 +10,7 @@ export function shouldTransferFrom() {
         .connect(this.receiver)
         .transferFrom(this.owner.address, this.receiver.address, tokenId);
 
-      await expect(tx).to.be.revertedWith(`ERC721: transfer caller is not owner nor approved`);
+      await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner nor approved`);
     });
 
     it("should fail: zero addr", async function () {

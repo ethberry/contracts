@@ -33,7 +33,7 @@ export function shouldBurn(supply = false) {
       await this.erc1155Instance.mint(this.owner.address, tokenId, amount, "0x");
       const tx = this.erc1155Instance.connect(this.receiver).burn(this.owner.address, tokenId, amount);
 
-      await expect(tx).to.be.revertedWith(`ERC1155: caller is not owner nor approved`);
+      await expect(tx).to.be.revertedWith(`ERC1155: caller is not token owner nor approved`);
     });
 
     it("should fail: burn amount exceeds totalSupply", async function () {

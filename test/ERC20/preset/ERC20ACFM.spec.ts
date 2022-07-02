@@ -186,7 +186,7 @@ describe("ERC20ACFM", function () {
     const borrowerInitialBalance = amount * 2;
     const customFlashFee = amount / 2;
 
-    beforeEach("init reciever balance & set flash fee", async function () {
+    beforeEach("init receiver balance & set flash fee", async function () {
       await this.erc20Instance.mint(this.owner.address, amount);
 
       const erc20FlashBorrower = await ethers.getContractFactory("ERC3156FlashBorrowerMock");
@@ -264,10 +264,10 @@ describe("ERC20ACFM", function () {
         .withArgs(constants.AddressZero, this.erc20FlashBorrowerInstance.address, amount);
       await expect(tx)
         .to.emit(this.erc20Instance, "Transfer")
-        .withArgs(this.erc20FlashBorrowerInstance.address, constants.AddressZero, amount + customFlashFee);
-      // await expect(tx)
-      //   .to.emit(this.erc20Instance, "Transfer")
-      //   .withArgs(this.erc20FlashBorrowerInstance.address, this.receiver.address, customFlashFee);
+        .withArgs(this.erc20FlashBorrowerInstance.address, constants.AddressZero, amount);
+      await expect(tx)
+        .to.emit(this.erc20Instance, "Transfer")
+        .withArgs(this.erc20FlashBorrowerInstance.address, this.receiver.address, customFlashFee);
       await expect(tx)
         .to.emit(this.erc20FlashBorrowerInstance, "BalanceOf")
         .withArgs(this.erc20Instance.address, this.erc20FlashBorrowerInstance.address, borrowerInitialBalance + amount);
@@ -276,13 +276,13 @@ describe("ERC20ACFM", function () {
         .withArgs(this.erc20Instance.address, borrowerInitialBalance + amount + amount);
 
       const totalSupply = await this.erc20Instance.totalSupply();
-      expect(totalSupply).to.equal(amount + borrowerInitialBalance - customFlashFee);
+      expect(totalSupply).to.equal(amount + borrowerInitialBalance);
 
       const balanceOf1 = await this.erc20Instance.balanceOf(this.erc20FlashBorrowerInstance.address);
       expect(balanceOf1).to.equal(borrowerInitialBalance - customFlashFee);
 
       const balanceOf2 = await this.erc20Instance.balanceOf(feeReceiver);
-      expect(balanceOf2).to.equal(0);
+      expect(balanceOf2).to.equal(customFlashFee);
 
       const allowance = await this.erc20Instance.allowance(
         this.erc20FlashBorrowerInstance.address,

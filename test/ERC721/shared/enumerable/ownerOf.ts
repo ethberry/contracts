@@ -15,7 +15,7 @@ export function shouldGetOwnerOf() {
       const balanceOfOwner = await this.erc721Instance.balanceOf(this.owner.address);
       expect(balanceOfOwner).to.equal(0);
       const tx2 = this.erc721Instance.ownerOf(0);
-      await expect(tx2).to.be.revertedWith(`ERC721: owner query for nonexistent token`);
+      await expect(tx2).to.be.revertedWith(`ERC721: invalid token ID`);
     });
   });
 }

@@ -7,7 +7,7 @@ export function shouldBalanceOf() {
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
       const tx = this.erc1155Instance.balanceOf(ethers.constants.AddressZero, tokenId);
-      await expect(tx).to.be.revertedWith(`ERC1155: balance query for the zero address`);
+      await expect(tx).to.be.revertedWith(`ERC1155: address zero is not a valid owner`);
     });
 
     it("should get balance of owner", async function () {

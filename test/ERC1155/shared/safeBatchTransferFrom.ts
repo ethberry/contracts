@@ -62,7 +62,7 @@ export function shouldSafeBatchTransferFrom() {
           [amount, amount],
           "0x",
         );
-      await expect(tx).to.be.revertedWith(`ERC1155: transfer caller is not owner nor approved`);
+      await expect(tx).to.be.revertedWith(`ERC1155: caller is not token owner nor approved`);
     });
 
     it("should transfer approved tokens to receiver contract", async function () {

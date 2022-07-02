@@ -8,7 +8,7 @@ export function shouldSafeTransferFrom() {
         .connect(this.receiver)
         ["safeTransferFrom(address,address,uint256)"](this.owner.address, this.receiver.address, 0);
 
-      await expect(tx).to.be.revertedWith(`ERC721: transfer caller is not owner nor approved`);
+      await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner nor approved`);
     });
 
     it("should fail: burned token", async function () {
@@ -24,7 +24,7 @@ export function shouldSafeTransferFrom() {
         0,
         "0x0000000000000000000000000000000000000000000000000000000000000001",
       );
-      await expect(tx).to.be.revertedWith(`ERC721: operator query for nonexistent token`);
+      await expect(tx).to.be.revertedWith(`ERC721: invalid token ID`);
     });
 
     it("should fail: receiver is burned", async function () {
@@ -40,7 +40,7 @@ export function shouldSafeTransferFrom() {
         0,
         "0x0000000000000000000000000000000000000000000000000000000000000001",
       );
-      await expect(tx).to.be.revertedWith(`ERC721: owner query for nonexistent token`);
+      await expect(tx).to.be.revertedWith(`ERC721: invalid token ID`);
     });
 
     it("should transfer own tokens to receiver contract", async function () {
@@ -205,7 +205,7 @@ export function shouldSafeTransferFrom() {
         2,
       );
       // DOUBLE CHECK
-      await expect(tx3).to.be.revertedWith(`ERC721: transfer caller is not owner nor approved`);
+      await expect(tx3).to.be.revertedWith(`ERC721: caller is not token owner nor approved`);
     });
 
     it("should not transfer token to its child token", async function () {

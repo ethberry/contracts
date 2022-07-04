@@ -43,7 +43,7 @@ contract ERC721TokenFactory is AbstractFactory {
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
 
-    addr = deploy(bytecode, abi.encode(name, symbol, royalty, baseTokenURI, templateId));
+    addr = deploy(bytecode, abi.encode(name, symbol, royalty, baseTokenURI));
     _erc721_tokens.push(addr);
 
     emit ERC721TokenDeployed(addr, name, symbol, royalty, baseTokenURI, templateId);

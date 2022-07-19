@@ -8,7 +8,7 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/finance/VestingWallet.sol";
 
-contract LinearVesting is VestingWallet {
+contract GradedVesting is VestingWallet {
   constructor(
     address account,
     uint64 startTimestamp,
@@ -20,11 +20,11 @@ contract LinearVesting is VestingWallet {
     if (timestamp > start() + duration()) {
       return totalAllocation;
     } else if (timestamp > start() + period * 3) {
-      return (totalAllocation * 75) / 100;
+      return (totalAllocation * 60) / 100;
     } else if (timestamp > start() + period * 2) {
-      return (totalAllocation * 50) / 100;
+      return (totalAllocation * 30) / 100;
     } else if (timestamp > start() + period) {
-      return (totalAllocation * 25) / 100;
+      return (totalAllocation * 10) / 100;
     } else {
       return 0;
     }

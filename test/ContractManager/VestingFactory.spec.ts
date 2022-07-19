@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 import { Network } from "@ethersproject/networks";
 
-import { ERC20VestingFactory } from "../../typechain-types";
+import { VestingFactory } from "../../typechain-types";
 import { DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, templateId } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
@@ -16,15 +16,15 @@ import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
 describe("VestingFactory", function () {
   let vesting: ContractFactory;
   let factory: ContractFactory;
-  let factoryInstance: ERC20VestingFactory;
+  let factoryInstance: VestingFactory;
   let network: Network;
 
   beforeEach(async function () {
-    vesting = await ethers.getContractFactory("FlatVesting");
-    factory = await ethers.getContractFactory("ERC20VestingFactory");
+    vesting = await ethers.getContractFactory("CliffVesting");
+    factory = await ethers.getContractFactory("VestingFactory");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
-    factoryInstance = (await factory.deploy()) as ERC20VestingFactory;
+    factoryInstance = (await factory.deploy()) as VestingFactory;
 
     network = await ethers.provider.getNetwork();
 
@@ -37,7 +37,7 @@ describe("VestingFactory", function () {
   shouldRevokeRole();
   shouldRenounceRole();
 
-  describe("deployERC20Vesting", function () {
+  describe("deployVesting", function () {
     it("should deploy contract", async function () {
       const span = 300;
       const timestamp: number = (await time.latest()).toNumber();
@@ -55,7 +55,7 @@ describe("VestingFactory", function () {
           EIP712: [
             { name: "nonce", type: "bytes32" },
             { name: "bytecode", type: "bytes" },
-            { name: "beneficiary", type: "address" },
+            { name: "account", type: "address" },
             { name: "startTimestamp", type: "uint64" },
             { name: "duration", type: "uint64" },
             { name: "templateId", type: "uint256" },
@@ -65,14 +65,14 @@ describe("VestingFactory", function () {
         {
           nonce,
           bytecode: vesting.bytecode,
-          beneficiary: this.receiver.address,
+          account: this.receiver.address,
           startTimestamp: timestamp,
           duration: span,
           templateId,
         },
       );
 
-      const tx = await factoryInstance.deployERC20Vesting(
+      const tx = await factoryInstance.deployVesting(
         nonce,
         vesting.bytecode,
         this.receiver.address,
@@ -86,7 +86,7 @@ describe("VestingFactory", function () {
       const [address] = await factoryInstance.allVesting();
 
       await expect(tx)
-        .to.emit(factoryInstance, "ERC20VestingDeployed")
+        .to.emit(factoryInstance, "VestingDeployed")
         .withArgs(address, this.receiver.address, timestamp, span, templateId);
     });
   });

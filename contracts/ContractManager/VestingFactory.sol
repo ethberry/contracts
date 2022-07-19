@@ -8,24 +8,26 @@ pragma solidity ^0.8.9;
 
 import "./AbstractFactory.sol";
 
-contract ERC20VestingFactory is AbstractFactory {
+contract VestingFactory is AbstractFactory {
   bytes32 private immutable VESTING_PERMIT_SIGNATURE =
-    keccak256("EIP712(bytes32 nonce,bytes bytecode,address beneficiary,uint64 startTimestamp,uint64 duration,uint256 templateId)");
+    keccak256(
+      "EIP712(bytes32 nonce,bytes bytecode,address account,uint64 startTimestamp,uint64 duration,uint256 templateId)"
+    );
 
   address[] private _erc20_vesting;
 
-  event ERC20VestingDeployed(
+  event VestingDeployed(
     address addr,
-    address beneficiary,
+    address account,
     uint64 startTimestamp, // in seconds
     uint64 duration, // in seconds
     uint256 templateId
   );
 
-  function deployERC20Vesting(
+  function deployVesting(
     bytes32 nonce,
     bytes calldata bytecode,
-    address beneficiary,
+    address account,
     uint64 startTimestamp,
     uint64 duration,
     uint256 templateId,
@@ -34,21 +36,21 @@ contract ERC20VestingFactory is AbstractFactory {
   ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
-    bytes32 digest = _hash(nonce, bytecode, beneficiary, startTimestamp, duration, templateId);
+    bytes32 digest = _hash(nonce, bytecode, account, startTimestamp, duration, templateId);
 
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
 
-    addr = deploy(bytecode, abi.encode(beneficiary, startTimestamp, duration));
+    addr = deploy(bytecode, abi.encode(account, startTimestamp, duration));
     _erc20_vesting.push(addr);
 
-    emit ERC20VestingDeployed(addr, beneficiary, startTimestamp, duration, templateId);
+    emit VestingDeployed(addr, account, startTimestamp, duration, templateId);
   }
 
   function _hash(
     bytes32 nonce,
     bytes calldata bytecode,
-    address beneficiary,
+    address account,
     uint64 startTimestamp,
     uint64 duration,
     uint256 templateId
@@ -60,7 +62,7 @@ contract ERC20VestingFactory is AbstractFactory {
             VESTING_PERMIT_SIGNATURE,
             nonce,
             keccak256(abi.encodePacked(bytecode)),
-            beneficiary,
+            account,
             startTimestamp,
             duration,
             templateId

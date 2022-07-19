@@ -13,9 +13,9 @@ interface IBlackList {
   event Blacklisted(address indexed account);
   event UnBlacklisted(address indexed account);
 
-  function blacklist(address addr) external;
+  function blacklist(address account) external;
 
-  function unBlacklist(address addr) external;
+  function unBlacklist(address account) external;
 
-  function isBlacklisted(address addr) external view returns (bool);
+  function isBlacklisted(address account) external view returns (bool);
 }

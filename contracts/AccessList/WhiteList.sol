@@ -13,18 +13,18 @@ import "./interfaces/IWhiteList.sol";
 abstract contract WhiteList is IWhiteList, AccessControl {
   mapping(address => bool) whiteList;
 
-  function whitelist(address addr) external onlyRole(DEFAULT_ADMIN_ROLE) {
-    whiteList[addr] = true;
-    emit Whitelisted(addr);
+  function whitelist(address account) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    whiteList[account] = true;
+    emit Whitelisted(account);
   }
 
-  function unWhitelist(address addr) external onlyRole(DEFAULT_ADMIN_ROLE) {
-    whiteList[addr] = false;
-    emit UnWhitelisted(addr);
+  function unWhitelist(address account) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    whiteList[account] = false;
+    emit UnWhitelisted(account);
   }
 
-  function isWhitelisted(address addr) external view returns (bool) {
-    return whiteList[addr];
+  function isWhitelisted(address account) external view returns (bool) {
+    return whiteList[account];
   }
 
   function _whitelist(address account) internal view {

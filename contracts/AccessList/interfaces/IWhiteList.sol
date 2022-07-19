@@ -12,9 +12,9 @@ interface IWhiteList {
   event Whitelisted(address indexed account);
   event UnWhitelisted(address indexed account);
 
-  function whitelist(address addr) external;
+  function whitelist(address account) external;
 
-  function unWhitelist(address addr) external;
+  function unWhitelist(address account) external;
 
-  function isWhitelisted(address addr) external view returns (bool);
+  function isWhitelisted(address account) external view returns (bool);
 }

@@ -13,18 +13,18 @@ import "./interfaces/IBlackList.sol";
 abstract contract BlackList is IBlackList, AccessControl {
   mapping(address => bool) blackList;
 
-  function blacklist(address addr) external onlyRole(DEFAULT_ADMIN_ROLE) {
-    blackList[addr] = true;
-    emit Blacklisted(addr);
+  function blacklist(address account) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    blackList[account] = true;
+    emit Blacklisted(account);
   }
 
-  function unBlacklist(address addr) external onlyRole(DEFAULT_ADMIN_ROLE) {
-    blackList[addr] = false;
-    emit UnBlacklisted(addr);
+  function unBlacklist(address account) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    blackList[account] = false;
+    emit UnBlacklisted(account);
   }
 
-  function isBlacklisted(address addr) external view returns (bool) {
-    return blackList[addr];
+  function isBlacklisted(address account) external view returns (bool) {
+    return blackList[account];
   }
 
   function _blacklist(address account) internal view {

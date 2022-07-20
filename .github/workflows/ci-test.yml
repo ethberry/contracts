@@ -48,6 +48,8 @@ jobs:
         run: npm whoami --registry=https://npm.pkg.github.com/
 
       - name: Install Packages
+        run: npm i -g ganache
+      - name: Install Packages
         run: npm i
       - name: Build Packages
         run: npm run build

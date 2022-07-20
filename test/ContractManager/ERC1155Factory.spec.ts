@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
 
-import { ERC1155TokenFactory } from "../../typechain-types";
+import { ERC1155Factory } from "../../typechain-types";
 import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, templateId, tokenId } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
@@ -12,18 +12,18 @@ import { shouldGrantRole } from "../shared/accessControl/grantRole";
 import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
 
-describe("ERC1155TokenFactory", function () {
+describe("ERC1155Factory", function () {
   let erc1155: ContractFactory;
   let factory: ContractFactory;
-  let factoryInstance: ERC1155TokenFactory;
+  let factoryInstance: ERC1155Factory;
   let network: Network;
 
   beforeEach(async function () {
     erc1155 = await ethers.getContractFactory("ERC1155ACBS");
-    factory = await ethers.getContractFactory("ERC1155TokenFactory");
+    factory = await ethers.getContractFactory("ERC1155Factory");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
-    factoryInstance = (await factory.deploy()) as ERC1155TokenFactory;
+    factoryInstance = (await factory.deploy()) as ERC1155Factory;
 
     network = await ethers.provider.getNetwork();
 

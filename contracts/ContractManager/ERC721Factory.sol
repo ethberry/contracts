@@ -8,7 +8,7 @@ pragma solidity ^0.8.9;
 
 import "./AbstractFactory.sol";
 
-contract ERC721TokenFactory is AbstractFactory {
+contract ERC721Factory is AbstractFactory {
   bytes32 private immutable ERC721_PERMIT_SIGNATURE =
     keccak256(
       "EIP712(bytes32 nonce,bytes bytecode,string name,string symbol,uint96 royalty,string baseTokenURI,uint256 templateId)"

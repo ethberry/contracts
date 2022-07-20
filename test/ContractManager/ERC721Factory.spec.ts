@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
 
-import { ERC721TokenFactory } from "../../typechain-types";
+import { ERC721Factory } from "../../typechain-types";
 import {
   baseTokenURI,
   DEFAULT_ADMIN_ROLE,
@@ -22,18 +22,18 @@ import { shouldGrantRole } from "../shared/accessControl/grantRole";
 import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
 
-describe("ERC721TokenFactory", function () {
+describe("ERC721Factory", function () {
   let erc721: ContractFactory;
   let factory: ContractFactory;
-  let factoryInstance: ERC721TokenFactory;
+  let factoryInstance: ERC721Factory;
   let network: Network;
 
   beforeEach(async function () {
     erc721 = await ethers.getContractFactory("ERC721BaseUrlTest");
-    factory = await ethers.getContractFactory("ERC721TokenFactory");
+    factory = await ethers.getContractFactory("ERC721Factory");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
-    factoryInstance = (await factory.deploy()) as ERC721TokenFactory;
+    factoryInstance = (await factory.deploy()) as ERC721Factory;
 
     network = await ethers.provider.getNetwork();
 

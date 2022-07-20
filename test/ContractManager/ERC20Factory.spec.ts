@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
-import { ERC20TokenFactory } from "../../typechain-types";
+import { ERC20Factory } from "../../typechain-types";
 import { amount, DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, templateId, tokenName, tokenSymbol } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
@@ -12,18 +12,18 @@ import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
 import { Network } from "@ethersproject/networks";
 
-describe("ERC20TokenFactory", function () {
+describe("ERC20Factory", function () {
   let erc20: ContractFactory;
   let factory: ContractFactory;
-  let factoryInstance: ERC20TokenFactory;
+  let factoryInstance: ERC20Factory;
   let network: Network;
 
   beforeEach(async function () {
     erc20 = await ethers.getContractFactory("ERC20ACBCS");
-    factory = await ethers.getContractFactory("ERC20TokenFactory");
+    factory = await ethers.getContractFactory("ERC20Factory");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
-    factoryInstance = (await factory.deploy()) as ERC20TokenFactory;
+    factoryInstance = (await factory.deploy()) as ERC20Factory;
 
     network = await ethers.provider.getNetwork();
 

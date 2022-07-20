@@ -38,7 +38,7 @@ contract ERC721Factory is AbstractFactory {
   ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
-    bytes32 digest = _hash(nonce, bytecode, name, symbol, royalty, baseTokenURI, templateId);
+    bytes32 digest = _hashERC721(nonce, bytecode, name, symbol, royalty, baseTokenURI, templateId);
 
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
@@ -55,7 +55,7 @@ contract ERC721Factory is AbstractFactory {
     fixPermissions(addr, roles);
   }
 
-  function _hash(
+  function _hashERC721(
     bytes32 nonce,
     bytes calldata bytecode,
     string memory name,

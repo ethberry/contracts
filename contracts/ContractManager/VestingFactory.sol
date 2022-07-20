@@ -14,7 +14,7 @@ contract VestingFactory is AbstractFactory {
       "EIP712(bytes32 nonce,bytes bytecode,address account,uint64 startTimestamp,uint64 duration,uint256 templateId)"
     );
 
-  address[] private _erc20_vesting;
+  address[] private _vesting;
 
   event VestingDeployed(
     address addr,
@@ -36,18 +36,18 @@ contract VestingFactory is AbstractFactory {
   ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
-    bytes32 digest = _hash(nonce, bytecode, account, startTimestamp, duration, templateId);
+    bytes32 digest = _hashVesting(nonce, bytecode, account, startTimestamp, duration, templateId);
 
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
 
     addr = deploy(bytecode, abi.encode(account, startTimestamp, duration));
-    _erc20_vesting.push(addr);
+    _vesting.push(addr);
 
     emit VestingDeployed(addr, account, startTimestamp, duration, templateId);
   }
 
-  function _hash(
+  function _hashVesting(
     bytes32 nonce,
     bytes calldata bytecode,
     address account,
@@ -72,6 +72,6 @@ contract VestingFactory is AbstractFactory {
   }
 
   function allVesting() external view returns (address[] memory) {
-    return _erc20_vesting;
+    return _vesting;
   }
 }

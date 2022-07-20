@@ -10,7 +10,7 @@ import "./AbstractFactory.sol";
 
 contract ERC20Factory is AbstractFactory {
   bytes32 private immutable ERC20_PERMIT_SIGNATURE =
-  keccak256("EIP712(bytes32 nonce,bytes bytecode,string name,string symbol,uint256 cap,uint256 templateId)");
+    keccak256("EIP712(bytes32 nonce,bytes bytecode,string name,string symbol,uint256 cap,uint256 templateId)");
 
   address[] private _erc20_tokens;
 
@@ -28,7 +28,7 @@ contract ERC20Factory is AbstractFactory {
   ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
-    bytes32 digest = _hash(nonce, bytecode, name, symbol, cap, templateId);
+    bytes32 digest = _hashERC20(nonce, bytecode, name, symbol, cap, templateId);
 
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
@@ -46,7 +46,7 @@ contract ERC20Factory is AbstractFactory {
     fixPermissions(addr, roles);
   }
 
-  function _hash(
+  function _hashERC20(
     bytes32 nonce,
     bytes calldata bytecode,
     string memory name,
@@ -55,19 +55,19 @@ contract ERC20Factory is AbstractFactory {
     uint256 templateId
   ) internal view returns (bytes32) {
     return
-    _hashTypedDataV4(
-      keccak256(
-        abi.encode(
-          ERC20_PERMIT_SIGNATURE,
-          nonce,
-          keccak256(abi.encodePacked(bytecode)),
-          keccak256(abi.encodePacked(name)),
-          keccak256(abi.encodePacked(symbol)),
-          cap,
-          templateId
-    )
-      )
-    );
+      _hashTypedDataV4(
+        keccak256(
+          abi.encode(
+            ERC20_PERMIT_SIGNATURE,
+            nonce,
+            keccak256(abi.encodePacked(bytecode)),
+            keccak256(abi.encodePacked(name)),
+            keccak256(abi.encodePacked(symbol)),
+            cap,
+            templateId
+          )
+        )
+      );
   }
 
   function allERC20Tokens() external view returns (address[] memory) {

@@ -26,7 +26,7 @@ contract ERC1155Factory is AbstractFactory {
   ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
-    bytes32 digest = _hash(nonce, bytecode, baseTokenURI, templateId);
+    bytes32 digest = _hashERC1155(nonce, bytecode, baseTokenURI, templateId);
 
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
@@ -43,7 +43,7 @@ contract ERC1155Factory is AbstractFactory {
     fixPermissions(addr, roles);
   }
 
-  function _hash(
+  function _hashERC1155(
     bytes32 nonce,
     bytes calldata bytecode,
     string memory baseTokenURI,

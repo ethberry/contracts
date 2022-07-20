@@ -47,10 +47,10 @@ jobs:
       - name: Authenticate check via npm
         run: npm whoami --registry=https://npm.pkg.github.com/
 
-      - name: Install ganache global
-        run: npm i --location=global ganache
-      - name: Install ganache
-        run: npm i ganache
+      - name: Install ganache-cli global
+        run: npm i --location=global ganache-cli
+      - name: Install ganache cli
+        run: npm i ganache-cli
       - name: Install Packages
         run: npm i
       - name: Build Packages

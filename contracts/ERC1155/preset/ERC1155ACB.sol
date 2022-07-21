@@ -14,8 +14,10 @@ contract ERC1155ACB is AccessControl, ERC1155Burnable {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
   constructor(string memory uri) ERC1155(uri) {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    _setupRole(MINTER_ROLE, _msgSender());
+    address account = _msgSender();
+
+    _setupRole(DEFAULT_ADMIN_ROLE, account);
+    _setupRole(MINTER_ROLE, account);
   }
 
   function mint(

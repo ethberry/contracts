@@ -6,59 +6,23 @@
 
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import "./ERC721ACB.sol";
+import "../ERC721ACRoyalty.sol";
 
-import "../interfaces/IERC721Royalty.sol";
-
-contract ERC721ACBR is AccessControl, ERC721Burnable, IERC721Royalty, ERC721Royalty {
-  bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-
+contract ERC721ACBR is ERC721ACB, ERC721ACRoyalty {
   constructor(
     string memory name,
     string memory symbol,
     uint96 royaltyNumerator
-  ) ERC721(name, symbol) {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    _setupRole(MINTER_ROLE, _msgSender());
-
+  ) ERC721ACB(name, symbol) {
     _setDefaultRoyalty(_msgSender(), royaltyNumerator);
-  }
-
-  function mint(address to, uint256 tokenId) public virtual onlyRole(MINTER_ROLE) {
-    _mint(to, tokenId);
-  }
-
-  function safeMint(address to, uint256 tokenId) public virtual onlyRole(MINTER_ROLE) {
-    _safeMint(to, tokenId);
-  }
-
-  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
-    public
-    virtual
-    override
-    onlyRole(DEFAULT_ADMIN_ROLE)
-  {
-    super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
-    emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
-  }
-
-  function setTokenRoyalty(
-    uint256 tokenId,
-    address royaltyReceiver,
-    uint96 royaltyNumerator
-  ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
-    super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
-    emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }
 
   function supportsInterface(bytes4 interfaceId)
     public
     view
     virtual
-    override(AccessControl, ERC721, ERC721Royalty)
+    override(ERC721ACB, ERC721ACRoyalty)
     returns (bool)
   {
     return super.supportsInterface(interfaceId);

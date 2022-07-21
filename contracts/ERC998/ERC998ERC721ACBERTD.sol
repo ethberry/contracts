@@ -15,7 +15,7 @@ import "./interfaces/IERC998ERC721TopDown.sol";
 import "./interfaces/IERC998ERC721TopDownEnumerable.sol";
 
 import "../ERC721/preset/ERC721ACBER.sol";
-import "../ERC721/ERC721BaseUrl.sol";
+import "../ERC721/ERC721ACBaseUrl.sol";
 
 contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721TopDownEnumerable {
   using Address for address;

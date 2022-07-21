@@ -6,40 +6,13 @@
 
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
-
 import "../ERC1155Capped.sol";
+import "./ERC1155ACB.sol";
 
-contract ERC1155ACBCS is AccessControl, ERC1155Burnable, ERC1155Capped {
-  bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+contract ERC1155ACBCS is ERC1155ACB, ERC1155Capped {
+  constructor(string memory uri) ERC1155ACB(uri) {}
 
-  constructor(string memory uri) ERC1155(uri) {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    _setupRole(MINTER_ROLE, _msgSender());
-  }
-
-  function mint(
-    address to,
-    uint256 id,
-    uint256 amount,
-    bytes memory data
-  ) public virtual onlyRole(MINTER_ROLE) {
-    _mint(to, id, amount, data);
-  }
-
-  function mintBatch(
-    address to,
-    uint256[] memory ids,
-    uint256[] memory amounts,
-    bytes memory data
-  ) public virtual onlyRole(MINTER_ROLE) {
-    _mintBatch(to, ids, amounts, data);
-  }
-
-
-  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC1155) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC1155, ERC1155ACB) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 

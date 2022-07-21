@@ -18,11 +18,11 @@ describe("ERC20ACFM", function () {
   beforeEach(async function () {
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    const erc20 = await ethers.getContractFactory("ERC20ACFM");
-    this.erc20Instance = await erc20.deploy(tokenName, tokenSymbol);
+    const erc20Factory = await ethers.getContractFactory("ERC20ACFM");
+    this.erc20Instance = await erc20Factory.deploy(tokenName, tokenSymbol);
 
-    const erc20NonReceiver = await ethers.getContractFactory("ERC20NonReceiverMock");
-    this.erc20NonReceiverInstance = await erc20NonReceiver.deploy();
+    const erc20NonReceiverFactory = await ethers.getContractFactory("ERC20NonReceiverMock");
+    this.erc20NonReceiverInstance = await erc20NonReceiverFactory.deploy();
 
     this.contractInstance = this.erc20Instance;
   });

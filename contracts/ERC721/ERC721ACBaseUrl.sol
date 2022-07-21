@@ -7,8 +7,9 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
-abstract contract ERC721BaseUrl {
+abstract contract ERC721ACBaseUrl is AccessControl {
   string internal _baseTokenURI;
 
   constructor(string memory baseTokenURI) {
@@ -20,6 +21,10 @@ abstract contract ERC721BaseUrl {
   }
 
   function _setBaseURI(string memory baseTokenURI) internal virtual {
+    _baseTokenURI = baseTokenURI;
+  }
+
+  function setBaseURI(string memory baseTokenURI) external onlyRole(DEFAULT_ADMIN_ROLE) {
     _baseTokenURI = baseTokenURI;
   }
 }

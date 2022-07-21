@@ -1,13 +1,11 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenId } from "../../constants";
+import { baseTokenURI } from "../../constants";
 
-import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
-import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
-import { shouldGrantRole } from "../../shared/accessControl/grantRole";
-import { shouldRevokeRole } from "../../shared/accessControl/revokeRole";
-import { shouldRenounceRole } from "../../shared/accessControl/renounceRole";
+import { shouldHaveOwner } from "../../shared/ownable/owner";
+import { shouldTransferOwnership } from "../../shared/ownable/transferOwnership";
+import { shouldRenounceOwnership } from "../../shared/ownable/renounceOwnership";
 import { shouldMint } from "../shared/mint";
 import { shouldMintBatch } from "../shared/mintBatch";
 import { shouldBalanceOf } from "../shared/balanceOf";
@@ -18,13 +16,12 @@ import { shouldSafeTransferFrom } from "../shared/safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "../shared/safeBatchTransferFrom";
 import { shouldBurn } from "../shared/burn";
 import { shouldBurnBatch } from "../shared/burnBatch";
-import { shouldGtTotalSupply } from "../shared/totalSupply";
 
-describe("ERC1155ACBCS", function () {
+describe("ERC1155OB", function () {
   beforeEach(async function () {
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    const erc1155Factory = await ethers.getContractFactory("ERC1155ACBCS");
+    const erc1155Factory = await ethers.getContractFactory("ERC1155OB");
     this.erc1155Instance = await erc1155Factory.deploy(baseTokenURI);
 
     const erc1155ReceiverFactory = await ethers.getContractFactory("ERC1155ReceiverMock");
@@ -36,38 +33,19 @@ describe("ERC1155ACBCS", function () {
     this.contractInstance = this.erc1155Instance;
   });
 
-  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldGrantRole();
-  shouldRevokeRole();
-  shouldRenounceRole();
-  shouldMint(true);
-  shouldMintBatch(true);
-  shouldGtTotalSupply();
+  shouldHaveOwner();
+  shouldTransferOwnership();
+  shouldRenounceOwnership();
+  shouldMint();
+  shouldMintBatch();
   shouldBalanceOf();
   shouldBalanceOfBatch();
   shouldURI();
   shouldSetApprovalForAll();
   shouldSafeTransferFrom();
   shouldSafeBatchTransferFrom();
-  shouldBurn(true);
-  shouldBurnBatch(true);
-
-  describe("mint", function () {
-    it("should fail: double mint", async function () {
-      await this.erc1155Instance.mint(this.receiver.address, tokenId, amount, "0x");
-      const tx1 = this.erc1155Instance.mint(this.receiver.address, tokenId, amount, "0x");
-      await expect(tx1).to.be.revertedWith("ERC1155Capped: subsequent mint not allowed");
-    });
-  });
-
-  describe("mintBatch", function () {
-    it("should fail: double mint", async function () {
-      await this.erc1155Instance.mint(this.receiver.address, tokenId, amount, "0x");
-      const tx1 = this.erc1155Instance.mintBatch(this.receiver.address, [tokenId], [amount], "0x");
-      await expect(tx1).to.be.revertedWith("ERC1155Capped: subsequent mint not allowed");
-    });
-  });
+  shouldBurn();
+  shouldBurnBatch();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {
@@ -77,8 +55,6 @@ describe("ERC1155ACBCS", function () {
       expect(supportsIERC1155MetadataURI).to.equal(true);
       const supportsIERC165 = await this.erc1155Instance.supportsInterface("0x01ffc9a7");
       expect(supportsIERC165).to.equal(true);
-      const supportsIAccessControl = await this.erc1155Instance.supportsInterface("0x7965db0b");
-      expect(supportsIAccessControl).to.equal(true);
       const supportsInvalidInterface = await this.erc1155Instance.supportsInterface("0xffffffff");
       expect(supportsInvalidInterface).to.equal(false);
     });

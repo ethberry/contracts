@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 import { expect } from "chai";
-import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
+import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
 import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
@@ -14,13 +14,14 @@ import { shouldTransferFrom } from "../shared/transferFrom";
 import { shouldApprove } from "../shared/approve";
 import { shouldBurn } from "../shared/burn";
 import { shouldBurnFrom } from "../shared/burnFrom";
+import { shouldCap } from "../shared/cap";
 
-describe("ERC20ACB", function () {
+describe("ERC20ACBC", function () {
   beforeEach(async function () {
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    const erc20Factory = await ethers.getContractFactory("ERC20ACB");
-    this.erc20Instance = await erc20Factory.deploy(tokenName, tokenSymbol);
+    const erc20Factory = await ethers.getContractFactory("ERC20ACBC");
+    this.erc20Instance = await erc20Factory.deploy(tokenName, tokenSymbol, amount);
 
     const erc20NonReceiverFactory = await ethers.getContractFactory("ERC20NonReceiverMock");
     this.erc20NonReceiverInstance = await erc20NonReceiverFactory.deploy();
@@ -40,6 +41,7 @@ describe("ERC20ACB", function () {
   shouldApprove();
   shouldBurn();
   shouldBurnFrom();
+  shouldCap();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

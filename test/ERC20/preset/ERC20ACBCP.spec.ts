@@ -1,8 +1,5 @@
 import { ethers } from "hardhat";
-import { ContractFactory } from "ethers";
 import { expect } from "chai";
-
-import { ERC20ACBCP, ERC20NonReceiverMock } from "../../../typechain-types";
 import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
 import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
@@ -21,16 +18,14 @@ import { shouldCap } from "../shared/cap";
 import { shouldPermit } from "../shared/permit";
 
 describe("ERC20ACBCP", function () {
-  let erc20: ContractFactory;
-  let erc20NonReceiver: ContractFactory;
-
   beforeEach(async function () {
-    erc20 = await ethers.getContractFactory("ERC20ACBCP");
-    erc20NonReceiver = await ethers.getContractFactory("ERC20NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ACBCP;
-    this.erc20NonReceiverInstance = (await erc20NonReceiver.deploy()) as ERC20NonReceiverMock;
+    const erc20Factory = await ethers.getContractFactory("ERC20ACBCP");
+    this.erc20Instance = await erc20Factory.deploy(tokenName, tokenSymbol, amount);
+
+    const erc20NonReceiverFactory = await ethers.getContractFactory("ERC20NonReceiverMock");
+    this.erc20NonReceiverInstance = await erc20NonReceiverFactory.deploy();
 
     this.contractInstance = this.erc20Instance;
   });

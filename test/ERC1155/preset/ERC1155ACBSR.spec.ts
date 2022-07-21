@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenId } from "../../constants";
+import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, royalty } from "../../constants";
 
 import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
@@ -19,13 +19,16 @@ import { shouldSafeBatchTransferFrom } from "../shared/safeBatchTransferFrom";
 import { shouldBurn } from "../shared/burn";
 import { shouldBurnBatch } from "../shared/burnBatch";
 import { shouldGtTotalSupply } from "../shared/totalSupply";
+import { shouldSetTokenRoyalty } from "../shared/royalty/setTokenRoyalty";
+import { shouldSetDefaultRoyalty } from "../shared/royalty/setDefaultRoyalty";
+import { shouldGetRoyaltyInfo } from "../shared/royalty/royaltyInfo";
 
-describe("ERC1155ACBCS", function () {
+describe("ERC1155ACBSR", function () {
   beforeEach(async function () {
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    const erc1155Factory = await ethers.getContractFactory("ERC1155ACBCS");
-    this.erc1155Instance = await erc1155Factory.deploy(baseTokenURI);
+    const erc1155Factory = await ethers.getContractFactory("ERC1155ACBSR");
+    this.erc1155Instance = await erc1155Factory.deploy(baseTokenURI, royalty);
 
     const erc1155ReceiverFactory = await ethers.getContractFactory("ERC1155ReceiverMock");
     this.erc1155ReceiverInstance = await erc1155ReceiverFactory.deploy();
@@ -52,22 +55,9 @@ describe("ERC1155ACBCS", function () {
   shouldSafeBatchTransferFrom();
   shouldBurn(true);
   shouldBurnBatch(true);
-
-  describe("mint", function () {
-    it("should fail: double mint", async function () {
-      await this.erc1155Instance.mint(this.receiver.address, tokenId, amount, "0x");
-      const tx1 = this.erc1155Instance.mint(this.receiver.address, tokenId, amount, "0x");
-      await expect(tx1).to.be.revertedWith("ERC1155Capped: subsequent mint not allowed");
-    });
-  });
-
-  describe("mintBatch", function () {
-    it("should fail: double mint", async function () {
-      await this.erc1155Instance.mint(this.receiver.address, tokenId, amount, "0x");
-      const tx1 = this.erc1155Instance.mintBatch(this.receiver.address, [tokenId], [amount], "0x");
-      await expect(tx1).to.be.revertedWith("ERC1155Capped: subsequent mint not allowed");
-    });
-  });
+  shouldSetTokenRoyalty(true);
+  shouldSetDefaultRoyalty(true);
+  shouldGetRoyaltyInfo();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {
@@ -75,6 +65,8 @@ describe("ERC1155ACBCS", function () {
       expect(supportsIERC1155).to.equal(true);
       const supportsIERC1155MetadataURI = await this.erc1155Instance.supportsInterface("0x0e89341c");
       expect(supportsIERC1155MetadataURI).to.equal(true);
+      const supportsIERC1155Royalty = await this.erc1155Instance.supportsInterface("0x2a55205a");
+      expect(supportsIERC1155Royalty).to.equal(true);
       const supportsIERC165 = await this.erc1155Instance.supportsInterface("0x01ffc9a7");
       expect(supportsIERC165).to.equal(true);
       const supportsIAccessControl = await this.erc1155Instance.supportsInterface("0x7965db0b");

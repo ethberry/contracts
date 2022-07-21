@@ -6,36 +6,25 @@
 
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract ERC20ACBCP is AccessControl, ERC20Burnable, ERC20Capped, ERC20Permit {
-  bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+import "./ERC20ACBC.sol";
 
+contract ERC20ACBCP is ERC20ACBC, ERC20Permit {
   constructor(
     string memory name,
     string memory symbol,
     uint256 cap
-  ) ERC20(name, symbol) ERC20Capped(cap) ERC20Permit(name) {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    _setupRole(MINTER_ROLE, _msgSender());
-  }
+  ) ERC20ACBC(name, symbol, cap) ERC20Permit(name) {}
 
-  function mint(address to, uint256 amount) public virtual onlyRole(MINTER_ROLE) {
-    _mint(to, amount);
-  }
-
-  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
     return
       interfaceId == type(IERC20).interfaceId ||
       interfaceId == type(IERC20Metadata).interfaceId ||
       super.supportsInterface(interfaceId);
   }
 
-  function _mint(address account, uint256 amount) internal virtual override(ERC20, ERC20Capped) {
+  function _mint(address account, uint256 amount) internal virtual override(ERC20, ERC20ACBC) {
     super._mint(account, amount);
   }
 

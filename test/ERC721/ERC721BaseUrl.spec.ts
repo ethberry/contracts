@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { ERC721BaseUrlTest } from "../../typechain-types";
-import { baseTokenURI, tokenId, tokenName, tokenSymbol, royalty } from "../constants";
+import { baseTokenURI, royalty, tokenId, tokenName, tokenSymbol } from "../constants";
 
 describe("ERC721BaseUrl", function () {
   let erc721: ContractFactory;

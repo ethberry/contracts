@@ -1,8 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { ContractFactory } from "ethers";
 
-import { ERC1155ACB, ERC1155NonReceiverMock, ERC1155ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
 
 import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
@@ -22,19 +20,17 @@ import { shouldBurn } from "../shared/burn";
 import { shouldBurnBatch } from "../shared/burnBatch";
 
 describe("ERC1155ACB", function () {
-  let erc1155: ContractFactory;
-  let erc1155Receiver: ContractFactory;
-  let erc1155NonReceiver: ContractFactory;
-
   beforeEach(async function () {
-    erc1155 = await ethers.getContractFactory("ERC1155ACB");
-    erc1155Receiver = await ethers.getContractFactory("ERC1155ReceiverMock");
-    erc1155NonReceiver = await ethers.getContractFactory("ERC1155NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc1155Instance = (await erc1155.deploy(baseTokenURI)) as ERC1155ACB;
-    this.erc1155ReceiverInstance = (await erc1155Receiver.deploy()) as ERC1155ReceiverMock;
-    this.erc1155NonReceiverInstance = (await erc1155NonReceiver.deploy()) as ERC1155NonReceiverMock;
+    const erc1155Factory = await ethers.getContractFactory("ERC1155ACB");
+    this.erc1155Instance = await erc1155Factory.deploy(baseTokenURI);
+
+    const erc1155ReceiverFactory = await ethers.getContractFactory("ERC1155ReceiverMock");
+    this.erc1155ReceiverInstance = await erc1155ReceiverFactory.deploy();
+
+    const erc1155NonReceiverFactory = await ethers.getContractFactory("ERC1155NonReceiverMock");
+    this.erc1155NonReceiverInstance = await erc1155NonReceiverFactory.deploy();
 
     this.contractInstance = this.erc1155Instance;
   });
@@ -44,8 +40,8 @@ describe("ERC1155ACB", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldMint();
-  shouldMintBatch();
+  shouldMint(true);
+  shouldMintBatch(true);
   shouldBalanceOf();
   shouldBalanceOfBatch();
   shouldURI();

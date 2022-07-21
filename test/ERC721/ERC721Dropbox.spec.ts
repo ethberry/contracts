@@ -4,7 +4,7 @@ import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
 
 import { ERC721DropboxTest } from "../../typechain-types";
-import { MINTER_ROLE, tokenName, tokenSymbol, DEFAULT_ADMIN_ROLE, tokenId } from "../constants";
+import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenId, tokenName, tokenSymbol } from "../constants";
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 
 describe("ERC721Dropbox", function () {

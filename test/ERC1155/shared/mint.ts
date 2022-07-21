@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 
 import { amount, MINTER_ROLE, tokenId } from "../../constants";
 
-export function shouldMint() {
+export function shouldMint(roles = false) {
   describe("mint", function () {
     it("should mint to wallet", async function () {
       const tx1 = this.erc1155Instance.mint(this.receiver.address, tokenId, amount, "0x");
@@ -39,7 +39,9 @@ export function shouldMint() {
     it("should fail: wrong role", async function () {
       const tx1 = this.erc1155Instance.connect(this.receiver).mint(this.receiver.address, tokenId, amount, "0x");
       await expect(tx1).to.be.revertedWith(
-        `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
+        roles
+          ? `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`
+          : "Ownable: caller is not the owner",
       );
     });
   });

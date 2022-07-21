@@ -6,62 +6,24 @@
 
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "./ERC721ACBC.sol";
+import "../ERC721ACRoyalty.sol";
 
-import "../ERC721Capped.sol";
-import "../interfaces/IERC721Royalty.sol";
-
-contract ERC721ACBCR is AccessControl, ERC721Burnable, ERC721Capped, IERC721Royalty, ERC721Royalty {
-  bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-
+contract ERC721ACBCR is ERC721ACBC, ERC721ACRoyalty {
   constructor(
     string memory name,
     string memory symbol,
     uint256 cap,
     uint96 royaltyNumerator
-  ) ERC721(name, symbol) ERC721Capped(cap) {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    _setupRole(MINTER_ROLE, _msgSender());
-
+  ) ERC721ACBC(name, symbol, cap) {
     _setDefaultRoyalty(_msgSender(), royaltyNumerator);
-  }
-
-  function mint(address to, uint256 tokenId) public virtual onlyRole(MINTER_ROLE) {
-    _mint(to, tokenId);
-  }
-
-  function safeMint(address to, uint256 tokenId) public virtual onlyRole(MINTER_ROLE) {
-    _safeMint(to, tokenId);
-  }
-
-  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
-    public
-    virtual
-    override
-    onlyRole(DEFAULT_ADMIN_ROLE)
-  {
-    super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
-    emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
-  }
-
-  function setTokenRoyalty(
-    uint256 tokenId,
-    address royaltyReceiver,
-    uint96 royaltyNumerator
-  ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
-    super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
-    emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }
 
   function supportsInterface(bytes4 interfaceId)
     public
     view
     virtual
-    override(AccessControl, ERC721, ERC721Royalty)
+    override(ERC721ACBC, ERC721ACRoyalty)
     returns (bool)
   {
     return super.supportsInterface(interfaceId);
@@ -75,7 +37,7 @@ contract ERC721ACBCR is AccessControl, ERC721Burnable, ERC721Capped, IERC721Roya
     address from,
     address to,
     uint256 tokenId
-  ) internal virtual override(ERC721, ERC721Capped) {
+  ) internal virtual override(ERC721, ERC721ACBC) {
     super._beforeTokenTransfer(from, to, tokenId);
   }
 }

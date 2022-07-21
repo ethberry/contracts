@@ -4,9 +4,9 @@ import { ContractFactory } from "ethers";
 
 import {
   ERC20ACBCS,
+  ERC721ACBCE,
   ERC721NonReceiverMock,
   ERC721ReceiverMock,
-  ERC721ACBCE,
   ERC998ERC20ERC721TopDown,
 } from "../../../typechain-types";
 import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";

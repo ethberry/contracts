@@ -17,8 +17,8 @@ contract ERC721BaseUrlTest is ERC721ACBR, ERC721ACBaseUrl {
     string memory baseTokenURI
   ) ERC721ACBR(name, symbol, royaltyNumerator) ERC721ACBaseUrl(baseTokenURI) {}
 
-  function _baseURI() internal view virtual override returns (string memory) {
-    return _baseURI(_baseTokenURI);
+  function _baseURI() internal view virtual override(ERC721, ERC721ACBaseUrl) returns (string memory) {
+    return super._baseURI();
   }
 
   function supportsInterface(bytes4 interfaceId)

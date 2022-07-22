@@ -25,7 +25,7 @@ describe("ERC1155OBR", function () {
     [this.owner, this.receiver] = await ethers.getSigners();
 
     const erc1155Factory = await ethers.getContractFactory("ERC1155OBR");
-    this.erc1155Instance = await erc1155Factory.deploy(baseTokenURI, royalty);
+    this.erc1155Instance = await erc1155Factory.deploy(royalty, baseTokenURI);
 
     const erc1155ReceiverFactory = await ethers.getContractFactory("ERC1155ReceiverMock");
     this.erc1155ReceiverInstance = await erc1155ReceiverFactory.deploy();

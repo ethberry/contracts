@@ -15,8 +15,7 @@ contract ERC721ACBCR is ERC721ACBC, ERC721ACRoyalty {
     string memory symbol,
     uint256 cap,
     uint96 royaltyNumerator
-  ) ERC721ACBC(name, symbol, cap) {
-    _setDefaultRoyalty(_msgSender(), royaltyNumerator);
+  ) ERC721ACBC(name, symbol, cap) ERC721ACRoyalty(royaltyNumerator) {
   }
 
   function supportsInterface(bytes4 interfaceId)

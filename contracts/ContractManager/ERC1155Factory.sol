@@ -10,15 +10,16 @@ import "./AbstractFactory.sol";
 
 contract ERC1155Factory is AbstractFactory {
   bytes32 private immutable ERC1155_PERMIT_SIGNATURE =
-    keccak256("EIP712(bytes32 nonce,bytes bytecode,string baseTokenURI,uint256 templateId)");
+    keccak256("EIP712(bytes32 nonce,bytes bytecode,uint96 royalty,string baseTokenURI,uint256 templateId)");
 
   address[] private _erc1155_tokens;
 
-  event ERC1155TokenDeployed(address addr, string baseTokenURI, uint256 templateId);
+  event ERC1155TokenDeployed(address addr, uint96 royalty, string baseTokenURI, uint256 templateId);
 
   function deployERC1155Token(
     bytes32 nonce,
     bytes calldata bytecode,
+    uint96 royalty,
     string memory baseTokenURI,
     uint256 templateId,
     address signer,
@@ -26,15 +27,15 @@ contract ERC1155Factory is AbstractFactory {
   ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
-    bytes32 digest = _hashERC1155(nonce, bytecode, baseTokenURI, templateId);
+    bytes32 digest = _hashERC1155(nonce, bytecode, royalty, baseTokenURI, templateId);
 
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
 
-    addr = deploy(bytecode, abi.encode(baseTokenURI));
+    addr = deploy(bytecode, abi.encode(royalty, baseTokenURI));
     _erc1155_tokens.push(addr);
 
-    emit ERC1155TokenDeployed(addr, baseTokenURI, templateId);
+    emit ERC1155TokenDeployed(addr, royalty, baseTokenURI, templateId);
 
     bytes32[] memory roles = new bytes32[](2);
     roles[0] = MINTER_ROLE;
@@ -46,6 +47,7 @@ contract ERC1155Factory is AbstractFactory {
   function _hashERC1155(
     bytes32 nonce,
     bytes calldata bytecode,
+    uint96 royalty,
     string memory baseTokenURI,
     uint256 templateId
   ) internal view returns (bytes32) {
@@ -56,6 +58,7 @@ contract ERC1155Factory is AbstractFactory {
             ERC1155_PERMIT_SIGNATURE,
             nonce,
             keccak256(abi.encodePacked(bytecode)),
+            royalty,
             keccak256(abi.encodePacked(baseTokenURI)),
             templateId
           )

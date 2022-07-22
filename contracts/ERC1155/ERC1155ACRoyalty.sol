@@ -12,6 +12,10 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "./interfaces/IERC1155Royalty.sol";
 
 abstract contract ERC1155ACRoyalty is AccessControl, IERC1155Royalty, ERC2981 {
+  constructor(uint96 royaltyNumerator) {
+    _setDefaultRoyalty(_msgSender(), royaltyNumerator);
+  }
+
   function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
     public
     virtual

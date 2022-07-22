@@ -4,7 +4,16 @@ import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
 
 import { ERC1155Factory } from "../../typechain-types";
-import { amount, baseTokenURI, DEFAULT_ADMIN_ROLE, nonce, PAUSER_ROLE, templateId, tokenId } from "../constants";
+import {
+  amount,
+  baseTokenURI,
+  DEFAULT_ADMIN_ROLE,
+  nonce,
+  PAUSER_ROLE,
+  royalty,
+  templateId,
+  tokenId,
+} from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
@@ -19,7 +28,7 @@ describe("ERC1155Factory", function () {
   let network: Network;
 
   beforeEach(async function () {
-    erc1155 = await ethers.getContractFactory("ERC1155ACBS");
+    erc1155 = await ethers.getContractFactory("ERC1155ACBSR");
     factory = await ethers.getContractFactory("ERC1155Factory");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
@@ -51,6 +60,7 @@ describe("ERC1155Factory", function () {
           EIP712: [
             { name: "nonce", type: "bytes32" },
             { name: "bytecode", type: "bytes" },
+            { name: "royalty", type: "uint96" },
             { name: "baseTokenURI", type: "string" },
             { name: "templateId", type: "uint256" },
           ],
@@ -59,6 +69,7 @@ describe("ERC1155Factory", function () {
         {
           nonce,
           bytecode: erc1155.bytecode,
+          royalty,
           baseTokenURI,
           templateId,
         },
@@ -67,6 +78,7 @@ describe("ERC1155Factory", function () {
       const tx = await factoryInstance.deployERC1155Token(
         nonce,
         erc1155.bytecode,
+        royalty,
         baseTokenURI,
         templateId,
         this.owner.address,
@@ -75,7 +87,9 @@ describe("ERC1155Factory", function () {
 
       const [address] = await factoryInstance.allERC1155Tokens();
 
-      await expect(tx).to.emit(factoryInstance, "ERC1155TokenDeployed").withArgs(address, baseTokenURI, templateId);
+      await expect(tx)
+        .to.emit(factoryInstance, "ERC1155TokenDeployed")
+        .withArgs(address, royalty, baseTokenURI, templateId);
 
       const erc1155Instance = erc1155.attach(address);
 

@@ -10,8 +10,7 @@ import "../ERC1155ACRoyalty.sol";
 import "./ERC1155ACBS.sol";
 
 contract ERC1155ACBSR is ERC1155ACBS, ERC1155ACRoyalty {
-  constructor(string memory uri, uint96 royaltyNumerator) ERC1155ACBS(uri) {
-    _setDefaultRoyalty(_msgSender(), royaltyNumerator);
+  constructor(uint96 royaltyNumerator, string memory uri) ERC1155ACBS(uri) ERC1155ACRoyalty(royaltyNumerator) {
   }
 
   function supportsInterface(bytes4 interfaceId)

@@ -12,6 +12,10 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
 import "./interfaces/IERC721Royalty.sol";
 
 abstract contract ERC721ACRoyalty is AccessControl, IERC721Royalty, ERC721Royalty {
+  constructor(uint96 royaltyNumerator) {
+    _setDefaultRoyalty(_msgSender(), royaltyNumerator);
+  }
+
   function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
     public
     virtual

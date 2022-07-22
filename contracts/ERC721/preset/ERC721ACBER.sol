@@ -14,8 +14,7 @@ contract ERC721ACBER is ERC721ACBE, ERC721ACRoyalty {
     string memory name,
     string memory symbol,
     uint96 royaltyNumerator
-  ) ERC721ACBE(name, symbol) {
-    _setDefaultRoyalty(_msgSender(), royaltyNumerator);
+  ) ERC721ACBE(name, symbol) ERC721ACRoyalty(royaltyNumerator) {
   }
 
   function supportsInterface(bytes4 interfaceId)

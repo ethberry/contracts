@@ -12,6 +12,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/IERC1155Royalty.sol";
 
 abstract contract ERC1155ORoyalty is Ownable, IERC1155Royalty, ERC2981 {
+  constructor(uint96 royaltyNumerator) {
+    _setDefaultRoyalty(_msgSender(), royaltyNumerator);
+  }
+
   function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
     public
     virtual

@@ -5,12 +5,7 @@
     "url": "https://gemunion.io/"
   },
   "description": "Collection of contracts and presets",
-  "dependencies": {
-    "@ganache/cli": "0.4.2",
-    "@ganache/core": "0.4.2"
-  },
   "devDependencies": {
-    "ethereum-waffle": "3.2.0",
     "@chainlink/contracts": "0.4.1",
     "@ethersproject/networks": "5.6.4",
     "@gemunion/eslint-config": "2.0.1",
@@ -41,6 +36,7 @@
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-promise": "6.0.0",
     "eth-sig-util": "3.0.1",
+    "ethereum-waffle": "4.0.1",
     "ethereumjs-util": "7.1.5",
     "ethers": "5.6.9",
     "hardhat": "2.10.1",
@@ -78,7 +74,7 @@
   },
   "scripts": {
     "build": "hardhat compile",
-    "clean": "sh scripts/clean.sh",
+    "clean": "hardhat clean",
     "deploy:mainnet": "hardhat --network mainnet deploy",
     "deploy:mumbai": "hardhat --network mumbai deploy",
     "deploy:polygon": "hardhat --network polygon deploy",

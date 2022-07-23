@@ -1,5 +1,6 @@
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
-import { expect } from "chai";
 import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
 import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
@@ -16,6 +17,8 @@ import { shouldBurn } from "../shared/burn";
 import { shouldBurnFrom } from "../shared/burnFrom";
 import { shouldCap } from "../shared/cap";
 import { shouldPermit } from "../shared/permit";
+
+use(solidity);
 
 describe("ERC20ACBCP", function () {
   beforeEach(async function () {

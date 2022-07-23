@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
 import { baseTokenURI, royalty } from "../../constants";
@@ -16,9 +17,11 @@ import { shouldSafeTransferFrom } from "../shared/safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "../shared/safeBatchTransferFrom";
 import { shouldBurn } from "../shared/burn";
 import { shouldBurnBatch } from "../shared/burnBatch";
-import { shouldSetTokenRoyalty } from "../shared/royalty/setTokenRoyalty";
-import { shouldSetDefaultRoyalty } from "../shared/royalty/setDefaultRoyalty";
-import { shouldGetRoyaltyInfo } from "../shared/royalty/royaltyInfo";
+import { shouldSetTokenRoyalty } from "../../shared/royalty/setTokenRoyalty";
+import { shouldSetDefaultRoyalty } from "../../shared/royalty/setDefaultRoyalty";
+import { shouldGetRoyaltyInfo } from "../../shared/royalty/royaltyInfo";
+
+use(solidity);
 
 describe("ERC1155OBR", function () {
   beforeEach(async function () {

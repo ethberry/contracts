@@ -1,21 +1,21 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
-import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
 
-import { ERC721DropboxTest } from "../../typechain-types";
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenId, tokenName, tokenSymbol } from "../constants";
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
 
+use(solidity);
+
 describe("ERC721Dropbox", function () {
-  let erc721: ContractFactory;
   let network: Network;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721DropboxTest");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol)) as ERC721DropboxTest;
+    const erc721Factory = await ethers.getContractFactory("ERC721DropboxTest");
+    this.erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, 1);
 
     network = await ethers.provider.getNetwork();
 
@@ -184,7 +184,7 @@ describe("ERC721Dropbox", function () {
       const tx2 = this.erc721Instance
         .connect(this.receiver)
         .redeem(this.receiver.address, newTokenId, this.owner.address, signature2);
-      await expect(tx2).to.be.revertedWith("ERC721Dropbox: cap exceeded");
+      await expect(tx2).to.be.revertedWith("ERC721Capped: cap exceeded");
     });
   });
 });

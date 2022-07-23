@@ -24,8 +24,8 @@ contract ERC20ACFM is AccessControl, ERC20FlashMint {
     _mint(to, amount);
   }
 
-  function flashFee(address token, uint256 amount) public view virtual override returns (uint256) {
-    super.flashFee(token, amount);
+  function flashFee(address token, uint256) public view virtual override returns (uint256) {
+    require(token == address(this), "ERC20FlashMint: wrong token");
     return _flashFeeAmount;
   }
 

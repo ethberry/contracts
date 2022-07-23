@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { parseEther } from "ethers/lib/utils";
 
@@ -14,6 +15,8 @@ import { shouldRevokeRole } from "../../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../../shared/accessControl/renounceRole";
 
 const linkAmountInWei = ethers.BigNumber.from("1000").mul(decimals);
+
+use(solidity);
 
 describe("LootBox", function () {
   let vrf: ContractFactory;

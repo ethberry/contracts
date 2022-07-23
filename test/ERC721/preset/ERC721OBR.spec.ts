@@ -1,6 +1,7 @@
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
-import { expect } from "chai";
 
 import { ERC721ACBR, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { royalty, tokenName, tokenSymbol } from "../../constants";
@@ -15,12 +16,14 @@ import { shouldGetBalanceOf } from "../shared/basic/balanceOf";
 import { shouldTransferFrom } from "../shared/basic/transferFrom";
 import { shouldSafeTransferFrom } from "../shared/basic/safeTransferFrom";
 import { shouldBurn } from "../shared/basic/burn";
-import { shouldSetTokenRoyalty } from "../shared/royalty/setTokenRoyalty";
-import { shouldSetDefaultRoyalty } from "../shared/royalty/setDefaultRoyalty";
-import { shouldGetRoyaltyInfo } from "../shared/royalty/royaltyInfo";
-import { shouldBurnBasic } from "../shared/royalty/burnBasic";
+import { shouldSetTokenRoyalty } from "../../shared/royalty/setTokenRoyalty";
+import { shouldSetDefaultRoyalty } from "../../shared/royalty/setDefaultRoyalty";
+import { shouldGetRoyaltyInfo } from "../../shared/royalty/royaltyInfo";
+import { shouldBurnBasic } from "../../shared/royalty/burnBasic";
 import { shouldTransferOwnership } from "../../shared/ownable/transferOwnership";
 import { shouldRenounceOwnership } from "../../shared/ownable/renounceOwnership";
+
+use(solidity);
 
 describe("ERC721OBR", function () {
   let erc721: ContractFactory;

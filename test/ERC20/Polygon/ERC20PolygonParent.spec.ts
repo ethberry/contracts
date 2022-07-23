@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
@@ -9,6 +10,8 @@ import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
 import { shouldGrantRole } from "../../shared/accessControl/grantRole";
 import { shouldRevokeRole } from "../../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../../shared/accessControl/renounceRole";
+
+use(solidity);
 
 describe("ERC20PolygonParentMock", function () {
   let erc20: ContractFactory;

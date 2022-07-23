@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
@@ -12,6 +13,8 @@ import { shouldGrantRole } from "../shared/accessControl/grantRole";
 import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
 import { shouldPause } from "../shared/pausable";
+
+use(solidity);
 
 describe("AuctionFactory", function () {
   let factory: ContractFactory;

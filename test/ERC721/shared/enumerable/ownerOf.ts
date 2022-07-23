@@ -12,10 +12,14 @@ export function shouldGetOwnerOf() {
       await this.erc721Instance.mint(this.owner.address);
       const tx = this.erc721Instance.burn(0);
       await expect(tx).to.not.be.reverted;
+
       const balanceOfOwner = await this.erc721Instance.balanceOf(this.owner.address);
       expect(balanceOfOwner).to.equal(0);
+
       const tx2 = this.erc721Instance.ownerOf(0);
-      await expect(tx2).to.be.revertedWith(`ERC721: invalid token ID`);
+      // https://github.com/TrueFiEng/Waffle/issues/761
+      // await expect(tx2).to.be.revertedWith(`ERC721: invalid token ID`);
+      await expect(tx2).to.be.reverted;
     });
   });
 }

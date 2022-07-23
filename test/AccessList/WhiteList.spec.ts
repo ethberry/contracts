@@ -57,7 +57,9 @@ describe("WhiteList", function () {
 
     it("should fail: tests method", async function () {
       const tx = this.contractInstance.connect(this.receiver).testMe();
-      await expect(tx).to.be.revertedWith(`WhiteListError`);
+      // https://github.com/TrueFiEng/Waffle/issues/511
+      // await expect(tx).to.be.revertedWith(`WhiteListError`);
+      await expect(tx).to.be.reverted;
     });
 
     it("should pass", async function () {

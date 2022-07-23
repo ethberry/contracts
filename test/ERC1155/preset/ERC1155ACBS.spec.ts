@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
@@ -19,6 +20,8 @@ import { shouldSafeBatchTransferFrom } from "../shared/safeBatchTransferFrom";
 import { shouldBurn } from "../shared/burn";
 import { shouldBurnBatch } from "../shared/burnBatch";
 import { shouldGtTotalSupply } from "../shared/totalSupply";
+
+use(solidity);
 
 describe("ERC1155ACBS", function () {
   beforeEach(async function () {

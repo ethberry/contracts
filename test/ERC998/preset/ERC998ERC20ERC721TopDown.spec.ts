@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
@@ -37,6 +38,8 @@ import { shouldGetERC20 } from "../shared/getERC20";
 import { shouldBalanceOfERC20 } from "../shared/balanceOfERC20";
 import { shouldErc20ContractByIndex } from "../shared/erc20ContractByIndex";
 import { shouldTotalERC20Contracts } from "../shared/totalERC20Contracts";
+
+use(solidity);
 
 describe("ERC998ComposableTopDown", function () {
   let erc20: ContractFactory;

@@ -1,5 +1,6 @@
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers, upgrades } from "hardhat";
-import { expect } from "chai";
 
 import {
   DummyBeacon1,
@@ -9,6 +10,8 @@ import {
   DummyUUPS1,
   DummyUUPS2,
 } from "../../typechain-types";
+
+use(solidity);
 
 describe("Upgradeable", function () {
   it("should redeploy (transparent)", async function () {

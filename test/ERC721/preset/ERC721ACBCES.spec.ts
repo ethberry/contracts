@@ -1,6 +1,7 @@
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
-import { expect } from "chai";
 
 import { ERC721ACBCES, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
@@ -22,6 +23,8 @@ import { shouldBurn } from "../shared/enumerable/burn";
 import { shouldGetTokenURI } from "../shared/enumerable/tokenURI";
 import { shouldGetTokenOfOwnerByIndex } from "../shared/enumerable/tokenOfOwnerByIndex";
 import { shouldGetCap } from "../shared/enumerable/capped";
+
+use(solidity);
 
 describe("ERC721ACBCES", function () {
   let erc721: ContractFactory;

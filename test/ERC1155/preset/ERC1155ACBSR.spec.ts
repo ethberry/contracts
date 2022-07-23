@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, royalty } from "../../constants";
@@ -19,9 +20,11 @@ import { shouldSafeBatchTransferFrom } from "../shared/safeBatchTransferFrom";
 import { shouldBurn } from "../shared/burn";
 import { shouldBurnBatch } from "../shared/burnBatch";
 import { shouldGtTotalSupply } from "../shared/totalSupply";
-import { shouldSetTokenRoyalty } from "../shared/royalty/setTokenRoyalty";
-import { shouldSetDefaultRoyalty } from "../shared/royalty/setDefaultRoyalty";
-import { shouldGetRoyaltyInfo } from "../shared/royalty/royaltyInfo";
+import { shouldSetTokenRoyalty } from "../../shared/royalty/setTokenRoyalty";
+import { shouldSetDefaultRoyalty } from "../../shared/royalty/setDefaultRoyalty";
+import { shouldGetRoyaltyInfo } from "../../shared/royalty/royaltyInfo";
+
+use(solidity);
 
 describe("ERC1155ACBSR", function () {
   beforeEach(async function () {

@@ -1,6 +1,6 @@
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
-import { constants } from "ethers";
-import { expect } from "chai";
 import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
 import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
@@ -13,6 +13,8 @@ import { shouldBalanceOf } from "../shared/balanceOf";
 import { shouldTransfer } from "../shared/transfer";
 import { shouldTransferFrom } from "../shared/transferFrom";
 import { shouldApprove } from "../shared/approve";
+
+use(solidity);
 
 describe("ERC20ACFM", function () {
   beforeEach(async function () {
@@ -41,18 +43,18 @@ describe("ERC20ACFM", function () {
   describe("maxFlashLoan", function () {
     it("token match (zero)", async function () {
       const maxFlashLoan = await this.erc20Instance.maxFlashLoan(this.erc20Instance.address);
-      expect(maxFlashLoan).to.equal(constants.MaxUint256);
+      expect(maxFlashLoan).to.equal(ethers.constants.MaxUint256);
     });
 
     it("token match (amount)", async function () {
       await this.erc20Instance.mint(this.owner.address, amount);
       const maxFlashLoan = await this.erc20Instance.maxFlashLoan(this.erc20Instance.address);
-      expect(maxFlashLoan).to.equal(constants.MaxUint256.sub(amount));
+      expect(maxFlashLoan).to.equal(ethers.constants.MaxUint256.sub(amount));
     });
 
     it("token mismatch", async function () {
       await this.erc20Instance.mint(this.owner.address, amount);
-      const maxFlashLoan = await this.erc20Instance.maxFlashLoan(constants.AddressZero);
+      const maxFlashLoan = await this.erc20Instance.maxFlashLoan(ethers.constants.AddressZero);
       expect(maxFlashLoan).to.equal(0);
     });
   });
@@ -64,15 +66,17 @@ describe("ERC20ACFM", function () {
     });
 
     it("token mismatch", async function () {
-      const tx = this.erc20Instance.flashFee(constants.AddressZero, amount);
-      await expect(tx).to.be.revertedWith("ERC20FlashMint: wrong token");
+      const tx = this.erc20Instance.flashFee(ethers.constants.AddressZero, amount);
+      // https://github.com/TrueFiEng/Waffle/issues/761
+      // await expect(tx).to.be.revertedWith("ERC20FlashMint: wrong token");
+      await expect(tx).to.be.reverted;
     });
   });
 
   describe("flashFeeReceiver", function () {
     it("default receiver", async function () {
       const flashFeeReceiver = await this.erc20Instance.flashFeeReceiver();
-      expect(flashFeeReceiver).to.equal(constants.AddressZero);
+      expect(flashFeeReceiver).to.equal(ethers.constants.AddressZero);
     });
   });
 
@@ -92,10 +96,10 @@ describe("ERC20ACFM", function () {
 
       await expect(tx)
         .to.emit(this.erc20Instance, "Transfer")
-        .withArgs(constants.AddressZero, this.erc20FlashBorrowerInstance.address, amount);
+        .withArgs(ethers.constants.AddressZero, this.erc20FlashBorrowerInstance.address, amount);
       await expect(tx)
         .to.emit(this.erc20Instance, "Transfer")
-        .withArgs(this.erc20FlashBorrowerInstance.address, constants.AddressZero, amount);
+        .withArgs(this.erc20FlashBorrowerInstance.address, ethers.constants.AddressZero, amount);
       await expect(tx)
         .to.emit(this.erc20FlashBorrowerInstance, "BalanceOf")
         .withArgs(this.erc20Instance.address, this.erc20FlashBorrowerInstance.address, amount);
@@ -175,7 +179,7 @@ describe("ERC20ACFM", function () {
       const tx = this.erc20Instance.flashLoan(
         erc20FlashBorrowerInstance.address,
         this.erc20Instance.address,
-        constants.MaxUint256,
+        ethers.constants.MaxUint256,
         data,
       );
       await expect(tx).to.be.revertedWith("ERC20FlashMint: amount exceeds maxFlashLoan");
@@ -195,7 +199,7 @@ describe("ERC20ACFM", function () {
       const tx = await this.erc20Instance.mint(this.erc20FlashBorrowerInstance.address, borrowerInitialBalance);
       await expect(tx)
         .to.emit(this.erc20Instance, "Transfer")
-        .withArgs(constants.AddressZero, this.erc20FlashBorrowerInstance.address, borrowerInitialBalance);
+        .withArgs(ethers.constants.AddressZero, this.erc20FlashBorrowerInstance.address, borrowerInitialBalance);
 
       const balanceOf = await this.erc20Instance.balanceOf(this.erc20FlashBorrowerInstance.address);
       expect(balanceOf).to.equal(borrowerInitialBalance);
@@ -207,7 +211,7 @@ describe("ERC20ACFM", function () {
 
     it("default flash fee receiver", async function () {
       const feeReceiver = await this.erc20Instance.flashFeeReceiver();
-      expect(feeReceiver).to.equal(constants.AddressZero);
+      expect(feeReceiver).to.equal(ethers.constants.AddressZero);
 
       const tx = await this.erc20Instance.flashLoan(
         this.erc20FlashBorrowerInstance.address,
@@ -217,10 +221,10 @@ describe("ERC20ACFM", function () {
       );
       await expect(tx)
         .to.emit(this.erc20Instance, "Transfer")
-        .withArgs(constants.AddressZero, this.erc20FlashBorrowerInstance.address, amount);
+        .withArgs(ethers.constants.AddressZero, this.erc20FlashBorrowerInstance.address, amount);
       await expect(tx)
         .to.emit(this.erc20Instance, "Transfer")
-        .withArgs(this.erc20FlashBorrowerInstance.address, constants.AddressZero, amount + customFlashFee);
+        .withArgs(this.erc20FlashBorrowerInstance.address, ethers.constants.AddressZero, amount + customFlashFee);
       await expect(tx)
         .to.emit(this.erc20FlashBorrowerInstance, "BalanceOf")
         .withArgs(this.erc20Instance.address, this.erc20FlashBorrowerInstance.address, borrowerInitialBalance + amount);
@@ -261,10 +265,10 @@ describe("ERC20ACFM", function () {
 
       await expect(tx)
         .to.emit(this.erc20Instance, "Transfer")
-        .withArgs(constants.AddressZero, this.erc20FlashBorrowerInstance.address, amount);
+        .withArgs(ethers.constants.AddressZero, this.erc20FlashBorrowerInstance.address, amount);
       await expect(tx)
         .to.emit(this.erc20Instance, "Transfer")
-        .withArgs(this.erc20FlashBorrowerInstance.address, constants.AddressZero, amount);
+        .withArgs(this.erc20FlashBorrowerInstance.address, ethers.constants.AddressZero, amount);
       await expect(tx)
         .to.emit(this.erc20Instance, "Transfer")
         .withArgs(this.erc20FlashBorrowerInstance.address, this.receiver.address, customFlashFee);

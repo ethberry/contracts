@@ -1,5 +1,6 @@
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
-import { expect } from "chai";
 import { amount, tokenName, tokenSymbol } from "../../constants";
 
 import { shouldHaveOwner } from "../../shared/ownable/owner";
@@ -13,6 +14,8 @@ import { shouldApprove } from "../shared/approve";
 import { shouldBurn } from "../shared/burn";
 import { shouldBurnFrom } from "../shared/burnFrom";
 import { shouldCap } from "../shared/cap";
+
+use(solidity);
 
 describe("ERC20OBC", function () {
   beforeEach(async function () {

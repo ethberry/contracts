@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
@@ -22,6 +23,8 @@ import { shouldBurn } from "../ERC721/shared/enumerable/burn";
 import { shouldGetTokenURI } from "../ERC721/shared/enumerable/tokenURI";
 import { shouldGetTokenOfOwnerByIndex } from "../ERC721/shared/enumerable/tokenOfOwnerByIndex";
 import { shouldGetCap } from "../ERC721/shared/enumerable/capped";
+
+use(solidity);
 
 describe("ERC998ComposableBottomUp", function () {
   let erc721: ContractFactory;

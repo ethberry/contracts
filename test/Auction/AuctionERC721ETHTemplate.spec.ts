@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers, web3 } from "hardhat";
 import { ContractFactory } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
@@ -9,6 +10,8 @@ import { amount, tokenId, tokenName, tokenSymbol } from "../constants";
 import { shouldHaveOwner } from "../shared/ownable/owner";
 import { shouldTransferOwnership } from "../shared/ownable/transferOwnership";
 import { shouldRenounceOwnership } from "../shared/ownable/renounceOwnership";
+
+use(solidity);
 
 describe("AuctionERC721ETHTemplate", function () {
   let erc721: ContractFactory;
@@ -151,7 +154,7 @@ describe("AuctionERC721ETHTemplate", function () {
 
     it("should fail: proposed bid must be bigger than current bid", async function () {
       await templateInstance.connect(this.receiver).makeBid({ value: amount * 10 });
-      const tx = templateInstance.connect(this.receiver).makeBid({ value: amount * 2 });
+      const tx = templateInstance.connect(this.stranger).makeBid({ value: amount * 2 });
       await expect(tx).to.be.revertedWith("Auction: proposed bid must be bigger than current bid");
     });
 

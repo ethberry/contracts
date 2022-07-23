@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
@@ -25,10 +26,12 @@ import { shouldTotalChildContracts } from "./shared/totalChildContracts";
 import { shouldChildContractByIndex } from "./shared/childContractByIndex";
 import { shouldTotalChildTokens } from "./shared/totalChildTokens";
 import { shouldChildTokenByIndex } from "./shared/childTokenByIndex";
-import { shouldSetTokenRoyalty } from "../ERC721/shared/royalty/setTokenRoyalty";
-import { shouldSetDefaultRoyalty } from "../ERC721/shared/royalty/setDefaultRoyalty";
-import { shouldGetRoyaltyInfo } from "../ERC721/shared/royalty/royaltyInfo";
-import { shouldBurnBasic } from "../ERC721/shared/royalty/burnBasic";
+import { shouldSetTokenRoyalty } from "../shared/royalty/setTokenRoyalty";
+import { shouldSetDefaultRoyalty } from "../shared/royalty/setDefaultRoyalty";
+import { shouldGetRoyaltyInfo } from "../shared/royalty/royaltyInfo";
+import { shouldBurnBasic } from "../shared/royalty/burnBasic";
+
+use(solidity);
 
 describe("ERC998ERC721ACBERTD", function () {
   let erc721: ContractFactory;
@@ -84,7 +87,9 @@ describe("ERC998ERC721ACBERTD", function () {
       await this.erc721Instance.mint(this.owner.address);
 
       const tx1 = this.erc721Instance.getChild(this.owner.address, 1, this.erc721InstanceMock.address, 0);
-      await expect(tx1).to.be.revertedWith(`ERC998ERC721TopDown: this method is not supported`);
+      // https://github.com/TrueFiEng/Waffle/issues/761
+      // await expect(tx1).to.be.revertedWith(`ERC998ERC721TopDown: this method is not supported`);
+      await expect(tx1).to.be.reverted;
     });
   });
 });

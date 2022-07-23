@@ -7,7 +7,6 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "hardhat/console.sol";
 
 import "./AuctionHelper.sol";
 
@@ -37,8 +36,6 @@ contract AuctionERC721ETHTemplate is AuctionHelper {
     _bidStep = bidStep;
     _buyoutPrice = buyoutPrice;
 
-    // this is questionable
-    uint256 _startTimestamp;
     if (startTimestamp == 0) {
       _startTimestamp = block.timestamp;
     } else {

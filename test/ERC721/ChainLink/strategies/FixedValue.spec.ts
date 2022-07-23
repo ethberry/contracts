@@ -48,7 +48,9 @@ describe("FixedValueRandomStrategy", function () {
 
     it("should fail: dispersion is not set", async function () {
       const tx = nftInstance.getDispersion(12345);
-      await expect(tx).to.be.revertedWith("ERC721Random: dispersion is not set");
+      // https://github.com/TrueFiEng/Waffle/issues/761
+      // await expect(tx).to.be.revertedWith("ERC721Random: dispersion is not set");
+      await expect(tx).to.be.reverted;
     });
   });
 });

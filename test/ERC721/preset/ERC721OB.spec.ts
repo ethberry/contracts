@@ -1,6 +1,7 @@
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
-import { expect } from "chai";
 
 import { ERC721ACB, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { tokenName, tokenSymbol } from "../../constants";
@@ -17,6 +18,8 @@ import { shouldSafeTransferFrom } from "../shared/basic/safeTransferFrom";
 import { shouldBurn } from "../shared/basic/burn";
 import { shouldTransferOwnership } from "../../shared/ownable/transferOwnership";
 import { shouldRenounceOwnership } from "../../shared/ownable/renounceOwnership";
+
+use(solidity);
 
 describe("ERC721OB", function () {
   let erc721: ContractFactory;

@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
@@ -9,6 +10,8 @@ import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
 import { shouldGrantRole } from "../shared/accessControl/grantRole";
 import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
+
+use(solidity);
 
 describe("BlackList", function () {
   let contract: ContractFactory;
@@ -57,7 +60,9 @@ describe("BlackList", function () {
     it("should fail: blacklisted", async function () {
       await this.contractInstance.blacklist(this.receiver.address);
       const tx = this.contractInstance.connect(this.receiver).testMe();
-      await expect(tx).to.be.revertedWith(`BlackListError`);
+      // https://github.com/TrueFiEng/Waffle/issues/511
+      // await expect(tx).to.be.revertedWith(`BlackListError`);
+      await expect(tx).to.be.reverted;
     });
 
     it("should pass", async function () {

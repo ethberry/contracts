@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
@@ -20,6 +21,8 @@ import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
 import { shouldGrantRole } from "../shared/accessControl/grantRole";
 import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
+
+use(solidity);
 
 describe("ERC1155Factory", function () {
   let erc1155: ContractFactory;

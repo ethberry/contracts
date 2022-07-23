@@ -1,43 +1,44 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
-import { ContractFactory } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { ERC721BaseUrlTest } from "../../typechain-types";
 import { baseTokenURI, royalty, tokenId, tokenName, tokenSymbol } from "../constants";
 
+use(solidity);
+
 describe("ERC721BaseUrl", function () {
-  let erc721: ContractFactory;
-  let erc721Instance: ERC721BaseUrlTest;
   let owner: SignerWithAddress;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721BaseUrlTest");
     [owner] = await ethers.getSigners();
 
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, royalty, baseTokenURI)) as ERC721BaseUrlTest;
+    const erc721Factory = await ethers.getContractFactory("ERC721BaseUrlTest");
+    this.erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, royalty, baseTokenURI);
   });
 
   describe("tokenURI", function () {
     it("should get token uri", async function () {
-      await erc721Instance.mint(owner.address, tokenId);
-      const uri = await erc721Instance.tokenURI(tokenId);
-      expect(uri).to.equal(`${baseTokenURI}/${erc721Instance.address.toLowerCase()}/${tokenId}`);
+      await this.erc721Instance.mint(owner.address, tokenId);
+      const uri = await this.erc721Instance.tokenURI(tokenId);
+      expect(uri).to.equal(`${baseTokenURI}/${this.erc721Instance.address.toLowerCase()}/${tokenId}`);
     });
 
     it("should fail: URI query for nonexistent token", async function () {
-      const uri = erc721Instance.tokenURI(tokenId);
-      await expect(uri).to.be.revertedWith("ERC721: invalid token ID");
+      const uri = this.erc721Instance.tokenURI(tokenId);
+      // https://github.com/TrueFiEng/Waffle/issues/761
+      // await expect(uri).to.be.revertedWith("ERC721: invalid token ID");
+      await expect(uri).to.be.reverted;
     });
   });
 
   describe("setBaseURI", function () {
     it("should set token uri", async function () {
       const newURI = "http://example.com/";
-      await erc721Instance.mint(owner.address, tokenId);
-      await erc721Instance.setBaseURI(newURI);
-      const uri = await erc721Instance.tokenURI(tokenId);
-      expect(uri).to.equal(`${newURI}/${erc721Instance.address.toLowerCase()}/${tokenId}`);
+      await this.erc721Instance.mint(owner.address, tokenId);
+      await this.erc721Instance.setBaseURI(newURI);
+      const uri = await this.erc721Instance.tokenURI(tokenId);
+      expect(uri).to.equal(`${newURI}/${this.erc721Instance.address.toLowerCase()}/${tokenId}`);
     });
   });
 });

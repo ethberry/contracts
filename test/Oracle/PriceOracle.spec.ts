@@ -1,12 +1,15 @@
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
-import { expect } from "chai";
 
 import { PriceOracle } from "../../typechain-types";
 
 import { shouldHaveOwner } from "../shared/ownable/owner";
 import { shouldTransferOwnership } from "../shared/ownable/transferOwnership";
 import { shouldRenounceOwnership } from "../shared/ownable/renounceOwnership";
+
+use(solidity);
 
 describe("PriceOracle", function () {
   let oracle: ContractFactory;

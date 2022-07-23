@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
@@ -6,6 +7,8 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { EIP712ERC721, ERC721ACB } from "../../typechain-types";
 import { MINTER_ROLE, nonce, tokenId, tokenName, tokenSymbol } from "../constants";
+
+use(solidity);
 
 describe("EIP712ERC721", function () {
   let erc721: ContractFactory;

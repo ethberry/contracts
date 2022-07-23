@@ -1,6 +1,7 @@
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
-import { expect } from "chai";
 
 import { ERC721ACBCR, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, royalty, tokenName, tokenSymbol } from "../../constants";
@@ -20,10 +21,12 @@ import { shouldTransferFrom } from "../shared/basic/transferFrom";
 import { shouldSafeTransferFrom } from "../shared/basic/safeTransferFrom";
 import { shouldBurn } from "../shared/basic/burn";
 import { shouldCapped } from "../shared/basic/capped";
-import { shouldSetTokenRoyalty } from "../shared/royalty/setTokenRoyalty";
-import { shouldSetDefaultRoyalty } from "../shared/royalty/setDefaultRoyalty";
-import { shouldGetRoyaltyInfo } from "../shared/royalty/royaltyInfo";
-import { shouldBurnBasic } from "../shared/royalty/burnBasic";
+import { shouldSetTokenRoyalty } from "../../shared/royalty/setTokenRoyalty";
+import { shouldSetDefaultRoyalty } from "../../shared/royalty/setDefaultRoyalty";
+import { shouldGetRoyaltyInfo } from "../../shared/royalty/royaltyInfo";
+import { shouldBurnBasic } from "../../shared/royalty/burnBasic";
+
+use(solidity);
 
 describe("ERC721ACBCR", function () {
   let erc721: ContractFactory;

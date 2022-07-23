@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
@@ -25,6 +26,8 @@ import { shouldSetApprovalForAll } from "../../ERC721/shared/enumerable/setAppro
 import { shouldTransferFrom } from "../../ERC721/shared/enumerable/transferFrom";
 import { testsUsingWhiteListChild } from "../shared/sharedWhiteListChild/testsUsingWhiteListChild";
 import { shouldWhiteListChild } from "../shared/sharedWhiteListChild/whiteListChild";
+
+use(solidity);
 
 describe("ERC998ERC721TopDownWhiteListChild", function () {
   let erc721: ContractFactory;
@@ -73,7 +76,10 @@ describe("ERC998ERC721TopDownWhiteListChild", function () {
       await this.erc721Instance.mint(this.owner.address);
 
       const tx1 = this.erc721Instance.getChild(this.owner.address, 1, this.erc721InstanceMock.address, 0);
-      await expect(tx1).to.be.revertedWith(`ERC998ERC721TopDown: this method is not supported`);
+
+      // https://github.com/TrueFiEng/Waffle/issues/761
+      // await expect(tx1).to.be.revertedWith(`ERC998ERC721TopDown: this method is not supported`);
+      await expect(tx1).to.be.reverted;
     });
   });
 

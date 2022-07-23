@@ -9,15 +9,16 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/security/Pausable.sol";
 
 import "../ERC721Dropbox.sol";
-import "../preset/ERC721ACB.sol";
+import "../preset/ERC721ACBC.sol";
 
-contract ERC721DropboxTest is ERC721Dropbox, ERC721ACB, Pausable {
+contract ERC721DropboxTest is ERC721Dropbox, ERC721ACBC, Pausable {
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
   constructor(
     string memory name,
-    string memory symbol
-  ) ERC721ACB(name, symbol) ERC721Dropbox(name) {
+    string memory symbol,
+    uint256 cap
+  ) ERC721ACBC(name, symbol, cap) ERC721Dropbox(name) {
     _setupRole(PAUSER_ROLE, _msgSender());
   }
 

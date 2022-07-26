@@ -63,16 +63,16 @@ contract ERC998ERC20TopDown is ERC721ACBCES, IERC998ERC20TopDown, IERC998ERC20To
     address _erc20Contract,
     uint256 _value
   ) external override {
-    require(_to != address(0), "ComposableTopDown: transferERC20 _to zero address");
+    require(_to != address(0), "CTD: transferERC20 _to zero address");
     address rootOwner = ownerOf(_tokenId);
     require(
       rootOwner == _msgSender() ||
         isApprovedForAll(rootOwner, _msgSender()) ||
         rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId] == _msgSender(),
-      "ComposableTopDown: transferERC20 _msgSender() not eligible"
+      "CTD: transferERC20 _msgSender() not eligible"
     );
     removeERC20(_tokenId, _erc20Contract, _value);
-    require(IERC20AndERC223(_erc20Contract).transfer(_to, _value), "ComposableTopDown: transferERC20 transfer failed");
+    require(IERC20AndERC223(_erc20Contract).transfer(_to, _value), "CTD: transferERC20 transfer failed");
     emit TransferERC20(_tokenId, _to, _erc20Contract, _value);
   }
 
@@ -84,18 +84,18 @@ contract ERC998ERC20TopDown is ERC721ACBCES, IERC998ERC20TopDown, IERC998ERC20To
     uint256 _value,
     bytes memory _data
   ) external override {
-    require(_to != address(0), "ComposableTopDown: transferERC223 _to zero address");
+    require(_to != address(0), "CTD: transferERC223 _to zero address");
     address rootOwner = ownerOf(_tokenId);
     require(
       rootOwner == _msgSender() ||
         isApprovedForAll(rootOwner, _msgSender()) ||
         rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId] == _msgSender(),
-      "ComposableTopDown: transferERC223 _msgSender() not eligible"
+      "CTD: transferERC223 _msgSender() not eligible"
     );
     removeERC20(_tokenId, _erc223Contract, _value);
     require(
       IERC20AndERC223(_erc223Contract).transfer(_to, _value, _data),
-      "ComposableTopDown: transferERC223 transfer failed"
+      "CTD: transferERC223 transfer failed"
     );
     emit TransferERC20(_tokenId, _to, _erc223Contract, _value);
   }
@@ -108,9 +108,9 @@ contract ERC998ERC20TopDown is ERC721ACBCES, IERC998ERC20TopDown, IERC998ERC20To
   ) external override {
     require(
       _data.length > 0,
-      "ComposableTopDown: tokenFallback _data must contain the uint256 tokenId to transfer the token to"
+      "CTD: tokenFallback _data must contain the uint256 tokenId to transfer the token to"
     );
-    require(tx.origin != _msgSender(), "ComposableTopDown: tokenFallback _msgSender() is not a contract");
+    require(tx.origin != _msgSender(), "CTD: tokenFallback _msgSender() is not a contract");
     uint256 tokenId = _parseTokenId(_data);
     erc20Received(_from, tokenId, _msgSender(), _value);
   }
@@ -138,19 +138,19 @@ contract ERC998ERC20TopDown is ERC721ACBCES, IERC998ERC20TopDown, IERC998ERC20To
     if (!allowed) {
       bytes memory callData = abi.encodeWithSelector(ALLOWANCE, _from, _msgSender());
       (bool callSuccess, bytes memory data) = _erc20Contract.staticcall(callData);
-      require(callSuccess, "ComposableTopDown: getERC20 allowance failed");
+      require(callSuccess, "CTD: getERC20 allowance failed");
       uint256 remaining;
       assembly {
         remaining := mload(add(data, 0x20))
       }
-      require(remaining >= _value, "ComposableTopDown: getERC20 value greater than remaining");
+      require(remaining >= _value, "CTD: getERC20 value greater than remaining");
       allowed = true;
     }
-    require(allowed, "ComposableTopDown: getERC20 not allowed to getERC20");
+    require(allowed, "CTD: getERC20 not allowed to getERC20");
     erc20Received(_from, _tokenId, _erc20Contract, _value);
     require(
       IERC20AndERC223(_erc20Contract).transferFrom(_from, address(this), _value),
-      "ComposableTopDown: getERC20 transfer failed"
+      "CTD: getERC20 transfer failed"
     );
   }
 
@@ -160,7 +160,7 @@ contract ERC998ERC20TopDown is ERC721ACBCES, IERC998ERC20TopDown, IERC998ERC20To
     address _erc20Contract,
     uint256 _value
   ) private {
-    require(_exists(_tokenId), "ComposableTopDown: erc20Received _tokenId does not exist");
+    require(_exists(_tokenId), "CTD: erc20Received _tokenId does not exist");
     if (_value == 0) {
       return;
     }
@@ -168,7 +168,7 @@ contract ERC998ERC20TopDown is ERC721ACBCES, IERC998ERC20TopDown, IERC998ERC20To
     if (erc20Balance == 0) {
       require(
         erc20Contracts[_tokenId].add(_erc20Contract),
-        "ComposableTopDown: erc20Received: erc20Contracts add _erc20Contract"
+        "CTD: erc20Received: erc20Contracts add _erc20Contract"
       );
     }
     erc20Balances[_tokenId][_erc20Contract] += _value;
@@ -184,7 +184,7 @@ contract ERC998ERC20TopDown is ERC721ACBCES, IERC998ERC20TopDown, IERC998ERC20To
       return;
     }
     uint256 erc20Balance = erc20Balances[_tokenId][_erc20Contract];
-    require(erc20Balance >= _value, "ComposableTopDown: removeERC20 value not enough");
+    require(erc20Balance >= _value, "CTD: removeERC20 value not enough");
     unchecked {
       // overflow already checked
       uint256 newERC20Balance = erc20Balance - _value;
@@ -192,7 +192,7 @@ contract ERC998ERC20TopDown is ERC721ACBCES, IERC998ERC20TopDown, IERC998ERC20To
       if (newERC20Balance == 0) {
         require(
           erc20Contracts[_tokenId].remove(_erc20Contract),
-          "ComposableTopDown: removeERC20: erc20Contracts remove _erc20Contract"
+          "CTD: removeERC20: erc20Contracts remove _erc20Contract"
         );
       }
     }

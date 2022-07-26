@@ -84,7 +84,7 @@ export function shouldSafeTransferChild() {
         0,
       );
 
-      await expect(tx).to.be.revertedWith(`ComposableTopDown: _transferChild _childContract _childTokenId not found`);
+      await expect(tx).to.be.revertedWith(`CTD: _transferChild _childContract _childTokenId not found`);
     });
 
     it("should transfer 998 token owned by another token to the wallet", async function () {

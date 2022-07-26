@@ -128,7 +128,7 @@ export function shouldSafeTransferFrom() {
       const balanceOfOwner = await this.erc721InstanceMock.balanceOf(this.erc721Instance.address);
       expect(balanceOfOwner).to.equal(1);
 
-      // TODO "ComposableTopDown: _transferFrom token is child of other top down composable"
+      // TODO "CTD: _transferFrom token is child of other top down composable"
     });
 
     it("should not transfer token to itself", async function () {
@@ -141,7 +141,7 @@ export function shouldSafeTransferFrom() {
         1,
         "0x0000000000000000000000000000000000000000000000000000000000000001",
       );
-      await expect(tx1).to.be.revertedWith(`ComposableTopDown: circular ownership is forbidden`);
+      await expect(tx1).to.be.revertedWith(`CTD: circular ownership is forbidden`);
     });
 
     it("should transfer tree of tokens to wallet", async function () {
@@ -227,7 +227,7 @@ export function shouldSafeTransferFrom() {
         2,
         "0x0000000000000000000000000000000000000000000000000000000000000001",
       );
-      await expect(tx2).to.be.revertedWith(`ComposableTopDown: circular ownership is forbidden`);
+      await expect(tx2).to.be.revertedWith(`CTD: circular ownership is forbidden`);
     });
   });
 }

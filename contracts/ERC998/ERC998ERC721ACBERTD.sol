@@ -10,7 +10,6 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "./interfaces/IERC998ERC721BottomUp.sol";
 import "./interfaces/IERC998ERC721TopDown.sol";
 import "./interfaces/IERC998ERC721TopDownEnumerable.sol";
 
@@ -40,7 +39,6 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
     // mint(0x000000000000000000000000000000000000dead);
   }
 
-  bytes4 constant APPROVE = bytes4(keccak256("approve(address,uint256)"));
   bytes4 constant ROOT_OWNER_OF_CHILD = bytes4(keccak256("rootOwnerOfChild(address,uint256)"));
 
   function rootOwnerOf(uint256 _tokenId) public view override returns (bytes32 rootOwner) {
@@ -72,7 +70,7 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
       (rootOwnerAddress, _childTokenId) = _ownerOfChild(rootOwnerAddress, _childTokenId);
       require(
         !(rootOwnerAddress_ == rootOwnerAddress && childTokenId_ == _childTokenId),
-        "ComposableTopDown: circular ownership is forbidden"
+        "CTD: circular ownership is forbidden"
       );
     }
     bytes memory callData = abi.encodeWithSelector(ROOT_OWNER_OF_CHILD, address(this), _childTokenId);
@@ -103,11 +101,11 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
 
   function approve(address to, uint256 _tokenId) public virtual override {
     address rootOwner = address(uint160(uint256(rootOwnerOf(_tokenId))));
-    require(to != rootOwner, "ComposableTopDown: approval to current owner");
+    require(to != rootOwner, "CTD: approval to current owner");
 
     require(
       _msgSender() == rootOwner || isApprovedForAll(rootOwner, _msgSender()),
-      "ComposableTopDown: approve caller is not owner nor approved for all"
+      "CTD: approve caller is not owner nor approved for all"
     );
     rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId] = to;
     emit Approval(rootOwner, to, _tokenId);
@@ -133,7 +131,7 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
         }
         require(
           rootOwner & 0xffffffff00000000000000000000000000000000000000000000000000000000 != ERC998_MAGIC_VALUE_32,
-          "ComposableTopDown: _transferFrom token is child of other top down composable"
+          "CTD: _transferFrom token is child of other top down composable"
         );
       }
     }
@@ -216,14 +214,14 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
   ) external override returns (bytes4) {
     require(
       _data.length > 0,
-      "ComposableTopDown: onERC721Received _data must contain the uint256 tokenId to transfer the child token to"
+      "CTD: onERC721Received _data must contain the uint256 tokenId to transfer the child token to"
     );
     // convert up to 32 bytes of _data to uint256, owner nft tokenId passed as uint in bytes
     uint256 tokenId = _parseTokenId(_data);
     receiveChild(_from, tokenId, _msgSender(), _childTokenId);
     require(
       IERC721(_msgSender()).ownerOf(_childTokenId) != address(0),
-      "ComposableTopDown: onERC721Received child token not owned"
+      "CTD: onERC721Received child token not owned"
     );
     // a check for looped ownership chain
     rootOwnerOf(tokenId);
@@ -269,7 +267,7 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
     returns (bytes32 parentTokenOwner, uint256 parentTokenId)
   {
     parentTokenId = childTokenOwner[_childContract][_childTokenId];
-    require(parentTokenId != 0, "ComposableTopDown: ownerOfChild not found");
+    require(parentTokenId != 0, "CTD: ownerOfChild not found");
     address parentTokenOwnerAddress = ownerOf(parentTokenId);
     assembly {
       parentTokenOwner := or(ERC998_MAGIC_VALUE_32, parentTokenOwnerAddress)
@@ -283,15 +281,15 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
     uint256 _childTokenId
   ) private {
     uint256 tokenId = childTokenOwner[_childContract][_childTokenId];
-    require(tokenId != 0, "ComposableTopDown: _transferChild _childContract _childTokenId not found");
-    require(tokenId == _fromTokenId, "ComposableTopDown: _transferChild wrong tokenId found");
-    require(_to != address(0), "ComposableTopDown: _transferChild _to zero address");
+    require(tokenId != 0, "CTD: _transferChild _childContract _childTokenId not found");
+    require(tokenId == _fromTokenId, "CTD: _transferChild wrong tokenId found");
+    require(_to != address(0), "CTD: _transferChild _to zero address");
     address rootOwner = address(uint160(uint256(rootOwnerOf(tokenId))));
     require(
       rootOwner == _msgSender() ||
         isApprovedForAll(rootOwner, _msgSender()) ||
         rootOwnerAndTokenIdToApprovedAddress[rootOwner][tokenId] == _msgSender(),
-      "ComposableTopDown: _transferChild _msgSender() not eligible"
+      "CTD: _transferChild _msgSender() not eligible"
     );
     removeChild(tokenId, _childContract, _childTokenId);
   }
@@ -302,7 +300,7 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
     returns (address parentTokenOwner, uint256 parentTokenId)
   {
     parentTokenId = childTokenOwner[_childContract][_childTokenId];
-    require(parentTokenId != 0, "ComposableTopDown: _ownerOfChild not found");
+    require(parentTokenId != 0, "CTD: _ownerOfChild not found");
     return (ownerOf(parentTokenId), parentTokenId);
   }
 
@@ -325,7 +323,7 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
     uint256 lastTokenIndex = childTokens[_tokenId][_childContract].length() - 1;
     require(
       childTokens[_tokenId][_childContract].remove(_childTokenId),
-      "ComposableTopDown: removeChild: _childTokenId not found"
+      "CTD: removeChild: _childTokenId not found"
     );
     delete childTokenOwner[_childContract][_childTokenId];
 
@@ -333,7 +331,7 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
     if (lastTokenIndex == 0) {
       require(
         childContracts[_tokenId].remove(_childContract),
-        "ComposableTopDown: removeChild: _childContract not found"
+        "CTD: removeChild: _childContract not found"
       );
     }
   }
@@ -344,19 +342,19 @@ contract ERC998ERC721ACBERTD is ERC721ACBER, IERC998ERC721TopDown, IERC998ERC721
     address _childContract,
     uint256 _childTokenId
   ) internal virtual {
-    require(ownerOf(_tokenId) != address(0), "ComposableTopDown: receiveChild _tokenId does not exist.");
+    require(ownerOf(_tokenId) != address(0), "CTD: receiveChild _tokenId does not exist.");
     // @dev this is edge case, _tokenId can't be 0
     require(
       childTokenOwner[_childContract][_childTokenId] != _tokenId,
-      "ComposableTopDown: receiveChild _childTokenId already received"
+      "CTD: receiveChild _childTokenId already received"
     );
     uint256 childTokensLength = childTokens[_tokenId][_childContract].length();
     if (childTokensLength == 0) {
-      require(childContracts[_tokenId].add(_childContract), "ComposableTopDown: receiveChild: add _childContract");
+      require(childContracts[_tokenId].add(_childContract), "CTD: receiveChild: add _childContract");
     }
     require(
       childTokens[_tokenId][_childContract].add(_childTokenId),
-      "ComposableTopDown: receiveChild: add _childTokenId"
+      "CTD: receiveChild: add _childTokenId"
     );
     childTokenOwner[_childContract][_childTokenId] = _tokenId;
     emit ReceivedChild(_from, _tokenId, _childContract, _childTokenId);

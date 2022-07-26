@@ -1,9 +1,7 @@
 import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
-import { ContractFactory } from "ethers";
 
-import { ERC721ACBCE, ERC721NonReceiverMock, ERC721ReceiverMock, ERC998ERC721TopDown } from "../../typechain-types";
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
@@ -31,22 +29,20 @@ import { shouldChildTokenByIndex } from "./shared/childTokenByIndex";
 use(solidity);
 
 describe("ERC998ERC721TopDown", function () {
-  let erc721: ContractFactory;
-  let erc998: ContractFactory;
-  let erc721Receiver: ContractFactory;
-  let erc721NonReceiver: ContractFactory;
-
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721ACBCE");
-    erc998 = await ethers.getContractFactory("ERC998ERC721TopDown");
-    erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
-    erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc721InstanceMock = (await erc721.deploy(tokenName, tokenSymbol, 2)) as ERC721ACBCE;
-    this.erc721Instance = (await erc998.deploy(tokenName, tokenSymbol, 1000)) as ERC998ERC721TopDown;
-    this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
-    this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
+    const erc721Factory = await ethers.getContractFactory("ERC721ACBCE");
+    this.erc721InstanceMock = await erc721Factory.deploy(tokenName, tokenSymbol, 2);
+
+    const erc998Factory = await ethers.getContractFactory("ERC998ERC721TopDown");
+    this.erc721Instance = await erc998Factory.deploy(tokenName, tokenSymbol, 1000);
+
+    const erc721ReceiverFactory = await ethers.getContractFactory("ERC721ReceiverMock");
+    this.erc721ReceiverInstance = await erc721ReceiverFactory.deploy();
+
+    const erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
+    this.erc721NonReceiverInstance = await erc721NonReceiver.deploy();
 
     this.contractInstance = this.erc721Instance;
   });

@@ -15,6 +15,10 @@ abstract contract AbstractFactory is EIP712, AccessControl {
 
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
+  bytes32 public constant METADATA_ADMIN_ROLE = keccak256("METADATA_ADMIN_ROLE");
+
+  address[] _minters;
+  address[] _manipulators;
 
   constructor() EIP712("ContractManager", "1.0.0") {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -28,6 +32,25 @@ abstract contract AbstractFactory is EIP712, AccessControl {
       if iszero(extcodesize(addr)) {
         revert(0, 0)
       }
+    }
+  }
+
+  function setFactories(address[] memory minters, address[] memory manipulators) public onlyRole(DEFAULT_ADMIN_ROLE) {
+  _minters=minters;
+  _manipulators=manipulators;
+  }
+
+  function grantFactoryMintPermission(address addr) internal {
+    IAccessControl instance = IAccessControl(addr);
+    for (uint256 i = 0; i < _minters.length; i++) {
+        instance.grantRole(MINTER_ROLE, _minters[i]);
+      }
+  }
+
+  function grantFactoryMetadataPermission(address addr) internal {
+    IAccessControl instance = IAccessControl(addr);
+    for (uint256 i = 0; i < _minters.length; i++) {
+      instance.grantRole(METADATA_ADMIN_ROLE, _minters[i]);
     }
   }
 

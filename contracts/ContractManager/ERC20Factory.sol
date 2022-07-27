@@ -43,6 +43,7 @@ contract ERC20Factory is AbstractFactory {
     roles[1] = SNAPSHOT_ROLE;
     roles[2] = DEFAULT_ADMIN_ROLE;
 
+    super.grantFactoryMintPermission(addr);
     fixPermissions(addr, roles);
   }
 

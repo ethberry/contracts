@@ -18,9 +18,7 @@ export function shouldSnapshot(role = false) {
       await expect(tx).to.emit(this.erc20Instance, "Snapshot").withArgs("1");
 
       const tx2 = this.erc20Instance.balanceOfAt(this.receiver.address, "2");
-      // https://github.com/TrueFiEng/Waffle/issues/761
-      // await expect(tx2).to.be.revertedWith("ERC20Snapshot: nonexistent id");
-      await expect(tx2).to.be.reverted;
+      await expect(tx2).to.be.revertedWith("ERC20Snapshot: nonexistent id");
     });
 
     it("should make snapshot", async function () {

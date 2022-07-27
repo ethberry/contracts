@@ -26,9 +26,7 @@ describe("ERC721BaseUrl", function () {
 
     it("should fail: URI query for nonexistent token", async function () {
       const uri = this.erc721Instance.tokenURI(tokenId);
-      // https://github.com/TrueFiEng/Waffle/issues/761
-      // await expect(uri).to.be.revertedWith("ERC721: invalid token ID");
-      await expect(uri).to.be.reverted;
+      await expect(uri).to.be.revertedWith("ERC721: invalid token ID");
     });
   });
 

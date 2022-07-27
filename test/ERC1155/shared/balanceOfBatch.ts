@@ -8,9 +8,7 @@ export function shouldBalanceOfBatch() {
   describe("balanceOfBatch", function () {
     it("should fail for zero addr", async function () {
       const tx = this.erc1155Instance.balanceOfBatch([ethers.constants.AddressZero], [tokenId]);
-      // https://github.com/TrueFiEng/Waffle/issues/761
-      // await expect(tx).to.be.revertedWith(`ERC1155: address zero is not a valid owner`);
-      await expect(tx).to.be.reverted;
+      await expect(tx).to.be.revertedWith(`ERC1155: address zero is not a valid owner`);
     });
 
     it("should get balance of owner", async function () {

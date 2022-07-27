@@ -17,9 +17,7 @@ export function shouldGetOwnerOf() {
       expect(balanceOfOwner).to.equal(0);
 
       const tx2 = this.erc721Instance.ownerOf(0);
-      // https://github.com/TrueFiEng/Waffle/issues/761
-      // await expect(tx2).to.be.revertedWith(`ERC721: invalid token ID`);
-      await expect(tx2).to.be.reverted;
+      await expect(tx2).to.be.revertedWith(`ERC721: invalid token ID`);
     });
   });
 }

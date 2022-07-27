@@ -67,9 +67,7 @@ describe("ERC20ACFM", function () {
 
     it("token mismatch", async function () {
       const tx = this.erc20Instance.flashFee(ethers.constants.AddressZero, amount);
-      // https://github.com/TrueFiEng/Waffle/issues/761
-      // await expect(tx).to.be.revertedWith("ERC20FlashMint: wrong token");
-      await expect(tx).to.be.reverted;
+      await expect(tx).to.be.revertedWith("ERC20FlashMint: wrong token");
     });
   });
 

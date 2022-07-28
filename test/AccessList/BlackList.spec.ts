@@ -60,9 +60,7 @@ describe("BlackList", function () {
     it("should fail: blacklisted", async function () {
       await this.contractInstance.blacklist(this.receiver.address);
       const tx = this.contractInstance.connect(this.receiver).testMe();
-      // https://github.com/TrueFiEng/Waffle/issues/511
-      // await expect(tx).to.be.revertedWith(`BlackListError`);
-      await expect(tx).to.be.reverted;
+      await expect(tx).to.be.revertedWith(`BlackListError`).withArgs(this.receiver.address);
     });
 
     it("should pass", async function () {

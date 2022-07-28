@@ -36,15 +36,15 @@ describe("WhiteList", function () {
     });
 
     it("should check white list", async function () {
-      const isBlackListed = await this.contractInstance.isWhitelisted(this.receiver.address);
-      expect(isBlackListed).to.equal(false);
+      const isWhitelisted = await this.contractInstance.isWhitelisted(this.receiver.address);
+      expect(isWhitelisted).to.equal(false);
     });
 
     it("should add to white list", async function () {
       const tx = this.contractInstance.whitelist(this.receiver.address);
       await expect(tx).to.emit(this.contractInstance, "Whitelisted").withArgs(this.receiver.address);
-      const isBlackListed = await this.contractInstance.isWhitelisted(this.receiver.address);
-      expect(isBlackListed).to.equal(true);
+      const isWhitelisted = await this.contractInstance.isWhitelisted(this.receiver.address);
+      expect(isWhitelisted).to.equal(true);
     });
 
     it("should delete from black list", async function () {
@@ -57,9 +57,7 @@ describe("WhiteList", function () {
 
     it("should fail: tests method", async function () {
       const tx = this.contractInstance.connect(this.receiver).testMe();
-      // https://github.com/TrueFiEng/Waffle/issues/511
-      // await expect(tx).to.be.revertedWith(`WhiteListError`);
-      await expect(tx).to.be.reverted;
+      await expect(tx).to.be.revertedWith(`WhiteListError`).withArgs(this.receiver.address);
     });
 
     it("should pass", async function () {

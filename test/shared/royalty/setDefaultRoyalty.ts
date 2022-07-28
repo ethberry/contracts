@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { DEFAULT_ADMIN_ROLE } from "../../constants";
+import { accessControlInterfaceId, DEFAULT_ADMIN_ROLE } from "../../constants";
 
-export function shouldSetDefaultRoyalty(roles = false) {
+export function shouldSetDefaultRoyalty() {
   describe("setDefaultRoyalty", function () {
     it("should set token royalty", async function () {
       const royalty = 5000;
@@ -28,9 +28,11 @@ export function shouldSetDefaultRoyalty(roles = false) {
     it("should fail: not admin", async function () {
       const royalty = 5000;
 
+      const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
+
       const tx = this.contractInstance.connect(this.receiver).setDefaultRoyalty(this.receiver.address, royalty);
       await expect(tx).to.be.revertedWith(
-        roles
+        supportsAccessControl
           ? `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`
           : "Ownable: caller is not the owner",
       );

@@ -49,8 +49,8 @@ describe("ERC721ACBCES", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldMint(true);
-  shouldSafeMint(true);
+  shouldMint();
+  shouldSafeMint();
   shouldGetOwnerOf();
   shouldApprove();
   shouldSetApprovalForAll();

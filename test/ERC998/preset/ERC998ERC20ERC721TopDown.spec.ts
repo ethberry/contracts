@@ -70,8 +70,8 @@ describe("ERC998ComposableTopDown", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldMint(true);
-  shouldSafeMint(true);
+  shouldMint();
+  shouldSafeMint();
   shouldGetBalanceOf();
   shouldGetOwnerOf();
   shouldGetTokenURI();

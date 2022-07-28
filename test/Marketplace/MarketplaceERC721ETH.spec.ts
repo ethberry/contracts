@@ -39,7 +39,7 @@ describe("MarketplaceERC721ETH", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldPause(true);
+  shouldPause();
 
   describe("buy", function () {
     it("should buy", async function () {

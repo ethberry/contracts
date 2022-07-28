@@ -50,8 +50,8 @@ describe("ERC721ACBR", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldMint(true);
-  shouldSafeMint(true);
+  shouldMint();
+  shouldSafeMint();
   shouldGetOwnerOf();
   shouldApprove();
   shouldSetApprovalForAll();
@@ -59,8 +59,8 @@ describe("ERC721ACBR", function () {
   shouldTransferFrom();
   shouldSafeTransferFrom();
   shouldBurn();
-  shouldSetTokenRoyalty(true);
-  shouldSetDefaultRoyalty(true);
+  shouldSetTokenRoyalty();
+  shouldSetDefaultRoyalty();
   shouldGetRoyaltyInfo();
   shouldBurnBasic();
 

@@ -52,8 +52,8 @@ describe("ERC721ACBCER", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldMint(true);
-  shouldSafeMint(true);
+  shouldMint();
+  shouldSafeMint();
   shouldGetOwnerOf();
   shouldApprove();
   shouldSetApprovalForAll();
@@ -63,8 +63,8 @@ describe("ERC721ACBCER", function () {
   shouldBurn();
   shouldGetTokenOfOwnerByIndex();
   shouldGetCap();
-  shouldSetTokenRoyalty(true);
-  shouldSetDefaultRoyalty(true);
+  shouldSetTokenRoyalty();
+  shouldSetDefaultRoyalty();
   shouldGetRoyaltyInfo();
   shouldBurnBasic(true);
 

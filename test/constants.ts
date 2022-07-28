@@ -19,6 +19,9 @@ export const DEPOSITOR_ROLE = ethers.utils.id("DEPOSITOR_ROLE");
 export const decimals = ethers.BigNumber.from(10).pow(18);
 export const amount = 100000;
 
+// INTERFACES
+export const accessControlInterfaceId = "0x7965db0b";
+
 export const addr = {
   hardhat: {
     openSeaProxyRegistry: "0xa5409ec958c83c3f309868babaca7c86dcb077c1",

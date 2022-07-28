@@ -52,8 +52,8 @@ describe("ERC998ERC721TopDown", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldMint(true);
-  shouldSafeMint(true);
+  shouldMint();
+  shouldSafeMint();
   shouldGetBalanceOf();
   shouldGetOwnerOf();
   shouldGetTokenURI();

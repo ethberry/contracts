@@ -41,7 +41,7 @@ describe("AuctionFactory", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldPause(true);
+  shouldPause();
 
   describe("createAuction", function () {
     it("should create auction", async function () {

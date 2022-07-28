@@ -1,14 +1,16 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { MINTER_ROLE, tokenId } from "../../../constants";
+import { accessControlInterfaceId, MINTER_ROLE, tokenId } from "../../../constants";
 
-export function shouldMint(roles = false) {
+export function shouldMint() {
   describe("mint", function () {
     it("should fail: wrong role", async function () {
+      const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
+
       const tx = this.erc721Instance.connect(this.receiver).mint(this.receiver.address, tokenId);
       await expect(tx).to.be.revertedWith(
-        roles
+        supportsAccessControl
           ? `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`
           : "Ownable: caller is not the owner",
       );

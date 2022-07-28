@@ -55,8 +55,8 @@ describe("ERC998ERC721TopDownWhiteListChild", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldMint(true);
-  shouldSafeMint(true);
+  shouldMint();
+  shouldSafeMint();
   shouldGetBalanceOf();
   shouldGetOwnerOf();
   shouldGetTokenURI();

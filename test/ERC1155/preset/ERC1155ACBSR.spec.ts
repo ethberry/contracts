@@ -47,8 +47,8 @@ describe("ERC1155ACBSR", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldMint(true);
-  shouldMintBatch(true);
+  shouldMint();
+  shouldMintBatch();
   shouldGtTotalSupply();
   shouldBalanceOf();
   shouldBalanceOfBatch();
@@ -58,8 +58,8 @@ describe("ERC1155ACBSR", function () {
   shouldSafeBatchTransferFrom();
   shouldBurn(true);
   shouldBurnBatch(true);
-  shouldSetTokenRoyalty(true);
-  shouldSetDefaultRoyalty(true);
+  shouldSetTokenRoyalty();
+  shouldSetDefaultRoyalty();
   shouldGetRoyaltyInfo();
 
   describe("supportsInterface", function () {

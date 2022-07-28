@@ -43,8 +43,8 @@ describe("ERC1155ACB", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldMint(true);
-  shouldMintBatch(true);
+  shouldMint();
+  shouldMintBatch();
   shouldBalanceOf();
   shouldBalanceOfBatch();
   shouldURI();

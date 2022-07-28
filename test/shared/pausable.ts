@@ -1,20 +1,22 @@
 import { expect } from "chai";
 
-import { PAUSER_ROLE } from "../constants";
+import { accessControlInterfaceId, PAUSER_ROLE } from "../constants";
 
-export function shouldPause(roles = false) {
+export function shouldPause() {
   describe("pause", function () {
     it("should fail: not an owner", async function () {
+      const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
+
       const tx = this.contractInstance.connect(this.receiver).pause();
       await expect(tx).to.be.revertedWith(
-        roles
+        supportsAccessControl
           ? `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`
           : "Ownable: caller is not the owner",
       );
 
       const tx2 = this.contractInstance.connect(this.receiver).unpause();
       await expect(tx2).to.be.revertedWith(
-        roles
+        supportsAccessControl
           ? `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`
           : "Ownable: caller is not the owner",
       );

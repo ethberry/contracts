@@ -34,7 +34,7 @@ describe("ERC20ACFM", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldMint(true);
+  shouldMint();
   shouldBalanceOf();
   shouldTransfer();
   shouldTransferFrom();

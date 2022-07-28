@@ -55,8 +55,8 @@ describe("ERC998ERC721ACBERTD", function () {
   shouldGrantRole();
   shouldRevokeRole();
   shouldRenounceRole();
-  shouldMint(true);
-  shouldSafeMint(true);
+  shouldMint();
+  shouldSafeMint();
   shouldGetBalanceOf();
   shouldGetOwnerOf();
   shouldApprove();
@@ -70,8 +70,8 @@ describe("ERC998ERC721ACBERTD", function () {
   shouldChildContractByIndex();
   shouldTotalChildTokens();
   shouldChildTokenByIndex();
-  shouldSetTokenRoyalty(true);
-  shouldSetDefaultRoyalty(true);
+  shouldSetTokenRoyalty();
+  shouldSetDefaultRoyalty();
   shouldGetRoyaltyInfo();
   shouldBurnBasic(true);
 

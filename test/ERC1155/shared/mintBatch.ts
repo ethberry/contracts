@@ -36,7 +36,7 @@ export function shouldMintBatch() {
       await expect(tx1).to.be.revertedWith(`ERC1155: transfer to non ERC1155Receiver implementer`);
     });
 
-    it("should fail: wrong role", async function () {
+    it("should fail: account is missing role", async function () {
       const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
 
       const tx1 = this.erc1155Instance

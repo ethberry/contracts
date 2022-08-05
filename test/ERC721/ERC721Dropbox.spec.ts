@@ -57,7 +57,7 @@ describe("ERC721Dropbox", function () {
       expect(ownerOf).to.equal(this.receiver.address);
     });
 
-    it("should fail: wrong signer", async function () {
+    it("should fail: account is missing role", async function () {
       const signature = await this.owner._signTypedData(
         // Domain
         {

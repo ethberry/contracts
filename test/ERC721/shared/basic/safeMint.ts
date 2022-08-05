@@ -5,7 +5,7 @@ import { accessControlInterfaceId, MINTER_ROLE, tokenId } from "../../../constan
 
 export function shouldSafeMint() {
   describe("safeMint", function () {
-    it("should fail: wrong role", async function () {
+    it("should fail: account is missing role", async function () {
       const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
 
       const tx = this.erc721Instance.connect(this.receiver).safeMint(this.receiver.address, tokenId);

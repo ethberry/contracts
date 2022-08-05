@@ -4,7 +4,7 @@ import { accessControlInterfaceId, amount, SNAPSHOT_ROLE } from "../../constants
 
 export function shouldSnapshot() {
   describe("snapshot", function () {
-    it("should fail: insufficient permissions", async function () {
+    it("should fail: account is missing role", async function () {
       const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
 
       const tx = this.erc20Instance.connect(this.receiver).snapshot();

@@ -4,7 +4,7 @@ import { accessControlInterfaceId, PAUSER_ROLE } from "../constants";
 
 export function shouldPause() {
   describe("pause", function () {
-    it("should fail: not an owner", async function () {
+    it("should fail: account is missing role", async function () {
       const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
 
       const tx = this.contractInstance.connect(this.receiver).pause();

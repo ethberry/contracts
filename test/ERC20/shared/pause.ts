@@ -4,7 +4,7 @@ import { amount, PAUSER_ROLE } from "../../constants";
 
 export function shouldPause() {
   describe("pause", function () {
-    it("should fail:  must have pauser role", async function () {
+    it("should fail: account is missing role", async function () {
       const tx = this.erc20Instance.connect(this.receiver).pause();
       await expect(tx).to.be.revertedWith(
         `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${PAUSER_ROLE}`,

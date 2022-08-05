@@ -11,7 +11,7 @@ export function shouldGrantRole() {
         .withArgs(DEFAULT_ADMIN_ROLE, this.receiver.address, this.owner.address);
     });
 
-    it("should fail: wrong role", async function () {
+    it("should fail: account is missing role", async function () {
       const tx1 = this.contractInstance.connect(this.receiver).grantRole(DEFAULT_ADMIN_ROLE, this.receiver.address);
       await expect(tx1).to.be.revertedWith(
         `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,

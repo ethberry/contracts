@@ -5,7 +5,7 @@ import { accessControlInterfaceId, amount, MINTER_ROLE } from "../../constants";
 
 export function shouldMint() {
   describe("mint", function () {
-    it("should fail: insufficient permissions", async function () {
+    it("should fail: account is missing role", async function () {
       const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
 
       const tx = this.erc20Instance.connect(this.receiver).mint(this.receiver.address, amount);

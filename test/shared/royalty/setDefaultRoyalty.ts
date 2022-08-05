@@ -25,7 +25,7 @@ export function shouldSetDefaultRoyalty() {
       await expect(tx).to.be.revertedWith("ERC2981: invalid receiver");
     });
 
-    it("should fail: not admin", async function () {
+    it("should fail: account is missing role", async function () {
       const royalty = 5000;
 
       const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);

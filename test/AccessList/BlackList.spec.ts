@@ -30,7 +30,7 @@ describe("BlackList", function () {
   shouldRenounceRole();
 
   describe("Black list", function () {
-    it("should fail: no admin role", async function () {
+    it("should fail: account is missing role", async function () {
       const tx = this.contractInstance.connect(this.receiver).blacklist(this.receiver.address);
       await expect(tx).to.be.revertedWith(
         `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,

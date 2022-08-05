@@ -36,15 +36,15 @@ abstract contract AbstractFactory is EIP712, AccessControl {
   }
 
   function setFactories(address[] memory minters, address[] memory manipulators) public onlyRole(DEFAULT_ADMIN_ROLE) {
-  _minters=minters;
-  _manipulators=manipulators;
+    _minters = minters;
+    _manipulators = manipulators;
   }
 
   function grantFactoryMintPermission(address addr) internal {
     IAccessControl instance = IAccessControl(addr);
     for (uint256 i = 0; i < _minters.length; i++) {
-        instance.grantRole(MINTER_ROLE, _minters[i]);
-      }
+      instance.grantRole(MINTER_ROLE, _minters[i]);
+    }
   }
 
   function grantFactoryMetadataPermission(address addr) internal {

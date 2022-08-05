@@ -41,7 +41,7 @@ contract ERC1155Factory is AbstractFactory {
     roles[0] = MINTER_ROLE;
     roles[1] = DEFAULT_ADMIN_ROLE;
 
-    super.grantFactoryMintPermission(addr);
+    grantFactoryMintPermission(addr);
     fixPermissions(addr, roles);
   }
 

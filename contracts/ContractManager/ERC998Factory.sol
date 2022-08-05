@@ -52,8 +52,8 @@ contract ERC998Factory is AbstractFactory {
     roles[0] = MINTER_ROLE;
     roles[1] = DEFAULT_ADMIN_ROLE;
 
-    super.grantFactoryMintPermission(addr);
-    super.grantFactoryMetadataPermission(addr);
+    grantFactoryMintPermission(addr);
+    grantFactoryMetadataPermission(addr);
     fixPermissions(addr, roles);
   }
 

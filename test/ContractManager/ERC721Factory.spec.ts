@@ -11,7 +11,7 @@ import {
   nonce,
   PAUSER_ROLE,
   royalty,
-  templateId,
+  featureIds,
   tokenId,
   tokenName,
   tokenSymbol,
@@ -68,7 +68,7 @@ describe("ERC721Factory", function () {
             { name: "symbol", type: "string" },
             { name: "royalty", type: "uint96" },
             { name: "baseTokenURI", type: "string" },
-            { name: "templateId", type: "uint256" },
+            { name: "featureIds", type: "uint8[]" },
           ],
         },
         // Value
@@ -79,7 +79,7 @@ describe("ERC721Factory", function () {
           symbol: tokenSymbol,
           royalty,
           baseTokenURI,
-          templateId,
+          featureIds,
         },
       );
 
@@ -90,7 +90,7 @@ describe("ERC721Factory", function () {
         tokenSymbol,
         royalty,
         baseTokenURI,
-        templateId,
+        featureIds,
         this.owner.address,
         signature,
       );
@@ -99,7 +99,7 @@ describe("ERC721Factory", function () {
 
       await expect(tx)
         .to.emit(factoryInstance, "ERC721TokenDeployed")
-        .withArgs(address, tokenName, tokenSymbol, royalty, baseTokenURI, templateId);
+        .withArgs(address, tokenName, tokenSymbol, royalty, baseTokenURI, featureIds);
 
       const erc721Instance = erc721.attach(address);
 

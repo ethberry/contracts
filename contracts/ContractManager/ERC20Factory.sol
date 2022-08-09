@@ -10,11 +10,11 @@ import "./AbstractFactory.sol";
 
 contract ERC20Factory is AbstractFactory {
   bytes32 private immutable ERC20_PERMIT_SIGNATURE =
-    keccak256("EIP712(bytes32 nonce,bytes bytecode,string name,string symbol,uint256 cap,uint256 templateId)");
+    keccak256("EIP712(bytes32 nonce,bytes bytecode,string name,string symbol,uint256 cap,uint8[] featureIds)");
 
   address[] private _erc20_tokens;
 
-  event ERC20TokenDeployed(address addr, string name, string symbol, uint256 cap, uint256 templateId);
+  event ERC20TokenDeployed(address addr, string name, string symbol, uint256 cap, uint8[] featureIds);
 
   function deployERC20Token(
     bytes32 nonce,
@@ -22,13 +22,13 @@ contract ERC20Factory is AbstractFactory {
     string memory name,
     string memory symbol,
     uint256 cap,
-    uint256 templateId,
+    uint8[] calldata featureIds,
     address signer,
     bytes calldata signature
   ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
-    bytes32 digest = _hashERC20(nonce, bytecode, name, symbol, cap, templateId);
+    bytes32 digest = _hashERC20(nonce, bytecode, name, symbol, cap, featureIds);
 
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
@@ -36,7 +36,7 @@ contract ERC20Factory is AbstractFactory {
     addr = deploy(bytecode, abi.encode(name, symbol, cap));
     _erc20_tokens.push(addr);
 
-    emit ERC20TokenDeployed(addr, name, symbol, cap, templateId);
+    emit ERC20TokenDeployed(addr, name, symbol, cap, featureIds);
 
     bytes32[] memory roles = new bytes32[](3);
     roles[0] = MINTER_ROLE;
@@ -53,7 +53,7 @@ contract ERC20Factory is AbstractFactory {
     string memory name,
     string memory symbol,
     uint256 cap,
-    uint256 templateId
+    uint8[] calldata featureIds
   ) internal view returns (bytes32) {
     return
       _hashTypedDataV4(
@@ -65,7 +65,7 @@ contract ERC20Factory is AbstractFactory {
             keccak256(abi.encodePacked(name)),
             keccak256(abi.encodePacked(symbol)),
             cap,
-            templateId
+            keccak256(abi.encodePacked(featureIds))
           )
         )
       );

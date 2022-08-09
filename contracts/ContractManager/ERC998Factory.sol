@@ -11,7 +11,7 @@ import "./AbstractFactory.sol";
 contract ERC998Factory is AbstractFactory {
   bytes32 private immutable ERC998_PERMIT_SIGNATURE =
     keccak256(
-      "EIP712(bytes32 nonce,bytes bytecode,string name,string symbol,uint96 royalty,string baseTokenURI,uint256 templateId)"
+      "EIP712(bytes32 nonce,bytes bytecode,string name,string symbol,uint96 royalty,string baseTokenURI,uint8[] featureIds)"
     );
 
   address[] private _erc998_tokens;
@@ -22,7 +22,7 @@ contract ERC998Factory is AbstractFactory {
     string symbol,
     uint96 royalty,
     string baseTokenURI,
-    uint256 templateId
+    uint8[] featureIds
   );
 
   function deployERC998Token(
@@ -32,13 +32,13 @@ contract ERC998Factory is AbstractFactory {
     string memory symbol,
     uint96 royalty,
     string memory baseTokenURI,
-    uint256 templateId,
+    uint8[] calldata featureIds,
     address signer,
     bytes calldata signature
   ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (address addr) {
     require(hasRole(DEFAULT_ADMIN_ROLE, signer), "ContractManager: Wrong signer");
 
-    bytes32 digest = _hashERC998(nonce, bytecode, name, symbol, royalty, baseTokenURI, templateId);
+    bytes32 digest = _hashERC998(nonce, bytecode, name, symbol, royalty, baseTokenURI, featureIds);
 
     _checkSignature(signer, digest, signature);
     _checkNonce(nonce);
@@ -46,7 +46,7 @@ contract ERC998Factory is AbstractFactory {
     addr = deploy(bytecode, abi.encode(name, symbol, royalty, baseTokenURI));
     _erc998_tokens.push(addr);
 
-    emit ERC998TokenDeployed(addr, name, symbol, royalty, baseTokenURI, templateId);
+    emit ERC998TokenDeployed(addr, name, symbol, royalty, baseTokenURI, featureIds);
 
     bytes32[] memory roles = new bytes32[](2);
     roles[0] = MINTER_ROLE;
@@ -64,7 +64,7 @@ contract ERC998Factory is AbstractFactory {
     string memory symbol,
     uint96 royalty,
     string memory baseTokenURI,
-    uint256 templateId
+    uint8[] calldata featureIds
   ) internal view returns (bytes32) {
     return
       _hashTypedDataV4(
@@ -77,7 +77,7 @@ contract ERC998Factory is AbstractFactory {
             keccak256(abi.encodePacked(symbol)),
             royalty,
             keccak256(abi.encodePacked(baseTokenURI)),
-            templateId
+            keccak256(abi.encodePacked(featureIds))
           )
         )
       );

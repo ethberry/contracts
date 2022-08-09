@@ -12,7 +12,7 @@ import {
   nonce,
   PAUSER_ROLE,
   royalty,
-  templateId,
+  featureIds,
   tokenId,
 } from "../constants";
 
@@ -65,7 +65,7 @@ describe("ERC1155Factory", function () {
             { name: "bytecode", type: "bytes" },
             { name: "royalty", type: "uint96" },
             { name: "baseTokenURI", type: "string" },
-            { name: "templateId", type: "uint256" },
+            { name: "featureIds", type: "uint8[]" },
           ],
         },
         // Value
@@ -74,7 +74,7 @@ describe("ERC1155Factory", function () {
           bytecode: erc1155.bytecode,
           royalty,
           baseTokenURI,
-          templateId,
+          featureIds,
         },
       );
 
@@ -83,7 +83,7 @@ describe("ERC1155Factory", function () {
         erc1155.bytecode,
         royalty,
         baseTokenURI,
-        templateId,
+        featureIds,
         this.owner.address,
         signature,
       );
@@ -92,7 +92,7 @@ describe("ERC1155Factory", function () {
 
       await expect(tx)
         .to.emit(factoryInstance, "ERC1155TokenDeployed")
-        .withArgs(address, royalty, baseTokenURI, templateId);
+        .withArgs(address, royalty, baseTokenURI, featureIds);
 
       const erc1155Instance = erc1155.attach(address);
 

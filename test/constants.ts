@@ -5,8 +5,9 @@ export const tokenSymbol = "SYMBOL";
 export const tokenName = "Lorem ipsum...";
 export const tokenId = 1;
 export const templateId = 1;
+export const featureIds = [1, 3, 7];
 export const royalty = 100; // 1%
-export const nonce = "0x6c00000000000000000000000000000000000000000000000000000000000000";
+export const nonce = ethers.utils.formatBytes32String("nonce");
 
 export const DEFAULT_ADMIN_ROLE = "0x0000000000000000000000000000000000000000000000000000000000000000";
 

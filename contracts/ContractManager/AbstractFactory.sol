@@ -50,7 +50,7 @@ abstract contract AbstractFactory is EIP712, AccessControl {
   function grantFactoryMetadataPermission(address addr) internal {
     IAccessControl instance = IAccessControl(addr);
     for (uint256 i = 0; i < _minters.length; i++) {
-      instance.grantRole(METADATA_ADMIN_ROLE, _minters[i]);
+      instance.grantRole(METADATA_ADMIN_ROLE, _manipulators[i]);
     }
   }
 

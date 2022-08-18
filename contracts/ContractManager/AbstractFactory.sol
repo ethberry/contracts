@@ -40,6 +40,17 @@ abstract contract AbstractFactory is EIP712, AccessControl {
     _manipulators = manipulators;
   }
 
+  function addFactory(address factory, bytes32 role) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    require((role == MINTER_ROLE || role == METADATA_ADMIN_ROLE), "ContractManager: Wrong role");
+
+    if (role == MINTER_ROLE) {
+      _minters.push(factory);
+    } else if (role == METADATA_ADMIN_ROLE) {
+      _manipulators.push(factory);
+    }
+  }
+
+
   function grantFactoryMintPermission(address addr) internal {
     IAccessControl instance = IAccessControl(addr);
     for (uint256 i = 0; i < _minters.length; i++) {

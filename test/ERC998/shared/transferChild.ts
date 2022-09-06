@@ -18,7 +18,7 @@ export function shouldTransferChild() {
       const tx2 = this.erc721Instance.transferChild(1, this.receiver.address, this.erc721InstanceMock.address, 0);
       await expect(tx2)
         .to.emit(this.erc721Instance, "TransferChild")
-        .withArgs(1, this.receiver.address, this.erc721InstanceMock.address, 0);
+        .withArgs(1, this.receiver.address, this.erc721InstanceMock.address, 0, 1);
     });
 
     it("should transfer token owned by another token to the receiver contract", async function () {
@@ -42,7 +42,7 @@ export function shouldTransferChild() {
       );
       await expect(tx2)
         .to.emit(this.erc721Instance, "TransferChild")
-        .withArgs(1, this.erc721ReceiverInstance.address, this.erc721InstanceMock.address, 0);
+        .withArgs(1, this.erc721ReceiverInstance.address, this.erc721InstanceMock.address, 0, 1);
     });
 
     it("should transfer token owned by another token to the non receiver contract", async function () {
@@ -66,7 +66,7 @@ export function shouldTransferChild() {
       );
       await expect(tx2)
         .to.emit(this.erc721Instance, "TransferChild")
-        .withArgs(1, this.erc721NonReceiverInstance.address, this.erc721InstanceMock.address, 0);
+        .withArgs(1, this.erc721NonReceiverInstance.address, this.erc721InstanceMock.address, 0, 1);
     });
 
     it("should not transfer token which is not owned", async function () {
@@ -95,7 +95,7 @@ export function shouldTransferChild() {
       const tx2 = this.erc721Instance.transferChild(2, this.receiver.address, this.erc721Instance.address, 1);
       await expect(tx2)
         .to.emit(this.erc721Instance, "TransferChild")
-        .withArgs(2, this.receiver.address, this.erc721Instance.address, 1);
+        .withArgs(2, this.receiver.address, this.erc721Instance.address, 1, 1);
     });
   });
 }

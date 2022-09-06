@@ -6,23 +6,27 @@
 
 pragma solidity ^0.8.9;
 
-contract WhiteListChild {
-  uint256 private _defaultMaxChildPerContract;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+
+abstract contract WhiteListChild is AccessControl {
+  uint256 private _defaultMaxChildPerContract = 0;
   mapping(address => bool) _whiteListChildAccess;
   mapping(address => uint256) private _childContractsCounter;
   mapping(address => uint256) private _maxChildPerContract;
 
-  event WhitelistedChild(address indexed addr);
+  event WhitelistedChild(address indexed addr, uint256 maxCount);
   event UnWhitelistedChild(address indexed addr);
   event SetMaxChild(address indexed addr, uint256 maxCount);
 
-  function _whiteListChild(address addr) internal {
+  function whiteListChild(address addr, uint256 max) public onlyRole(DEFAULT_ADMIN_ROLE) {
     _whiteListChildAccess[addr] = true;
-    emit WhitelistedChild(addr);
+    _maxChildPerContract[addr] = max;
+    emit WhitelistedChild(addr, max);
   }
 
-  function _unWhitelistChild(address addr) internal {
+  function unWhitelistChild(address addr) public onlyRole(DEFAULT_ADMIN_ROLE) {
     _whiteListChildAccess[addr] = false;
+    _maxChildPerContract[addr] = 0;
     emit UnWhitelistedChild(addr);
   }
 
@@ -37,12 +41,12 @@ contract WhiteListChild {
     return _defaultMaxChildPerContract;
   }
 
-  function _setDefaultMaxChild(uint256 max) internal {
+  function setDefaultMaxChild(uint256 max) public onlyRole(DEFAULT_ADMIN_ROLE) {
     _defaultMaxChildPerContract = max;
     emit SetMaxChild(address(0), max);
   }
 
-  function _setMaxChild(address addr, uint256 max) internal {
+  function setMaxChild(address addr, uint256 max) public onlyRole(DEFAULT_ADMIN_ROLE) {
     _maxChildPerContract[addr] = max;
     emit SetMaxChild(addr, max);
   }

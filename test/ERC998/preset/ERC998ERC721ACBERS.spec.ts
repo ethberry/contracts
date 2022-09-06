@@ -8,7 +8,7 @@ import {
   ERC721ACBCE,
   ERC721NonReceiverMock,
   ERC721ReceiverMock,
-  ERC998ERC20ERC721TopDown,
+  ERC998ERC721ACBERS,
 } from "../../../typechain-types";
 import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
@@ -29,19 +29,10 @@ import { shouldSafeTransferFrom } from "../shared/safeTransferFrom";
 import { shouldSafeTransferChild } from "../shared/safeTransferChild";
 import { shouldTransferChild } from "../shared/transferChild";
 import { shouldChildExists } from "../shared/childExists";
-import { shouldTotalChildContracts } from "../shared/totalChildContracts";
-import { shouldChildContractByIndex } from "../shared/childContractByIndex";
-import { shouldTotalChildTokens } from "../shared/totalChildTokens";
-import { shouldChildTokenByIndex } from "../shared/childTokenByIndex";
-import { shouldGetChild } from "../shared/getChild";
-import { shouldGetERC20 } from "../shared/getERC20";
-import { shouldBalanceOfERC20 } from "../shared/balanceOfERC20";
-import { shouldErc20ContractByIndex } from "../shared/erc20ContractByIndex";
-import { shouldTotalERC20Contracts } from "../shared/totalERC20Contracts";
 
 use(solidity);
 
-describe("ERC998ComposableTopDown", function () {
+describe("ERC998ERC721ACBERS", function () {
   let erc20: ContractFactory;
   let erc721: ContractFactory;
   let erc998: ContractFactory;
@@ -51,14 +42,14 @@ describe("ERC998ComposableTopDown", function () {
   beforeEach(async function () {
     erc20 = await ethers.getContractFactory("ERC20ACBCS");
     erc721 = await ethers.getContractFactory("ERC721ACBCE");
-    erc998 = await ethers.getContractFactory("ERC998ERC20ERC721TopDown");
+    erc998 = await ethers.getContractFactory("ERC998ERC721ACBERS");
     erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
     erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
     this.erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ACBCS;
     this.erc721InstanceMock = (await erc721.deploy(tokenName, tokenSymbol, 2)) as ERC721ACBCE;
-    this.erc721Instance = (await erc998.deploy(tokenName, tokenSymbol, 1000)) as ERC998ERC20ERC721TopDown;
+    this.erc721Instance = (await erc998.deploy(tokenName, tokenSymbol, 1000)) as ERC998ERC721ACBERS;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
 
@@ -82,15 +73,6 @@ describe("ERC998ComposableTopDown", function () {
   shouldSafeTransferChild();
   shouldTransferChild();
   shouldChildExists();
-  shouldTotalChildContracts();
-  shouldChildContractByIndex();
-  shouldTotalChildTokens();
-  shouldChildTokenByIndex();
-  shouldGetChild();
-  shouldGetERC20();
-  shouldBalanceOfERC20();
-  shouldErc20ContractByIndex();
-  shouldTotalERC20Contracts();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
@@ -8,29 +8,6 @@ import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 /// @dev See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-998.md
 ///  Note: the ERC-165 identifier for this interface is 0x1efdf36a
 interface IERC998ERC721TopDown is IERC721Receiver {
-  /// @dev This emits when a token receives a child token.
-  /// @param from The prior owner of the token.
-  /// @param tokenId The token that receives the child token.
-  /// @param childContract The contract address of the child token.
-  /// @param childTokenId The tokenId of the child.
-  event ReceivedChild(
-    address indexed from,
-    uint256 indexed tokenId,
-    address indexed childContract,
-    uint256 childTokenId
-  );
-
-  /// @dev This emits when a child token is transferred from a token to an address.
-  /// @param tokenId The parent token that the child token is being transferred from.
-  /// @param to The new owner address of the child token.
-  /// @param childContract The contract address of the child token.
-  /// @param childTokenId The tokenId of the child.
-  event TransferChild(
-    uint256 indexed tokenId,
-    address indexed to,
-    address indexed childContract,
-    uint256 childTokenId
-  );
 
   /// @notice Get the root owner of tokenId.
   /// @param tokenId The token to query for a root owner address

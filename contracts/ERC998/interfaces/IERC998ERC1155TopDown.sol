@@ -2,57 +2,61 @@
 
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
+interface IERC998ERC1155TopDown {
+    event BatchTransferChild(
+        uint256 indexed tokenId,
+        address indexed to,
+        address indexed childContract,
+        uint256[] childTokenIds,
+        uint256[] amounts
+    );
 
-interface IERC998ERC1155TopDown is IERC721, IERC1155Receiver {
-  event ReceivedChild(
-    address indexed from,
-    uint256 indexed toTokenId,
-    address indexed childContract,
-    uint256 childTokenId,
-    uint256 amount
-  );
-  event TransferSingleChild(
-    uint256 indexed fromTokenId,
-    address indexed to,
-    address indexed childContract,
-    uint256 childTokenId,
-    uint256 amount
-  );
-  event TransferBatchChild(
-    uint256 indexed fromTokenId,
-    address indexed to,
-    address indexed childContract,
-    uint256[] childTokenIds,
-    uint256[] amounts
-  );
+    event BatchReceivedChild(
+        address indexed from,
+        uint256 indexed tokenId,
+        address indexed childContract,
+        uint256[] childTokenIds,
+        uint256[] amounts
+    );
 
-  function childContractsFor(uint256 tokenId) external view returns (address[] memory childContracts);
+    /**
+     * @dev See {IERC1155-safeTransferFrom}.
+     */
+    function safeTransferFromERC1155(
+        uint256 _fromTokenId,
+        address _to,
+        address _erc1155Contract,
+        uint256 _childTokenId,
+        uint256 _amount,
+        bytes memory _data
+    ) external;
 
-  function childIdsForOn(uint256 tokenId, address childContract) external view returns (uint256[] memory childIds);
+    /**
+     * @dev See {IERC1155-safeBatchTransferFrom}.
+     */
+    function safeBatchTransferFromERC1155(
+        uint256 _fromTokenId,
+        address _to,
+        address _erc1155Contract,
+        uint256[] memory _childTokenIds,
+        uint256[] memory _amounts,
+        bytes memory _data
+    ) external;
 
-  function childBalance(
-    uint256 tokrnId,
-    address childContract,
-    uint256 childTokenId
-  ) external view returns (uint256);
+    /**
+     * @dev See {IERC1155-balanceOf}.
+     */
+    function balanceOfERC1155(uint256 _tokenId, address _erc1155Contract, uint256 childTokenId)
+        external
+        view
+        returns (uint256);
 
-  function safeTransferChildFrom(
-    uint256 fromTokenId,
-    address to,
-    address childContract,
-    uint256 childTokenId,
-    uint256 amount,
-    bytes calldata data
-  ) external;
+    /**
+     * @dev See {IERC1155-balanceOfBatch}.
+     */
+    function balanceOfBatchERC1155(uint256[] memory _tokenIds, address _erc1155Contract, uint256[] memory childTokenIds)
+        external
+        view
+        returns (uint256[] memory);
 
-  function safeBatchTransferChildFrom(
-    uint256 fromTokenId,
-    address to,
-    address childContract,
-    uint256[] calldata childTokenIds,
-    uint256[] calldata amounts,
-    bytes calldata data
-  ) external;
 }

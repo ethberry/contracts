@@ -24,7 +24,7 @@ import { shouldGetCap } from "../ERC721/shared/enumerable/capped";
 
 use(solidity);
 
-describe("ERC998ComposableBottomUp", function () {
+describe("ERC998BottomUp", function () {
   beforeEach(async function () {
     [this.owner, this.receiver] = await ethers.getSigners();
 

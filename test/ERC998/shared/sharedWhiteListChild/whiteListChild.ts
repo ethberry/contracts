@@ -13,15 +13,15 @@ export function shouldWhiteListChild() {
 
     describe("whiteListChild", function () {
       it("should add to whiteListChild", async function () {
-        const tx1 = this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
-        await expect(tx1).to.emit(this.erc721Instance, "WhitelistedChild").withArgs(this.erc721InstanceMock.address);
+        const tx1 = this.erc721Instance.whiteListChild(this.erc721InstanceMock.address, 0);
+        await expect(tx1).to.emit(this.erc721Instance, "WhitelistedChild").withArgs(this.erc721InstanceMock.address, 0);
 
         const isWhitelisted = await this.erc721Instance.isWhitelisted(this.erc721InstanceMock.address);
         expect(isWhitelisted).to.equal(true);
       });
 
       it("should fail: account is missing role", async function () {
-        const tx = this.erc721Instance.connect(this.receiver).whiteListChild(this.erc721InstanceMock.address);
+        const tx = this.erc721Instance.connect(this.receiver).whiteListChild(this.erc721InstanceMock.address, 0);
         await expect(tx).to.be.revertedWith(
           `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`,
         );
@@ -30,8 +30,8 @@ export function shouldWhiteListChild() {
 
     describe("unWhitelistChild", function () {
       it("should remove from whitelist", async function () {
-        const tx1 = this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
-        await expect(tx1).to.emit(this.erc721Instance, "WhitelistedChild").withArgs(this.erc721InstanceMock.address);
+        const tx1 = this.erc721Instance.whiteListChild(this.erc721InstanceMock.address, 0);
+        await expect(tx1).to.emit(this.erc721Instance, "WhitelistedChild").withArgs(this.erc721InstanceMock.address, 0);
 
         const isWhitelisted1 = await this.erc721Instance.isWhitelisted(this.erc721InstanceMock.address);
         expect(isWhitelisted1).to.equal(true);
@@ -44,7 +44,7 @@ export function shouldWhiteListChild() {
       });
 
       it("should fail: account is missing role", async function () {
-        await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
+        await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address, 0);
         const tx1 = await this.erc721Instance.isWhitelisted(this.erc721InstanceMock.address);
         expect(tx1).to.equal(true);
 
@@ -102,7 +102,7 @@ export function shouldWhiteListChild() {
 
     describe("getChildCount", function () {
       it("should increment while safeTransferFrom", async function () {
-        await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
+        await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address, 0);
         await this.erc721Instance.setDefaultMaxChild(0); // unlimited
         await this.erc721InstanceMock.mint(this.owner.address);
         await this.erc721Instance.mint(this.owner.address); // this is edge case
@@ -123,7 +123,7 @@ export function shouldWhiteListChild() {
 
     describe("incrementChildCount/decrementChildCount", function () {
       it("should make increment for safeTransferFrom", async function () {
-        await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
+        await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address, 0);
         await this.erc721Instance.setDefaultMaxChild(0);
         await this.erc721InstanceMock.mint(this.owner.address);
         await this.erc721InstanceMock.mint(this.owner.address);
@@ -154,7 +154,7 @@ export function shouldWhiteListChild() {
       });
 
       it("should make increment/decriment for safeTransferFrom", async function () {
-        await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
+        await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address, 0);
         await this.erc721Instance.setDefaultMaxChild(0);
         await this.erc721InstanceMock.mint(this.owner.address);
         await this.erc721InstanceMock.mint(this.owner.address);
@@ -180,14 +180,14 @@ export function shouldWhiteListChild() {
         );
         await expect(tx3)
           .to.emit(this.erc721Instance, "TransferChild")
-          .withArgs(1, this.receiver.address, this.erc721InstanceMock.address, 0);
+          .withArgs(1, this.receiver.address, this.erc721InstanceMock.address, 0, 1);
 
         const tx4 = await this.erc721Instance.getChildCount(this.erc721InstanceMock.address);
         expect(tx4).to.equal(0);
       });
 
       it("should fail with excess number for safeTransferFrom", async function () {
-        await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
+        await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address, 0);
         await this.erc721Instance.setDefaultMaxChild(1);
         await this.erc721InstanceMock.mint(this.owner.address);
         await this.erc721InstanceMock.mint(this.owner.address);
@@ -215,7 +215,7 @@ export function shouldWhiteListChild() {
       });
 
       it("should make increment/decriment for safeTransferFrom and safeTransferChild", async function () {
-        await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
+        await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address, 0);
         await this.erc721Instance.setDefaultMaxChild(0);
         await this.erc721InstanceMock.mint(this.owner.address);
         await this.erc721Instance.mint(this.owner.address); // this is edge case
@@ -240,14 +240,14 @@ export function shouldWhiteListChild() {
         );
         await expect(tx3)
           .to.emit(this.erc721Instance, "TransferChild")
-          .withArgs(1, this.receiver.address, this.erc721InstanceMock.address, 0);
+          .withArgs(1, this.receiver.address, this.erc721InstanceMock.address, 0, 1);
 
         const tx4 = await this.erc721Instance.getChildCount(this.erc721InstanceMock.address);
         expect(tx4).to.equal(0);
       });
 
       it("should make increment/decriment for safeTransferFrom and transferChild", async function () {
-        await this.erc721Instance.whiteListChild(this.erc721Instance.address);
+        await this.erc721Instance.whiteListChild(this.erc721Instance.address, 0);
         await this.erc721Instance.setDefaultMaxChild(0);
         await this.erc721Instance.mint(this.owner.address); // this is edge case
         await this.erc721Instance.mint(this.owner.address);
@@ -267,7 +267,7 @@ export function shouldWhiteListChild() {
         const tx3 = this.erc721Instance.transferChild(2, this.receiver.address, this.erc721Instance.address, 1);
         await expect(tx3)
           .to.emit(this.erc721Instance, "TransferChild")
-          .withArgs(2, this.receiver.address, this.erc721Instance.address, 1);
+          .withArgs(2, this.receiver.address, this.erc721Instance.address, 1, 1);
 
         const tx4 = await this.erc721Instance.getChildCount(this.erc721Instance.address);
         expect(tx4).to.equal(0);

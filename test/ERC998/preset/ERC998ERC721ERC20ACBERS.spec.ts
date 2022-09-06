@@ -4,12 +4,13 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
 import {
+  ERC20ACBCS,
   ERC721ACBCE,
   ERC721NonReceiverMock,
   ERC721ReceiverMock,
-  ERC998ERC721TopDownWhiteListChild,
+  ERC998ERC721ERC20ACBERS,
 } from "../../../typechain-types";
-import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
+import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
 import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
 import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
@@ -24,26 +25,33 @@ import { shouldGetTokenURI } from "../../ERC721/shared/enumerable/tokenURI";
 import { shouldApprove } from "../shared/approve";
 import { shouldSetApprovalForAll } from "../../ERC721/shared/enumerable/setApprovalForAll";
 import { shouldTransferFrom } from "../../ERC721/shared/enumerable/transferFrom";
-import { testsUsingWhiteListChild } from "../shared/sharedWhiteListChild/testsUsingWhiteListChild";
-import { shouldWhiteListChild } from "../shared/sharedWhiteListChild/whiteListChild";
+import { shouldSafeTransferFrom } from "../shared/safeTransferFrom";
+import { shouldSafeTransferChild } from "../shared/safeTransferChild";
+import { shouldTransferChild } from "../shared/transferChild";
+import { shouldChildExists } from "../shared/childExists";
+import { shouldGetERC20 } from "../shared/getERC20";
+import { shouldBalanceOfERC20 } from "../shared/balanceOfERC20";
 
 use(solidity);
 
-describe("ERC998ERC721TopDownWhiteListChild", function () {
+describe("ERC998ERC721ERC20ACBERS", function () {
+  let erc20: ContractFactory;
   let erc721: ContractFactory;
   let erc998: ContractFactory;
   let erc721Receiver: ContractFactory;
   let erc721NonReceiver: ContractFactory;
 
   beforeEach(async function () {
+    erc20 = await ethers.getContractFactory("ERC20ACBCS");
     erc721 = await ethers.getContractFactory("ERC721ACBCE");
-    erc998 = await ethers.getContractFactory("ERC998ERC721TopDownWhiteListChild");
+    erc998 = await ethers.getContractFactory("ERC998ERC721ERC20ACBERS");
     erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
     erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
+    this.erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ACBCS;
     this.erc721InstanceMock = (await erc721.deploy(tokenName, tokenSymbol, 2)) as ERC721ACBCE;
-    this.erc721Instance = (await erc998.deploy(tokenName, tokenSymbol, 1000)) as ERC998ERC721TopDownWhiteListChild;
+    this.erc721Instance = (await erc998.deploy(tokenName, tokenSymbol, 1000)) as ERC998ERC721ERC20ACBERS;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
 
@@ -63,23 +71,30 @@ describe("ERC998ERC721TopDownWhiteListChild", function () {
   shouldApprove();
   shouldSetApprovalForAll();
   shouldTransferFrom();
+  shouldSafeTransferFrom();
+  shouldSafeTransferChild();
+  shouldTransferChild();
+  shouldChildExists();
 
-  testsUsingWhiteListChild();
+  shouldGetERC20();
+  shouldBalanceOfERC20();
 
-  describe("getChild", function () {
-    it("should get child", async function () {
-      await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
-      await this.erc721Instance.setDefaultMaxChild(0);
-      await this.erc721InstanceMock.mint(this.owner.address);
-      await this.erc721InstanceMock.approve(this.erc721Instance.address, 0);
-      await this.erc721Instance.mint(this.owner.address); // this is edge case
-      await this.erc721Instance.mint(this.owner.address);
-
-      const tx1 = this.erc721Instance.getChild(this.owner.address, 1, this.erc721InstanceMock.address, 0);
-
-      await expect(tx1).to.be.revertedWith(`ERC998ERC721TopDown: this method is not supported`);
+  describe("supportsInterface", function () {
+    it("should support all interfaces", async function () {
+      const supportsIERC721 = await this.erc721Instance.supportsInterface("0x80ac58cd");
+      expect(supportsIERC721).to.equal(true);
+      const supportsIERC721Metadata = await this.erc721Instance.supportsInterface("0x5b5e139f");
+      expect(supportsIERC721Metadata).to.equal(true);
+      const supportsIERC721Enumerable = await this.erc721Instance.supportsInterface("0x780e9d63");
+      expect(supportsIERC721Enumerable).to.equal(true);
+      const supportsIERC165 = await this.erc721Instance.supportsInterface("0x01ffc9a7");
+      expect(supportsIERC165).to.equal(true);
+      const supportsIAccessControl = await this.erc721Instance.supportsInterface("0x7965db0b");
+      expect(supportsIAccessControl).to.equal(true);
+      const supportsERC998 = await this.erc721Instance.supportsInterface("0x1bc995e4");
+      expect(supportsERC998).to.equal(true);
+      const supportsInvalidInterface = await this.erc721Instance.supportsInterface("0xffffffff");
+      expect(supportsInvalidInterface).to.equal(false);
     });
   });
-
-  shouldWhiteListChild();
 });

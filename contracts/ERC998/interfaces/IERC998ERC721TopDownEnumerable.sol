@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 interface IERC998ERC721TopDownEnumerable {
   function totalChildContracts(uint256 tokenId) external view returns (uint256);

@@ -11,9 +11,8 @@ import { shouldChildContractsFor } from "../childContractsFor";
 export function testsUsingWhiteListChild() {
   describe("using WhiteListChild", function () {
     beforeEach(async function () {
-      await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address);
-      await this.erc721Instance.whiteListChild(this.erc721Instance.address);
-      await this.erc721Instance.setDefaultMaxChild(0);
+      await this.erc721Instance.whiteListChild(this.erc721InstanceMock.address, 0);
+      await this.erc721Instance.whiteListChild(this.erc721Instance.address, 0);
     });
 
     shouldSafeTransferFrom();

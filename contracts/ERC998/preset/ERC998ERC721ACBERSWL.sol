@@ -6,15 +6,15 @@
 
 pragma solidity ^0.8.9;
 
-import "../ERC998ERC721TopDown.sol";
+import "./ERC998ERC721ACBERS.sol";
 import "../WhiteListChild.sol";
 
-contract ERC998ERC721TopDownWhiteListChild is ERC998ERC721TopDown, WhiteListChild {
+contract ERC998ERC721ACBERSWL is ERC998ERC721ACBERS, WhiteListChild {
   constructor(
     string memory name,
     string memory symbol,
-    uint256 cap
-  ) ERC998ERC721TopDown(name, symbol, cap) {}
+    uint96 royalty
+  ) ERC998ERC721ACBERS(name, symbol, royalty) {}
 
   function removeChild(
     uint256 _tokenId,
@@ -33,19 +33,13 @@ contract ERC998ERC721TopDownWhiteListChild is ERC998ERC721TopDown, WhiteListChil
     super.receiveChild(_from, _tokenId, _childContract, _childTokenId);
   }
 
-  function whiteListChild(address addr) public onlyRole(DEFAULT_ADMIN_ROLE){
-    _whiteListChild(addr);
-  }
-
-  function unWhitelistChild(address addr) public onlyRole(DEFAULT_ADMIN_ROLE) {
-    _unWhitelistChild(addr);
-  }
-
-  function setDefaultMaxChild(uint256 max) public onlyRole(DEFAULT_ADMIN_ROLE) {
-    _setDefaultMaxChild(max);
-  }
-
-  function setMaxChild(address addr, uint256 max) public onlyRole(DEFAULT_ADMIN_ROLE) {
-    _setMaxChild(addr, max);
+  function supportsInterface(bytes4 interfaceId)
+    public
+    view
+    virtual
+    override(ERC998ERC721ACBERS, AccessControl)
+    returns (bool)
+  {
+    return super.supportsInterface(interfaceId);
   }
 }

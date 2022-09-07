@@ -15,18 +15,18 @@ export function shouldPermit() {
     });
 
     it("initial nonce is 0", async function () {
-      const nonces = await this.erc20Instance.nonces(this.owner.address);
+      const nonces = await this.contractInstance.nonces(this.owner.address);
       expect(nonces).to.equal(0);
     });
 
     it("domain separator", async function () {
-      const chainId = await this.erc20Instance.getChainId();
-      const actual = await this.erc20Instance.DOMAIN_SEPARATOR();
+      const chainId = await this.contractInstance.getChainId();
+      const actual = await this.contractInstance.DOMAIN_SEPARATOR();
       const expected = ethers.utils._TypedDataEncoder.hashDomain({
         name: tokenName,
         version: "1",
         chainId,
-        verifyingContract: this.erc20Instance.address,
+        verifyingContract: this.contractInstance.address,
       });
       expect(actual).to.equal(expected);
     });
@@ -40,7 +40,7 @@ export function shouldPermit() {
           name: tokenName,
           version: "1",
           chainId: network.chainId,
-          verifyingContract: this.erc20Instance.address,
+          verifyingContract: this.contractInstance.address,
         },
         // Types
         {
@@ -63,7 +63,7 @@ export function shouldPermit() {
       );
       const { v, r, s } = utils.splitSignature(signature);
 
-      const tx = await this.erc20Instance.permit(
+      const tx = await this.contractInstance.permit(
         this.owner.address,
         this.receiver.address,
         amount,
@@ -76,8 +76,8 @@ export function shouldPermit() {
       // besu
       await tx.wait();
 
-      expect(await this.erc20Instance.nonces(this.owner.address)).to.equal(1);
-      expect(await this.erc20Instance.allowance(this.owner.address, this.receiver.address)).to.equal(amount);
+      expect(await this.contractInstance.nonces(this.owner.address)).to.equal(1);
+      expect(await this.contractInstance.allowance(this.owner.address, this.receiver.address)).to.equal(amount);
     });
 
     it("rejects reused signature", async function () {
@@ -89,7 +89,7 @@ export function shouldPermit() {
           name: tokenName,
           version: "1",
           chainId: network.chainId,
-          verifyingContract: this.erc20Instance.address,
+          verifyingContract: this.contractInstance.address,
         },
         // Types
         {
@@ -112,9 +112,17 @@ export function shouldPermit() {
       );
       const { v, r, s } = utils.splitSignature(signature);
 
-      await this.erc20Instance.permit(this.owner.address, this.receiver.address, amount, constants.MaxUint256, v, r, s);
+      await this.contractInstance.permit(
+        this.owner.address,
+        this.receiver.address,
+        amount,
+        constants.MaxUint256,
+        v,
+        r,
+        s,
+      );
 
-      const tx = this.erc20Instance.permit(
+      const tx = this.contractInstance.permit(
         this.owner.address,
         this.receiver.address,
         amount,
@@ -136,7 +144,7 @@ export function shouldPermit() {
           name: tokenName,
           version: "1",
           chainId: network.chainId,
-          verifyingContract: this.erc20Instance.address,
+          verifyingContract: this.contractInstance.address,
         },
         // Types
         {
@@ -159,7 +167,7 @@ export function shouldPermit() {
       );
       const { v, r, s } = utils.splitSignature(signature);
 
-      const tx = this.erc20Instance.permit(
+      const tx = this.contractInstance.permit(
         this.owner.address,
         this.receiver.address,
         amount,
@@ -182,7 +190,7 @@ export function shouldPermit() {
           name: tokenName,
           version: "1",
           chainId: network.chainId,
-          verifyingContract: this.erc20Instance.address,
+          verifyingContract: this.contractInstance.address,
         },
         // Types
         {
@@ -205,7 +213,7 @@ export function shouldPermit() {
       );
       const { v, r, s } = utils.splitSignature(signature);
 
-      const tx = this.erc20Instance.permit(this.owner.address, this.receiver.address, amount, deadline, v, r, s);
+      const tx = this.contractInstance.permit(this.owner.address, this.receiver.address, amount, deadline, v, r, s);
 
       await expect(tx).to.be.revertedWith("ERC20Permit: expired deadline");
     });

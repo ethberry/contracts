@@ -23,13 +23,7 @@ describe("ERC721BaseUrl", function () {
       expect(uri).to.equal(`${baseTokenURI}/${this.erc721Instance.address.toLowerCase()}/${tokenId}`);
     });
 
-    it("should override token URI", async function () {
-      const slug = "custom";
-      await this.contractInstance.mint(this.owner.address, tokenId);
-      await this.contractInstance.setTokenURI(tokenId, slug);
-      const uri = await this.erc721Instance.tokenURI(tokenId);
-      expect(uri).to.equal(`${baseTokenURI}/${this.contractInstance.address.toLowerCase()}/${slug}`);
-    });
+    // setTokenURI is not supported
 
     it("should fail: URI query for nonexistent token", async function () {
       const uri = this.contractInstance.tokenURI(tokenId);

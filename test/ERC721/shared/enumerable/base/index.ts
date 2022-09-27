@@ -7,13 +7,13 @@ import { shouldGetOwnerOf } from "./ownerOf";
 import { shouldApprove } from "./approve";
 import { shouldTransferFrom } from "./transferFrom";
 
-export function shouldERC721Base() {
-  shouldMint();
-  shouldSafeMint();
-  shouldGetOwnerOf();
-  shouldApprove();
-  shouldSetApprovalForAll();
-  shouldGetBalanceOf();
-  shouldTransferFrom();
-  shouldSafeTransferFrom();
+export function shouldERC721Base(name: string) {
+  shouldMint(name);
+  shouldSafeMint(name);
+  shouldGetOwnerOf(name);
+  shouldApprove(name);
+  shouldSetApprovalForAll(name);
+  shouldGetBalanceOf(name);
+  shouldTransferFrom(name);
+  shouldSafeTransferFrom(name);
 }

@@ -5,18 +5,20 @@ import { ContractFactory } from "ethers";
 
 import { ERC721ABCE, ERC721NonReceiverMock, ERC721ReceiverMock, ERC998ERC721ABERSWL } from "../../../typechain-types";
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, royalty, tokenName, tokenSymbol } from "../../constants";
-import { shouldERC721Storage } from "../../ERC721/shared/enumerable/storage";
 import { testsWhiteListChildTD } from "../shared/sharedWhiteListChild/testsWhiteListChildTD";
 import { shouldWhiteListChild } from "../shared/sharedWhiteListChild/whiteListChild";
 import { shouldERC721Base } from "../../ERC721/shared/enumerable/base";
-import { shouldERC721Acessible } from "../../ERC721/shared/accessible";
+import { shouldERC721Accessible } from "../../ERC721/shared/accessible";
 import { shouldERC721Burnable } from "../../ERC721/shared/enumerable/burn";
 import { shouldERC721Enumerable } from "../../ERC721/shared/enumerable/enumerable";
 import { shouldERC721Royalty } from "../../ERC721/shared/enumerable/royalty";
+import { shouldERC721Storage } from "../../ERC721/shared/enumerable/storage";
 
 use(solidity);
 
 describe("ERC998ERC721ABERSWL", function () {
+  const name = "ERC998ERC721ABERSWL";
+
   let erc721: ContractFactory;
   let erc998: ContractFactory;
   let erc721Receiver: ContractFactory;
@@ -37,12 +39,12 @@ describe("ERC998ERC721ABERSWL", function () {
     this.contractInstance = this.erc721Instance;
   });
 
-  shouldERC721Base();
-  shouldERC721Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldERC721Burnable();
-  shouldERC721Enumerable();
-  shouldERC721Royalty();
-  shouldERC721Storage();
+  shouldERC721Base(name);
+  shouldERC721Accessible(name)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC721Burnable(name);
+  shouldERC721Enumerable(name);
+  shouldERC721Royalty(name);
+  shouldERC721Storage(name);
 
   testsWhiteListChildTD();
 

@@ -1,31 +1,35 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { deployErc721Base } from "../../fixtures";
 
-export function shouldSetApprovalForAll() {
+export function shouldSetApprovalForAll(name: string) {
   describe("setApprovalForAll", function () {
     it("should approve for all", async function () {
-      await this.erc721Instance.mint(this.owner.address);
-      await this.erc721Instance.mint(this.owner.address);
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc721Base(name);
 
-      const balanceOfOwner = await this.erc721Instance.balanceOf(this.owner.address);
+      await contractInstance.mint(owner.address);
+      await contractInstance.mint(owner.address);
+
+      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(2);
 
-      const tx1 = this.erc721Instance.setApprovalForAll(this.receiver.address, true);
+      const tx1 = contractInstance.setApprovalForAll(receiver.address, true);
       await expect(tx1).to.not.be.reverted;
 
-      const approved1 = await this.erc721Instance.getApproved(0);
+      const approved1 = await contractInstance.getApproved(0);
       expect(approved1).to.equal(ethers.constants.AddressZero);
 
-      const isApproved1 = await this.erc721Instance.isApprovedForAll(this.owner.address, this.receiver.address);
+      const isApproved1 = await contractInstance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved1).to.equal(true);
 
-      const tx2 = this.erc721Instance.setApprovalForAll(this.receiver.address, false);
+      const tx2 = contractInstance.setApprovalForAll(receiver.address, false);
       await expect(tx2).to.not.be.reverted;
 
-      const approved3 = await this.erc721Instance.getApproved(0);
+      const approved3 = await contractInstance.getApproved(0);
       expect(approved3).to.equal(ethers.constants.AddressZero);
 
-      const isApproved2 = await this.erc721Instance.isApprovedForAll(this.owner.address, this.receiver.address);
+      const isApproved2 = await contractInstance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved2).to.equal(false);
     });
   });

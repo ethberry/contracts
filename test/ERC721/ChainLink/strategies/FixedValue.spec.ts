@@ -7,8 +7,6 @@ describe("FixedValueRandomStrategy", function () {
   let nftInstance: ERC721FixedValueRandomStrategy;
 
   beforeEach(async function () {
-    [this.owner, this.receiver] = await ethers.getSigners();
-
     const nft = await ethers.getContractFactory("ERC721FixedValueRandomStrategy");
     nftInstance = await nft.deploy();
   });

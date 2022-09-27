@@ -6,38 +6,48 @@ import { baseTokenURI, royalty, tokenId, tokenName, tokenSymbol } from "../const
 
 use(solidity);
 
+export async function deployErc721Base(name: string) {
+  const erc721Factory = await ethers.getContractFactory(name);
+  const erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, royalty, baseTokenURI);
+
+  return {
+    contractInstance: erc721Instance,
+  };
+}
+
 describe("ERC721BaseUrl", function () {
-  beforeEach(async function () {
-    [this.owner] = await ethers.getSigners();
-
-    const erc721Factory = await ethers.getContractFactory("ERC721BaseUrlTest");
-    this.erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, royalty, baseTokenURI);
-
-    this.contractInstance = this.erc721Instance;
-  });
+  const name = "ERC721BaseUrlTest";
 
   describe("tokenURI", function () {
     it("should get token uri", async function () {
-      await this.contractInstance.mint(this.owner.address, tokenId);
-      const uri = await this.erc721Instance.tokenURI(tokenId);
-      expect(uri).to.equal(`${baseTokenURI}/${this.erc721Instance.address.toLowerCase()}/${tokenId}`);
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc721Base(name);
+
+      await contractInstance.mint(owner.address, tokenId);
+      const uri = await contractInstance.tokenURI(tokenId);
+      expect(uri).to.equal(`${baseTokenURI}/${contractInstance.address.toLowerCase()}/${tokenId}`);
     });
 
     // setTokenURI is not supported
 
     it("should fail: URI query for nonexistent token", async function () {
-      const uri = this.contractInstance.tokenURI(tokenId);
+      const { contractInstance } = await deployErc721Base(name);
+
+      const uri = contractInstance.tokenURI(tokenId);
       await expect(uri).to.be.revertedWith("ERC721: invalid token ID");
     });
   });
 
   describe("setBaseURI", function () {
     it("should set token uri", async function () {
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc721Base(name);
+
       const newURI = "http://example.com/";
-      await this.contractInstance.mint(this.owner.address, tokenId);
-      await this.contractInstance.setBaseURI(newURI);
-      const uri = await this.contractInstance.tokenURI(tokenId);
-      expect(uri).to.equal(`${newURI}/${this.contractInstance.address.toLowerCase()}/${tokenId}`);
+      await contractInstance.mint(owner.address, tokenId);
+      await contractInstance.setBaseURI(newURI);
+      const uri = await contractInstance.tokenURI(tokenId);
+      expect(uri).to.equal(`${newURI}/${contractInstance.address.toLowerCase()}/${tokenId}`);
     });
   });
 });

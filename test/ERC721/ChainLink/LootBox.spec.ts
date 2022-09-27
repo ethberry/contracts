@@ -6,13 +6,7 @@ import { parseEther } from "ethers/lib/utils";
 import { ContractFactory, ContractTransaction } from "ethers";
 
 import { ChainLinkLootboxMock, ChainLinkTokenMock, LINK, VRFCoordinatorMock } from "../../../typechain-types";
-import { decimals, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenName, tokenSymbol } from "../../constants";
-
-import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
-import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
-import { shouldGrantRole } from "../../shared/accessControl/grantRole";
-import { shouldRevokeRole } from "../../shared/accessControl/revokeRole";
-import { shouldRenounceRole } from "../../shared/accessControl/renounceRole";
+import { decimals, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
 const linkAmountInWei = ethers.BigNumber.from("1000").mul(decimals);
 
@@ -31,11 +25,11 @@ describe("LootBox", function () {
   this.timeout(42000);
 
   beforeEach(async function () {
-    [this.owner, this.receiver] = await ethers.getSigners();
+    const [owner] = await ethers.getSigners();
 
     link = await ethers.getContractFactory("LINK");
     linkInstance = (await link.deploy(tokenName, tokenSymbol)) as LINK;
-    await linkInstance.mint(this.owner.address, linkAmountInWei);
+    await linkInstance.mint(owner.address, linkAmountInWei);
     vrf = await ethers.getContractFactory("VRFCoordinatorMock");
     vrfInstance = (await vrf.deploy(linkInstance.address)) as VRFCoordinatorMock;
 
@@ -54,19 +48,19 @@ describe("LootBox", function () {
     )) as ChainLinkTokenMock;
 
     lootInstance = (await lootbox.deploy(tokenName, tokenSymbol)) as ChainLinkLootboxMock;
-
-    this.contractInstance = lootInstance;
   });
 
-  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE);
-  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE);
-  shouldGrantRole();
-  shouldRevokeRole();
-  shouldRenounceRole();
+  // shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE);
+  // shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE);
+  // shouldGrantRole();
+  // shouldRevokeRole();
+  // shouldRenounceRole();
 
   describe("Factory", function () {
     it("should fail not a contract", async function () {
-      const tx = lootInstance.setFactory(this.receiver.address);
+      const [_owner, receiver] = await ethers.getSigners();
+
+      const tx = lootInstance.setFactory(receiver.address);
       await expect(tx).to.be.revertedWith(`LootBox: the factory must be a deployed contract`);
     });
 
@@ -76,10 +70,10 @@ describe("LootBox", function () {
     });
 
     it("Should set the right roles for lootbox", async function () {
+      const [owner] = await ethers.getSigners();
+
       const tx = nftInstance.grantRole(MINTER_ROLE, lootInstance.address);
-      await expect(tx)
-        .to.emit(nftInstance, "RoleGranted")
-        .withArgs(MINTER_ROLE, lootInstance.address, this.owner.address);
+      await expect(tx).to.emit(nftInstance, "RoleGranted").withArgs(MINTER_ROLE, lootInstance.address, owner.address);
 
       const isMinter = await nftInstance.hasRole(MINTER_ROLE, lootInstance.address);
       expect(isMinter).to.equal(true);
@@ -87,20 +81,24 @@ describe("LootBox", function () {
   });
 
   describe("Unpack Random", function () {
-    it("should fail not this.owner of token", async function () {
+    it("should fail not owner of token", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+
       await nftInstance.grantRole(MINTER_ROLE, lootInstance.address);
       await lootInstance.setFactory(nftInstance.address);
-      await lootInstance.mint(this.owner.address);
-      const tx = lootInstance.connect(this.receiver).unpack(0);
+      await lootInstance.mint(owner.address);
+      const tx = lootInstance.connect(receiver).unpack(0);
       await expect(tx).to.be.revertedWith("LootBox: unpack caller is not owner nor approved");
     });
 
     it("should fail not enough LINK", async function () {
+      const [owner] = await ethers.getSigners();
+
       await nftInstance.grantRole(MINTER_ROLE, lootInstance.address);
       await lootInstance.setFactory(nftInstance.address);
-      await lootInstance.mint(this.owner.address);
+      await lootInstance.mint(owner.address);
 
-      const balanceOfOwner1 = await lootInstance.balanceOf(this.owner.address);
+      const balanceOfOwner1 = await lootInstance.balanceOf(owner.address);
       expect(balanceOfOwner1).to.equal(1);
 
       const tx = lootInstance.unpack(0);
@@ -108,16 +106,18 @@ describe("LootBox", function () {
     });
 
     it("should unpack own tokens using random", async function () {
+      const [owner] = await ethers.getSigners();
+
       await nftInstance.grantRole(MINTER_ROLE, lootInstance.address);
       await nftInstance.grantRole(MINTER_ROLE, vrfInstance.address);
       await lootInstance.setFactory(nftInstance.address);
-      const txx: ContractTransaction = await lootInstance.mint(this.owner.address);
+      const txx: ContractTransaction = await lootInstance.mint(owner.address);
       await txx.wait();
 
-      const balanceOfOwner1 = await lootInstance.balanceOf(this.owner.address);
+      const balanceOfOwner1 = await lootInstance.balanceOf(owner.address);
       expect(balanceOfOwner1).to.equal(1);
 
-      const balanceOfOwner2 = await nftInstance.balanceOf(this.owner.address);
+      const balanceOfOwner2 = await nftInstance.balanceOf(owner.address);
       expect(balanceOfOwner2).to.equal(0);
 
       const txr: ContractTransaction = await linkInstance.transfer(nftInstance.address, linkAmountInWei);
@@ -153,7 +153,7 @@ describe("LootBox", function () {
       //   },
       // ];
       // const linkContractAddr = "0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06";
-      // const linkTokenContract = new ethers.Contract(linkContractAddr, LINK_TOKEN_ABI, this.owner);
+      // const linkTokenContract = new ethers.Contract(linkContractAddr, LINK_TOKEN_ABI, owner);
       // await linkTokenContract.transfer(nftInstance, parseEther("1.0")).then(function (transaction: any) {
       //   console.info("Contract ", nftInstance.address, " funded with 1 LINK. Transaction Hash: ", transaction.hash);
       // });
@@ -161,7 +161,7 @@ describe("LootBox", function () {
       const tx: ContractTransaction = await lootInstance.unpack(0);
       await tx.wait();
 
-      await expect(tx).to.emit(lootInstance, "Transfer").withArgs(this.owner.address, ethers.constants.AddressZero, 0);
+      await expect(tx).to.emit(lootInstance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, 0);
       await expect(tx)
         .to.emit(linkInstance, "Transfer")
         .withArgs(nftInstance.address, vrfInstance.address, parseEther("0.1"));
@@ -175,15 +175,15 @@ describe("LootBox", function () {
       await expect(tx).to.emit(vrfInstance, "RandomnessRequestId").withArgs(requestId, nftInstance.address);
 
       const trx = await vrfInstance.callBackWithRandomness(requestId, 123, nftInstance.address);
-      await expect(trx).to.emit(nftInstance, "MintRandom").withArgs(this.owner.address, requestId);
+      await expect(trx).to.emit(nftInstance, "MintRandom").withArgs(owner.address, requestId);
 
-      const balanceOfOwner3 = await lootInstance.balanceOf(this.owner.address);
+      const balanceOfOwner3 = await lootInstance.balanceOf(owner.address);
       expect(balanceOfOwner3).to.equal(0);
 
-      const balanceOfOwner4 = await nftInstance.balanceOf(this.owner.address);
+      const balanceOfOwner4 = await nftInstance.balanceOf(owner.address);
       expect(balanceOfOwner4).to.equal(1);
 
-      const item = await nftInstance.tokenOfOwnerByIndex(this.owner.address, 0);
+      const item = await nftInstance.tokenOfOwnerByIndex(owner.address, 0);
       expect(item).to.equal(0); // 0 is nft index
     });
   });

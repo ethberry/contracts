@@ -2,44 +2,58 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { accessControlInterfaceId, MINTER_ROLE, tokenId } from "../../../../constants";
+import { deployErc721Base } from "../../fixtures";
+import { deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures/wallet";
 
-export function shouldMint() {
+export function shouldMint(name: string) {
   describe("mint", function () {
     it("should fail: account is missing role", async function () {
-      const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
+      const [_owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc721Base(name);
 
-      const tx = this.erc721Instance.connect(this.receiver).mint(this.receiver.address, tokenId);
+      const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
+
+      const tx = contractInstance.connect(receiver).mint(receiver.address, tokenId);
       await expect(tx).to.be.revertedWith(
         supportsAccessControl
-          ? `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`
+          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`
           : "Ownable: caller is not the owner",
       );
     });
 
     it("should mint to wallet", async function () {
-      const tx = this.erc721Instance.mint(this.owner.address, tokenId);
-      await expect(tx)
-        .to.emit(this.erc721Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, this.owner.address, tokenId);
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc721Base(name);
 
-      const balance = await this.erc721Instance.balanceOf(this.owner.address);
+      const tx = contractInstance.mint(owner.address, tokenId);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, owner.address, tokenId);
+
+      const balance = await contractInstance.balanceOf(owner.address);
       expect(balance).to.equal(1);
     });
 
     it("should mint to non receiver", async function () {
-      const tx = this.erc721Instance.mint(this.erc721NonReceiverInstance.address, tokenId);
+      const { contractInstance } = await deployErc721Base(name);
+      const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
+
+      const tx = contractInstance.mint(erc721NonReceiverInstance.address, tokenId);
       await expect(tx)
-        .to.emit(this.erc721Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, this.erc721NonReceiverInstance.address, tokenId);
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, erc721NonReceiverInstance.address, tokenId);
     });
 
     it("should mint to receiver", async function () {
-      const tx = this.erc721Instance.mint(this.erc721ReceiverInstance.address, tokenId);
-      await expect(tx)
-        .to.emit(this.erc721Instance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, this.erc721ReceiverInstance.address, tokenId);
+      const { contractInstance } = await deployErc721Base(name);
+      const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
 
-      const balance = await this.erc721Instance.balanceOf(this.erc721ReceiverInstance.address);
+      const tx = contractInstance.mint(erc721ReceiverInstance.address, tokenId);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, erc721ReceiverInstance.address, tokenId);
+
+      const balance = await contractInstance.balanceOf(erc721ReceiverInstance.address);
       expect(balance).to.equal(1);
     });
   });

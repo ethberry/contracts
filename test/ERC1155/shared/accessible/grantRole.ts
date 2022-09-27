@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { DEFAULT_ADMIN_ROLE } from "../../../constants";
-import { deployErc1155Base } from "../fixtures/base";
+import { deployErc1155Base } from "../fixtures";
 
 export function shouldGrantRole(name: string) {
   describe("grantRole", function () {

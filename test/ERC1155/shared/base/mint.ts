@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { constants } from "ethers";
 
 import { accessControlInterfaceId, amount, MINTER_ROLE, tokenId } from "../../../constants";
-import { deployErc1155Base } from "../fixtures/base";
+import { deployErc1155Base } from "../fixtures";
 import { deployErc1155NonReceiver, deployErc1155Receiver } from "../fixtures/wallet";
 
 export function shouldMint(name: string) {

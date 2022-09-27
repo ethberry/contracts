@@ -2,38 +2,46 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { tokenId } from "../../../../constants";
+import { deployErc721Base } from "../../fixtures";
 
-export function shouldApprove() {
+export function shouldApprove(name: string) {
   describe("approve", function () {
     it("should fail: not an owner", async function () {
-      await this.contractInstance.mint(this.owner.address, tokenId);
-      const tx = this.contractInstance.connect(this.receiver).approve(this.owner.address, tokenId);
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc721Base(name);
+
+      await contractInstance.mint(owner.address, tokenId);
+      const tx = contractInstance.connect(receiver).approve(owner.address, tokenId);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
 
     it("should fail: approve to self", async function () {
-      await this.contractInstance.mint(this.owner.address, tokenId);
-      const tx = this.contractInstance.approve(this.owner.address, tokenId);
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc721Base(name);
+
+      await contractInstance.mint(owner.address, tokenId);
+      const tx = contractInstance.approve(owner.address, tokenId);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
 
     it("should approve", async function () {
-      await this.contractInstance.mint(this.owner.address, tokenId);
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc721Base(name);
 
-      const tx = this.contractInstance.approve(this.receiver.address, tokenId);
-      await expect(tx)
-        .to.emit(this.contractInstance, "Approval")
-        .withArgs(this.owner.address, this.receiver.address, tokenId);
+      await contractInstance.mint(owner.address, tokenId);
 
-      const approved = await this.contractInstance.getApproved(tokenId);
-      expect(approved).to.equal(this.receiver.address);
+      const tx = contractInstance.approve(receiver.address, tokenId);
+      await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner.address, receiver.address, tokenId);
 
-      const tx1 = this.contractInstance.connect(this.receiver).burn(tokenId);
+      const approved = await contractInstance.getApproved(tokenId);
+      expect(approved).to.equal(receiver.address);
+
+      const tx1 = contractInstance.connect(receiver).burn(tokenId);
       await expect(tx1)
-        .to.emit(this.contractInstance, "Transfer")
-        .withArgs(this.owner.address, ethers.constants.AddressZero, tokenId);
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(owner.address, ethers.constants.AddressZero, tokenId);
 
-      const balanceOfOwner = await this.contractInstance.balanceOf(this.owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
     });
   });

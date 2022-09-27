@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { deployErc1155Base } from "../fixtures/base";
+import { deployErc1155Base } from "../fixtures";
 import { DEFAULT_ADMIN_ROLE } from "../../../constants";
 
 export function shouldGetRoleAdmin(name: string) {

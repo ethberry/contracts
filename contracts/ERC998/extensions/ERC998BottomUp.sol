@@ -16,9 +16,9 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "../interfaces/IERC998ERC721BottomUp.sol";
 import "../interfaces/IERC998ERC721BottomUpEnumerable.sol";
 
-import "../../ERC721/preset/ERC721ABCES.sol";
+import "../../ERC721/preset/ERC721ABERS.sol";
 
-contract ERC998BottomUp is ERC721ABCES, IERC998ERC721BottomUp, IERC998ERC721BottomUpEnumerable {
+contract ERC998BottomUp is ERC721ABERS, IERC998ERC721BottomUp, IERC998ERC721BottomUpEnumerable {
   using Address for address;
   using SafeMath for uint256;
   using Counters for Counters.Counter;
@@ -57,8 +57,8 @@ contract ERC998BottomUp is ERC721ABCES, IERC998ERC721BottomUp, IERC998ERC721Bott
   constructor(
     string memory name,
     string memory symbol,
-    uint256 cap
-  ) ERC721ABCES(name, symbol, cap) {}
+    uint96 royalty
+  ) ERC721ABERS(name, symbol, royalty) {}
 
   function _tokenOwnerOf(uint256 _tokenId)
     internal

@@ -10,6 +10,7 @@ import { shouldERC721Storage } from "../shared/enumerable/storage";
 import { shouldERC721Acessible } from "../shared/accessible";
 import { shouldERC721Capped } from "../shared/enumerable/capped";
 import { shouldERC721Base } from "../shared/enumerable/base";
+import { shouldERC721Enumerable } from "../shared/enumerable/enumerable";
 
 use(solidity);
 
@@ -35,6 +36,7 @@ describe("ERC721ABCES", function () {
   shouldERC721Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldERC721Burnable();
   shouldERC721Capped();
+  shouldERC721Enumerable();
   shouldERC721Storage();
 
   describe("supportsInterface", function () {

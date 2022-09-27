@@ -3,28 +3,29 @@ import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
-import { ERC721ABCE, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
-import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
+import { ERC721ABERS, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
+import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, royalty, tokenName, tokenSymbol } from "../../constants";
 import { shouldERC721Burnable } from "../shared/enumerable/burn";
-import { shouldERC721Capped } from "../shared/enumerable/capped";
 import { shouldERC721Acessible } from "../shared/accessible";
 import { shouldERC721Base } from "../shared/enumerable/base";
+import { shouldERC721Royalty } from "../shared/enumerable/royalty";
+import { shouldERC721Storage } from "../shared/enumerable/storage";
 import { shouldERC721Enumerable } from "../shared/enumerable/enumerable";
 
 use(solidity);
 
-describe("ERC721ABCE", function () {
+describe("ERC721ABERS", function () {
   let erc721: ContractFactory;
   let erc721Receiver: ContractFactory;
   let erc721NonReceiver: ContractFactory;
 
   beforeEach(async function () {
-    erc721 = await ethers.getContractFactory("ERC721ABCE");
+    erc721 = await ethers.getContractFactory("ERC721ABERS");
     erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
     erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, 2)) as ERC721ABCE;
+    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, royalty)) as ERC721ABERS;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
 
@@ -34,8 +35,9 @@ describe("ERC721ABCE", function () {
   shouldERC721Base();
   shouldERC721Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldERC721Burnable();
-  shouldERC721Capped();
   shouldERC721Enumerable();
+  shouldERC721Royalty();
+  shouldERC721Storage();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {
@@ -45,6 +47,8 @@ describe("ERC721ABCE", function () {
       expect(supportsIERC721Metadata).to.equal(true);
       const supportsIERC721Enumerable = await this.erc721Instance.supportsInterface("0x780e9d63");
       expect(supportsIERC721Enumerable).to.equal(true);
+      const supportsIERC721Royalty = await this.erc721Instance.supportsInterface("0x2a55205a");
+      expect(supportsIERC721Royalty).to.equal(true);
       const supportsIERC165 = await this.erc721Instance.supportsInterface("0x01ffc9a7");
       expect(supportsIERC165).to.equal(true);
       const supportsIAccessControl = await this.erc721Instance.supportsInterface("0x7965db0b");

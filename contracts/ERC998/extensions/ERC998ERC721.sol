@@ -93,7 +93,8 @@ abstract contract ERC998ERC721 is Context, ERC165, IERC721, IERC998TopDown, IERC
 
   function approve(address to, uint256 _tokenId) public virtual override {
     address rootOwner = address(uint160(uint256(rootOwnerOf(_tokenId))));
-    require(to != rootOwner, "CTD: approval to current owner");
+    // https://github.com/OpenZeppelin/openzeppelin-contracts/issues/3346
+    require(to != rootOwner, "ERC721: approval to current owner");
 
     require(
       _msgSender() == rootOwner || isApprovedForAll(rootOwner, _msgSender()),

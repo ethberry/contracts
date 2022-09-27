@@ -2,25 +2,13 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
-import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
-
-import { shouldHaveRole } from "../shared/accessControl/hasRoles";
-import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
-import { shouldGrantRole } from "../shared/accessControl/grantRole";
-import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
-import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
-import { shouldMint } from "../ERC721/shared/enumerable/base/mint";
-import { shouldSafeMint } from "../ERC721/shared/enumerable/base/safeMint";
-import { shouldGetOwnerOf } from "../ERC721/shared/enumerable/base/ownerOf";
-import { shouldApprove } from "../ERC721/shared/enumerable/base/approve";
-import { shouldSetApprovalForAll } from "../ERC721/shared/enumerable/base/setApprovalForAll";
-import { shouldGetBalanceOf } from "../ERC721/shared/enumerable/base/balanceOf";
-import { shouldTransferFrom } from "../ERC721/shared/enumerable/base/transferFrom";
-import { shouldSafeTransferFrom } from "../ERC721/shared/enumerable/base/safeTransferFrom";
+import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, royalty, tokenName, tokenSymbol } from "../constants";
 import { shouldERC721Burnable } from "../ERC721/shared/enumerable/burn";
 import { shouldERC721Storage } from "../ERC721/shared/enumerable/storage";
-import { shouldGetTokenOfOwnerByIndex } from "../ERC721/shared/enumerable/base/tokenOfOwnerByIndex";
-import { shouldERC721Capped } from "../ERC721/shared/enumerable/capped";
+import { shouldERC721Enumerable } from "../ERC721/shared/enumerable/enumerable";
+import { shouldERC721Base } from "../ERC721/shared/enumerable/base";
+import { shouldERC721Acessible } from "../ERC721/shared/accessible";
+import { shouldERC721Royalty } from "../ERC721/shared/enumerable/royalty";
 
 use(solidity);
 
@@ -29,7 +17,7 @@ describe("ERC998BottomUp", function () {
     [this.owner, this.receiver] = await ethers.getSigners();
 
     const erc721Factory = await ethers.getContractFactory("ERC998BottomUp");
-    this.erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, 2);
+    this.erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, royalty);
 
     const erc721ReceiverFactory = await ethers.getContractFactory("ERC721ReceiverMock");
     this.erc721ReceiverInstance = await erc721ReceiverFactory.deploy();
@@ -40,23 +28,12 @@ describe("ERC998BottomUp", function () {
     this.contractInstance = this.erc721Instance;
   });
 
-  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldGrantRole();
-  shouldRevokeRole();
-  shouldRenounceRole();
-  shouldMint();
-  shouldSafeMint();
-  shouldGetOwnerOf();
-  shouldApprove();
-  shouldSetApprovalForAll();
-  shouldGetBalanceOf();
-  shouldTransferFrom();
-  shouldSafeTransferFrom();
+  shouldERC721Base();
+  shouldERC721Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldERC721Burnable();
+  shouldERC721Enumerable();
+  shouldERC721Royalty();
   shouldERC721Storage();
-  shouldGetTokenOfOwnerByIndex();
-  shouldERC721Capped();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

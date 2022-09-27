@@ -8,6 +8,7 @@ import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../c
 import { shouldERC721Base } from "../shared/enumerable/base";
 import { shouldERC721Acessible } from "../shared/accessible";
 import { shouldERC721Burnable } from "../shared/enumerable/burn";
+import { shouldERC721Enumerable } from "../shared/enumerable/enumerable";
 
 use(solidity);
 
@@ -32,6 +33,7 @@ describe("ERC721ABE", function () {
   shouldERC721Base();
   shouldERC721Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldERC721Burnable();
+  shouldERC721Enumerable();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

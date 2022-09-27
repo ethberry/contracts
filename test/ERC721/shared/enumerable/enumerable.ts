@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-export function shouldGetTokenOfOwnerByIndex() {
+export function shouldERC721Enumerable() {
   describe("tokenOfOwnerByIndex", function () {
     it("should match the token number of the owner", async function () {
       await this.erc721Instance.mint(this.owner.address);

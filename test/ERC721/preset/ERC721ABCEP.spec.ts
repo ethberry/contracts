@@ -9,6 +9,7 @@ import { shouldERC721Capped } from "../shared/enumerable/capped";
 import { shouldERC721Pause } from "../shared/enumerable/pausable";
 import { shouldERC721Acessible } from "../shared/accessible";
 import { shouldERC721Base } from "../shared/enumerable/base";
+import { shouldERC721Enumerable } from "../shared/enumerable/enumerable";
 
 describe("ERC721ABCEP", function () {
   let erc721: ContractFactory;
@@ -32,6 +33,7 @@ describe("ERC721ABCEP", function () {
   shouldERC721Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldERC721Burnable();
   shouldERC721Capped();
+  shouldERC721Enumerable();
   shouldERC721Pause();
 
   describe("supportsInterface", function () {

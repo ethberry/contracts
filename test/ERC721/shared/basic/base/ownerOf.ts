@@ -1,6 +1,7 @@
 import { expect } from "chai";
-import { tokenId } from "../../../../constants";
 import { ethers } from "hardhat";
+
+import { tokenId } from "../../../../constants";
 import { deployErc721Base } from "../../fixtures";
 
 export function shouldGetOwnerOf(name: string) {

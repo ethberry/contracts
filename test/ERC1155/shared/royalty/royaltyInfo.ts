@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { utils } from "ethers";
 
 import { royalty } from "../../../constants";
-import { deployErc1155Base } from "../fixtures/base";
+import { deployErc1155Base } from "../fixtures";
 
 export function shouldGetRoyaltyInfo(name: string) {
   describe("royaltyInfo", function () {

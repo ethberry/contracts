@@ -2,8 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { amount } from "../../../constants";
-import { deployErc20Base } from "../fixtures";
-import { deployErc20Wallet } from "../fixtures/wallet";
+import { deployErc20Base, deployErc20Wallet } from "../fixtures";
 
 export function shouldTransferFrom(name: string) {
   describe("transferFrom", function () {

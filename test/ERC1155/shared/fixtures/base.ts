@@ -1,4 +1,5 @@
 import { ethers } from "hardhat";
+
 import { baseTokenURI, royalty } from "../../../constants";
 
 export async function deployErc1155Base(name: string) {

@@ -1,21 +1,7 @@
 import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
-import { ethers } from "hardhat";
-import { ContractFactory } from "ethers";
 
-import {
-  ERC20ABCS,
-  ERC721ABCE,
-  ERC721NonReceiverMock,
-  ERC721ReceiverMock,
-  ERC998ERC721ABERS,
-} from "../../../typechain-types";
-import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, royalty, tokenName, tokenSymbol } from "../../constants";
-
-import { shouldSafeTransferFrom } from "../shared/safeTransferFrom";
-import { shouldSafeTransferChild } from "../shared/safeTransferChild";
-import { shouldTransferChild } from "../shared/transferChild";
-import { shouldChildExists } from "../shared/childExists";
+import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
 import { shouldERC721Base } from "../../ERC721/shared/enumerable/base";
 import { shouldERC721Accessible } from "../../ERC721/shared/accessible";
 import { shouldERC721Burnable } from "../../ERC721/shared/enumerable/burn";
@@ -23,34 +9,12 @@ import { shouldERC721Enumerable } from "../../ERC721/shared/enumerable/enumerabl
 import { shouldERC721Royalty } from "../../ERC721/shared/enumerable/royalty";
 import { shouldERC721Storage } from "../../ERC721/shared/enumerable/storage";
 import { deployErc721Base } from "../../ERC721/shared/fixtures";
+import { shouldERC998Base } from "../shared/base/basic";
 
 use(solidity);
 
 describe("ERC998ERC721ABERS", function () {
   const name = "ERC998ERC721ABERS";
-
-  let erc20: ContractFactory;
-  let erc721: ContractFactory;
-  let erc998: ContractFactory;
-  let erc721Receiver: ContractFactory;
-  let erc721NonReceiver: ContractFactory;
-
-  beforeEach(async function () {
-    erc20 = await ethers.getContractFactory("ERC20ABCS");
-    erc721 = await ethers.getContractFactory("ERC721ABCE");
-    erc998 = await ethers.getContractFactory("ERC998ERC721ABERS");
-    erc721Receiver = await ethers.getContractFactory("ERC721ReceiverMock");
-    erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
-    [this.owner, this.receiver] = await ethers.getSigners();
-
-    this.erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ABCS;
-    this.erc721InstanceMock = (await erc721.deploy(tokenName, tokenSymbol, 2)) as ERC721ABCE;
-    this.erc721Instance = (await erc998.deploy(tokenName, tokenSymbol, royalty)) as ERC998ERC721ABERS;
-    this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
-    this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
-
-    this.contractInstance = this.erc721Instance;
-  });
 
   shouldERC721Base(name);
   shouldERC721Accessible(name)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
@@ -59,10 +23,7 @@ describe("ERC998ERC721ABERS", function () {
   shouldERC721Royalty(name);
   shouldERC721Storage(name);
 
-  shouldSafeTransferFrom();
-  shouldSafeTransferChild();
-  shouldTransferChild();
-  shouldChildExists();
+  shouldERC998Base(name);
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

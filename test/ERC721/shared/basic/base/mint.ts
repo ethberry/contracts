@@ -2,8 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { accessControlInterfaceId, MINTER_ROLE, tokenId } from "../../../../constants";
-import { deployErc721Base } from "../../fixtures";
-import { deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures/wallet";
+import { deployErc721Base, deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures";
 
 export function shouldMint(name: string) {
   describe("mint", function () {

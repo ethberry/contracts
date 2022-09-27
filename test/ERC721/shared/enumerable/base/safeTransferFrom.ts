@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures/wallet";
 import { ethers } from "hardhat";
-import { deployErc721Base } from "../../fixtures";
+
+import { deployErc721Base, deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures";
 
 export function shouldSafeTransferFrom(name: string) {
   describe("safeTransferFrom", function () {
@@ -42,7 +42,6 @@ export function shouldSafeTransferFrom(name: string) {
     it("should transfer own tokens to non receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const { contractInstance } = await deployErc721Base(name);
-
       const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
 
       await contractInstance.mint(owner.address);

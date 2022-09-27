@@ -2,6 +2,7 @@ import { expect } from "chai";
 
 import { amount, tokenId } from "../../constants";
 
+// TODO wtf?
 export function shouldGtTotalSupply() {
   describe("totalSupply", function () {
     it("should get total supply (mint)", async function () {

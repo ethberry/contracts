@@ -1,8 +1,8 @@
 import { expect } from "chai";
-import { tokenId } from "../../../../constants";
 import { ethers } from "hardhat";
-import { deployErc721Base } from "../../fixtures";
-import { deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures/wallet";
+
+import { tokenId } from "../../../../constants";
+import { deployErc721Base, deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures";
 
 export function shouldSafeTransferFrom(name: string) {
   describe("safeTransferFrom", function () {

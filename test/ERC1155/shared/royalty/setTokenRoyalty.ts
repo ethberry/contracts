@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { accessControlInterfaceId, DEFAULT_ADMIN_ROLE } from "../../../constants";
-import { deployErc1155Base } from "../fixtures/base";
+import { deployErc1155Base } from "../fixtures";
 
 export function shouldSetTokenRoyalty(name: string) {
   describe("setTokenRoyalty", function () {

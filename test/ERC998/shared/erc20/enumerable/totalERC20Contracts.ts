@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { amount } from "../../constants";
+import { amount } from "../../../../constants";
 
 export function shouldTotalERC20Contracts() {
   describe("totalERC20Contracts", function () {

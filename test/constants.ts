@@ -22,6 +22,7 @@ export const amount = 100000;
 
 // INTERFACES
 export const accessControlInterfaceId = "0x7965db0b";
+export const whiteListChildInterfaceId = "0x69906c17";
 
 export const addr = {
   hardhat: {

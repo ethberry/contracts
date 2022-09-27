@@ -9,7 +9,7 @@ pragma solidity ^0.8.9;
 import "./ERC998ERC721ABERS.sol";
 import "../extensions/WhiteListChild.sol";
 
-contract ERC998ERC721ABERSWL is ERC998ERC721ABERS, WhiteListChild {
+contract ERC998ERC721ABERSW is ERC998ERC721ABERS, WhiteListChild {
   constructor(
     string memory name,
     string memory symbol,
@@ -40,6 +40,6 @@ contract ERC998ERC721ABERSWL is ERC998ERC721ABERS, WhiteListChild {
     override(ERC998ERC721ABERS, AccessControl)
     returns (bool)
   {
-    return super.supportsInterface(interfaceId);
+    return interfaceId == type(IWhiteListChild).interfaceId || super.supportsInterface(interfaceId);
   }
 }

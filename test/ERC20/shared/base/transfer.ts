@@ -1,9 +1,8 @@
 import { expect } from "chai";
+import { ethers } from "hardhat";
 
 import { amount } from "../../../constants";
-import { ethers } from "hardhat";
-import { deployErc20Base } from "../fixtures";
-import { deployErc20Wallet } from "../fixtures/wallet";
+import { deployErc20Base, deployErc20Wallet } from "../fixtures";
 
 export function shouldTransfer(name: string) {
   describe("transfer", function () {

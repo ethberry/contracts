@@ -34,6 +34,7 @@ import "../ERC998/interfaces/IERC998ERC721TopDownEnumerable.sol";
 import "../ERC998/interfaces/IERC998ERC1155TopDown.sol";
 import "../ERC998/interfaces/IERC998ERC721BottomUpEnumerable.sol";
 import "../ERC998/interfaces/IERC998ERC721BottomUp.sol";
+import "../ERC998/interfaces/IWhiteListChild.sol";
 
 contract InterfaceIdCalculator {
   constructor() {
@@ -58,6 +59,7 @@ contract InterfaceIdCalculator {
     console.logBytes4(type(IERC998ERC1155TopDown).interfaceId);
     console.logBytes4(type(IERC998ERC721BottomUp).interfaceId);
     console.logBytes4(type(IERC998ERC721BottomUpEnumerable).interfaceId);
+    console.logBytes4(type(IWhiteListChild).interfaceId);
 
     console.log("IERC1155");
     console.logBytes4(type(IERC1155).interfaceId);

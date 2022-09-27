@@ -1,8 +1,8 @@
 import { expect } from "chai";
-import { amount, tokenId } from "../../../constants";
 import { ethers } from "hardhat";
-import { deployErc1155Base } from "../fixtures/base";
-import { deployErc1155NonReceiver, deployErc1155Receiver } from "../fixtures/wallet";
+
+import { amount, tokenId } from "../../../constants";
+import { deployErc1155Base, deployErc1155NonReceiver, deployErc1155Receiver } from "../fixtures";
 
 export function shouldSafeBatchTransferFrom(name: string) {
   describe("safeBatchTransferFrom", function () {

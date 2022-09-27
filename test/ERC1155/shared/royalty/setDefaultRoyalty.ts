@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { constants } from "ethers";
 
 import { accessControlInterfaceId, DEFAULT_ADMIN_ROLE } from "../../../constants";
-import { deployErc1155Base } from "../fixtures/base";
+import { deployErc1155Base } from "../fixtures";
 
 export function shouldSetDefaultRoyalty(name: string) {
   describe("setDefaultRoyalty", function () {

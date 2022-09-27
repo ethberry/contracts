@@ -1,11 +1,11 @@
 import { expect } from "chai";
 
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../../constants";
-import { shouldERC721Burnable } from "../shared/basic/burn";
-import { shouldERC721Capped } from "../shared/basic/capped";
-import { shouldERC721Pause } from "../shared/basic/pausable";
+import { shouldERC721Burnable } from "../shared/burn/basic/burn";
+import { shouldERC721Capped } from "../shared/capped/basic/capped";
+import { shouldERC721Pause } from "../shared/pausable/basic/pausable";
 import { shouldERC721Accessible } from "../shared/accessible";
-import { shouldERC721Base } from "../shared/basic/base";
+import { shouldERC721Base } from "../shared/base/basic";
 import { deployErc721Base } from "../shared/fixtures";
 
 describe("ERC721ABCP", function () {

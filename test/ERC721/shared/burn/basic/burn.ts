@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { tokenId } from "../../../constants";
-import { deployErc721Base } from "../fixtures";
+import { tokenId } from "../../../../constants";
+import { deployErc721Base } from "../../fixtures";
 
 export function shouldERC721Burnable(name: string) {
   describe("burn", function () {

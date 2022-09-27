@@ -1,11 +1,15 @@
 import { expect } from "chai";
 
-import { amount, tokenId } from "../../constants";
+import { amount, tokenId } from "../../../constants";
+import { ethers } from "hardhat";
+import { deployErc1155Base } from "../fixtures";
 
-// TODO wtf?
-export function shouldGtTotalSupply() {
+export function shouldGetTotalSupply(name: string) {
   describe("totalSupply", function () {
     it("should get total supply (mint)", async function () {
+      const [_owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
+
       await contractInstance.mint(receiver.address, tokenId, amount, "0x");
 
       const totalSupply = await contractInstance.totalSupply(tokenId);
@@ -13,6 +17,9 @@ export function shouldGtTotalSupply() {
     });
 
     it("should get total supply (mintBatch)", async function () {
+      const [_owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
+
       await contractInstance.mintBatch(receiver.address, [tokenId], [amount], "0x");
 
       const totalSupply = await contractInstance.totalSupply(tokenId);

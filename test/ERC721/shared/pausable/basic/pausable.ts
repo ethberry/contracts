@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { PAUSER_ROLE } from "../../../constants";
-import { deployErc721Base } from "../fixtures";
+import { PAUSER_ROLE } from "../../../../constants";
+import { deployErc721Base } from "../../fixtures";
 
 export function shouldERC721Pause(name: string) {
   describe("pause", function () {
@@ -25,7 +25,7 @@ export function shouldERC721Pause(name: string) {
       const [owner] = await ethers.getSigners();
       const { contractInstance } = await deployErc721Base(name);
 
-      const tx1 = contractInstance.mint(owner.address);
+      const tx1 = contractInstance.mint(owner.address, 0);
       await expect(tx1).to.not.be.reverted;
 
       const balanceOfOwner1 = await contractInstance.balanceOf(owner.address);
@@ -34,13 +34,13 @@ export function shouldERC721Pause(name: string) {
       const tx2 = contractInstance.pause();
       await expect(tx2).to.emit(contractInstance, "Paused").withArgs(owner.address);
 
-      const tx3 = contractInstance.mint(owner.address);
+      const tx3 = contractInstance.mint(owner.address, 1);
       await expect(tx3).to.be.revertedWith(`ERC721Pausable: token transfer while paused`);
 
       const tx4 = contractInstance.unpause();
       await expect(tx4).to.emit(contractInstance, "Unpaused").withArgs(owner.address);
 
-      const tx5 = contractInstance.mint(owner.address);
+      const tx5 = contractInstance.mint(owner.address, 2);
       await expect(tx5).to.not.be.reverted;
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);

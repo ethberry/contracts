@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { deployErc721Base } from "../fixtures";
+import { deployErc721Base } from "../../fixtures";
 
 export function shouldERC721Capped(name: string) {
   describe("cap", function () {
@@ -9,8 +9,8 @@ export function shouldERC721Capped(name: string) {
       const [owner] = await ethers.getSigners();
       const { contractInstance } = await deployErc721Base(name);
 
-      await contractInstance.mint(owner.address, 0);
-      await contractInstance.mint(owner.address, 1);
+      await contractInstance.mint(owner.address);
+      await contractInstance.mint(owner.address);
 
       const cap = await contractInstance.cap();
       expect(cap).to.equal(2);
@@ -18,8 +18,8 @@ export function shouldERC721Capped(name: string) {
       const totalSupply = await contractInstance.totalSupply();
       expect(totalSupply).to.equal(2);
 
-      const tx = contractInstance.mint(owner.address, 2);
-      await expect(tx).to.be.revertedWith(`ERC721Capped: cap exceeded`);
+      const tx = contractInstance.mint(owner.address);
+      await expect(tx).to.be.revertedWith(`ERC721CappedEnumerable: cap exceeded`);
     });
   });
 }

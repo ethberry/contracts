@@ -2,11 +2,11 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
-import { shouldERC721Burnable } from "../shared/enumerable/burn";
+import { shouldERC721Burnable } from "../shared/burn/enumerable/burn";
 import { shouldERC721Accessible } from "../shared/accessible";
-import { shouldERC721Base } from "../shared/enumerable/base";
-import { shouldERC721Royalty } from "../shared/enumerable/royalty";
-import { shouldERC721Enumerable } from "../shared/enumerable/enumerable";
+import { shouldERC721Base } from "../shared/base/enumerable";
+import { shouldERC721Royalty } from "../shared/royalty/enumerable";
+import { shouldERC721Enumerable } from "../shared/enumerable";
 import { deployErc721Base } from "../shared/fixtures";
 
 use(solidity);

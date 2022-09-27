@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { deployErc721Base, deployErc721Receiver } from "../fixtures";
+import { deployErc721Base, deployErc721Receiver } from "./fixtures";
 
 export function shouldERC721Enumerable(name: string) {
   describe("tokenOfOwnerByIndex", function () {

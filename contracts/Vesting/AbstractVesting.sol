@@ -27,7 +27,6 @@ contract AbstractVesting is VestingWallet, Ownable, Multicall {
 
   function releaseable() public view virtual returns (uint256) {
     return vestedAmount(uint64(block.timestamp)) - released();
-
   }
 
   function releaseable(address token) public view virtual returns (uint256) {

@@ -1,49 +1,38 @@
 import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
-import { ethers } from "hardhat";
 
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
-import { shouldERC1155Acessible } from "../shared/accessible";
+import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
+import { shouldERC1155Accessible } from "../shared/accessible";
 import { shouldERC1155Base } from "../shared/base";
 import { shouldERC1155Capped } from "../shared/capped";
 import { shouldERC1155Supply } from "../shared/supply";
 import { shouldERC1155Burnable } from "../shared/burnable";
+import { deployErc1155Base } from "../shared/fixtures";
 
 use(solidity);
 
 describe("ERC1155ABCS", function () {
-  beforeEach(async function () {
-    [this.owner, this.receiver] = await ethers.getSigners();
+  const name = "ERC1155ABCS";
 
-    const erc1155Factory = await ethers.getContractFactory("ERC1155ABCS");
-    this.erc1155Instance = await erc1155Factory.deploy(baseTokenURI);
-
-    const erc1155ReceiverFactory = await ethers.getContractFactory("ERC1155ReceiverMock");
-    this.erc1155ReceiverInstance = await erc1155ReceiverFactory.deploy();
-
-    const erc1155NonReceiverFactory = await ethers.getContractFactory("ERC1155NonReceiverMock");
-    this.erc1155NonReceiverInstance = await erc1155NonReceiverFactory.deploy();
-
-    this.contractInstance = this.erc1155Instance;
-  });
-
-  shouldERC1155Base();
-  shouldERC1155Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldERC1155Burnable();
-  shouldERC1155Capped();
-  shouldERC1155Supply();
+  shouldERC1155Base(name);
+  shouldERC1155Accessible(name)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC1155Burnable(name);
+  shouldERC1155Capped(name);
+  shouldERC1155Supply(name);
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {
-      const supportsIERC1155 = await this.erc1155Instance.supportsInterface("0xd9b67a26");
+      const { contractInstance } = await deployErc1155Base(name);
+
+      const supportsIERC1155 = await contractInstance.supportsInterface("0xd9b67a26");
       expect(supportsIERC1155).to.equal(true);
-      const supportsIERC1155MetadataURI = await this.erc1155Instance.supportsInterface("0x0e89341c");
+      const supportsIERC1155MetadataURI = await contractInstance.supportsInterface("0x0e89341c");
       expect(supportsIERC1155MetadataURI).to.equal(true);
-      const supportsIERC165 = await this.erc1155Instance.supportsInterface("0x01ffc9a7");
+      const supportsIERC165 = await contractInstance.supportsInterface("0x01ffc9a7");
       expect(supportsIERC165).to.equal(true);
-      const supportsIAccessControl = await this.erc1155Instance.supportsInterface("0x7965db0b");
+      const supportsIAccessControl = await contractInstance.supportsInterface("0x7965db0b");
       expect(supportsIAccessControl).to.equal(true);
-      const supportsInvalidInterface = await this.erc1155Instance.supportsInterface("0xffffffff");
+      const supportsInvalidInterface = await contractInstance.supportsInterface("0xffffffff");
       expect(supportsInvalidInterface).to.equal(false);
     });
   });

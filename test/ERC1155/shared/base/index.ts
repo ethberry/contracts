@@ -7,13 +7,13 @@ import { shouldSetApprovalForAll } from "./setApprovalForAll";
 import { shouldSafeTransferFrom } from "./safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "./safeBatchTransferFrom";
 
-export function shouldERC1155Base() {
-  shouldMint();
-  shouldMintBatch();
-  shouldBalanceOf();
-  shouldBalanceOfBatch();
-  shouldURI();
-  shouldSetApprovalForAll();
-  shouldSafeTransferFrom();
-  shouldSafeBatchTransferFrom();
+export function shouldERC1155Base(name: string) {
+  shouldMint(name);
+  shouldMintBatch(name);
+  shouldBalanceOf(name);
+  shouldBalanceOfBatch(name);
+  shouldURI(name);
+  shouldSetApprovalForAll(name);
+  shouldSafeTransferFrom(name);
+  shouldSafeBatchTransferFrom(name);
 }

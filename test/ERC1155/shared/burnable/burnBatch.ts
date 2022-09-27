@@ -1,102 +1,95 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { amount, tokenId } from "../../../constants";
+import { constants } from "ethers";
 
-export function shouldBurnBatch() {
+import { amount, tokenId } from "../../../constants";
+import { deployErc1155Base } from "../fixtures/base";
+
+export function shouldBurnBatch(name: string) {
   describe("burnBatch", function () {
     it("should burn own tokens", async function () {
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
+
       const tokenId1 = tokenId + 1;
-      await this.erc1155Instance.mintBatch(this.owner.address, [tokenId, tokenId1], [amount, amount], "0x");
-      const tx = this.erc1155Instance.burnBatch(this.owner.address, [tokenId, tokenId1], [amount, amount]);
+      await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
+      const tx = contractInstance.burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
 
       await expect(tx)
-        .to.emit(this.erc1155Instance, "TransferBatch")
-        .withArgs(
-          this.owner.address,
-          this.owner.address,
-          ethers.constants.AddressZero,
-          [tokenId, tokenId1],
-          [amount, amount],
-        );
+        .to.emit(contractInstance, "TransferBatch")
+        .withArgs(owner.address, owner.address, constants.AddressZero, [tokenId, tokenId1], [amount, amount]);
 
-      const balanceOfOwner = await this.erc1155Instance.balanceOf(this.owner.address, tokenId);
+      const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
       expect(balanceOfOwner).to.equal(0);
 
-      const balanceOfOwner1 = await this.erc1155Instance.balanceOf(this.owner.address, tokenId1);
+      const balanceOfOwner1 = await contractInstance.balanceOf(owner.address, tokenId1);
       expect(balanceOfOwner1).to.equal(0);
     });
 
     it("should burn approved tokens", async function () {
-      const tokenId1 = tokenId + 1;
-      await this.erc1155Instance.mintBatch(this.owner.address, [tokenId, tokenId1], [amount, amount], "0x");
-      await this.erc1155Instance.setApprovalForAll(this.receiver.address, true);
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
 
-      const tx = this.erc1155Instance
-        .connect(this.receiver)
-        .burnBatch(this.owner.address, [tokenId, tokenId1], [amount, amount]);
+      const tokenId1 = tokenId + 1;
+      await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
+      await contractInstance.setApprovalForAll(receiver.address, true);
+
+      const tx = contractInstance.connect(receiver).burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
 
       await expect(tx)
-        .to.emit(this.erc1155Instance, "TransferBatch")
-        .withArgs(
-          this.receiver.address,
-          this.owner.address,
-          ethers.constants.AddressZero,
-          [tokenId, tokenId1],
-          [amount, amount],
-        );
+        .to.emit(contractInstance, "TransferBatch")
+        .withArgs(receiver.address, owner.address, constants.AddressZero, [tokenId, tokenId1], [amount, amount]);
 
-      const balanceOfOwner = await this.erc1155Instance.balanceOf(this.owner.address, tokenId);
+      const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
       expect(balanceOfOwner).to.equal(0);
 
-      const balanceOfOwner1 = await this.erc1155Instance.balanceOf(this.owner.address, tokenId1);
+      const balanceOfOwner1 = await contractInstance.balanceOf(owner.address, tokenId1);
       expect(balanceOfOwner1).to.equal(0);
     });
 
     it("should fail: not an owner", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
+
       const tokenId1 = tokenId + 1;
-      await this.erc1155Instance.mintBatch(this.owner.address, [tokenId, tokenId1], [amount, amount], "0x");
-      const tx = this.erc1155Instance
-        .connect(this.receiver)
-        .burnBatch(this.owner.address, [tokenId, tokenId1], [amount, amount]);
+      await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
+      const tx = contractInstance.connect(receiver).burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
 
       await expect(tx).to.be.revertedWith(`ERC1155: caller is not token owner nor approved`);
     });
 
     it("should fail: ids and amounts length mismatch", async function () {
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
+
       const tokenId1 = tokenId + 1;
-      await this.erc1155Instance.mintBatch(this.owner.address, [tokenId, tokenId1], [amount, amount], "0x");
-      const tx = this.erc1155Instance.burnBatch(this.owner.address, [tokenId, tokenId1], [amount]);
+      await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
+      const tx = contractInstance.burnBatch(owner.address, [tokenId, tokenId1], [amount]);
 
       await expect(tx).to.be.revertedWith(`ERC1155: ids and amounts length mismatch`);
     });
 
     it("should fail: burn amount exceeds totalSupply", async function () {
-      await this.erc1155Instance.mintBatch(this.owner.address, [tokenId], [amount], "0x");
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
 
-      await this.erc1155Instance.safeBatchTransferFrom(
-        this.owner.address,
-        this.receiver.address,
-        [tokenId],
-        [amount],
-        "0x",
-      );
+      await contractInstance.mintBatch(owner.address, [tokenId], [amount], "0x");
 
-      const tx = this.erc1155Instance.burnBatch(this.owner.address, [tokenId], [amount]);
+      await contractInstance.safeBatchTransferFrom(owner.address, receiver.address, [tokenId], [amount], "0x");
+
+      const tx = contractInstance.burnBatch(owner.address, [tokenId], [amount]);
       await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds balance");
     });
 
     it("should fail: burn amount exceeds balance", async function () {
-      await this.erc1155Instance.mintBatch(this.owner.address, [tokenId], [amount], "0x");
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
 
-      await this.erc1155Instance.safeBatchTransferFrom(
-        this.owner.address,
-        this.receiver.address,
-        [tokenId],
-        [amount],
-        "0x",
-      );
+      await contractInstance.mintBatch(owner.address, [tokenId], [amount], "0x");
 
-      const tx = this.erc1155Instance.burnBatch(this.owner.address, [tokenId], [amount]);
+      await contractInstance.safeBatchTransferFrom(owner.address, receiver.address, [tokenId], [amount], "0x");
+
+      const tx = contractInstance.burnBatch(owner.address, [tokenId], [amount]);
       await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds balance");
     });
   });

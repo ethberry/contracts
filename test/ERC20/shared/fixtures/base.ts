@@ -13,8 +13,6 @@ export async function deployErc20Base(name: string) {
           case "C":
             memo.push(amount);
             break;
-          case "A":
-          case "B":
           default:
             break;
         }

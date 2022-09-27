@@ -1,48 +1,58 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { constants } from "ethers";
 
 import { accessControlInterfaceId, amount, MINTER_ROLE, tokenId } from "../../../constants";
+import { deployErc1155Base } from "../fixtures/base";
+import { deployErc1155NonReceiver, deployErc1155Receiver } from "../fixtures/wallet";
 
-export function shouldMint() {
+export function shouldMint(name: string) {
   describe("mint", function () {
     it("should mint to wallet", async function () {
-      const tx1 = this.erc1155Instance.mint(this.receiver.address, tokenId, amount, "0x");
-      await expect(tx1)
-        .to.emit(this.erc1155Instance, "TransferSingle")
-        .withArgs(this.owner.address, ethers.constants.AddressZero, this.receiver.address, tokenId, amount);
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
 
-      const balance = await this.erc1155Instance.balanceOf(this.receiver.address, tokenId);
+      const tx1 = contractInstance.mint(receiver.address, tokenId, amount, "0x");
+      await expect(tx1)
+        .to.emit(contractInstance, "TransferSingle")
+        .withArgs(owner.address, constants.AddressZero, receiver.address, tokenId, amount);
+
+      const balance = await contractInstance.balanceOf(receiver.address, tokenId);
       expect(balance).to.equal(amount);
     });
 
     it("should mint to receiver", async function () {
-      const tx1 = this.erc1155Instance.mint(this.erc1155ReceiverInstance.address, tokenId, amount, "0x");
-      await expect(tx1)
-        .to.emit(this.erc1155Instance, "TransferSingle")
-        .withArgs(
-          this.owner.address,
-          ethers.constants.AddressZero,
-          this.erc1155ReceiverInstance.address,
-          tokenId,
-          amount,
-        );
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
+      const { contractInstance: erc1155ReceiverInstance } = await deployErc1155Receiver();
 
-      const balance = await this.erc1155Instance.balanceOf(this.erc1155ReceiverInstance.address, tokenId);
+      const tx1 = contractInstance.mint(erc1155ReceiverInstance.address, tokenId, amount, "0x");
+      await expect(tx1)
+        .to.emit(contractInstance, "TransferSingle")
+        .withArgs(owner.address, constants.AddressZero, erc1155ReceiverInstance.address, tokenId, amount);
+
+      const balance = await contractInstance.balanceOf(erc1155ReceiverInstance.address, tokenId);
       expect(balance).to.equal(amount);
     });
 
     it("should fail: non receiver", async function () {
-      const tx1 = this.erc1155Instance.mint(this.erc1155NonReceiverInstance.address, tokenId, amount, "0x");
+      const { contractInstance } = await deployErc1155Base(name);
+      const { contractInstance: erc1155NonReceiverInstance } = await deployErc1155NonReceiver();
+
+      const tx1 = contractInstance.mint(erc1155NonReceiverInstance.address, tokenId, amount, "0x");
       await expect(tx1).to.be.revertedWith(`ERC1155: transfer to non ERC1155Receiver implementer`);
     });
 
     it("should fail: account is missing role", async function () {
-      const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
+      const [_owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
 
-      const tx1 = this.erc1155Instance.connect(this.receiver).mint(this.receiver.address, tokenId, amount, "0x");
+      const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
+
+      const tx1 = contractInstance.connect(receiver).mint(receiver.address, tokenId, amount, "0x");
       await expect(tx1).to.be.revertedWith(
         supportsAccessControl
-          ? `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`
+          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`
           : "Ownable: caller is not the owner",
       );
     });

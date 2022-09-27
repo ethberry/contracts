@@ -1,47 +1,58 @@
 import { expect } from "chai";
 import { amount, tokenId } from "../../../constants";
+import { ethers } from "hardhat";
+import { deployErc1155Base } from "../fixtures/base";
+import { deployErc1155NonReceiver, deployErc1155Receiver } from "../fixtures/wallet";
 
-export function shouldSafeBatchTransferFrom() {
+export function shouldSafeBatchTransferFrom(name: string) {
   describe("safeBatchTransferFrom", function () {
     it("should transfer own tokens to receiver contract", async function () {
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
+      const { contractInstance: erc1155ReceiverInstance } = await deployErc1155Receiver();
+
       const tokenId_1 = 2;
-      await this.erc1155Instance.mint(this.owner.address, tokenId, amount, "0x");
-      await this.erc1155Instance.mint(this.owner.address, tokenId_1, amount, "0x");
-      const tx = this.erc1155Instance.safeBatchTransferFrom(
-        this.owner.address,
-        this.erc1155ReceiverInstance.address,
+      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      await contractInstance.mint(owner.address, tokenId_1, amount, "0x");
+      const tx = contractInstance.safeBatchTransferFrom(
+        owner.address,
+        erc1155ReceiverInstance.address,
         [tokenId, tokenId_1],
         [amount, amount],
         "0x",
       );
       await expect(tx)
-        .to.emit(this.erc1155Instance, "TransferBatch")
+        .to.emit(contractInstance, "TransferBatch")
         .withArgs(
-          this.owner.address,
-          this.owner.address,
-          this.erc1155ReceiverInstance.address,
+          owner.address,
+          owner.address,
+          erc1155ReceiverInstance.address,
           [tokenId, tokenId_1],
           [amount, amount],
         );
 
-      const balanceOfOwner1 = await this.erc1155Instance.balanceOf(this.owner.address, tokenId);
+      const balanceOfOwner1 = await contractInstance.balanceOf(owner.address, tokenId);
       expect(balanceOfOwner1).to.equal(0);
-      const balanceOfOwner2 = await this.erc1155Instance.balanceOf(this.owner.address, tokenId_1);
+      const balanceOfOwner2 = await contractInstance.balanceOf(owner.address, tokenId_1);
       expect(balanceOfOwner2).to.equal(0);
 
-      const balanceOfReceiver1 = await this.erc1155Instance.balanceOf(this.erc1155ReceiverInstance.address, tokenId);
+      const balanceOfReceiver1 = await contractInstance.balanceOf(erc1155ReceiverInstance.address, tokenId);
       expect(balanceOfReceiver1).to.equal(amount);
-      const balanceOfReceiver2 = await this.erc1155Instance.balanceOf(this.erc1155ReceiverInstance.address, tokenId);
+      const balanceOfReceiver2 = await contractInstance.balanceOf(erc1155ReceiverInstance.address, tokenId);
       expect(balanceOfReceiver2).to.equal(amount);
     });
 
     it("should fail: transfer to non ERC1155Receiver implementer", async function () {
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
+      const { contractInstance: erc1155NonReceiverInstance } = await deployErc1155NonReceiver();
+
       const tokenId_1 = 2;
-      await this.erc1155Instance.mint(this.owner.address, tokenId, amount, "0x");
-      await this.erc1155Instance.mint(this.owner.address, tokenId_1, amount, "0x");
-      const tx = this.erc1155Instance.safeBatchTransferFrom(
-        this.owner.address,
-        this.erc1155NonReceiverInstance.address,
+      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      await contractInstance.mint(owner.address, tokenId_1, amount, "0x");
+      const tx = contractInstance.safeBatchTransferFrom(
+        owner.address,
+        erc1155NonReceiverInstance.address,
         [tokenId, tokenId_1],
         [amount, amount],
         "0x",
@@ -50,14 +61,18 @@ export function shouldSafeBatchTransferFrom() {
     });
 
     it("should fail: not an owner", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
+      const { contractInstance: erc1155ReceiverInstance } = await deployErc1155Receiver();
+
       const tokenId_1 = 2;
-      await this.erc1155Instance.mint(this.owner.address, tokenId, amount, "0x");
-      await this.erc1155Instance.mint(this.owner.address, tokenId_1, amount, "0x");
-      const tx = this.erc1155Instance
-        .connect(this.receiver)
+      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      await contractInstance.mint(owner.address, tokenId_1, amount, "0x");
+      const tx = contractInstance
+        .connect(receiver)
         .safeBatchTransferFrom(
-          this.owner.address,
-          this.erc1155ReceiverInstance.address,
+          owner.address,
+          erc1155ReceiverInstance.address,
           [tokenId, tokenId_1],
           [amount, amount],
           "0x",
@@ -66,38 +81,42 @@ export function shouldSafeBatchTransferFrom() {
     });
 
     it("should transfer approved tokens to receiver contract", async function () {
-      const tokenId_1 = 2;
-      await this.erc1155Instance.mint(this.owner.address, tokenId, amount, "0x");
-      await this.erc1155Instance.mint(this.owner.address, tokenId_1, amount, "0x");
-      this.erc1155Instance.setApprovalForAll(this.receiver.address, true);
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
+      const { contractInstance: erc1155ReceiverInstance } = await deployErc1155Receiver();
 
-      const tx = this.erc1155Instance
-        .connect(this.receiver)
+      const tokenId_1 = 2;
+      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      await contractInstance.mint(owner.address, tokenId_1, amount, "0x");
+      contractInstance.setApprovalForAll(receiver.address, true);
+
+      const tx = contractInstance
+        .connect(receiver)
         .safeBatchTransferFrom(
-          this.owner.address,
-          this.erc1155ReceiverInstance.address,
+          owner.address,
+          erc1155ReceiverInstance.address,
           [tokenId, tokenId_1],
           [amount, amount],
           "0x",
         );
       await expect(tx)
-        .to.emit(this.erc1155Instance, "TransferBatch")
+        .to.emit(contractInstance, "TransferBatch")
         .withArgs(
-          this.receiver.address,
-          this.owner.address,
-          this.erc1155ReceiverInstance.address,
+          receiver.address,
+          owner.address,
+          erc1155ReceiverInstance.address,
           [tokenId, tokenId_1],
           [amount, amount],
         );
 
-      const balanceOfOwner1 = await this.erc1155Instance.balanceOf(this.owner.address, tokenId);
+      const balanceOfOwner1 = await contractInstance.balanceOf(owner.address, tokenId);
       expect(balanceOfOwner1).to.equal(0);
-      const balanceOfOwner2 = await this.erc1155Instance.balanceOf(this.owner.address, tokenId_1);
+      const balanceOfOwner2 = await contractInstance.balanceOf(owner.address, tokenId_1);
       expect(balanceOfOwner2).to.equal(0);
 
-      const balanceOfReceiver1 = await this.erc1155Instance.balanceOf(this.erc1155ReceiverInstance.address, tokenId);
+      const balanceOfReceiver1 = await contractInstance.balanceOf(erc1155ReceiverInstance.address, tokenId);
       expect(balanceOfReceiver1).to.equal(amount);
-      const balanceOfReceiver2 = await this.erc1155Instance.balanceOf(this.erc1155ReceiverInstance.address, tokenId);
+      const balanceOfReceiver2 = await contractInstance.balanceOf(erc1155ReceiverInstance.address, tokenId);
       expect(balanceOfReceiver2).to.equal(amount);
     });
   });

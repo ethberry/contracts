@@ -1,22 +1,25 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { BigNumber } from "ethers";
+import { BigNumber, constants } from "ethers";
 
 import { amount, tokenId } from "../../../constants";
+import { deployErc1155Base } from "../fixtures/base";
 
-export function shouldBalanceOfBatch() {
+export function shouldBalanceOfBatch(name: string) {
   describe("balanceOfBatch", function () {
     it("should fail for zero addr", async function () {
-      const tx = this.erc1155Instance.balanceOfBatch([ethers.constants.AddressZero], [tokenId]);
+      const { contractInstance } = await deployErc1155Base(name);
+
+      const tx = contractInstance.balanceOfBatch([constants.AddressZero], [tokenId]);
       await expect(tx).to.be.revertedWith(`ERC1155: address zero is not a valid owner`);
     });
 
     it("should get balance of owner", async function () {
-      await this.erc1155Instance.mint(this.owner.address, tokenId, amount, "0x");
-      const balances = await this.erc1155Instance.balanceOfBatch(
-        [this.owner.address, this.owner.address],
-        [tokenId, 0],
-      );
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
+
+      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      const balances = await contractInstance.balanceOfBatch([owner.address, owner.address], [tokenId, 0]);
       expect(balances).to.deep.equal([BigNumber.from(amount), BigNumber.from(0)]);
     });
   });

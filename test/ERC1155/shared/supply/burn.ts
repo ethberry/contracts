@@ -1,12 +1,18 @@
 import { expect } from "chai";
-import { amount, tokenId } from "../../../constants";
+import { ethers } from "hardhat";
 
-export function shouldBurn() {
+import { amount, tokenId } from "../../../constants";
+import { deployErc1155Base } from "../fixtures/base";
+
+export function shouldBurn(name: string) {
   describe("burn", function () {
     it("should fail: burn amount exceeds totalSupply", async function () {
-      await this.erc1155Instance.mint(this.owner.address, tokenId, amount, "0x");
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc1155Base(name);
 
-      const tx = this.erc1155Instance.burn(this.owner.address, tokenId, amount * 2);
+      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+
+      const tx = contractInstance.burn(owner.address, tokenId, amount * 2);
       await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds totalSupply");
     });
   });

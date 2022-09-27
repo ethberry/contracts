@@ -10,18 +10,18 @@ use(solidity);
 
 describe("ERC1155BaseUrl", function () {
   let erc1155: ContractFactory;
-  let erc1155Instance: ERC1155BaseUrlTest;
+  let contractInstance: ERC1155BaseUrlTest;
 
   beforeEach(async function () {
     erc1155 = await ethers.getContractFactory("ERC1155BaseUrlTest");
 
-    erc1155Instance = (await erc1155.deploy(baseTokenURI)) as ERC1155BaseUrlTest;
+    contractInstance = (await erc1155.deploy(baseTokenURI)) as ERC1155BaseUrlTest;
   });
 
   describe("uri", function () {
     it("should get token uri", async function () {
-      const uri2 = await erc1155Instance.uri(tokenId);
-      expect(uri2).to.equal(`${baseTokenURI}/${erc1155Instance.address.toLowerCase()}/{id}`);
+      const uri2 = await contractInstance.uri(tokenId);
+      expect(uri2).to.equal(`${baseTokenURI}/${contractInstance.address.toLowerCase()}/{id}`);
     });
   });
 });

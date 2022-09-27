@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-export function shouldGetTokenURI() {
+export function shouldERC721Storage() {
   describe("tokenURI", function () {
     it("should get default token URI", async function () {
       await this.erc721Instance.mint(this.owner.address);

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { tokenId } from "../../../constants";
+import { tokenId } from "../../../../constants";
 
 export function shouldTransferFrom() {
   describe("transferFrom", function () {

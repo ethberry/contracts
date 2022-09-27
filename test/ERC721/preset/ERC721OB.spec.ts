@@ -5,19 +5,9 @@ import { ContractFactory } from "ethers";
 
 import { ERC721AB, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { tokenName, tokenSymbol } from "../../constants";
-
-import { shouldHaveOwner } from "../../shared/ownable/owner";
-import { shouldMint } from "../shared/basic/mint";
-import { shouldSafeMint } from "../shared/basic/safeMint";
-import { shouldGetOwnerOf } from "../shared/basic/ownerOf";
-import { shouldApprove } from "../shared/basic/approve";
-import { shouldSetApprovalForAll } from "../shared/basic/setApprovalForAll";
-import { shouldGetBalanceOf } from "../shared/basic/balanceOf";
-import { shouldTransferFrom } from "../shared/basic/transferFrom";
-import { shouldSafeTransferFrom } from "../shared/basic/safeTransferFrom";
-import { shouldBurn } from "../shared/basic/burn";
-import { shouldTransferOwnership } from "../../shared/ownable/transferOwnership";
-import { shouldRenounceOwnership } from "../../shared/ownable/renounceOwnership";
+import { shouldERC721Burnable } from "../shared/basic/burn";
+import { shouldERC721Ownable } from "../shared/ownable";
+import { shouldERC721Base } from "../shared/basic/base";
 
 use(solidity);
 
@@ -39,18 +29,9 @@ describe("ERC721OB", function () {
     this.contractInstance = this.erc721Instance;
   });
 
-  shouldHaveOwner();
-  shouldTransferOwnership();
-  shouldRenounceOwnership();
-  shouldMint();
-  shouldSafeMint();
-  shouldGetOwnerOf();
-  shouldApprove();
-  shouldSetApprovalForAll();
-  shouldGetBalanceOf();
-  shouldTransferFrom();
-  shouldSafeTransferFrom();
-  shouldBurn();
+  shouldERC721Base();
+  shouldERC721Ownable();
+  shouldERC721Burnable();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

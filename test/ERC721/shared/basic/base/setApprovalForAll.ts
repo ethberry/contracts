@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { tokenId } from "../../../constants";
+import { tokenId } from "../../../../constants";
 
 export function shouldSetApprovalForAll() {
   describe("setApprovalForAll", function () {

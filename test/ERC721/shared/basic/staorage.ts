@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { tokenId } from "../../../constants";
 
-export function shouldGetTokenURI() {
+export function shouldERC721Storage() {
   describe("tokenURI", function () {
     it("should get default token URI", async function () {
       await this.contractInstance.mint(this.owner.address, 0);

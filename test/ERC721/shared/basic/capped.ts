@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-export function shouldCapped() {
+export function shouldERC721Capped() {
   describe("cap", function () {
     it("should fail: cap exceeded", async function () {
       await this.erc721Instance.mint(this.owner.address, 0);

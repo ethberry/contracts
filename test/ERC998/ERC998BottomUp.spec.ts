@@ -9,18 +9,18 @@ import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
 import { shouldGrantRole } from "../shared/accessControl/grantRole";
 import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
 import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
-import { shouldMint } from "../ERC721/shared/enumerable/mint";
-import { shouldSafeMint } from "../ERC721/shared/enumerable/safeMint";
-import { shouldGetOwnerOf } from "../ERC721/shared/enumerable/ownerOf";
-import { shouldApprove } from "../ERC721/shared/enumerable/approve";
-import { shouldSetApprovalForAll } from "../ERC721/shared/enumerable/setApprovalForAll";
-import { shouldGetBalanceOf } from "../ERC721/shared/enumerable/balanceOf";
-import { shouldTransferFrom } from "../ERC721/shared/enumerable/transferFrom";
-import { shouldSafeTransferFrom } from "../ERC721/shared/enumerable/safeTransferFrom";
-import { shouldBurn } from "../ERC721/shared/enumerable/burn";
-import { shouldGetTokenURI } from "../ERC721/shared/enumerable/tokenURI";
-import { shouldGetTokenOfOwnerByIndex } from "../ERC721/shared/enumerable/tokenOfOwnerByIndex";
-import { shouldGetCap } from "../ERC721/shared/enumerable/capped";
+import { shouldMint } from "../ERC721/shared/enumerable/base/mint";
+import { shouldSafeMint } from "../ERC721/shared/enumerable/base/safeMint";
+import { shouldGetOwnerOf } from "../ERC721/shared/enumerable/base/ownerOf";
+import { shouldApprove } from "../ERC721/shared/enumerable/base/approve";
+import { shouldSetApprovalForAll } from "../ERC721/shared/enumerable/base/setApprovalForAll";
+import { shouldGetBalanceOf } from "../ERC721/shared/enumerable/base/balanceOf";
+import { shouldTransferFrom } from "../ERC721/shared/enumerable/base/transferFrom";
+import { shouldSafeTransferFrom } from "../ERC721/shared/enumerable/base/safeTransferFrom";
+import { shouldERC721Burnable } from "../ERC721/shared/enumerable/burn";
+import { shouldERC721Storage } from "../ERC721/shared/enumerable/storage";
+import { shouldGetTokenOfOwnerByIndex } from "../ERC721/shared/enumerable/base/tokenOfOwnerByIndex";
+import { shouldERC721Capped } from "../ERC721/shared/enumerable/capped";
 
 use(solidity);
 
@@ -53,10 +53,10 @@ describe("ERC998BottomUp", function () {
   shouldGetBalanceOf();
   shouldTransferFrom();
   shouldSafeTransferFrom();
-  shouldBurn();
-  shouldGetTokenURI();
+  shouldERC721Burnable();
+  shouldERC721Storage();
   shouldGetTokenOfOwnerByIndex();
-  shouldGetCap();
+  shouldERC721Capped();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

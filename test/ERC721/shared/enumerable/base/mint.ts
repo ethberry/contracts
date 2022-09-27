@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { accessControlInterfaceId, MINTER_ROLE } from "../../../constants";
+import { accessControlInterfaceId, MINTER_ROLE } from "../../../../constants";
 
 export function shouldMint() {
   describe("mint", function () {

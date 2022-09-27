@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { tokenId } from "../../../constants";
+import { tokenId } from "../../../../constants";
 
 export function shouldGetOwnerOf() {
   describe("ownerOf", function () {

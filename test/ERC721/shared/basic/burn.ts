@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { tokenId } from "../../../constants";
 
-export function shouldBurn() {
+export function shouldERC721Burnable() {
   describe("burn", function () {
     it("should fail: not an owner", async function () {
       await this.erc721Instance.mint(this.owner.address, tokenId);

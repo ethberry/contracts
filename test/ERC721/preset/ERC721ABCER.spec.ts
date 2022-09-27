@@ -5,27 +5,11 @@ import { ContractFactory } from "ethers";
 
 import { ERC721ABCER, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, royalty, tokenName, tokenSymbol } from "../../constants";
-
-import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
-import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
-import { shouldGrantRole } from "../../shared/accessControl/grantRole";
-import { shouldRevokeRole } from "../../shared/accessControl/revokeRole";
-import { shouldRenounceRole } from "../../shared/accessControl/renounceRole";
-import { shouldMint } from "../shared/enumerable/mint";
-import { shouldSafeMint } from "../shared/enumerable/safeMint";
-import { shouldGetOwnerOf } from "../shared/enumerable/ownerOf";
-import { shouldApprove } from "../shared/enumerable/approve";
-import { shouldSetApprovalForAll } from "../shared/enumerable/setApprovalForAll";
-import { shouldGetBalanceOf } from "../shared/enumerable/balanceOf";
-import { shouldTransferFrom } from "../shared/enumerable/transferFrom";
-import { shouldSafeTransferFrom } from "../shared/enumerable/safeTransferFrom";
-import { shouldBurn } from "../shared/enumerable/burn";
-import { shouldGetTokenOfOwnerByIndex } from "../shared/enumerable/tokenOfOwnerByIndex";
-import { shouldGetCap } from "../shared/enumerable/capped";
-import { shouldSetTokenRoyalty } from "../../shared/royalty/setTokenRoyalty";
-import { shouldSetDefaultRoyalty } from "../../shared/royalty/setDefaultRoyalty";
-import { shouldGetRoyaltyInfo } from "../../shared/royalty/royaltyInfo";
-import { shouldBurnBasic } from "../../shared/royalty/burnBasic";
+import { shouldERC721Acessible } from "../shared/accessible";
+import { shouldERC721Burnable } from "../shared/enumerable/burn";
+import { shouldERC721Capped } from "../shared/enumerable/capped";
+import { shouldERC721Base } from "../shared/enumerable/base";
+import { shouldERC721Royalty } from "../shared/enumerable/royalty";
 
 use(solidity);
 
@@ -47,26 +31,11 @@ describe("ERC721ABCER", function () {
     this.contractInstance = this.erc721Instance;
   });
 
-  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldGrantRole();
-  shouldRevokeRole();
-  shouldRenounceRole();
-  shouldMint();
-  shouldSafeMint();
-  shouldGetOwnerOf();
-  shouldApprove();
-  shouldSetApprovalForAll();
-  shouldGetBalanceOf();
-  shouldTransferFrom();
-  shouldSafeTransferFrom();
-  shouldBurn();
-  shouldGetTokenOfOwnerByIndex();
-  shouldGetCap();
-  shouldSetTokenRoyalty();
-  shouldSetDefaultRoyalty();
-  shouldGetRoyaltyInfo();
-  shouldBurnBasic(true);
+  shouldERC721Base();
+  shouldERC721Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC721Burnable();
+  shouldERC721Capped();
+  shouldERC721Royalty();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

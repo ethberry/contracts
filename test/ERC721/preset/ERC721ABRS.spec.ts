@@ -5,26 +5,11 @@ import { ContractFactory } from "ethers";
 
 import { ERC721ABRS, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, royalty, tokenName, tokenSymbol } from "../../constants";
-
-import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
-import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
-import { shouldGrantRole } from "../../shared/accessControl/grantRole";
-import { shouldRevokeRole } from "../../shared/accessControl/revokeRole";
-import { shouldRenounceRole } from "../../shared/accessControl/renounceRole";
-import { shouldMint } from "../shared/basic/mint";
-import { shouldSafeMint } from "../shared/basic/safeMint";
-import { shouldGetOwnerOf } from "../shared/basic/ownerOf";
-import { shouldApprove } from "../shared/basic/approve";
-import { shouldSetApprovalForAll } from "../shared/basic/setApprovalForAll";
-import { shouldGetBalanceOf } from "../shared/basic/balanceOf";
-import { shouldTransferFrom } from "../shared/basic/transferFrom";
-import { shouldSafeTransferFrom } from "../shared/basic/safeTransferFrom";
-import { shouldBurn } from "../shared/basic/burn";
-import { shouldGetTokenURI } from "../shared/basic/tokenURI";
-import { shouldSetTokenRoyalty } from "../../shared/royalty/setTokenRoyalty";
-import { shouldSetDefaultRoyalty } from "../../shared/royalty/setDefaultRoyalty";
-import { shouldGetRoyaltyInfo } from "../../shared/royalty/royaltyInfo";
-import { shouldBurnBasic } from "../../shared/royalty/burnBasic";
+import { shouldERC721Burnable } from "../shared/basic/burn";
+import { shouldERC721Storage } from "../shared/basic/staorage";
+import { shouldERC721Acessible } from "../shared/accessible";
+import { shouldERC721Base } from "../shared/basic/base";
+import { shouldERC721Royalty } from "../shared/basic/royalty";
 
 use(solidity);
 
@@ -46,25 +31,11 @@ describe("ERC721ABRS", function () {
     this.contractInstance = this.erc721Instance;
   });
 
-  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldGrantRole();
-  shouldRevokeRole();
-  shouldRenounceRole();
-  shouldMint();
-  shouldSafeMint();
-  shouldGetOwnerOf();
-  shouldApprove();
-  shouldSetApprovalForAll();
-  shouldGetBalanceOf();
-  shouldTransferFrom();
-  shouldSafeTransferFrom();
-  shouldBurn();
-  shouldGetTokenURI();
-  shouldSetTokenRoyalty();
-  shouldSetDefaultRoyalty();
-  shouldGetRoyaltyInfo();
-  shouldBurnBasic();
+  shouldERC721Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC721Base();
+  shouldERC721Burnable();
+  shouldERC721Royalty();
+  shouldERC721Storage();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

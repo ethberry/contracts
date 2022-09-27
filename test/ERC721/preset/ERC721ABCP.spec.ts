@@ -4,23 +4,11 @@ import { expect } from "chai";
 
 import { ERC721ABCP, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, tokenName, tokenSymbol } from "../../constants";
-
-import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
-import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
-import { shouldGrantRole } from "../../shared/accessControl/grantRole";
-import { shouldRevokeRole } from "../../shared/accessControl/revokeRole";
-import { shouldRenounceRole } from "../../shared/accessControl/renounceRole";
-import { shouldMint } from "../shared/basic/mint";
-import { shouldSafeMint } from "../shared/basic/safeMint";
-import { shouldGetOwnerOf } from "../shared/basic/ownerOf";
-import { shouldApprove } from "../shared/basic/approve";
-import { shouldSetApprovalForAll } from "../shared/basic/setApprovalForAll";
-import { shouldGetBalanceOf } from "../shared/basic/balanceOf";
-import { shouldTransferFrom } from "../shared/basic/transferFrom";
-import { shouldSafeTransferFrom } from "../shared/basic/safeTransferFrom";
-import { shouldBurn } from "../shared/basic/burn";
-import { shouldCapped } from "../shared/basic/capped";
-import { shouldPause } from "../shared/basic/pausable";
+import { shouldERC721Burnable } from "../shared/basic/burn";
+import { shouldERC721Capped } from "../shared/basic/capped";
+import { shouldERC721Pause } from "../shared/basic/pausable";
+import { shouldERC721Acessible } from "../shared/accessible";
+import { shouldERC721Base } from "../shared/basic/base";
 
 describe("ERC721ABCP", function () {
   let erc721: ContractFactory;
@@ -40,22 +28,11 @@ describe("ERC721ABCP", function () {
     this.contractInstance = this.erc721Instance;
   });
 
-  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE);
-  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE);
-  shouldGrantRole();
-  shouldRevokeRole();
-  shouldRenounceRole();
-  shouldMint();
-  shouldSafeMint();
-  shouldGetOwnerOf();
-  shouldApprove();
-  shouldSetApprovalForAll();
-  shouldGetBalanceOf();
-  shouldTransferFrom();
-  shouldSafeTransferFrom();
-  shouldBurn();
-  shouldCapped();
-  shouldPause();
+  shouldERC721Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE);
+  shouldERC721Base();
+  shouldERC721Burnable();
+  shouldERC721Capped();
+  shouldERC721Pause();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount } from "../../constants";
+import { amount } from "../../../constants";
 
 export function shouldApprove() {
   describe("approve", function () {

@@ -1,20 +1,13 @@
 import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
-import { amount, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldHaveOwner } from "../../shared/ownable/owner";
-import { shouldTransferOwnership } from "../../shared/ownable/transferOwnership";
-import { shouldRenounceOwnership } from "../../shared/ownable/renounceOwnership";
-import { shouldMint } from "../shared/mint";
-import { shouldBalanceOf } from "../shared/balanceOf";
-import { shouldTransfer } from "../shared/transfer";
-import { shouldTransferFrom } from "../shared/transferFrom";
+import { amount, tokenName, tokenSymbol } from "../../constants";
 import { shouldSnapshot } from "../shared/snapshot";
-import { shouldApprove } from "../shared/approve";
-import { shouldBurn } from "../shared/burn";
-import { shouldBurnFrom } from "../shared/burnFrom";
 import { shouldCap } from "../shared/cap";
+import { shouldERC20Base } from "../shared/base";
+import { shouldERC20Burnable } from "../shared/burnable";
+import { shouldERC20Ownable } from "../shared/ownable";
 
 use(solidity);
 
@@ -31,17 +24,10 @@ describe("ERC20OBCS", function () {
     this.contractInstance = this.erc20Instance;
   });
 
-  shouldHaveOwner();
-  shouldTransferOwnership();
-  shouldRenounceOwnership();
-  shouldMint();
-  shouldBalanceOf(true);
-  shouldTransfer();
-  shouldTransferFrom();
+  shouldERC20Ownable();
+  shouldERC20Base();
+  shouldERC20Burnable();
   shouldSnapshot();
-  shouldApprove();
-  shouldBurn();
-  shouldBurnFrom();
   shouldCap();
 
   describe("supportsInterface", function () {

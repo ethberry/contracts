@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { amount } from "../../constants";
+import { amount } from "../../../constants";
 
 export function shouldTransfer() {
   describe("transfer", function () {

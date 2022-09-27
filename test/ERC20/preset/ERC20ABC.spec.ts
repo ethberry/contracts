@@ -1,21 +1,12 @@
 import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
-import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 
-import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
-import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
-import { shouldGrantRole } from "../../shared/accessControl/grantRole";
-import { shouldRevokeRole } from "../../shared/accessControl/revokeRole";
-import { shouldRenounceRole } from "../../shared/accessControl/renounceRole";
-import { shouldMint } from "../shared/mint";
-import { shouldBalanceOf } from "../shared/balanceOf";
-import { shouldTransfer } from "../shared/transfer";
-import { shouldTransferFrom } from "../shared/transferFrom";
-import { shouldApprove } from "../shared/approve";
-import { shouldBurn } from "../shared/burn";
-import { shouldBurnFrom } from "../shared/burnFrom";
+import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 import { shouldCap } from "../shared/cap";
+import { shouldERC20Base } from "../shared/base";
+import { shouldERC20Burnable } from "../shared/burnable";
+import { shouldERC20Accessible } from "../shared/accessible";
 
 use(solidity);
 
@@ -32,18 +23,9 @@ describe("ERC20ABC", function () {
     this.contractInstance = this.erc20Instance;
   });
 
-  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldGrantRole();
-  shouldRevokeRole();
-  shouldRenounceRole();
-  shouldMint();
-  shouldBalanceOf(true);
-  shouldTransfer();
-  shouldTransferFrom();
-  shouldApprove();
-  shouldBurn();
-  shouldBurnFrom();
+  shouldERC20Accessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC20Base();
+  shouldERC20Burnable();
   shouldCap();
 
   describe("supportsInterface", function () {

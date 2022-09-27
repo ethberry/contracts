@@ -2,30 +2,37 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { accessControlInterfaceId, amount, MINTER_ROLE } from "../../../constants";
+import { deployErc20Base } from "../fixtures";
 
-export function shouldMint() {
+export function shouldMint(name: string) {
   describe("mint", function () {
     it("should fail: account is missing role", async function () {
-      const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
+      const [_owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc20Base(name);
 
-      const tx = this.contractInstance.connect(this.receiver).mint(this.receiver.address, amount);
+      const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
+
+      const tx = contractInstance.connect(receiver).mint(receiver.address, amount);
       await expect(tx).to.be.revertedWith(
         supportsAccessControl
-          ? `AccessControl: account ${this.receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`
+          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`
           : "Ownable: caller is not the owner",
       );
     });
 
     it("should mint", async function () {
-      const tx = this.contractInstance.mint(this.owner.address, amount);
-      await expect(tx)
-        .to.emit(this.contractInstance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, this.owner.address, amount);
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc20Base(name);
 
-      const balance = await this.contractInstance.balanceOf(this.owner.address);
+      const tx = contractInstance.mint(owner.address, amount);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(ethers.constants.AddressZero, owner.address, amount);
+
+      const balance = await contractInstance.balanceOf(owner.address);
       expect(balance).to.equal(amount);
 
-      const totalSupply = await this.contractInstance.totalSupply();
+      const totalSupply = await contractInstance.totalSupply();
       expect(totalSupply).to.equal(amount);
     });
   });

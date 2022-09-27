@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 
 import "./ERC20AB.sol";
 
-contract ERC20ABP is ERC20AB, ERC20Permit {
+contract ERC20ABT is ERC20AB, ERC20Permit {
   constructor(string memory name, string memory symbol) ERC20AB(name, symbol) ERC20Permit(name) {}
 
   // this function exist because of ganache bug

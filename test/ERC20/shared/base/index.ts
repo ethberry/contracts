@@ -4,10 +4,10 @@ import { shouldTransfer } from "./transfer";
 import { shouldTransferFrom } from "./transferFrom";
 import { shouldApprove } from "./approve";
 
-export function shouldERC20Base() {
-  shouldMint();
-  shouldBalanceOf();
-  shouldTransfer();
-  shouldTransferFrom();
-  shouldApprove();
+export function shouldERC20Base(name: string) {
+  shouldMint(name);
+  shouldBalanceOf(name);
+  shouldTransfer(name);
+  shouldTransferFrom(name);
+  shouldApprove(name);
 }

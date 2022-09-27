@@ -2,16 +2,21 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { amount } from "../../../constants";
+import { deployErc20Base } from "../fixtures";
 
-export function shouldFlashFee() {
+export function shouldFlashFee(name: string) {
   describe("flashFee", function () {
     it("token match", async function () {
-      const flashFee = await this.erc20Instance.flashFee(this.erc20Instance.address, amount);
+      const { contractInstance } = await deployErc20Base(name);
+
+      const flashFee = await contractInstance.flashFee(contractInstance.address, amount);
       expect(flashFee).to.equal(0);
     });
 
     it("token mismatch", async function () {
-      const tx = this.erc20Instance.flashFee(ethers.constants.AddressZero, amount);
+      const { contractInstance } = await deployErc20Base(name);
+
+      const tx = contractInstance.flashFee(ethers.constants.AddressZero, amount);
       await expect(tx).to.be.revertedWith("ERC20FlashMint: wrong token");
     });
   });

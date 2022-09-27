@@ -1,5 +1,5 @@
 import { shouldMint } from "./mint";
 
-export function shouldERC20Capped() {
-  shouldMint();
+export function shouldERC20Capped(name: string) {
+  shouldMint(name);
 }

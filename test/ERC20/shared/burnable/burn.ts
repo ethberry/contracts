@@ -2,33 +2,40 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { amount } from "../../../constants";
+import { deployErc20Base } from "../fixtures";
 
-export function shouldBurn() {
+export function shouldBurn(name: string) {
   describe("burn", function () {
     it("should fail: burn amount exceeds balance", async function () {
-      const tx = this.contractInstance.burn(amount);
+      const { contractInstance } = await deployErc20Base(name);
+
+      const tx = contractInstance.burn(amount);
       await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds balance");
     });
 
     it("should burn zero", async function () {
-      const tx = this.contractInstance.burn(0);
-      await expect(tx)
-        .to.emit(this.contractInstance, "Transfer")
-        .withArgs(this.owner.address, ethers.constants.AddressZero, 0);
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc20Base(name);
+
+      const tx = contractInstance.burn(0);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, 0);
     });
 
     it("should burn tokens", async function () {
-      await this.contractInstance.mint(this.owner.address, amount);
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc20Base(name);
 
-      const tx = this.contractInstance.burn(amount);
+      await contractInstance.mint(owner.address, amount);
+
+      const tx = contractInstance.burn(amount);
       await expect(tx)
-        .to.emit(this.contractInstance, "Transfer")
-        .withArgs(this.owner.address, ethers.constants.AddressZero, amount);
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(owner.address, ethers.constants.AddressZero, amount);
 
-      const balance = await this.contractInstance.balanceOf(this.owner.address);
+      const balance = await contractInstance.balanceOf(owner.address);
       expect(balance).to.equal(0);
 
-      const totalSupply = await this.contractInstance.totalSupply();
+      const totalSupply = await contractInstance.totalSupply();
       expect(totalSupply).to.equal(0);
     });
   });

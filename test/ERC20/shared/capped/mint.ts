@@ -1,11 +1,16 @@
 import { expect } from "chai";
 
 import { amount } from "../../../constants";
+import { ethers } from "hardhat";
+import { deployErc20Base } from "../fixtures";
 
-export function shouldMint() {
+export function shouldMint(name: string) {
   describe("mint", function () {
     it("should fail: cap exceeded", async function () {
-      const tx = this.contractInstance.mint(this.owner.address, amount + 1);
+      const [owner] = await ethers.getSigners();
+      const { contractInstance } = await deployErc20Base(name);
+
+      const tx = contractInstance.mint(owner.address, amount + 1);
       await expect(tx).to.be.revertedWith("ERC20Capped: cap exceeded");
     });
   });

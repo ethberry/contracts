@@ -1,10 +1,13 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { deployErc20Base } from "../fixtures";
 
-export function shouldFlashFeeReceiver() {
+export function shouldFlashFeeReceiver(name: string) {
   describe("flashFeeReceiver", function () {
     it("default receiver", async function () {
-      const flashFeeReceiver = await this.erc20Instance.flashFeeReceiver();
+      const { contractInstance } = await deployErc20Base(name);
+
+      const flashFeeReceiver = await contractInstance.flashFeeReceiver();
       expect(flashFeeReceiver).to.equal(ethers.constants.AddressZero);
     });
   });

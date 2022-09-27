@@ -2,82 +2,87 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { amount } from "../../../constants";
+import { deployErc20Base } from "../fixtures";
+import { deployErc20Wallet } from "../fixtures/wallet";
 
-export function shouldTransferFrom() {
+export function shouldTransferFrom(name: string) {
   describe("transferFrom", function () {
     it("should transfer", async function () {
-      await this.contractInstance.mint(this.owner.address, amount);
-      await this.contractInstance.approve(this.receiver.address, amount);
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc20Base(name);
 
-      const tx = this.contractInstance
-        .connect(this.receiver)
-        .transferFrom(this.owner.address, this.receiver.address, amount);
-      await expect(tx)
-        .to.emit(this.contractInstance, "Transfer")
-        .withArgs(this.owner.address, this.receiver.address, amount);
+      await contractInstance.mint(owner.address, amount);
+      await contractInstance.approve(receiver.address, amount);
 
-      const receiverBalance = await this.contractInstance.balanceOf(this.receiver.address);
+      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, amount);
+
+      const receiverBalance = await contractInstance.balanceOf(receiver.address);
       expect(receiverBalance).to.equal(amount);
-      const balanceOfOwner = await this.contractInstance.balanceOf(this.owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
     });
 
     it("should transfer to contract", async function () {
-      await this.contractInstance.mint(this.owner.address, amount);
-      await this.contractInstance.approve(this.receiver.address, amount);
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc20Base(name);
+      const { contractInstance: erc20NonReceiverInstance } = await deployErc20Wallet();
 
-      const tx = this.contractInstance
-        .connect(this.receiver)
-        .transferFrom(this.owner.address, this.erc20NonReceiverInstance.address, amount);
+      await contractInstance.mint(owner.address, amount);
+      await contractInstance.approve(receiver.address, amount);
+
+      const tx = contractInstance
+        .connect(receiver)
+        .transferFrom(owner.address, erc20NonReceiverInstance.address, amount);
       await expect(tx)
-        .to.emit(this.contractInstance, "Transfer")
-        .withArgs(this.owner.address, this.erc20NonReceiverInstance.address, amount);
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(owner.address, erc20NonReceiverInstance.address, amount);
 
-      const nonReceiverBalance = await this.contractInstance.balanceOf(this.erc20NonReceiverInstance.address);
+      const nonReceiverBalance = await contractInstance.balanceOf(erc20NonReceiverInstance.address);
       expect(nonReceiverBalance).to.equal(amount);
-      const balanceOfOwner = await this.contractInstance.balanceOf(this.owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
     });
 
     it("should fail: double transfer, amount exceeds allowance", async function () {
-      await this.contractInstance.mint(this.owner.address, amount);
-      await this.contractInstance.approve(this.receiver.address, amount);
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc20Base(name);
 
-      const tx = this.contractInstance
-        .connect(this.receiver)
-        .transferFrom(this.owner.address, this.receiver.address, amount);
-      await expect(tx)
-        .to.emit(this.contractInstance, "Transfer")
-        .withArgs(this.owner.address, this.receiver.address, amount);
+      await contractInstance.mint(owner.address, amount);
+      await contractInstance.approve(receiver.address, amount);
 
-      const tx1 = this.contractInstance
-        .connect(this.receiver)
-        .transferFrom(this.owner.address, this.receiver.address, amount);
+      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, amount);
+
+      const tx1 = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
       await expect(tx1).to.be.revertedWith(`ERC20: insufficient allowance`);
     });
 
     it("should fail: transfer to the zero address", async function () {
-      await this.contractInstance.mint(this.owner.address, amount);
-      await this.contractInstance.approve(this.receiver.address, amount);
-      const tx = this.contractInstance
-        .connect(this.receiver)
-        .transferFrom(this.owner.address, ethers.constants.AddressZero, amount);
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc20Base(name);
+
+      await contractInstance.mint(owner.address, amount);
+      await contractInstance.approve(receiver.address, amount);
+      const tx = contractInstance.connect(receiver).transferFrom(owner.address, ethers.constants.AddressZero, amount);
       await expect(tx).to.be.revertedWith(`ERC20: transfer to the zero address`);
     });
 
     it("should fail: transfer amount exceeds balance", async function () {
-      await this.contractInstance.approve(this.receiver.address, amount);
-      const tx = this.contractInstance
-        .connect(this.receiver)
-        .transferFrom(this.owner.address, this.receiver.address, amount);
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc20Base(name);
+
+      await contractInstance.approve(receiver.address, amount);
+      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
       await expect(tx).to.be.revertedWith(`ERC20: transfer amount exceeds balance`);
     });
 
     it("should fail: transfer amount exceeds allowance", async function () {
-      await this.contractInstance.mint(this.owner.address, amount);
-      const tx = this.contractInstance
-        .connect(this.receiver)
-        .transferFrom(this.owner.address, this.receiver.address, amount);
+      const [owner, receiver] = await ethers.getSigners();
+      const { contractInstance } = await deployErc20Base(name);
+
+      await contractInstance.mint(owner.address, amount);
+      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
       await expect(tx).to.be.revertedWith(`ERC20: insufficient allowance`);
     });
   });

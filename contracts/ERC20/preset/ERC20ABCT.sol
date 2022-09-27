@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 
 import "./ERC20ABC.sol";
 
-contract ERC20ABCP is ERC20ABC, ERC20Permit {
+contract ERC20ABCT is ERC20ABC, ERC20Permit {
   constructor(
     string memory name,
     string memory symbol,

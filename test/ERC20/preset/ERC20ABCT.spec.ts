@@ -2,6 +2,7 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
+import { shouldERC20Permit } from "../shared/permit";
 import { shouldERC20Base } from "../shared/base";
 import { shouldERC20Burnable } from "../shared/burnable";
 import { shouldERC20Accessible } from "../shared/accessible";
@@ -10,13 +11,14 @@ import { deployErc20Base } from "../shared/fixtures";
 
 use(solidity);
 
-describe("ERC20ABC", function () {
-  const name = "ERC20ABC";
+describe("ERC20ABCT", function () {
+  const name = "ERC20ABCT";
 
   shouldERC20Base(name);
   shouldERC20Accessible(name)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldERC20Burnable(name);
   shouldERC20Capped(name);
+  shouldERC20Permit(name);
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

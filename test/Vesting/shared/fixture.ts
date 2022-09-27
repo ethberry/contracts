@@ -1,19 +1,27 @@
 import { ethers } from "hardhat";
-import { constants } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
+import { AbstractVesting, ERC20ABCS } from "../../../typechain-types";
+import { amount, tokenName, tokenSymbol } from "../../constants";
 
-export async function deployVestingFixture(name: string) {
+export async function deployVestingFixture(name: string): Promise<{ contractInstance: AbstractVesting }> {
   const [owner, receiver] = await ethers.getSigners();
   const current = await time.latest();
   const vestingFactory = await ethers.getContractFactory(name);
-  const contractInstance = await vestingFactory.deploy(receiver.address, current.toNumber(), 10000);
+  const vestingInstance = (await vestingFactory.deploy(receiver.address, current.toNumber(), 10000)) as AbstractVesting;
 
   await owner.sendTransaction({
-    to: contractInstance.address,
-    value: constants.WeiPerEther,
+    to: vestingInstance.address,
+    value: amount * 100,
   });
 
-  return {
-    contractInstance,
-  };
+  return { contractInstance: vestingInstance };
+}
+
+export async function deployERC20Fixture(contractInstance: AbstractVesting): Promise<{ contractInstance: ERC20ABCS }> {
+  const erc20Factory = await ethers.getContractFactory("ERC20ABCS");
+  const erc20Instance = await erc20Factory.deploy(tokenName, tokenSymbol, amount * 100);
+
+  await erc20Instance.functions.mint(contractInstance.address, amount * 100);
+
+  return { contractInstance: erc20Instance };
 }

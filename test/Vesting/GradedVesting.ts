@@ -1,54 +1,57 @@
 import { expect } from "chai";
 import { ethers, web3 } from "hardhat";
-import { constants } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
-import { deployVestingFixture } from "./shared/fixture";
+import { deployVestingFixture, deployERC20Fixture } from "./shared/fixture";
+import { shouldHaveOwner } from "./shared/owner";
+import { shouldRenounceOwnership } from "./shared/renounceOwnership";
+import { shouldTransferOwnership } from "./shared/transferOwnership";
+import { amount } from "../constants";
 
 describe("GradedVesting", function () {
   const span = 2500;
 
+  shouldHaveOwner("GradedVesting");
+  shouldRenounceOwnership("GradedVesting");
+  shouldTransferOwnership("GradedVesting");
+
   it("should release", async function () {
     const [_owner, receiver] = await ethers.getSigners();
-    const { contractInstance } = await deployVestingFixture("GradedVesting");
+    const { contractInstance: vestingInstance } = await deployVestingFixture("GradedVesting");
+    const expectedAmounts = [0, amount * 10, amount * 20, amount * 30, amount * 40, 0];
 
-    const tx1 = await contractInstance["release()"]();
-    await expect(tx1).to.changeEtherBalances([contractInstance, receiver], [0, 0]);
+    for (const expectedAmount of expectedAmounts) {
+      const releaseable = await vestingInstance["releaseable()"]();
+      expect(releaseable).to.be.equal(expectedAmount);
 
-    const current1 = await time.latest();
-    await time.increaseTo(current1.add(web3.utils.toBN(span)));
+      const tx = await vestingInstance["release()"]();
+      await expect(tx).changeEtherBalances([vestingInstance, receiver], [releaseable.mul(-1), releaseable]);
 
-    const tx2 = await contractInstance["release()"]();
-    await expect(tx2).to.changeEtherBalances(
-      [contractInstance, receiver],
-      [constants.WeiPerEther.div(100).mul(10).mul(-1), constants.WeiPerEther.div(100).mul(10)],
-    );
+      const current = await time.latest();
+      await time.increaseTo(current.add(web3.utils.toBN(span)));
+    }
+  });
 
-    const current2 = await time.latest();
-    await time.increaseTo(current2.add(web3.utils.toBN(span)));
+  it("should release ERC20", async function () {
+    const [_owner, receiver] = await ethers.getSigners();
+    const { contractInstance: vestingInstance } = await deployVestingFixture("GradedVesting");
+    const { contractInstance: erc20Instance } = await deployERC20Fixture(vestingInstance);
 
-    const tx3 = await contractInstance["release()"]();
-    await expect(tx3).to.changeEtherBalances(
-      [contractInstance, receiver],
-      [constants.WeiPerEther.div(100).mul(20).mul(-1), constants.WeiPerEther.div(100).mul(20)],
-    );
+    const expectedAmounts = [0, amount * 10, amount * 20, amount * 30, amount * 40, 0];
 
-    const current3 = await time.latest();
-    await time.increaseTo(current3.add(web3.utils.toBN(span)));
+    for (const expectedAmount of expectedAmounts) {
+      const releaseable = await vestingInstance["releaseable(address)"](erc20Instance.address);
+      expect(releaseable).to.be.equal(expectedAmount);
 
-    const tx4 = await contractInstance["release()"]();
-    await expect(tx4).to.changeEtherBalances(
-      [contractInstance, receiver],
-      [constants.WeiPerEther.div(100).mul(30).mul(-1), constants.WeiPerEther.div(100).mul(30)],
-    );
+      const tx = await vestingInstance["release(address)"](erc20Instance.address);
+      await expect(tx).changeTokenBalances(
+        erc20Instance,
+        [vestingInstance.address, receiver.address],
+        [releaseable.mul(-1), releaseable],
+      );
 
-    const current4 = await time.latest();
-    await time.increaseTo(current4.add(web3.utils.toBN(span)));
-
-    const tx5 = await contractInstance["release()"]();
-    await expect(tx5).to.changeEtherBalances(
-      [contractInstance, receiver],
-      [constants.WeiPerEther.div(100).mul(40).mul(-1), constants.WeiPerEther.div(100).mul(40)],
-    );
+      const current = await time.latest();
+      await time.increaseTo(current.add(web3.utils.toBN(span)));
+    }
   });
 });

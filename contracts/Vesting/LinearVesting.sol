@@ -6,14 +6,14 @@
 
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/finance/VestingWallet.sol";
+import "./AbstractVesting.sol";
 
-contract LinearVesting is VestingWallet {
+contract LinearVesting is AbstractVesting {
   constructor(
     address account,
     uint64 startTimestamp,
     uint64 duration
-  ) VestingWallet(account, startTimestamp, duration) {}
+  ) AbstractVesting(account, startTimestamp, duration) {}
 
   function _vestingSchedule(uint256 totalAllocation, uint64 timestamp) internal view override returns (uint256) {
     uint256 period = duration() / 4;

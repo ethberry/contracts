@@ -7,7 +7,7 @@
 pragma solidity ^0.8.9;
 
 import "./ERC721OB.sol";
-import "../ERC721ORoyalty.sol";
+import "../extensions/ERC721ORoyalty.sol";
 
 contract ERC721OBR is ERC721OB, ERC721ORoyalty {
   constructor(

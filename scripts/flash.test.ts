@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { amount, tokenName, tokenSymbol } from "../test/constants";
 
 async function main() {
-  const erc20 = await ethers.getContractFactory("ERC20ACFM");
+  const erc20 = await ethers.getContractFactory("ERC20AF");
   const erc20Instance = await erc20.deploy(tokenName, tokenSymbol);
 
   const erc20FlashBorrower = await ethers.getContractFactory("ERC3156FlashBorrowerMock");

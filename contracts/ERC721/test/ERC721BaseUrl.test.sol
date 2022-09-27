@@ -6,18 +6,18 @@
 
 pragma solidity ^0.8.9;
 
-import "../ERC721ACBaseUrl.sol";
-import "../preset/ERC721ACBRS.sol";
+import "../preset/ERC721ABRS.sol";
+import "../extensions/ERC721ABaseUrl.sol";
 
-contract ERC721BaseUrlTest is ERC721ACBRS, ERC721ACBaseUrl {
+contract ERC721BaseUrlTest is ERC721ABRS, ERC721ABaseUrl {
   constructor(
     string memory name,
     string memory symbol,
     uint96 royaltyNumerator,
     string memory baseTokenURI
-  ) ERC721ACBRS(name, symbol, royaltyNumerator) ERC721ACBaseUrl(baseTokenURI) {}
+  ) ERC721ABRS(name, symbol, royaltyNumerator) ERC721ABaseUrl(baseTokenURI) {}
 
-  function _baseURI() internal view virtual override(ERC721, ERC721ACBaseUrl) returns (string memory) {
+  function _baseURI() internal view virtual override(ERC721, ERC721ABaseUrl) returns (string memory) {
     return super._baseURI();
   }
 
@@ -25,7 +25,7 @@ contract ERC721BaseUrlTest is ERC721ACBRS, ERC721ACBaseUrl {
     public
     view
     virtual
-    override(AccessControl, ERC721ACBRS)
+    override(AccessControl, ERC721ABRS)
     returns (bool)
   {
     return super.supportsInterface(interfaceId);

@@ -22,7 +22,7 @@ describe("ERC20Factory", function () {
   let network: Network;
 
   beforeEach(async function () {
-    erc20 = await ethers.getContractFactory("ERC20ACBCS");
+    erc20 = await ethers.getContractFactory("ERC20ABCS");
     factory = await ethers.getContractFactory("ERC20Factory");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 

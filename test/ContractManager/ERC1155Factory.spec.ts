@@ -31,7 +31,7 @@ describe("ERC1155Factory", function () {
   let network: Network;
 
   beforeEach(async function () {
-    erc1155 = await ethers.getContractFactory("ERC1155ACBSR");
+    erc1155 = await ethers.getContractFactory("ERC1155ABSR");
     factory = await ethers.getContractFactory("ERC1155Factory");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 

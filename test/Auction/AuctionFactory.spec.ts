@@ -4,7 +4,7 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
-import { AuctionFactory, ERC721ACB } from "../../typechain-types";
+import { AuctionFactory, ERC721AB } from "../../typechain-types";
 import { amount, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenId, tokenName, tokenSymbol } from "../constants";
 
 import { shouldHaveRole } from "../shared/accessControl/hasRoles";
@@ -20,15 +20,15 @@ describe("AuctionFactory", function () {
   let factory: ContractFactory;
   let factoryInstance: AuctionFactory;
   let erc721: ContractFactory;
-  let erc721Instance: ERC721ACB;
+  let erc721Instance: ERC721AB;
 
   beforeEach(async function () {
     factory = await ethers.getContractFactory("AuctionFactory");
-    erc721 = await ethers.getContractFactory("ERC721ACB");
+    erc721 = await ethers.getContractFactory("ERC721AB");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 
     factoryInstance = (await factory.deploy()) as AuctionFactory;
-    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol)) as ERC721ACB;
+    erc721Instance = (await erc721.deploy(tokenName, tokenSymbol)) as ERC721AB;
 
     await erc721Instance.mint(this.owner.address, tokenId);
     await erc721Instance.approve(factoryInstance.address, tokenId);

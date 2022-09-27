@@ -3,7 +3,7 @@ import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 
-import { ERC721ACBR, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
+import { ERC721ABR, ERC721NonReceiverMock, ERC721ReceiverMock } from "../../../typechain-types";
 import { royalty, tokenName, tokenSymbol } from "../../constants";
 
 import { shouldHaveOwner } from "../../shared/ownable/owner";
@@ -36,7 +36,7 @@ describe("ERC721OBR", function () {
     erc721NonReceiver = await ethers.getContractFactory("ERC721NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, royalty)) as ERC721ACBR;
+    this.erc721Instance = (await erc721.deploy(tokenName, tokenSymbol, royalty)) as ERC721ABR;
     this.erc721ReceiverInstance = (await erc721Receiver.deploy()) as ERC721ReceiverMock;
     this.erc721NonReceiverInstance = (await erc721NonReceiver.deploy()) as ERC721NonReceiverMock;
 

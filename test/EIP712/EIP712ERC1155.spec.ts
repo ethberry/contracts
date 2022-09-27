@@ -5,14 +5,14 @@ import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { EIP712ERC1155, ERC1155ACB } from "../../typechain-types";
+import { EIP712ERC1155, ERC1155AB } from "../../typechain-types";
 import { amount, baseTokenURI, MINTER_ROLE, nonce, tokenId, tokenName } from "../constants";
 
 use(solidity);
 
 describe("EIP712ERC1155", function () {
   let erc1155: ContractFactory;
-  let erc1155Instance: ERC1155ACB;
+  let erc1155Instance: ERC1155AB;
   let dropbox: ContractFactory;
   let dropboxInstance: EIP712ERC1155;
   let owner: SignerWithAddress;
@@ -21,11 +21,11 @@ describe("EIP712ERC1155", function () {
   let network: Network;
 
   beforeEach(async function () {
-    erc1155 = await ethers.getContractFactory("ERC1155ACB");
+    erc1155 = await ethers.getContractFactory("ERC1155AB");
     dropbox = await ethers.getContractFactory("EIP712ERC1155");
     [owner, receiver, stranger] = await ethers.getSigners();
 
-    erc1155Instance = (await erc1155.deploy(baseTokenURI)) as ERC1155ACB;
+    erc1155Instance = (await erc1155.deploy(baseTokenURI)) as ERC1155AB;
     dropboxInstance = (await dropbox.deploy(tokenName)) as EIP712ERC1155;
 
     await dropboxInstance.grantRole(MINTER_ROLE, owner.address);

@@ -9,10 +9,10 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 
-import "../../ERC721/preset/ERC721ACBCE.sol";
+import "../../ERC721/preset/ERC721ABCE.sol";
 import "../../ERC721/ChainLink/interfaces/IERC721ChainLink.sol";
 
-contract ChainLinkLootboxMock is ERC721ACBCE, Pausable {
+contract ChainLinkLootboxMock is ERC721ABCE, Pausable {
   using Address for address;
 
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
@@ -22,7 +22,7 @@ contract ChainLinkLootboxMock is ERC721ACBCE, Pausable {
   constructor(
     string memory name,
     string memory symbol
-  ) ERC721ACBCE(name, symbol, 1000) {
+  ) ERC721ABCE(name, symbol, 1000) {
     _setupRole(PAUSER_ROLE, _msgSender());
   }
 

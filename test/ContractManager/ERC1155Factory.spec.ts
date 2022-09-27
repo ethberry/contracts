@@ -9,10 +9,10 @@ import {
   amount,
   baseTokenURI,
   DEFAULT_ADMIN_ROLE,
+  featureIds,
   nonce,
   PAUSER_ROLE,
   royalty,
-  featureIds,
   tokenId,
 } from "../constants";
 

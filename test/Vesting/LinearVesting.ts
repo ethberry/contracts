@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { web3, ethers } from "hardhat";
+import { ethers, web3 } from "hardhat";
 import { constants } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 

@@ -8,10 +8,10 @@ import { ERC721Factory } from "../../typechain-types";
 import {
   baseTokenURI,
   DEFAULT_ADMIN_ROLE,
+  featureIds,
   nonce,
   PAUSER_ROLE,
   royalty,
-  featureIds,
   tokenId,
   tokenName,
   tokenSymbol,

@@ -1,45 +1,36 @@
-import { expect } from "chai";
+import { expect, use } from "chai";
+import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
-import { ContractFactory } from "ethers";
 
-import { ERC20ABCSP, ERC20NonReceiverMock } from "../../../typechain-types";
-import {
-  amount,
-  DEFAULT_ADMIN_ROLE,
-  MINTER_ROLE,
-  PAUSER_ROLE,
-  SNAPSHOT_ROLE,
-  tokenName,
-  tokenSymbol,
-} from "../../constants";
+import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, SNAPSHOT_ROLE, tokenName, tokenSymbol } from "../../constants";
 import { shouldSnapshot } from "../shared/snapshot";
-import { shouldERC20Pause } from "../shared/pause";
+import { shouldERC20Permit } from "../shared/permit";
 import { shouldERC20Base } from "../shared/base";
-import { shouldERC20Accessible } from "../shared/accessible";
 import { shouldERC20Burnable } from "../shared/burnable";
+import { shouldERC20Accessible } from "../shared/accessible";
 import { shouldERC20Capped } from "../shared/capped";
 
-describe("ERC20ABCSP", function () {
-  let erc20: ContractFactory;
-  let erc20NonReceiver: ContractFactory;
+use(solidity);
 
+describe("ERC20ABCST", function () {
   beforeEach(async function () {
-    erc20 = await ethers.getContractFactory("ERC20ABCSP");
-    erc20NonReceiver = await ethers.getContractFactory("ERC20NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    this.erc20Instance = (await erc20.deploy(tokenName, tokenSymbol, amount)) as ERC20ABCSP;
-    this.erc20NonReceiverInstance = (await erc20NonReceiver.deploy()) as ERC20NonReceiverMock;
+    const erc20Factory = await ethers.getContractFactory("ERC20ABCST");
+    this.erc20Instance = await erc20Factory.deploy(tokenName, tokenSymbol, amount);
+
+    const erc20NonReceiverFactory = await ethers.getContractFactory("ERC20NonReceiverMock");
+    this.erc20NonReceiverInstance = await erc20NonReceiverFactory.deploy();
 
     this.contractInstance = this.erc20Instance;
   });
 
   shouldERC20Base();
-  shouldERC20Accessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, SNAPSHOT_ROLE);
+  shouldERC20Accessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE, SNAPSHOT_ROLE);
   shouldERC20Burnable();
   shouldERC20Capped();
   shouldSnapshot();
-  shouldERC20Pause();
+  shouldERC20Permit();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

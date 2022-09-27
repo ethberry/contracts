@@ -4,7 +4,7 @@ import { ethers } from "hardhat";
 
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
 import { shouldERC20Base } from "../shared/base";
-import { shouldPermit } from "../shared/permit";
+import { shouldERC20Permit } from "../shared/permit";
 import { shouldERC20Burnable } from "../shared/burnable";
 import { shouldERC20Accessible } from "../shared/accessible";
 
@@ -23,10 +23,10 @@ describe("ERC20ABP", function () {
     this.contractInstance = this.erc20Instance;
   });
 
-  shouldERC20Accessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldERC20Base();
+  shouldERC20Accessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldERC20Burnable();
-  shouldPermit();
+  shouldERC20Permit();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

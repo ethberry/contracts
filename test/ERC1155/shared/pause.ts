@@ -2,7 +2,7 @@ import { expect } from "chai";
 
 import { amount, PAUSER_ROLE, tokenId } from "../../constants";
 
-export function shouldPause() {
+export function shouldERC1155Pause() {
   describe("pause", function () {
     it("should fail: account is missing role", async function () {
       const tx = this.erc1155Instance.connect(this.receiver).pause();

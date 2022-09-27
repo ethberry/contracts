@@ -1,37 +1,38 @@
-import { expect, use } from "chai";
-import { solidity } from "ethereum-waffle";
+import { expect } from "chai";
 import { ethers } from "hardhat";
+import { ContractFactory } from "ethers";
 
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
-import { shouldERC1155Acessible } from "../shared/accessible";
+import { ERC1155ABSP, ERC1155NonReceiverMock, ERC1155ReceiverMock } from "../../../typechain-types";
+import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../../constants";
+import { shouldERC1155Pause } from "../shared/pause";
 import { shouldERC1155Base } from "../shared/base";
-import { shouldERC1155Capped } from "../shared/capped";
-import { shouldERC1155Supply } from "../shared/supply";
+import { shouldERC1155Acessible } from "../shared/accessible";
 import { shouldERC1155Burnable } from "../shared/burnable";
+import { shouldERC1155Supply } from "../shared/supply";
 
-use(solidity);
+describe("ERC1155ABSP", function () {
+  let erc1155: ContractFactory;
+  let erc1155Receiver: ContractFactory;
+  let erc1155NonReceiver: ContractFactory;
 
-describe("ERC1155ABCS", function () {
   beforeEach(async function () {
+    erc1155 = await ethers.getContractFactory("ERC1155ABSP");
+    erc1155Receiver = await ethers.getContractFactory("ERC1155ReceiverMock");
+    erc1155NonReceiver = await ethers.getContractFactory("ERC1155NonReceiverMock");
     [this.owner, this.receiver] = await ethers.getSigners();
 
-    const erc1155Factory = await ethers.getContractFactory("ERC1155ABCS");
-    this.erc1155Instance = await erc1155Factory.deploy(baseTokenURI);
-
-    const erc1155ReceiverFactory = await ethers.getContractFactory("ERC1155ReceiverMock");
-    this.erc1155ReceiverInstance = await erc1155ReceiverFactory.deploy();
-
-    const erc1155NonReceiverFactory = await ethers.getContractFactory("ERC1155NonReceiverMock");
-    this.erc1155NonReceiverInstance = await erc1155NonReceiverFactory.deploy();
+    this.erc1155Instance = (await erc1155.deploy(baseTokenURI)) as ERC1155ABSP;
+    this.erc1155ReceiverInstance = (await erc1155Receiver.deploy()) as ERC1155ReceiverMock;
+    this.erc1155NonReceiverInstance = (await erc1155NonReceiver.deploy()) as ERC1155NonReceiverMock;
 
     this.contractInstance = this.erc1155Instance;
   });
 
   shouldERC1155Base();
-  shouldERC1155Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC1155Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE);
   shouldERC1155Burnable();
-  shouldERC1155Capped();
   shouldERC1155Supply();
+  shouldERC1155Pause();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

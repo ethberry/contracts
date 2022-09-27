@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { amount, tokenId } from "../../constants";
+import { amount, tokenId } from "../../../constants";
 
-export function shouldBurnBatch(supply = false) {
+export function shouldBurnBatch() {
   describe("burnBatch", function () {
     it("should burn own tokens", async function () {
       const tokenId1 = tokenId + 1;
@@ -71,22 +71,33 @@ export function shouldBurnBatch(supply = false) {
     });
 
     it("should fail: burn amount exceeds totalSupply", async function () {
-      const tokenId1 = tokenId + 1;
-      await this.erc1155Instance.mintBatch(this.owner.address, [tokenId, tokenId1], [amount, amount], "0x");
+      await this.erc1155Instance.mintBatch(this.owner.address, [tokenId], [amount], "0x");
 
-      const tx = this.erc1155Instance.burnBatch(this.owner.address, [tokenId, tokenId1], [amount, amount * 2]);
-      await expect(tx).to.be.revertedWith(
-        supply ? `ERC1155: burn amount exceeds totalSupply` : `ERC1155: burn amount exceeds balance`,
+      await this.erc1155Instance.safeBatchTransferFrom(
+        this.owner.address,
+        this.receiver.address,
+        [tokenId],
+        [amount],
+        "0x",
       );
+
+      const tx = this.erc1155Instance.burnBatch(this.owner.address, [tokenId], [amount]);
+      await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds balance");
     });
 
     it("should fail: burn amount exceeds balance", async function () {
-      const tokenId1 = tokenId + 1;
-      await this.erc1155Instance.mintBatch(this.owner.address, [tokenId, tokenId1], [amount, amount * 2], "0x");
-      await this.erc1155Instance.safeTransferFrom(this.owner.address, this.receiver.address, tokenId, amount, "0x");
+      await this.erc1155Instance.mintBatch(this.owner.address, [tokenId], [amount], "0x");
 
-      const tx = this.erc1155Instance.burnBatch(this.owner.address, [tokenId, tokenId1], [amount, amount * 2]);
-      await expect(tx).to.be.revertedWith(`ERC1155: burn amount exceeds balance`);
+      await this.erc1155Instance.safeBatchTransferFrom(
+        this.owner.address,
+        this.receiver.address,
+        [tokenId],
+        [amount],
+        "0x",
+      );
+
+      const tx = this.erc1155Instance.burnBatch(this.owner.address, [tokenId], [amount]);
+      await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds balance");
     });
   });
 }

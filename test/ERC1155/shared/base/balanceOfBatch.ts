@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { BigNumber } from "ethers";
 
-import { amount, tokenId } from "../../constants";
+import { amount, tokenId } from "../../../constants";
 
 export function shouldBalanceOfBatch() {
   describe("balanceOfBatch", function () {

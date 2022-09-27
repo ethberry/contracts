@@ -4,10 +4,10 @@ import { ethers } from "hardhat";
 
 import { amount, tokenName, tokenSymbol } from "../../constants";
 import { shouldSnapshot } from "../shared/snapshot";
-import { shouldCap } from "../shared/cap";
 import { shouldERC20Base } from "../shared/base";
 import { shouldERC20Burnable } from "../shared/burnable";
 import { shouldERC20Ownable } from "../shared/ownable";
+import { shouldERC20Capped } from "../shared/capped";
 
 use(solidity);
 
@@ -24,11 +24,11 @@ describe("ERC20OBCS", function () {
     this.contractInstance = this.erc20Instance;
   });
 
-  shouldERC20Ownable();
   shouldERC20Base();
+  shouldERC20Ownable();
   shouldERC20Burnable();
+  shouldERC20Capped();
   shouldSnapshot();
-  shouldCap();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

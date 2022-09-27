@@ -22,8 +22,8 @@ describe("ERC20OB", function () {
     this.contractInstance = this.erc20Instance;
   });
 
-  shouldERC20Ownable();
   shouldERC20Base();
+  shouldERC20Ownable();
   shouldERC20Burnable();
 
   describe("supportsInterface", function () {

@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount, tokenId } from "../../constants";
+import { amount, tokenId } from "../../../constants";
 
 export function shouldBalanceOf() {
   describe("balanceOf", function () {

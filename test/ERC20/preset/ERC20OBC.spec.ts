@@ -3,10 +3,10 @@ import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
 import { amount, tokenName, tokenSymbol } from "../../constants";
-import { shouldCap } from "../shared/cap";
 import { shouldERC20Base } from "../shared/base";
 import { shouldERC20Burnable } from "../shared/burnable";
 import { shouldERC20Ownable } from "../shared/ownable";
+import { shouldERC20Capped } from "../shared/capped";
 
 use(solidity);
 
@@ -23,10 +23,10 @@ describe("ERC20OBC", function () {
     this.contractInstance = this.erc20Instance;
   });
 
-  shouldERC20Ownable();
   shouldERC20Base();
+  shouldERC20Ownable();
   shouldERC20Burnable();
-  shouldCap();
+  shouldERC20Capped();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { amount, tokenId } from "../../constants";
+import { amount, tokenId } from "../../../constants";
 
 export function shouldSafeTransferFrom() {
   describe("safeTransferFrom", function () {

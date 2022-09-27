@@ -22,8 +22,8 @@ describe("ERC20AB", function () {
     this.contractInstance = this.erc20Instance;
   });
 
-  shouldERC20Accessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldERC20Base();
+  shouldERC20Accessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldERC20Burnable();
 
   describe("supportsInterface", function () {

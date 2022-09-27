@@ -4,11 +4,11 @@ import { ethers } from "hardhat";
 
 import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, SNAPSHOT_ROLE, tokenName, tokenSymbol } from "../../constants";
 import { shouldSnapshot } from "../shared/snapshot";
-import { shouldCap } from "../shared/cap";
-import { shouldPermit } from "../shared/permit";
+import { shouldERC20Permit } from "../shared/permit";
 import { shouldERC20Base } from "../shared/base";
 import { shouldERC20Burnable } from "../shared/burnable";
 import { shouldERC20Accessible } from "../shared/accessible";
+import { shouldERC20Capped } from "../shared/capped";
 
 use(solidity);
 
@@ -25,12 +25,12 @@ describe("ERC20ABCSP", function () {
     this.contractInstance = this.erc20Instance;
   });
 
-  shouldERC20Accessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE, SNAPSHOT_ROLE);
   shouldERC20Base();
+  shouldERC20Accessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE, SNAPSHOT_ROLE);
   shouldERC20Burnable();
-  shouldCap();
+  shouldERC20Capped();
   shouldSnapshot();
-  shouldPermit();
+  shouldERC20Permit();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

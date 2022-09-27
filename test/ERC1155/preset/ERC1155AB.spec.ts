@@ -3,22 +3,9 @@ import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
-
-import { shouldHaveRole } from "../../shared/accessControl/hasRoles";
-import { shouldGetRoleAdmin } from "../../shared/accessControl/getRoleAdmin";
-import { shouldGrantRole } from "../../shared/accessControl/grantRole";
-import { shouldRevokeRole } from "../../shared/accessControl/revokeRole";
-import { shouldRenounceRole } from "../../shared/accessControl/renounceRole";
-import { shouldMint } from "../shared/mint";
-import { shouldMintBatch } from "../shared/mintBatch";
-import { shouldBalanceOf } from "../shared/balanceOf";
-import { shouldBalanceOfBatch } from "../shared/balanceOfBatch";
-import { shouldURI } from "../shared/uri";
-import { shouldSetApprovalForAll } from "../shared/setApprovalForAll";
-import { shouldSafeTransferFrom } from "../shared/safeTransferFrom";
-import { shouldSafeBatchTransferFrom } from "../shared/safeBatchTransferFrom";
-import { shouldBurn } from "../shared/burn";
-import { shouldBurnBatch } from "../shared/burnBatch";
+import { shouldERC1155Acessible } from "../shared/accessible";
+import { shouldERC1155Base } from "../shared/base";
+import { shouldERC1155Burnable } from "../shared/burnable";
 
 use(solidity);
 
@@ -38,21 +25,9 @@ describe("ERC1155AB", function () {
     this.contractInstance = this.erc1155Instance;
   });
 
-  shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldGrantRole();
-  shouldRevokeRole();
-  shouldRenounceRole();
-  shouldMint();
-  shouldMintBatch();
-  shouldBalanceOf();
-  shouldBalanceOfBatch();
-  shouldURI();
-  shouldSetApprovalForAll();
-  shouldSafeTransferFrom();
-  shouldSafeBatchTransferFrom();
-  shouldBurn();
-  shouldBurnBatch();
+  shouldERC1155Base();
+  shouldERC1155Acessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC1155Burnable();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

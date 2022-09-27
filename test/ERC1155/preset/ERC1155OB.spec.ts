@@ -3,20 +3,9 @@ import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
 import { baseTokenURI } from "../../constants";
-
-import { shouldHaveOwner } from "../../shared/ownable/owner";
-import { shouldTransferOwnership } from "../../shared/ownable/transferOwnership";
-import { shouldRenounceOwnership } from "../../shared/ownable/renounceOwnership";
-import { shouldMint } from "../shared/mint";
-import { shouldMintBatch } from "../shared/mintBatch";
-import { shouldBalanceOf } from "../shared/balanceOf";
-import { shouldBalanceOfBatch } from "../shared/balanceOfBatch";
-import { shouldURI } from "../shared/uri";
-import { shouldSetApprovalForAll } from "../shared/setApprovalForAll";
-import { shouldSafeTransferFrom } from "../shared/safeTransferFrom";
-import { shouldSafeBatchTransferFrom } from "../shared/safeBatchTransferFrom";
-import { shouldBurn } from "../shared/burn";
-import { shouldBurnBatch } from "../shared/burnBatch";
+import { shouldERC1155Ownable } from "../shared/ownable";
+import { shouldERC1155Base } from "../shared/base";
+import { shouldERC1155Burnable } from "../shared/burnable";
 
 use(solidity);
 
@@ -36,19 +25,9 @@ describe("ERC1155OB", function () {
     this.contractInstance = this.erc1155Instance;
   });
 
-  shouldHaveOwner();
-  shouldTransferOwnership();
-  shouldRenounceOwnership();
-  shouldMint();
-  shouldMintBatch();
-  shouldBalanceOf();
-  shouldBalanceOfBatch();
-  shouldURI();
-  shouldSetApprovalForAll();
-  shouldSafeTransferFrom();
-  shouldSafeBatchTransferFrom();
-  shouldBurn();
-  shouldBurnBatch();
+  shouldERC1155Ownable();
+  shouldERC1155Base();
+  shouldERC1155Burnable();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

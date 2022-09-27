@@ -6,7 +6,7 @@ import { Network } from "@ethersproject/networks";
 
 import { amount, tokenName } from "../../constants";
 
-export function shouldPermit() {
+export function shouldERC20Permit() {
   describe("permit", function () {
     let network: Network;
 

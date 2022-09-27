@@ -3,10 +3,10 @@ import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
 import { amount, DEFAULT_ADMIN_ROLE, MINTER_ROLE, tokenName, tokenSymbol } from "../../constants";
-import { shouldCap } from "../shared/cap";
 import { shouldERC20Base } from "../shared/base";
 import { shouldERC20Burnable } from "../shared/burnable";
 import { shouldERC20Accessible } from "../shared/accessible";
+import { shouldERC20Capped } from "../shared/capped";
 
 use(solidity);
 
@@ -23,10 +23,10 @@ describe("ERC20ABC", function () {
     this.contractInstance = this.erc20Instance;
   });
 
-  shouldERC20Accessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldERC20Base();
+  shouldERC20Accessible(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldERC20Burnable();
-  shouldCap();
+  shouldERC20Capped();
 
   describe("supportsInterface", function () {
     it("should support all interfaces", async function () {

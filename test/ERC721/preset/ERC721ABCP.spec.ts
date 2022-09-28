@@ -1,12 +1,10 @@
-import { expect } from "chai";
-
-import { DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE } from "../../constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, PAUSER_ROLE } from "../../constants";
 import { shouldERC721Burnable } from "../shared/burnable/basic/burn";
 import { shouldERC721Capped } from "../shared/capped/basic/capped";
 import { shouldERC721Pause } from "../shared/pausable/basic/pausable";
 import { shouldERC721Accessible } from "../shared/accessible";
 import { shouldERC721Base } from "../shared/base/basic";
-import { deployErc721Base } from "../shared/fixtures";
+import { shouldSupportsInterface } from "../../shared/supportInterface";
 
 describe("ERC721ABCP", function () {
   const name = "ERC721ABCP";
@@ -17,20 +15,10 @@ describe("ERC721ABCP", function () {
   shouldERC721Capped(name);
   shouldERC721Pause(name);
 
-  describe("supportsInterface", function () {
-    it("should support all interfaces", async function () {
-      const { contractInstance } = await deployErc721Base(name);
-
-      const supportsIERC721 = await contractInstance.supportsInterface("0x80ac58cd");
-      expect(supportsIERC721).to.equal(true);
-      const supportsIERC721Metadata = await contractInstance.supportsInterface("0x5b5e139f");
-      expect(supportsIERC721Metadata).to.equal(true);
-      const supportsIERC165 = await contractInstance.supportsInterface("0x01ffc9a7");
-      expect(supportsIERC165).to.equal(true);
-      const supportsIAccessControl = await contractInstance.supportsInterface("0x7965db0b");
-      expect(supportsIAccessControl).to.equal(true);
-      const supportsInvalidInterface = await contractInstance.supportsInterface("0xffffffff");
-      expect(supportsInvalidInterface).to.equal(false);
-    });
-  });
+  shouldSupportsInterface(name)(
+    InterfaceId.IERC165,
+    InterfaceId.IAccessControl,
+    InterfaceId.IERC721,
+    InterfaceId.IERC721Metadata,
+  );
 });

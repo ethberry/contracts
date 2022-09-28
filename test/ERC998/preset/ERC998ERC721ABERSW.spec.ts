@@ -2,7 +2,7 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
-import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "../../constants";
 import { shouldWhiteListChild } from "../shared/whitelist/whiteListChild";
 import { shouldERC721Base } from "../../ERC721/shared/base/enumerable";
 import { shouldERC721Accessible } from "../../ERC721/shared/accessible";
@@ -12,6 +12,7 @@ import { shouldERC721Royalty } from "../../ERC721/shared/royalty/enumerable";
 import { shouldERC721Storage } from "../../ERC721/shared/storage/enumerable/storage";
 import { shouldERC998Base } from "../shared/base/basic";
 import { deployErc721Base } from "../../ERC721/shared/fixtures";
+import { shouldSupportsInterface } from "../../shared/supportInterface";
 
 use(solidity);
 
@@ -46,4 +47,15 @@ describe("ERC998ERC721ABERSW", function () {
       await expect(tx1).to.be.revertedWith(`CTD: this method is not supported`);
     });
   });
+
+  shouldSupportsInterface(name)(
+    InterfaceId.IERC165,
+    InterfaceId.IAccessControl,
+    InterfaceId.IERC721,
+    InterfaceId.IERC721Metadata,
+    InterfaceId.IERC721Enumerable,
+    InterfaceId.IERC998TD,
+    InterfaceId.IERC998WL,
+    InterfaceId.IRoyalty,
+  );
 });

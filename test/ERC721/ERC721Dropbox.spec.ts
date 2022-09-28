@@ -2,18 +2,10 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
-import { MINTER_ROLE, tokenId, tokenName, tokenSymbol } from "../constants";
+import { MINTER_ROLE, tokenId, tokenName } from "../constants";
+import { deployErc721Base } from "./shared/fixtures";
 
 use(solidity);
-
-export async function deployErc721Base(name: string) {
-  const erc721Factory = await ethers.getContractFactory(name);
-  const erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, 1);
-
-  return {
-    contractInstance: erc721Instance,
-  };
-}
 
 describe("ERC721Dropbox", function () {
   const name = "ERC721DropboxTest";

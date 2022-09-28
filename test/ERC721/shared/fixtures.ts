@@ -1,5 +1,5 @@
 import { ethers } from "hardhat";
-import { royalty, tokenName, tokenSymbol } from "../../constants";
+import { baseTokenURI, royalty, tokenName, tokenSymbol } from "../../constants";
 
 export async function deployErc721Base(name: string) {
   const erc721Factory = await ethers.getContractFactory(name);
@@ -8,6 +8,18 @@ export async function deployErc721Base(name: string) {
 
   if (is998) {
     const erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, royalty);
+
+    return {
+      contractInstance: erc721Instance,
+    };
+  } else if (name === "ERC721BaseUrlTest") {
+    const erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, royalty, baseTokenURI);
+
+    return {
+      contractInstance: erc721Instance,
+    };
+  } else if (name === "ERC721DropboxTest") {
+    const erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, 1);
 
     return {
       contractInstance: erc721Instance,

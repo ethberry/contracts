@@ -2,21 +2,23 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
-import { baseTokenURI, royalty, tokenId, tokenName, tokenSymbol } from "../constants";
+import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId } from "../constants";
+import { shouldSupportsInterface } from "../shared/supportInterface";
+import { deployErc721Base } from "./shared/fixtures";
+import { shouldERC721Base } from "./shared/base/basic";
+import { shouldERC721Accessible } from "./shared/accessible";
+import { shouldERC721Burnable } from "./shared/burnable/basic/burn";
+import { shouldERC721Royalty } from "./shared/royalty/basic";
 
 use(solidity);
 
-export async function deployErc721Base(name: string) {
-  const erc721Factory = await ethers.getContractFactory(name);
-  const erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, royalty, baseTokenURI);
-
-  return {
-    contractInstance: erc721Instance,
-  };
-}
-
 describe("ERC721BaseUrl", function () {
   const name = "ERC721BaseUrlTest";
+
+  shouldERC721Base(name);
+  shouldERC721Accessible(name)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC721Burnable(name);
+  shouldERC721Royalty(name);
 
   describe("tokenURI", function () {
     it("should get token uri", async function () {
@@ -50,4 +52,12 @@ describe("ERC721BaseUrl", function () {
       expect(uri).to.equal(`${newURI}/${contractInstance.address.toLowerCase()}/${tokenId}`);
     });
   });
+
+  shouldSupportsInterface(name)(
+    InterfaceId.IERC165,
+    InterfaceId.IAccessControl,
+    InterfaceId.IERC721,
+    InterfaceId.IERC721Metadata,
+    InterfaceId.IRoyalty,
+  );
 });

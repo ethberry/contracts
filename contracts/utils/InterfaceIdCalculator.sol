@@ -25,7 +25,7 @@ import "@openzeppelin/contracts/access/IAccessControlEnumerable.sol";
 
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 
-import "@openzeppelin/contracts/token/common/ERC2981.sol";
+import "@openzeppelin/contracts/interfaces/IERC2981.sol";
 
 import "../ERC998/interfaces/IERC998ERC20TopDown.sol";
 import "../ERC998/interfaces/IERC998ERC20TopDownEnumerable.sol";

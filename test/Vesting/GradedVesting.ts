@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers, web3 } from "hardhat";
 import { time } from "@openzeppelin/test-helpers";
 
-import { deployVestingFixture, deployERC20Fixture } from "./shared/fixture";
+import { deployERC20Fixture, deployVestingFixture } from "./shared/fixture";
 import { shouldHaveOwner } from "./shared/owner";
 import { shouldRenounceOwnership } from "./shared/renounceOwnership";
 import { shouldTransferOwnership } from "./shared/transferOwnership";

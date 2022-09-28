@@ -1,7 +1,7 @@
 import { expect } from "chai";
+import { ethers } from "hardhat";
 
 import { amount, PAUSER_ROLE } from "../../constants";
-import { ethers } from "hardhat";
 import { deployErc20Base } from "./fixtures";
 
 export function shouldERC20Pause(name: string) {

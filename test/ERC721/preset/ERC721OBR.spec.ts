@@ -1,7 +1,7 @@
 import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { shouldERC721Burnable } from "../shared/burn/basic/burn";
+import { shouldERC721Burnable } from "../shared/burnable/basic/burn";
 import { shouldERC721Ownable } from "../shared/ownable";
 import { shouldERC721Base } from "../shared/base/basic";
 import { shouldERC721Royalty } from "../shared/royalty/basic";

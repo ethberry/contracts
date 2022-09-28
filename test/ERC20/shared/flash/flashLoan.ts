@@ -2,8 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { amount } from "../../../constants";
-import { deployErc20Base } from "../fixtures";
-import { deployErc20Borrower } from "../fixtures/borrower";
+import { deployErc20Base, deployErc20Borrower } from "../fixtures";
 
 export function shouldFlashLoan(name: string) {
   describe("flashLoan", function () {

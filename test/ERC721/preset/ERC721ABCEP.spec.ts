@@ -1,7 +1,7 @@
 import { expect } from "chai";
 
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
-import { shouldERC721Burnable } from "../shared/burn/enumerable/burn";
+import { shouldERC721Burnable } from "../shared/burnable/enumerable/burn";
 import { shouldERC721Capped } from "../shared/capped/enumerable/capped";
 import { shouldERC721Pause } from "../shared/pausable/enumerable/pausable";
 import { shouldERC721Accessible } from "../shared/accessible";

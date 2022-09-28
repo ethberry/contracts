@@ -1,10 +1,10 @@
 import { expect } from "chai";
 
-import { amount } from "../../../constants";
+import { amount } from "../../constants";
 import { ethers } from "hardhat";
-import { deployErc20Base } from "../fixtures";
+import { deployErc20Base } from "./fixtures";
 
-export function shouldMint(name: string) {
+export function shouldERC20Capped(name: string) {
   describe("mint", function () {
     it("should fail: cap exceeded", async function () {
       const [owner] = await ethers.getSigners();

@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { constants } from "ethers";
 
 import { amount, tokenId } from "../../../constants";
-import { deployErc1155Base } from "../fixtures/base";
+import { deployErc1155Base } from "../fixtures";
 
 export function shouldBalanceOf(name: string) {
   describe("balanceOf", function () {

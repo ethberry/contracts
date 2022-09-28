@@ -6,7 +6,7 @@ import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
 import { shouldWhiteListChild } from "../shared/whitelist/whiteListChild";
 import { shouldERC721Base } from "../../ERC721/shared/base/enumerable";
 import { shouldERC721Accessible } from "../../ERC721/shared/accessible";
-import { shouldERC721Burnable } from "../../ERC721/shared/burn/enumerable/burn";
+import { shouldERC721Burnable } from "../../ERC721/shared/burnable/enumerable/burn";
 import { shouldERC721Enumerable } from "../../ERC721/shared/enumerable";
 import { shouldERC721Royalty } from "../../ERC721/shared/royalty/enumerable";
 import { shouldERC721Storage } from "../../ERC721/shared/storage/enumerable/storage";

@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { BigNumber, constants } from "ethers";
 
 import { amount, tokenId } from "../../../constants";
-import { deployErc1155Base } from "../fixtures/base";
+import { deployErc1155Base } from "../fixtures";
 
 export function shouldBalanceOfBatch(name: string) {
   describe("balanceOfBatch", function () {

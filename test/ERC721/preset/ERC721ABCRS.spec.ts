@@ -2,7 +2,7 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
-import { shouldERC721Burnable } from "../shared/burn/basic/burn";
+import { shouldERC721Burnable } from "../shared/burnable/basic/burn";
 import { shouldERC721Storage } from "../shared/storage/basic/storage";
 import { shouldERC721Capped } from "../shared/capped/basic/capped";
 import { shouldERC721Accessible } from "../shared/accessible";

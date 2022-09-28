@@ -3,7 +3,7 @@ import { solidity } from "ethereum-waffle";
 
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "../../constants";
 import { shouldERC721Accessible } from "../shared/accessible";
-import { shouldERC721Burnable } from "../shared/burn/enumerable/burn";
+import { shouldERC721Burnable } from "../shared/burnable/enumerable/burn";
 import { shouldERC721Capped } from "../shared/capped/enumerable/capped";
 import { shouldERC721Base } from "../shared/base/enumerable";
 import { shouldERC721Royalty } from "../shared/royalty/enumerable";

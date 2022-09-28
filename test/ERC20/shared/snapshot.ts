@@ -1,7 +1,7 @@
 import { expect } from "chai";
+import { ethers } from "hardhat";
 
 import { accessControlInterfaceId, amount, SNAPSHOT_ROLE } from "../../constants";
-import { ethers } from "hardhat";
 import { deployErc20Base } from "./fixtures";
 
 export function shouldSnapshot(name: string) {

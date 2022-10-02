@@ -27,17 +27,17 @@ contract ERC721ABE is AccessControl, ERC721Burnable, ERC721Enumerable {
   }
 
   function mint(address to) public virtual onlyRole(MINTER_ROLE) {
-    // We cannot just use balanceOf to create the new tokenId because tokens
-    // can be burned (destroyed), so we need a separate counter.
     _mint(to, _tokenIdTracker.current());
     _tokenIdTracker.increment();
   }
 
   function safeMint(address to) public virtual onlyRole(MINTER_ROLE) {
-    // We cannot just use balanceOf to create the new tokenId because tokens
-    // can be burned (destroyed), so we need a separate counter.
     _safeMint(to, _tokenIdTracker.current());
     _tokenIdTracker.increment();
+  }
+
+  function getCurrentTokenIndex() public view returns (uint256) {
+    return _tokenIdTracker.current();
   }
 
   function supportsInterface(bytes4 interfaceId)

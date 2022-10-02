@@ -6,6 +6,7 @@ import { shouldSafeMint } from "./safeMint";
 import { shouldGetOwnerOf } from "./ownerOf";
 import { shouldApprove } from "./approve";
 import { shouldTransferFrom } from "./transferFrom";
+import { getGetCurrentTokenIndex } from "./getCurrentTokenIndex";
 
 export function shouldERC721Base(name: string) {
   shouldMint(name);
@@ -16,4 +17,5 @@ export function shouldERC721Base(name: string) {
   shouldGetBalanceOf(name);
   shouldTransferFrom(name);
   shouldSafeTransferFrom(name);
+  getGetCurrentTokenIndex(name);
 }

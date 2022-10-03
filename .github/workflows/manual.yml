@@ -32,7 +32,8 @@ jobs:
         env:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
-          BINANCE_RPC_URL: ${{ secrets.BINANCE_RPC_URL }}
+          BINANCE_RPC_URL: "https://bsc-dataseed.binance.org/"
+          BINANCE_TEST_RPC_URL: "https://data-seed-prebsc-1-s1.binance.org:8545"
           RINKEBY_RPC_URL: ${{ secrets.RINKEBY_RPC_URL }}
           ROPSTEN_RPC_URL: ${{ secrets.ROPSTEN_RPC_URL }}
           POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
@@ -48,8 +49,8 @@ jobs:
           GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
-          BINANCE_RPC_URL: ${{ secrets.BINANCE_RPC_URL }}
-          BINANCE_TEST_RPC_URL: ${{ secrets.BINANCE_RPC_URL }}
+          BINANCE_RPC_URL: "https://bsc-dataseed.binance.org/"
+          BINANCE_TEST_RPC_URL: "https://data-seed-prebsc-1-s1.binance.org:8545"
           RINKEBY_RPC_URL: ${{ secrets.RINKEBY_RPC_URL }}
           ROPSTEN_RPC_URL: ${{ secrets.ROPSTEN_RPC_URL }}
           POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}

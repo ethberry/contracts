@@ -58,9 +58,7 @@ export default {
       url: process.env.BINANCE_TEST_RPC_URL,
       chainId: 97,
       gasPrice: 20000000000,
-      accounts: {
-        mnemonic: process.env.MM_MNEMONIC,
-      },
+      accounts: [process.env.MM_PRIVATEKEY],
     },
     binancemain: {
       url: process.env.BINANCE_RPC_URL,

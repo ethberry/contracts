@@ -9,7 +9,7 @@ export function shouldSafeTransferFrom(name: string) {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const { contractInstance } = await deployErc1155Base(name);
-
+      console.info("owner.address", owner.address);
       await contractInstance.mint(owner.address, tokenId, amount, "0x");
       const tx = contractInstance
         .connect(receiver)
@@ -21,6 +21,7 @@ export function shouldSafeTransferFrom(name: string) {
       const [owner] = await ethers.getSigners();
       const { contractInstance } = await deployErc1155Base(name);
       const { contractInstance: erc1155ReceiverInstance } = await deployErc1155Receiver();
+      console.info("owner.address", owner.address);
 
       await contractInstance.mint(owner.address, tokenId, amount, "0x");
       const tx = contractInstance.safeTransferFrom(

@@ -17,7 +17,7 @@ contract ChainLinkTokenMock is ERC721ChainLink, IERC721ChainLink, ERC721ABCE {
   // tokenId => rarity
   mapping(uint256 => uint256) private _rarity;
   // requestId => owner
-  mapping(bytes32 => address) internal _queue;
+  mapping(bytes32 => address) private _queue;
 
   constructor(
     string memory name,

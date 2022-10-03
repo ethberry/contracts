@@ -12,7 +12,6 @@ import {
   nonce,
   PAUSER_ROLE,
   royalty,
-  tokenId,
   tokenName,
   tokenSymbol,
 } from "../constants";
@@ -35,7 +34,7 @@ describe("ERC998Factory", function () {
   beforeEach(async function () {
     // erc998 = await ethers.getContractFactory("ERC721BaseUrlTest");
     // erc998 = await ethers.getContractFactory("ERC998ERC1155Simple");
-    erc998 = await ethers.getContractFactory("ERC998ERC20Simple");
+    erc998 = await ethers.getContractFactory("ERC998ERC721ABERS");
     factory = await ethers.getContractFactory("ERC998Factory");
     [this.owner, this.receiver, this.stranger] = await ethers.getSigners();
 

@@ -50,12 +50,6 @@ describe("LootBox", function () {
     lootInstance = (await lootbox.deploy(tokenName, tokenSymbol)) as ChainLinkLootboxMock;
   });
 
-  // shouldHaveRole(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE);
-  // shouldGetRoleAdmin(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE);
-  // shouldGrantRole();
-  // shouldRevokeRole();
-  // shouldRenounceRole();
-
   describe("Factory", function () {
     it("should fail not a contract", async function () {
       const [_owner, receiver] = await ethers.getSigners();
@@ -103,6 +97,16 @@ describe("LootBox", function () {
 
       const tx = lootInstance.unpack(0);
       await expect(tx).to.be.revertedWith("ERC721ChainLink: Not enough LINK");
+    });
+
+    it("should mint token", async function () {
+      const [owner] = await ethers.getSigners();
+
+      const txx: ContractTransaction = await nftInstance.mint(owner.address);
+      await txx.wait();
+
+      const balanceOfOwner1 = await nftInstance.balanceOf(owner.address);
+      expect(balanceOfOwner1).to.equal(1);
     });
 
     it("should unpack own tokens using random", async function () {
@@ -175,6 +179,7 @@ describe("LootBox", function () {
       await expect(tx).to.emit(vrfInstance, "RandomnessRequestId").withArgs(requestId, nftInstance.address);
 
       const trx = await vrfInstance.callBackWithRandomness(requestId, 123, nftInstance.address);
+      await trx.wait();
       await expect(trx).to.emit(nftInstance, "MintRandom").withArgs(owner.address, requestId);
 
       const balanceOfOwner3 = await lootInstance.balanceOf(owner.address);

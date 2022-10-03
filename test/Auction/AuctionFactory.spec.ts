@@ -58,6 +58,8 @@ describe("AuctionFactory", function () {
         timestamp + span,
       );
 
+      // TODO strange: first call returns undef, second call returns array[string]
+      await factoryInstance.allAuctions();
       const [auction] = await factoryInstance.allAuctions();
 
       await expect(tx)

@@ -39,8 +39,8 @@ contract VRFCoordinatorMock is VRFRequestIDBase {
   ) public {
     v = VRFConsumerBase(consumerContract);
     bytes memory resp = abi.encodeWithSelector(v.rawFulfillRandomness.selector, requestId, randomness);
-    // uint256 b = 206000;
-    // require(gasleft() >= b, "not enough gas for consumer");
+     uint256 b = 206000;
+     require(gasleft() >= b, "not enough gas for consumer");
     (bool success, ) = consumerContract.call(resp);
     (success);
     // v.rawFulfillRandomness(requestId, randomness);

@@ -41,15 +41,8 @@ jobs:
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
           BESU_RPC_URL: ${{ secrets.BESU_RPC_URL }}
 
-#      - name: Build Packages
-#        run: env && npm run build
-#        env:
-#          MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
-#          MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
-#          RPC_URL_BINANCE: ${{ secrets.RPC_URL_BINANCE }}
-
-      - name: Version by NPM
-        run: npm version patch -m "[Manual release] [skip ci] %s"
+      - name: Publish sol and abi only
+        run: npm run release:abi
         env:
           GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
@@ -62,24 +55,4 @@ jobs:
           ROPSTEN_PRIVATE_KEY: ${{ secrets.MM_PRIVATEKEY }}
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
           BESU_RPC_URL: ${{ secrets.BESU_RPC_URL }}
-
-      - name: Publish by NPM
-        run: npm publish
-        env:
-          GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
-          MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
-          MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
-          BINANCE_RPC_URL: ${{ secrets.BINANCE_RPC_URL }}
-          RINKEBY_RPC_URL: ${{ secrets.RINKEBY_RPC_URL }}
-          ROPSTEN_RPC_URL: ${{ secrets.ROPSTEN_RPC_URL }}
-          POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
-          MUMBAI_RPC_URL: ${{ secrets.MUMBAI_RPC_URL }}
-          ROPSTEN_PRIVATE_KEY: ${{ secrets.MM_PRIVATEKEY }}
-          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
-          BESU_RPC_URL: ${{ secrets.BESU_RPC_URL }}
-
-      - name: Git push
-        run: git push --no-verify && git push --tags --no-verify
-        env:
-          GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
 

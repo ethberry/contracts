@@ -31,4 +31,4 @@ coverage.json
 .prettierrc
 .solhint.json
 
-contracts/ERC998
+sol/ERC998

@@ -34,10 +34,14 @@ fi
 echo "### Build finished. Copying abis."
 rm -rf abi
 mkdir -p abi
-# copy all abis to contracts/abi
+# copy all abis to ./abi
 find artifacts/contracts ! -iregex ".*([a-zA-Z0-9_]).json" -exec cp {} abi \; 2>/dev/null
 # remove non-abi files
 rm abi/*.dbg.json
+# copy sol
+rm -rf sol
+mkdir -p sol
+cp -r contracts/** sol
 # publish from root
 echo "### Publishing..."
 if [[ $local -eq 1 ]]; then

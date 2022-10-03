@@ -72,6 +72,10 @@
     "type": "git",
     "url": "https://github.com/gemunion/contracts"
   },
+  "files": [
+    "**/*.sol",
+    "/abi/*.json"
+  ],
   "scripts": {
     "build": "hardhat compile",
     "clean": "hardhat clean",
@@ -84,7 +88,8 @@
     "preversion": "npm run build",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test",
-    "test:coverage": "hardhat coverage"
+    "test:coverage": "hardhat coverage",
+    "release:abi": "sh scripts/publish-abi.sh"
   },
   "types": "./typechain-types/index.ts",
   "version": "0.7.7"

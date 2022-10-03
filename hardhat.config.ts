@@ -17,6 +17,8 @@ export default {
   networks: {
     hardhat: {
       allowUnlimitedContractSize: true,
+      gas: "auto",
+      blockGasLimit: 40966424,
     },
     besu: {
       url: process.env.BESU_RPC_URL,
@@ -53,12 +55,18 @@ export default {
       saveDeployments: true,
     },
     binancetest: {
-      url: process.env.BINANCE_RPC_URL,
+      url: process.env.RPC_URL_BINANCE_TEST,
       chainId: 97,
       gasPrice: 20000000000,
       accounts: {
         mnemonic: process.env.MM_MNEMONIC,
       },
+    },
+    binancemain: {
+      url: process.env.RPC_URL_BINANCE,
+      chainId: 56,
+      gasPrice: 20000000000,
+      accounts: [process.env.BNB_PRIVATEKEY],
     },
   },
   solidity: {
@@ -71,7 +79,7 @@ export default {
     },
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: process.env.ETHERSCAN_API_KEY_BINANCE,
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS === "true",

@@ -2,7 +2,7 @@
 
 set -e
 
-POSITIONAL_ARGS=()
+declare -a POSITIONAL_ARGS
 
 while [[ $# -gt 0 ]]; do
   case $1 in

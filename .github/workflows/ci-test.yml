@@ -61,6 +61,7 @@ jobs:
           BINANCE_RPC_URL: ${{ secrets.BINANCE_RPC_URL }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+          BINANCE_TEST_RPC_URL: "https://data-seed-prebsc-1-s1.binance.org:8545"
           REPORT_GAS: false
       - name: Npm run test
         run: npm run test
@@ -74,4 +75,5 @@ jobs:
           BINANCE_RPC_URL: ${{ secrets.BINANCE_RPC_URL }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+          BINANCE_TEST_RPC_URL: "https://data-seed-prebsc-1-s1.binance.org:8545"
           REPORT_GAS: false

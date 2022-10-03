@@ -8,9 +8,9 @@ export function shouldSafeTransferFrom(name: string) {
   describe("safeTransferFrom", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
-      await contractInstance.connect(owner).mint(owner.address, tokenId, amount, "0x");
-      const tx = contractInstance
+      const { contractInstance: erc1155Instance } = await deployErc1155Base(name);
+      await erc1155Instance.connect(owner).mint(owner.address, tokenId, amount, "0x");
+      const tx = erc1155Instance
         .connect(receiver)
         .safeTransferFrom(owner.address, receiver.address, tokenId, amount, "0x");
       await expect(tx).to.be.revertedWith(`ERC1155: caller is not token owner nor approved`);
@@ -20,9 +20,7 @@ export function shouldSafeTransferFrom(name: string) {
       const [owner] = await ethers.getSigners();
       const { contractInstance } = await deployErc1155Base(name);
       const { contractInstance: erc1155ReceiverInstance } = await deployErc1155Receiver();
-      console.log("owner.address1", owner);
       await contractInstance.connect(owner).mint(owner.address, tokenId, amount, "0x");
-      console.log("owner.address2", owner);
       const tx = contractInstance
         .connect(owner)
         .safeTransferFrom(owner.address, erc1155ReceiverInstance.address, tokenId, amount, "0x");
@@ -55,23 +53,23 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer approved tokens to receiver contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const { contractInstance: erc1155Instance } = await deployErc1155Base(name);
       const { contractInstance: erc1155ReceiverInstance } = await deployErc1155Receiver();
 
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
-      contractInstance.setApprovalForAll(receiver.address, true);
+      await erc1155Instance.mint(owner.address, tokenId, amount, "0x");
+      erc1155Instance.setApprovalForAll(receiver.address, true);
 
-      const tx = contractInstance
+      const tx = erc1155Instance
         .connect(receiver)
         .safeTransferFrom(owner.address, erc1155ReceiverInstance.address, tokenId, amount, "0x");
       await expect(tx)
-        .to.emit(contractInstance, "TransferSingle")
+        .to.emit(erc1155Instance, "TransferSingle")
         .withArgs(receiver.address, owner.address, erc1155ReceiverInstance.address, tokenId, amount);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
+      const balanceOfOwner = await erc1155Instance.balanceOf(owner.address, tokenId);
       expect(balanceOfOwner).to.equal(0);
 
-      const balanceOfReceiver = await contractInstance.balanceOf(erc1155ReceiverInstance.address, tokenId);
+      const balanceOfReceiver = await erc1155Instance.balanceOf(erc1155ReceiverInstance.address, tokenId);
       expect(balanceOfReceiver).to.equal(amount);
     });
   });

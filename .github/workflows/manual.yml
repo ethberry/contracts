@@ -43,6 +43,7 @@ jobs:
 
       - name: Publish sol and abi only
         run: npm run release:abi
+        shell: bash
         env:
           GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}

@@ -55,7 +55,7 @@ export default {
       saveDeployments: true,
     },
     binancetest: {
-      url: process.env.RPC_URL_BINANCE_TEST,
+      url: process.env.BINANCE_TEST_RPC_URL,
       chainId: 97,
       gasPrice: 20000000000,
       accounts: {
@@ -63,10 +63,10 @@ export default {
       },
     },
     binancemain: {
-      url: process.env.RPC_URL_BINANCE,
+      url: process.env.BINANCE_RPC_URL,
       chainId: 56,
       gasPrice: 20000000000,
-      accounts: [process.env.BNB_PRIVATEKEY],
+      accounts: [process.env.MM_PRIVATEKEY],
     },
   },
   solidity: {

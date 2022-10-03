@@ -49,6 +49,7 @@ jobs:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
           BINANCE_RPC_URL: ${{ secrets.BINANCE_RPC_URL }}
+          BINANCE_TEST_RPC_URL: ${{ secrets.BINANCE_RPC_URL }}
           RINKEBY_RPC_URL: ${{ secrets.RINKEBY_RPC_URL }}
           ROPSTEN_RPC_URL: ${{ secrets.ROPSTEN_RPC_URL }}
           POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}

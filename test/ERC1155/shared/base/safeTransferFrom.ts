@@ -20,8 +20,9 @@ export function shouldSafeTransferFrom(name: string) {
       const [owner] = await ethers.getSigners();
       const { contractInstance } = await deployErc1155Base(name);
       const { contractInstance: erc1155ReceiverInstance } = await deployErc1155Receiver();
-
+      console.log("owner.address1", owner);
       await contractInstance.connect(owner).mint(owner.address, tokenId, amount, "0x");
+      console.log("owner.address2", owner);
       const tx = contractInstance
         .connect(owner)
         .safeTransferFrom(owner.address, erc1155ReceiverInstance.address, tokenId, amount, "0x");

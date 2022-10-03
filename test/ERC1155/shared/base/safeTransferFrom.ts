@@ -57,7 +57,10 @@ export function shouldSafeTransferFrom(name: string) {
       const { contractInstance: erc1155ReceiverInstance } = await deployErc1155Receiver();
 
       await erc1155Instance.mint(owner.address, tokenId, amount, "0x");
-      erc1155Instance.setApprovalForAll(receiver.address, true);
+      await erc1155Instance.setApprovalForAll(receiver.address, true);
+      const checkApprove = await erc1155Instance.isApprovedForAll(owner.address, receiver.address);
+      expect(checkApprove).to.equal(true);
+      await erc1155Instance.setApprovalForAll(receiver.address, true);
 
       const tx = erc1155Instance
         .connect(receiver)

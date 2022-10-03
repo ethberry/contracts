@@ -15,7 +15,7 @@ import { shouldSafeBatchTransferFrom } from "./shared/base/safeBatchTransferFrom
 
 use(solidity);
 
-describe.only("ERC1155BaseUrl", function () {
+describe("ERC1155BaseUrl", function () {
   const name = "ERC1155BaseUrlTest";
 
   shouldMint(name);

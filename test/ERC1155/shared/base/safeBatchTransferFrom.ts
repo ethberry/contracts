@@ -88,7 +88,7 @@ export function shouldSafeBatchTransferFrom(name: string) {
       const tokenId_1 = 2;
       await contractInstance.mint(owner.address, tokenId, amount, "0x");
       await contractInstance.mint(owner.address, tokenId_1, amount, "0x");
-      contractInstance.setApprovalForAll(receiver.address, true);
+      await contractInstance.setApprovalForAll(receiver.address, true);
 
       const tx = contractInstance
         .connect(receiver)

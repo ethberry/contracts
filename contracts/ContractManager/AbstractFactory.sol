@@ -50,6 +50,20 @@ abstract contract AbstractFactory is EIP712, AccessControl {
     }
   }
 
+  function removeFactory(address factory) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    for (uint256 i = 0; i < _minters.length; i++) {
+      if (_minters[i] == factory) {
+        delete _minters[i];
+      }
+    }
+
+    for (uint256 i = 0; i < _manipulators.length; i++) {
+      if (_manipulators[i] == factory) {
+        delete _manipulators[i];
+      }
+    }
+  }
+
 
   function grantFactoryMintPermission(address addr) internal {
     IAccessControl instance = IAccessControl(addr);

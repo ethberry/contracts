@@ -92,5 +92,5 @@
     "release:abi": "sh scripts/publish-abi.sh"
   },
   "types": "./typechain-types/index.ts",
-  "version": "1.0.2"
+  "version": "1.0.3"
 }

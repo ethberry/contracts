@@ -7,6 +7,10 @@
 /besu
 /@types
 /.openzeppelin
+/contracts
+/typechain-types
+
+CUSTOM/
 
 DOCKER.md
 HARDHAT.md
@@ -17,7 +21,11 @@ hardhat.config.ts
 tsconfig.json
 tsconfig.test.json
 coverage.json
+docker-compose.yml
+gen-besu.json
+Dockerfile
 
+.nvmrc
 .idea
 .vscode
 .github
@@ -31,4 +39,4 @@ coverage.json
 .prettierrc
 .solhint.json
 
-sol/ERC998
+/ERC998

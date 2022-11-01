@@ -72,10 +72,6 @@
     "type": "git",
     "url": "https://github.com/gemunion/contracts"
   },
-  "files": [
-    "/sol/**/*.sol",
-    "/abi/*.json"
-  ],
   "scripts": {
     "build": "hardhat compile",
     "clean": "hardhat clean",

@@ -5,11 +5,11 @@ import { ContractFactory } from "ethers";
 
 import { BlackListTest } from "../../typechain-types";
 import { DEFAULT_ADMIN_ROLE } from "../constants";
-import { shouldHaveRole } from "../shared/accessControl/hasRoles";
-import { shouldGetRoleAdmin } from "../shared/accessControl/getRoleAdmin";
-import { shouldGrantRole } from "../shared/accessControl/grantRole";
-import { shouldRevokeRole } from "../shared/accessControl/revokeRole";
-import { shouldRenounceRole } from "../shared/accessControl/renounceRole";
+import { shouldHaveRole } from "../shared/accessible/hasRoles";
+import { shouldGetRoleAdmin } from "../shared/accessible/getRoleAdmin";
+import { shouldGrantRole } from "../shared/accessible/grantRole";
+import { shouldRevokeRole } from "../shared/accessible/revokeRole";
+import { shouldRenounceRole } from "../shared/accessible/renounceRole";
 
 use(solidity);
 

@@ -19,7 +19,6 @@
     "hardhat": "2.12.1",
     "hardhat-deploy": "0.11.19",
     "hardhat-gas-reporter": "1.0.9",
-    "@openzeppelin/contracts": "4.7.3",
     "dotenv": "16.0.3"
   },
   "files": [

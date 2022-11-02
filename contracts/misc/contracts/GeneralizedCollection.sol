@@ -84,11 +84,7 @@ contract GeneralizedCollection {
 
   // Set a field key value in a specific record. Insert the primary key and/or field key if needed.
 
-  function upsertRecordField(
-    uint256 pk,
-    bytes32 fieldKey,
-    uint256 value
-  ) internal returns (bool) {
+  function upsertRecordField(uint256 pk, bytes32 fieldKey, uint256 value) internal returns (bool) {
     if (!isRecord(pk)) {
       insertRecord(pk);
     }

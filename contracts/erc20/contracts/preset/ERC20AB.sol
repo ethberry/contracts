@@ -12,10 +12,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 contract ERC20AB is AccessControl, ERC20Burnable {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-  constructor(
-    string memory name,
-    string memory symbol
-  ) ERC20(name, symbol) {
+  constructor(string memory name, string memory symbol) ERC20(name, symbol) {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
   }

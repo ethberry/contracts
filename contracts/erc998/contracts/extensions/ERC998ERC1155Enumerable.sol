@@ -22,8 +22,8 @@ abstract contract ERC998ERC1155Enumerable is ERC998ERC1155, IERC998ERC1155TopDow
   mapping(uint256 => mapping(address => EnumerableSet.UintSet)) internal erc1155Tokens;
 
   function _beforeReceiveERC1155(
-    address, /* _operator */
-    address, /* _from */
+    address /* _operator */,
+    address /* _from */,
     uint256 _tokenId,
     address _erc1155Contract,
     uint256[] memory _childTokenIds,
@@ -45,9 +45,9 @@ abstract contract ERC998ERC1155Enumerable is ERC998ERC1155, IERC998ERC1155TopDow
   }
 
   function _beforeRemoveERC1155(
-    address, /* _operator */
+    address /* _operator */,
     uint256 _tokenId,
-    address, /* _to */
+    address /* _to */,
     address _erc1155Contract,
     uint256[] memory _childTokenIds,
     uint256[] memory _amounts,
@@ -79,11 +79,12 @@ abstract contract ERC998ERC1155Enumerable is ERC998ERC1155, IERC998ERC1155TopDow
     return erc1155Tokens[_tokenId][_erc1155Contract].length();
   }
 
-  function erc1155TokenByIndex(
-    uint256 _tokenId,
-    address _erc1155Contract,
-    uint256 _index
-  ) external view override returns (uint256 erc1155TokenId) {
+  function erc1155TokenByIndex(uint256 _tokenId, address _erc1155Contract, uint256 _index)
+    external
+    view
+    override
+    returns (uint256 erc1155TokenId)
+  {
     return erc1155Tokens[_tokenId][_erc1155Contract].at(_index);
   }
 

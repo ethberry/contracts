@@ -20,10 +20,7 @@ contract ChainLinkLootboxMock is ERC721ABCE, Pausable {
 
   IERC721ChainLink _factory;
 
-  constructor(
-    string memory name,
-    string memory symbol
-  ) ERC721ABCE(name, symbol, 1000) {
+  constructor(string memory name, string memory symbol) ERC721ABCE(name, symbol, 1000) {
     _setupRole(PAUSER_ROLE, _msgSender());
   }
 

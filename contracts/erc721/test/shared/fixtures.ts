@@ -4,15 +4,7 @@ import { baseTokenURI, royalty, tokenName, tokenSymbol } from "../constants";
 export async function deployErc721Base(name: string) {
   const erc721Factory = await ethers.getContractFactory(name);
 
-  const is998 = name.substring(0, 6) === "ERC998";
-
-  if (is998) {
-    const erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, royalty);
-
-    return {
-      contractInstance: erc721Instance,
-    };
-  } else if (name === "ERC721BaseUrlTest") {
+  if (name === "ERC721BaseUrlTest") {
     const erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, royalty, baseTokenURI);
 
     return {

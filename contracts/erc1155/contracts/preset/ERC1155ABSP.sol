@@ -36,13 +36,7 @@ contract ERC1155ABSP is ERC1155ABS, ERC1155Pausable {
     super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
   }
 
-  function supportsInterface(bytes4 interfaceId)
-  public
-  view
-  virtual
-  override(ERC1155, ERC1155ABS)
-  returns (bool)
-  {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC1155, ERC1155ABS) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 }

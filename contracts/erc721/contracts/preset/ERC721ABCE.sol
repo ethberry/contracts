@@ -19,11 +19,7 @@ contract ERC721ABCE is AccessControl, ERC721Burnable, ERC721CappedEnumerable {
 
   Counters.Counter internal _tokenIdTracker;
 
-  constructor(
-    string memory name,
-    string memory symbol,
-    uint256 cap
-  ) ERC721(name, symbol) ERC721CappedEnumerable(cap) {
+  constructor(string memory name, string memory symbol, uint256 cap) ERC721(name, symbol) ERC721CappedEnumerable(cap) {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
   }
@@ -52,11 +48,11 @@ contract ERC721ABCE is AccessControl, ERC721Burnable, ERC721CappedEnumerable {
     return super.supportsInterface(interfaceId);
   }
 
-  function _beforeTokenTransfer(
-    address from,
-    address to,
-    uint256 tokenId
-  ) internal virtual override(ERC721, ERC721CappedEnumerable) {
+  function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+    internal
+    virtual
+    override(ERC721, ERC721CappedEnumerable)
+  {
     super._beforeTokenTransfer(from, to, tokenId);
   }
 }

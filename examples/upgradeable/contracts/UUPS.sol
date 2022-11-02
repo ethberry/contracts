@@ -6,7 +6,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-contract DummyUUPS1 is Initializable, OwnableUpgradeable, UUPSUpgradeable {
+contract UUPS1 is Initializable, OwnableUpgradeable, UUPSUpgradeable {
   event Dummy(bool dummy);
 
   /// @custom:oz-upgrades-unsafe-allow constructor
@@ -26,7 +26,7 @@ contract DummyUUPS1 is Initializable, OwnableUpgradeable, UUPSUpgradeable {
   }
 }
 
-contract DummyUUPS2 is Initializable, OwnableUpgradeable, UUPSUpgradeable {
+contract UUPS2 is Initializable, OwnableUpgradeable, UUPSUpgradeable {
   event Dummy(bool dummy);
 
   /// @custom:oz-upgrades-unsafe-allow constructor

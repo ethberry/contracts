@@ -21,7 +21,8 @@ contract EIP712ERC20 is EIP712, Pausable, AccessControl {
 
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-  bytes32 private immutable PERMIT_SIGNATURE = keccak256("EIP712(bytes32 nonce,address account,address token,uint256 amount)");
+  bytes32 private immutable PERMIT_SIGNATURE =
+    keccak256("EIP712(bytes32 nonce,address account,address token,uint256 amount)");
 
   constructor(string memory name) EIP712(name, "1.0.0") {
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -47,20 +48,11 @@ contract EIP712ERC20 is EIP712, Pausable, AccessControl {
     IERC20Mintable(token).mint(account, amount);
   }
 
-  function _hash(
-    bytes32 nonce,
-    address account,
-    address token,
-    uint256 amount
-  ) internal view returns (bytes32) {
+  function _hash(bytes32 nonce, address account, address token, uint256 amount) internal view returns (bytes32) {
     return _hashTypedDataV4(keccak256(abi.encode(PERMIT_SIGNATURE, nonce, account, token, amount)));
   }
 
-  function _verify(
-    address signer,
-    bytes32 digest,
-    bytes memory signature
-  ) internal view returns (bool) {
+  function _verify(address signer, bytes32 digest, bytes memory signature) internal view returns (bool) {
     return SignatureChecker.isValidSignatureNow(signer, digest, signature);
   }
 

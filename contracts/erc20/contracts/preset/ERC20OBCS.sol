@@ -11,11 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
 import "./ERC20OBC.sol";
 
 contract ERC20OBCS is ERC20OBC, ERC20Snapshot {
-  constructor(
-    string memory name,
-    string memory symbol,
-    uint256 cap
-  ) ERC20OBC(name, symbol, cap) {}
+  constructor(string memory name, string memory symbol, uint256 cap) ERC20OBC(name, symbol, cap) {}
 
   function snapshot() public onlyOwner {
     _snapshot();
@@ -25,11 +21,11 @@ contract ERC20OBCS is ERC20OBC, ERC20Snapshot {
     super._mint(account, amount);
   }
 
-  function _beforeTokenTransfer(
-    address from,
-    address to,
-    uint256 amount
-  ) internal virtual override(ERC20, ERC20Snapshot) {
+  function _beforeTokenTransfer(address from, address to, uint256 amount)
+    internal
+    virtual
+    override(ERC20, ERC20Snapshot)
+  {
     super._beforeTokenTransfer(from, to, amount);
   }
 }

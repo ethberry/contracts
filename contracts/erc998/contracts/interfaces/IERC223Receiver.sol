@@ -10,9 +10,5 @@ interface IERC223Receiver {
    * @param value Amount of tokens.
    * @param data  Transaction metadata.
    */
-  function tokenFallback(
-    address from,
-    uint256 value,
-    bytes memory data
-  ) external;
+  function tokenFallback(address from, uint256 value, bytes memory data) external;
 }

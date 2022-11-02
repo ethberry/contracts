@@ -13,11 +13,7 @@ import "./ERC20ABCS.sol";
 contract ERC20ABCSP is ERC20ABCS, ERC20Pausable {
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
-  constructor(
-    string memory name,
-    string memory symbol,
-    uint256 cap
-  ) ERC20ABCS(name, symbol, cap){
+  constructor(string memory name, string memory symbol, uint256 cap) ERC20ABCS(name, symbol, cap) {
     _setupRole(PAUSER_ROLE, _msgSender());
   }
 
@@ -33,11 +29,11 @@ contract ERC20ABCSP is ERC20ABCS, ERC20Pausable {
     super._mint(account, amount);
   }
 
-  function _beforeTokenTransfer(
-    address from,
-    address to,
-    uint256 amount
-  ) internal virtual override(ERC20ABCS, ERC20Pausable) {
+  function _beforeTokenTransfer(address from, address to, uint256 amount)
+    internal
+    virtual
+    override(ERC20ABCS, ERC20Pausable)
+  {
     super._beforeTokenTransfer(from, to, amount);
   }
 }

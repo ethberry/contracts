@@ -38,13 +38,13 @@ abstract contract ERC721OpenSea is ERC721ABCES, AccessControlEnumerable {
   /**
    * Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
    */
-  function isApprovedForAll(address owner_, address operator) public view virtual override returns (bool) {
+  function isApprovedForAll(address owner, address operator) public view virtual override returns (bool) {
     // Whitelist OpenSea proxy contract for easy trading.
-    if (address(_proxyRegistry.proxies(owner_)) == operator) {
+    if (address(_proxyRegistry.proxies(owner)) == operator) {
       return true;
     }
 
-    return super.isApprovedForAll(owner_, operator);
+    return super.isApprovedForAll(owner, operator);
   }
 
   /**
@@ -64,7 +64,6 @@ abstract contract ERC721OpenSea is ERC721ABCES, AccessControlEnumerable {
   {
     super._revokeRole(role, account);
   }
-
 
   function supportsInterface(bytes4 interfaceId)
     public

@@ -14,20 +14,11 @@ import "../extensions/ERC721Dropbox.sol";
 contract ERC721DropboxTest is ERC721Dropbox, ERC721ABC, Pausable {
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
-  constructor(
-    string memory name,
-    string memory symbol,
-    uint256 cap
-  ) ERC721ABC(name, symbol, cap) ERC721Dropbox(name) {
+  constructor(string memory name, string memory symbol, uint256 cap) ERC721ABC(name, symbol, cap) ERC721Dropbox(name) {
     _setupRole(PAUSER_ROLE, _msgSender());
   }
 
-  function redeem(
-    address account,
-    uint256 tokenId,
-    address signer,
-    bytes calldata signature
-  ) public virtual {
+  function redeem(address account, uint256 tokenId, address signer, bytes calldata signature) public virtual {
     _checkRole(MINTER_ROLE, signer);
     _redeem(account, tokenId, signer, signature);
   }

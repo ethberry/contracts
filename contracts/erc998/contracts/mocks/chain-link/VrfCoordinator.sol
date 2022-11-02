@@ -16,11 +16,7 @@ contract VRFCoordinatorMock is VRFRequestIDBase {
 
   mapping(bytes32 /* keyHash */ => uint256 /* nonce */) private nonces;
 
-  function onTokenTransfer(
-    address sender,
-    uint256,
-    bytes memory _data
-  ) public onlyLINK {
+  function onTokenTransfer(address sender, uint256, bytes memory _data) public onlyLINK {
     (bytes32 keyHash, uint256 seed) = abi.decode(_data, (bytes32, uint256));
     emit RandomnessRequest(sender, keyHash, seed);
 
@@ -32,15 +28,11 @@ contract VRFCoordinatorMock is VRFRequestIDBase {
 
   VRFConsumerBase v;
 
-  function callBackWithRandomness(
-    bytes32 requestId,
-    uint256 randomness,
-    address consumerContract
-  ) public {
+  function callBackWithRandomness(bytes32 requestId, uint256 randomness, address consumerContract) public {
     v = VRFConsumerBase(consumerContract);
     bytes memory resp = abi.encodeWithSelector(v.rawFulfillRandomness.selector, requestId, randomness);
-     uint256 b = 206000;
-     require(gasleft() >= b, "not enough gas for consumer");
+    uint256 b = 206000;
+    require(gasleft() >= b, "not enough gas for consumer");
     (bool success, ) = consumerContract.call(resp);
     (success);
     // v.rawFulfillRandomness(requestId, randomness);

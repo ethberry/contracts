@@ -20,21 +20,15 @@ contract ERC1155AB is AccessControl, ERC1155Burnable {
     _setupRole(MINTER_ROLE, account);
   }
 
-  function mint(
-    address to,
-    uint256 id,
-    uint256 amount,
-    bytes memory data
-  ) public virtual onlyRole(MINTER_ROLE) {
+  function mint(address to, uint256 id, uint256 amount, bytes memory data) public virtual onlyRole(MINTER_ROLE) {
     _mint(to, id, amount, data);
   }
 
-  function mintBatch(
-    address to,
-    uint256[] memory ids,
-    uint256[] memory amounts,
-    bytes memory data
-  ) public virtual onlyRole(MINTER_ROLE) {
+  function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
+    public
+    virtual
+    onlyRole(MINTER_ROLE)
+  {
     _mintBatch(to, ids, amounts, data);
   }
 

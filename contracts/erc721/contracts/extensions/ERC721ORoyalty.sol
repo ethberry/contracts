@@ -22,11 +22,12 @@ abstract contract ERC721ORoyalty is Ownable, IERC721Royalty, ERC721Royalty {
     emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
   }
 
-  function setTokenRoyalty(
-    uint256 tokenId,
-    address royaltyReceiver,
-    uint96 royaltyNumerator
-  ) public virtual override onlyOwner {
+  function setTokenRoyalty(uint256 tokenId, address royaltyReceiver, uint96 royaltyNumerator)
+    public
+    virtual
+    override
+    onlyOwner
+  {
     super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }

@@ -11,19 +11,9 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "./ERC721ABCE.sol";
 
 contract ERC721ABCES is ERC721ABCE, ERC721URIStorage {
-  constructor(
-    string memory name,
-    string memory symbol,
-    uint256 cap
-  ) ERC721ABCE(name, symbol, cap) { }
+  constructor(string memory name, string memory symbol, uint256 cap) ERC721ABCE(name, symbol, cap) {}
 
-  function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    virtual
-    override(ERC721, ERC721ABCE)
-    returns (bool)
-  {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721ABCE) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 
@@ -39,11 +29,11 @@ contract ERC721ABCES is ERC721ABCE, ERC721URIStorage {
     return super._burn(tokenId);
   }
 
-  function _beforeTokenTransfer(
-    address from,
-    address to,
-    uint256 tokenId
-  ) internal virtual override(ERC721, ERC721ABCE) {
+  function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+    internal
+    virtual
+    override(ERC721, ERC721ABCE)
+  {
     super._beforeTokenTransfer(from, to, tokenId);
   }
 }

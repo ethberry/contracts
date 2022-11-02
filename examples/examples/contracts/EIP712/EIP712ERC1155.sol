@@ -52,13 +52,11 @@ contract EIP712ERC1155 is AccessControl, Pausable, EIP712 {
     IERC1155Mintable(token).mintBatch(account, tokenIds, amounts, "0x");
   }
 
-  function _hash(
-    bytes32 nonce,
-    address account,
-    address token,
-    uint256[] memory tokenIds,
-    uint256[] memory amounts
-  ) internal view returns (bytes32) {
+  function _hash(bytes32 nonce, address account, address token, uint256[] memory tokenIds, uint256[] memory amounts)
+    internal
+    view
+    returns (bytes32)
+  {
     return
       _hashTypedDataV4(
         keccak256(
@@ -74,11 +72,7 @@ contract EIP712ERC1155 is AccessControl, Pausable, EIP712 {
       );
   }
 
-  function _verify(
-    address signer,
-    bytes32 digest,
-    bytes memory signature
-  ) internal view returns (bool) {
+  function _verify(address signer, bytes32 digest, bytes memory signature) internal view returns (bool) {
     return SignatureChecker.isValidSignatureNow(signer, digest, signature);
   }
 

@@ -12,11 +12,7 @@ import "./ERC721ABCE.sol";
 contract ERC721ABCEP is ERC721ABCE, ERC721Pausable {
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
-  constructor(
-    string memory name,
-    string memory symbol,
-    uint256 cap
-  ) ERC721ABCE(name, symbol, cap) {
+  constructor(string memory name, string memory symbol, uint256 cap) ERC721ABCE(name, symbol, cap) {
     _setupRole(PAUSER_ROLE, _msgSender());
   }
 
@@ -32,11 +28,11 @@ contract ERC721ABCEP is ERC721ABCE, ERC721Pausable {
     return super.supportsInterface(interfaceId);
   }
 
-  function _beforeTokenTransfer(
-    address from,
-    address to,
-    uint256 tokenId
-  ) internal virtual override(ERC721ABCE, ERC721Pausable) {
+  function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+    internal
+    virtual
+    override(ERC721ABCE, ERC721Pausable)
+  {
     super._beforeTokenTransfer(from, to, tokenId);
   }
 }

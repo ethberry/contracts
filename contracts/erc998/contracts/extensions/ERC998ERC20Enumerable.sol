@@ -16,23 +16,21 @@ abstract contract ERC998ERC20Enumerable is ERC998ERC20, IERC998ERC20TopDownEnume
   // tokenId => token contract
   mapping(uint256 => EnumerableSet.AddressSet) erc20Contracts;
 
-  function _beforeERC20Received(
-    address, /*_from*/
-    uint256 _tokenId,
-    address _erc20Contract,
-    uint256 _value
-  ) internal virtual override {
+  function _beforeERC20Received(address /*_from*/, uint256 _tokenId, address _erc20Contract, uint256 _value)
+    internal
+    virtual
+    override
+  {
     if (erc20Balances[_tokenId][_erc20Contract] == 0 && _value > 0) {
       require(erc20Contracts[_tokenId].add(_erc20Contract), "CTD: erc20Received: erc20Contracts add _erc20Contract");
     }
   }
 
-  function _beforeRemoveERC20(
-    uint256 _tokenId,
-    address, /*_to*/
-    address _erc20Contract,
-    uint256 _value
-  ) internal virtual override {
+  function _beforeRemoveERC20(uint256 _tokenId, address /*_to*/, address _erc20Contract, uint256 _value)
+    internal
+    virtual
+    override
+  {
     if (erc20Balances[_tokenId][_erc20Contract] == _value && _value > 0) {
       // the new balance becomes 0, so the ERC20 contract is removed
       require(

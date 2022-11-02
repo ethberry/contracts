@@ -19,12 +19,7 @@ abstract contract ERC998ERC20 is Context, ERC165, IERC721, IERC998TopDown, IERC9
   // tokenId => (token contract => balance)
   mapping(uint256 => mapping(address => uint256)) erc20Balances;
 
-  function transferERC20(
-    uint256 _tokenId,
-    address _to,
-    address _erc20Contract,
-    uint256 _value
-  ) external override {
+  function transferERC20(uint256 _tokenId, address _to, address _erc20Contract, uint256 _value) external override {
     require(_to != address(0), "CTD: transferERC20 _to zero address");
     address sender = _msgSender();
     _ownerOrApproved(sender, _tokenId);
@@ -33,13 +28,10 @@ abstract contract ERC998ERC20 is Context, ERC165, IERC721, IERC998TopDown, IERC9
   }
 
   // implementation of ERC 223
-  function transferERC223(
-    uint256 _tokenId,
-    address _to,
-    address _erc223Contract,
-    uint256 _value,
-    bytes memory _data
-  ) external override {
+  function transferERC223(uint256 _tokenId, address _to, address _erc223Contract, uint256 _value, bytes memory _data)
+    external
+    override
+  {
     require(_to != address(0), "CTD: transferERC223 _to zero address");
     address sender = _msgSender();
     _ownerOrApproved(sender, _tokenId);
@@ -47,12 +39,7 @@ abstract contract ERC998ERC20 is Context, ERC165, IERC721, IERC998TopDown, IERC9
     require(IERC20AndERC223(_erc223Contract).transfer(_to, _value, _data), "CTD: transferERC223 transfer failed");
   }
 
-  function _removeERC20(
-    uint256 _tokenId,
-    address _to,
-    address _erc20Contract,
-    uint256 _value
-  ) internal {
+  function _removeERC20(uint256 _tokenId, address _to, address _erc20Contract, uint256 _value) internal {
     uint256 erc20Balance = erc20Balances[_tokenId][_erc20Contract];
     require(erc20Balance >= _value, "CTD: removeERC20 value not enough");
 
@@ -70,30 +57,16 @@ abstract contract ERC998ERC20 is Context, ERC165, IERC721, IERC998TopDown, IERC9
     _afterRemoveERC20(_tokenId, _to, _erc20Contract, _value);
   }
 
-  function _beforeRemoveERC20(
-    uint256 _tokenId,
-    address _to,
-    address _erc20Contract,
-    uint256 _value
-  ) internal virtual {}
+  function _beforeRemoveERC20(uint256 _tokenId, address _to, address _erc20Contract, uint256 _value) internal virtual {}
 
-  function _afterRemoveERC20(
-    uint256 _tokenId,
-    address _to,
-    address _erc20Contract,
-    uint256 _value
-  ) internal virtual {}
+  function _afterRemoveERC20(uint256 _tokenId, address _to, address _erc20Contract, uint256 _value) internal virtual {}
 
   function balanceOfERC20(uint256 _tokenId, address _erc20Contract) external view override returns (uint256) {
     return erc20Balances[_tokenId][_erc20Contract];
   }
 
   // used by ERC 223
-  function tokenFallback(
-    address _from,
-    uint256 _value,
-    bytes memory _data
-  ) external override {
+  function tokenFallback(address _from, uint256 _value, bytes memory _data) external override {
     require(_data.length > 0, "CTD: tokenFallback empty _data");
     address sender = _msgSender();
     require(tx.origin != sender, "CTD: tokenFallback sender is not a contract");
@@ -102,12 +75,7 @@ abstract contract ERC998ERC20 is Context, ERC165, IERC721, IERC998TopDown, IERC9
   }
 
   // this contract has to be approved first by _erc20Contract
-  function getERC20(
-    address _from,
-    uint256 _tokenId,
-    address _erc20Contract,
-    uint256 _value
-  ) public override {
+  function getERC20(address _from, uint256 _tokenId, address _erc20Contract, uint256 _value) public override {
     address sender = _msgSender();
     if (_from != sender) {
       try IERC20AndERC223(_erc20Contract).allowance(_from, sender) returns (uint256 remaining) {
@@ -123,12 +91,7 @@ abstract contract ERC998ERC20 is Context, ERC165, IERC721, IERC998TopDown, IERC9
     );
   }
 
-  function _erc20Received(
-    address _from,
-    uint256 _tokenId,
-    address _erc20Contract,
-    uint256 _value
-  ) internal {
+  function _erc20Received(address _from, uint256 _tokenId, address _erc20Contract, uint256 _value) internal {
     require(ownerOf(_tokenId) != address(0), "CTD: erc20Received _tokenId does not exist");
 
     _beforeERC20Received(_from, _tokenId, _erc20Contract, _value);
@@ -141,19 +104,15 @@ abstract contract ERC998ERC20 is Context, ERC165, IERC721, IERC998TopDown, IERC9
     _afterReceivedERC20(_from, _tokenId, _erc20Contract, _value);
   }
 
-  function _beforeERC20Received(
-    address _from,
-    uint256 _tokenId,
-    address _erc20Contract,
-    uint256 _value
-  ) internal virtual {}
+  function _beforeERC20Received(address _from, uint256 _tokenId, address _erc20Contract, uint256 _value)
+    internal
+    virtual
+  {}
 
-  function _afterReceivedERC20(
-    address _from,
-    uint256 _tokenId,
-    address _erc20Contract,
-    uint256 _value
-  ) internal virtual {}
+  function _afterReceivedERC20(address _from, uint256 _tokenId, address _erc20Contract, uint256 _value)
+    internal
+    virtual
+  {}
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165, ERC165) returns (bool) {
     return interfaceId == type(IERC998ERC20TopDown).interfaceId || super.supportsInterface(interfaceId);

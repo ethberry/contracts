@@ -22,9 +22,8 @@ interface IERC998ERC721TopDownEnumerable {
   // @param childContract The child contract of the child token
   // @param index The index position of the child token.
   // @return childTokenId The child tokenId for the parent token, child token and index
-  function childTokenByIndex(
-    uint256 tokenId,
-    address childContract,
-    uint256 index
-  ) external view returns (uint256 childTokenId);
+  function childTokenByIndex(uint256 tokenId, address childContract, uint256 index)
+    external
+    view
+    returns (uint256 childTokenId);
 }

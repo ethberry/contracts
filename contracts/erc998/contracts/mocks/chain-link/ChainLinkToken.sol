@@ -20,14 +20,10 @@ contract ChainLinkTokenMock is ERC721ChainLink, IERC721ChainLink, ERC721ABCE {
   // requestId => owner
   mapping(bytes32 => address) private _queue;
 
-  constructor(
-    string memory name,
-    string memory symbol,
-    address link,
-    address vrf,
-    bytes32 keyHash,
-    uint256 fee
-  ) ERC721ABCE(name, symbol, 1000) ERC721ChainLink(link, vrf, keyHash, fee) {}
+  constructor(string memory name, string memory symbol, address link, address vrf, bytes32 keyHash, uint256 fee)
+    ERC721ABCE(name, symbol, 1000)
+    ERC721ChainLink(link, vrf, keyHash, fee)
+  {}
 
   function mintRandom(address to) external override onlyRole(MINTER_ROLE) {
     _queue[getRandomNumber()] = to;

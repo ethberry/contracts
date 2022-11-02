@@ -54,20 +54,12 @@ contract ERC998BottomUp is ERC721ABERS, IERC998ERC721BottomUp, IERC998ERC721Bott
   //old version
   bytes4 constant ERC721_RECEIVED = 0x150b7a02;
 
-  constructor(
-    string memory name,
-    string memory symbol,
-    uint96 royalty
-  ) ERC721ABERS(name, symbol, royalty) {}
+  constructor(string memory name, string memory symbol, uint96 royalty) ERC721ABERS(name, symbol, royalty) {}
 
   function _tokenOwnerOf(uint256 _tokenId)
     internal
     view
-    returns (
-      address tokenOwner,
-      uint256 parentTokenId,
-      bool isParent
-    )
+    returns (address tokenOwner, uint256 parentTokenId, bool isParent)
   {
     tokenOwner = tokenIdToTokenOwner[_tokenId].tokenOwner;
     require(tokenOwner != address(0), "ComposableBottomUp: _tokenOwnerOf tokenOwner zero address");
@@ -92,11 +84,7 @@ contract ERC998BottomUp is ERC721ABERS, IERC998ERC721BottomUp, IERC998ERC721Bott
     external
     view
     override
-    returns (
-      bytes32 tokenOwner,
-      uint256 parentTokenId,
-      bool isParent
-    )
+    returns (bytes32 tokenOwner, uint256 parentTokenId, bool isParent)
   {
     address tokenOwnerAddress = tokenIdToTokenOwner[_tokenId].tokenOwner;
     require(tokenOwnerAddress != address(0), "ComposableBottomUp: tokenOwnerOf tokenOwnerAddress zero address");
@@ -212,11 +200,7 @@ contract ERC998BottomUp is ERC721ABERS, IERC998ERC721BottomUp, IERC998ERC721Bott
     }
   }
 
-  function removeChild(
-    address _fromContract,
-    uint256 _fromTokenId,
-    uint256 _tokenId
-  ) internal {
+  function removeChild(address _fromContract, uint256 _fromTokenId, uint256 _tokenId) internal {
     uint256 childTokenIndex = tokenIdToChildTokenIdsIndex[_tokenId];
     uint256 lastChildTokenIndex = parentToChildTokenIds[_fromContract][_fromTokenId].length - 1;
     uint256 lastChildTokenId = parentToChildTokenIds[_fromContract][_fromTokenId][lastChildTokenIndex];
@@ -287,13 +271,10 @@ contract ERC998BottomUp is ERC721ABERS, IERC998ERC721BottomUp, IERC998ERC721Bott
     emit TransferFromParent(_fromContract, _fromTokenId, _tokenId);
   }
 
-  function transferToParent(
-    address _from,
-    address _toContract,
-    uint256 _toTokenId,
-    uint256 _tokenId,
-    bytes memory
-  ) external override {
+  function transferToParent(address _from, address _toContract, uint256 _toTokenId, uint256 _tokenId, bytes memory)
+    external
+    override
+  {
     require(_from != address(0), "ComposableBottomUp: transferToParent _from zero address");
     require(
       tokenIdToTokenOwner[_tokenId].tokenOwner == _from,
@@ -407,11 +388,7 @@ contract ERC998BottomUp is ERC721ABERS, IERC998ERC721BottomUp, IERC998ERC721Bott
     emit TransferToParent(_toContract, _toTokenId, _tokenId);
   }
 
-  function _transferFrom(
-    address _from,
-    address _to,
-    uint256 _tokenId
-  ) private {
+  function _transferFrom(address _from, address _to, uint256 _tokenId) private {
     require(_from != address(0), "ComposableBottomUp: _transferFrom _from zero address");
     require(tokenIdToTokenOwner[_tokenId].tokenOwner == _from, "ComposableBottomUp: _transferFrom tokenOwner != _from");
     require(
@@ -462,11 +439,12 @@ contract ERC998BottomUp is ERC721ABERS, IERC998ERC721BottomUp, IERC998ERC721Bott
     return parentToChildTokenIds[_parentContract][_parentTokenId].length;
   }
 
-  function childTokenByIndex(
-    address _parentContract,
-    uint256 _parentTokenId,
-    uint256 _index
-  ) external view override returns (uint256) {
+  function childTokenByIndex(address _parentContract, uint256 _parentTokenId, uint256 _index)
+    external
+    view
+    override
+    returns (uint256)
+  {
     require(
       parentToChildTokenIds[_parentContract][_parentTokenId].length > _index,
       "ComposableBottomUp: childTokenByIndex invalid _index"

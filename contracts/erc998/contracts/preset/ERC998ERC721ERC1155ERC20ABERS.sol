@@ -13,11 +13,7 @@ import "../extensions/ERC998ERC1155.sol";
 import "../extensions/ERC998ERC20.sol";
 
 contract ERC998ERC1155ERC20ABERS is ERC998ERC721ABERS, ERC998ERC1155, ERC998ERC20 {
-  constructor(
-    string memory name,
-    string memory symbol,
-    uint96 royalty
-  ) ERC998ERC721ABERS(name, symbol, royalty) {}
+  constructor(string memory name, string memory symbol, uint96 royalty) ERC998ERC721ABERS(name, symbol, royalty) {}
 
   function ownerOf(uint256 tokenId)
     public

@@ -32,11 +32,12 @@ abstract contract ERC998ERC721Enumerable is ERC998ERC721, IERC998ERC721TopDownEn
     return childTokens[_tokenId][_childContract].length();
   }
 
-  function childTokenByIndex(
-    uint256 _tokenId,
-    address _childContract,
-    uint256 _index
-  ) external view override returns (uint256 childTokenId) {
+  function childTokenByIndex(uint256 _tokenId, address _childContract, uint256 _index)
+    external
+    view
+    override
+    returns (uint256 childTokenId)
+  {
     return childTokens[_tokenId][_childContract].at(_index);
   }
 

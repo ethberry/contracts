@@ -26,22 +26,17 @@ abstract contract ERC1155ARoyalty is AccessControl, IERC1155Royalty, ERC2981 {
     emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
   }
 
-  function setTokenRoyalty(
-    uint256 tokenId,
-    address royaltyReceiver,
-    uint96 royaltyNumerator
-  ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
+  function setTokenRoyalty(uint256 tokenId, address royaltyReceiver, uint96 royaltyNumerator)
+    public
+    virtual
+    override
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
     super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }
 
-  function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    virtual
-    override(AccessControl, ERC2981)
-    returns (bool)
-  {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC2981) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 }

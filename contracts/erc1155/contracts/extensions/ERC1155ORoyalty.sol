@@ -16,21 +16,17 @@ abstract contract ERC1155ORoyalty is Ownable, IERC1155Royalty, ERC2981 {
     _setDefaultRoyalty(_msgSender(), royaltyNumerator);
   }
 
-  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
+  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator) public virtual override onlyOwner {
+    super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
+    emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
+  }
+
+  function setTokenRoyalty(uint256 tokenId, address royaltyReceiver, uint96 royaltyNumerator)
     public
     virtual
     override
     onlyOwner
   {
-    super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
-    emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
-  }
-
-  function setTokenRoyalty(
-    uint256 tokenId,
-    address royaltyReceiver,
-    uint96 royaltyNumerator
-  ) public virtual override onlyOwner {
     super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }

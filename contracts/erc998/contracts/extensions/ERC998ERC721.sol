@@ -109,11 +109,7 @@ abstract contract ERC998ERC721 is Context, ERC165, IERC721, IERC998TopDown, IERC
     return rootOwnerAndTokenIdToApprovedAddress[rootOwner][_tokenId];
   }
 
-  function _beforeTokenTransfer(
-    address from,
-    address,
-    uint256 tokenId
-  ) internal virtual {
+  function _beforeTokenTransfer(address from, address, uint256 tokenId) internal virtual {
     if (_msgSender() != from) {
       bytes memory callData = abi.encodeWithSelector(ROOT_OWNER_OF_CHILD, address(this), tokenId);
       (bool callSuccess, bytes memory data) = from.staticcall(callData);
@@ -143,12 +139,10 @@ abstract contract ERC998ERC721 is Context, ERC165, IERC721, IERC998TopDown, IERC
   // child address => childId => tokenId
   mapping(address => mapping(uint256 => uint256)) private childTokenOwner;
 
-  function safeTransferChild(
-    uint256 _fromTokenId,
-    address _to,
-    address _childContract,
-    uint256 _childTokenId
-  ) external override {
+  function safeTransferChild(uint256 _fromTokenId, address _to, address _childContract, uint256 _childTokenId)
+    external
+    override
+  {
     _transferChild(_fromTokenId, _to, _childContract, _childTokenId);
     IERC721(_childContract).safeTransferFrom(address(this), _to, _childTokenId);
     emit TransferChild(_fromTokenId, _to, _childContract, _childTokenId, 1);
@@ -166,43 +160,28 @@ abstract contract ERC998ERC721 is Context, ERC165, IERC721, IERC998TopDown, IERC
     emit TransferChild(_fromTokenId, _to, _childContract, _childTokenId, 1);
   }
 
-  function transferChild(
-    uint256 _fromTokenId,
-    address _to,
-    address _childContract,
-    uint256 _childTokenId
-  ) external override {
+  function transferChild(uint256 _fromTokenId, address _to, address _childContract, uint256 _childTokenId)
+    external
+    override
+  {
     _transferChild(_fromTokenId, _to, _childContract, _childTokenId);
     IERC721(_childContract).transferFrom(address(this), _to, _childTokenId);
     emit TransferChild(_fromTokenId, _to, _childContract, _childTokenId, 1);
   }
 
-  function transferChildToParent(
-    uint256,
-    address,
-    uint256,
-    address,
-    uint256,
-    bytes memory
-  ) external pure override {
+  function transferChildToParent(uint256, address, uint256, address, uint256, bytes memory) external pure override {
     revert("CTD: this method is not supported");
   }
 
-  function getChild(
-    address,
-    uint256,
-    address,
-    uint256
-  ) external pure override {
+  function getChild(address, uint256, address, uint256) external pure override {
     revert("CTD: this method is not supported");
   }
 
-  function onERC721Received(
-    address,
-    address _from,
-    uint256 _childTokenId,
-    bytes calldata _data
-  ) external override returns (bytes4) {
+  function onERC721Received(address, address _from, uint256 _childTokenId, bytes calldata _data)
+    external
+    override
+    returns (bytes4)
+  {
     require(
       _data.length > 0,
       "CTD: onERC721Received _data must contain the uint256 tokenId to transfer the child token to"
@@ -235,12 +214,7 @@ abstract contract ERC998ERC721 is Context, ERC165, IERC721, IERC998TopDown, IERC
     }
   }
 
-  function _transferChild(
-    uint256 _fromTokenId,
-    address _to,
-    address _childContract,
-    uint256 _childTokenId
-  ) private {
+  function _transferChild(uint256 _fromTokenId, address _to, address _childContract, uint256 _childTokenId) private {
     uint256 tokenId = childTokenOwner[_childContract][_childTokenId];
     require(tokenId != 0, "CTD: _transferChild _childContract _childTokenId not found");
     require(tokenId == _fromTokenId, "CTD: _transferChild wrong tokenId found");
@@ -262,11 +236,7 @@ abstract contract ERC998ERC721 is Context, ERC165, IERC721, IERC998TopDown, IERC
     return (ownerOf(parentTokenId), parentTokenId);
   }
 
-  function removeChild(
-    uint256 _tokenId,
-    address _childContract,
-    uint256 _childTokenId
-  ) internal virtual {
+  function removeChild(uint256 _tokenId, address _childContract, uint256 _childTokenId) internal virtual {
     // remove child token
     uint256 lastTokenIndex = childTokens[_tokenId][_childContract].length() - 1;
     require(childTokens[_tokenId][_childContract].remove(_childTokenId), "CTD: removeChild: _childTokenId not found");
@@ -283,24 +253,14 @@ abstract contract ERC998ERC721 is Context, ERC165, IERC721, IERC998TopDown, IERC
     _afterRemoveERC721(_tokenId, _childContract, _childTokenId);
   }
 
-  function _beforeRemoveERC721(
-    uint256 _tokenId,
-    address _childContract,
-    uint256 _childTokenId
-  ) internal virtual {}
+  function _beforeRemoveERC721(uint256 _tokenId, address _childContract, uint256 _childTokenId) internal virtual {}
 
-  function _afterRemoveERC721(
-    uint256 _tokenId,
-    address _childContract,
-    uint256 _childTokenId
-  ) internal virtual {}
+  function _afterRemoveERC721(uint256 _tokenId, address _childContract, uint256 _childTokenId) internal virtual {}
 
-  function receiveChild(
-    address _from,
-    uint256 _tokenId,
-    address _childContract,
-    uint256 _childTokenId
-  ) internal virtual {
+  function receiveChild(address _from, uint256 _tokenId, address _childContract, uint256 _childTokenId)
+    internal
+    virtual
+  {
     require(ownerOf(_tokenId) != address(0), "CTD: receiveChild _tokenId does not exist.");
     // @dev this is edge case, _tokenId can't be 0
     require(
@@ -321,19 +281,15 @@ abstract contract ERC998ERC721 is Context, ERC165, IERC721, IERC998TopDown, IERC
     _afterReceiveERC721(_from, _tokenId, _childContract, _childTokenId);
   }
 
-  function _beforeReceiveERC721(
-    address _from,
-    uint256 _tokenId,
-    address _childContract,
-    uint256 _childTokenId
-  ) internal virtual {}
+  function _beforeReceiveERC721(address _from, uint256 _tokenId, address _childContract, uint256 _childTokenId)
+    internal
+    virtual
+  {}
 
-  function _afterReceiveERC721(
-    address _from,
-    uint256 _tokenId,
-    address _childContract,
-    uint256 _childTokenId
-  ) internal virtual {}
+  function _afterReceiveERC721(address _from, uint256 _tokenId, address _childContract, uint256 _childTokenId)
+    internal
+    virtual
+  {}
 
   function childContractsFor(uint256 tokenId) external view returns (address[] memory) {
     address[] memory _childContracts = new address[](childContracts[tokenId].length());

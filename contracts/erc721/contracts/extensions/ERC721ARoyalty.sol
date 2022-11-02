@@ -26,11 +26,12 @@ abstract contract ERC721ARoyalty is AccessControl, IERC721Royalty, ERC721Royalty
     emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
   }
 
-  function setTokenRoyalty(
-    uint256 tokenId,
-    address royaltyReceiver,
-    uint96 royaltyNumerator
-  ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
+  function setTokenRoyalty(uint256 tokenId, address royaltyReceiver, uint96 royaltyNumerator)
+    public
+    virtual
+    override
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
     super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }

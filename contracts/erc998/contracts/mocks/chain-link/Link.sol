@@ -10,11 +10,7 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 interface ERC677Receiver {
-  function onTokenTransfer(
-    address _sender,
-    uint256 _value,
-    bytes calldata _data
-  ) external;
+  function onTokenTransfer(address _sender, uint256 _value, bytes calldata _data) external;
 }
 
 contract LINK is ERC20 {
@@ -28,11 +24,7 @@ contract LINK is ERC20 {
 
   // VRF CORDINATOR TEST
 
-  function transferAndCall(
-    address _to,
-    uint256 _value,
-    bytes calldata _data
-  ) external returns (bool success) {
+  function transferAndCall(address _to, uint256 _value, bytes calldata _data) external returns (bool success) {
     super.transfer(_to, _value);
     // Transfer(msg.sender, _to, _value, _data);
     if (_to.isContract()) {
@@ -41,11 +33,7 @@ contract LINK is ERC20 {
     return true;
   }
 
-  function contractFallback(
-    address _to,
-    uint256 _value,
-    bytes calldata _data
-  ) private {
+  function contractFallback(address _to, uint256 _value, bytes calldata _data) private {
     ERC677Receiver receiver = ERC677Receiver(_to);
     receiver.onTokenTransfer(msg.sender, _value, _data);
   }

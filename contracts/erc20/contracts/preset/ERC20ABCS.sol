@@ -13,11 +13,7 @@ import "./ERC20ABC.sol";
 contract ERC20ABCS is ERC20ABC, ERC20Snapshot {
   bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
 
-  constructor(
-    string memory name,
-    string memory symbol,
-    uint256 cap
-  ) ERC20ABC(name, symbol, cap) {
+  constructor(string memory name, string memory symbol, uint256 cap) ERC20ABC(name, symbol, cap) {
     _setupRole(SNAPSHOT_ROLE, _msgSender());
   }
 
@@ -29,11 +25,11 @@ contract ERC20ABCS is ERC20ABC, ERC20Snapshot {
     super._mint(account, amount);
   }
 
-  function _beforeTokenTransfer(
-    address from,
-    address to,
-    uint256 amount
-  ) internal virtual override(ERC20, ERC20Snapshot) {
+  function _beforeTokenTransfer(address from, address to, uint256 amount)
+    internal
+    virtual
+    override(ERC20, ERC20Snapshot)
+  {
     super._beforeTokenTransfer(from, to, amount);
   }
 }

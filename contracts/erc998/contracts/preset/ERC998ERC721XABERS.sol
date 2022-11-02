@@ -11,11 +11,7 @@ import "@gemunion/contracts-erc721/contracts/preset/ERC721ABERS.sol";
 import "../extensions/ERC998ERC721Enumerable.sol";
 
 contract ERC998ERC721XABERS is ERC721ABERS, ERC998ERC721Enumerable {
-  constructor(
-    string memory name,
-    string memory symbol,
-    uint96 royalty
-  ) ERC721ABERS(name, symbol, royalty) {}
+  constructor(string memory name, string memory symbol, uint96 royalty) ERC721ABERS(name, symbol, royalty) {}
 
   function ownerOf(uint256 tokenId) public view virtual override(ERC721, ERC998ERC721) returns (address) {
     return super.ownerOf(tokenId);
@@ -39,11 +35,11 @@ contract ERC998ERC721XABERS is ERC721ABERS, ERC998ERC721Enumerable {
     return ERC998ERC721.getApproved(_tokenId);
   }
 
-  function _beforeTokenTransfer(
-    address from,
-    address to,
-    uint256 tokenId
-  ) internal virtual override(ERC721ABERS, ERC998ERC721) {
+  function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+    internal
+    virtual
+    override(ERC721ABERS, ERC998ERC721)
+  {
     ERC998ERC721._beforeTokenTransfer(from, to, tokenId);
     super._beforeTokenTransfer(from, to, tokenId);
   }

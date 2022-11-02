@@ -83,12 +83,10 @@ abstract contract ERC998ERC1155 is
     IERC1155(_erc1155Contract).safeBatchTransferFrom(address(this), _to, _childTokenIds, _amounts, _data);
   }
 
-  function removeERC1155(
-    uint256 _tokenId,
-    address _erc1155Contract,
-    uint256 _childTokenId,
-    uint256 _amount
-  ) internal returns (uint256) {
+  function removeERC1155(uint256 _tokenId, address _erc1155Contract, uint256 _childTokenId, uint256 _amount)
+    internal
+    returns (uint256)
+  {
     uint256 erc1155Balance = erc1155Balances[_tokenId][_erc1155Contract][_childTokenId];
     require(erc1155Balance >= _amount, "CTD: removeERC1155 value not enough");
     uint256 newERC1155Balance = erc1155Balance - _amount;
@@ -119,22 +117,24 @@ abstract contract ERC998ERC1155 is
   /**
    * @dev See {IERC1155-balanceOf}.
    */
-  function balanceOfERC1155(
-    uint256 _tokenId,
-    address _erc1155Contract,
-    uint256 childTokenId
-  ) external view override returns (uint256) {
+  function balanceOfERC1155(uint256 _tokenId, address _erc1155Contract, uint256 childTokenId)
+    external
+    view
+    override
+    returns (uint256)
+  {
     return erc1155Balances[_tokenId][_erc1155Contract][childTokenId];
   }
 
   /**
    * @dev See {IERC1155-balanceOf}.
    */
-  function balanceOfBatchERC1155(
-    uint256[] memory _tokenIds,
-    address _erc1155Contract,
-    uint256[] memory childTokenIds
-  ) external view override returns (uint256[] memory) {
+  function balanceOfBatchERC1155(uint256[] memory _tokenIds, address _erc1155Contract, uint256[] memory childTokenIds)
+    external
+    view
+    override
+    returns (uint256[] memory)
+  {
     require(
       _tokenIds.length == childTokenIds.length,
       "CTD: batchTransferERC1155 childTokenIds and tokenIds length mismatch"

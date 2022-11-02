@@ -7,4 +7,3 @@
 pragma solidity ^0.8.9;
 
 import "@gemunion/contracts-erc20/contracts/preset/ERC20ABCS.sol";
-

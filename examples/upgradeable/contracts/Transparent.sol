@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract DummyTransparent1 is Initializable {
+contract Transparent1 is Initializable {
   event Dummy(bool dummy);
 
   /// @custom:oz-upgrades-unsafe-allow constructor
@@ -19,7 +19,7 @@ contract DummyTransparent1 is Initializable {
   }
 }
 
-contract DummyTransparent2 is Initializable {
+contract Transparent2 is Initializable {
   event Dummy(bool dummy);
 
   /// @custom:oz-upgrades-unsafe-allow constructor

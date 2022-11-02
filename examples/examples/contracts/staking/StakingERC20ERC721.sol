@@ -41,12 +41,7 @@ contract StakingERC20ERC721 is AccessControl, Pausable {
   event StakingWithdraw(uint256 stakingId, address owner, uint256 withdrawTimestamp, uint256[] tokenIds);
   event StakingFinish(uint256 stakingId, address owner, uint256 finishTimestamp);
 
-  constructor(
-    address acceptedToken,
-    address rewardToken,
-    uint256[] memory periods,
-    uint256[] memory amounts
-  ) {
+  constructor(address acceptedToken, address rewardToken, uint256[] memory periods, uint256[] memory amounts) {
     require(acceptedToken.isContract(), "Staking: The accepted token address must be a deployed contract");
     _acceptedToken = IERC20(acceptedToken);
     require(rewardToken.isContract(), "Staking: The reward token address must be a deployed contract");
@@ -58,10 +53,7 @@ contract StakingERC20ERC721 is AccessControl, Pausable {
     setNewRules(periods, amounts);
   }
 
-  function setNewRules(
-    uint256[] memory periods,
-    uint256[] memory amounts
-  ) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
+  function setNewRules(uint256[] memory periods, uint256[] memory amounts) public virtual onlyRole(DEFAULT_ADMIN_ROLE) {
     require(periods.length != amounts.length, "Staking: length doesn't match");
 
     for (uint256 i; i < periods.length; i++) {
@@ -85,19 +77,16 @@ contract StakingERC20ERC721 is AccessControl, Pausable {
     emit StakingStart(stakeId, _msgSender(), block.timestamp, _periods[level], _amounts[level]);
   }
 
-  function _calculateRewardMultiplier(
-    uint256 startTimestamp,
-    uint256 finishTimestamp,
-    uint256 periodInSeconds
-  ) internal pure virtual returns (uint256) {
+  function _calculateRewardMultiplier(uint256 startTimestamp, uint256 finishTimestamp, uint256 periodInSeconds)
+    internal
+    pure
+    virtual
+    returns (uint256)
+  {
     return (finishTimestamp - startTimestamp) % periodInSeconds;
   }
 
-  function receiveReward(
-    uint256 stakingId,
-    bool withdrawDeposit,
-    bool breakLastPeriod
-  ) public virtual whenNotPaused {
+  function receiveReward(uint256 stakingId, bool withdrawDeposit, bool breakLastPeriod) public virtual whenNotPaused {
     StakingData storage stake = _stakes[stakingId];
     require(stake._owner != address(0), "Staking: wrong staking id");
     require(stake._owner != _msgSender(), "Staking: not an owner");
@@ -109,8 +98,7 @@ contract StakingERC20ERC721 is AccessControl, Pausable {
     } else {
       multiplier = _calculateRewardMultiplier(
         stake._startTimestamp,
-        stake._startTimestamp +
-          (((block.timestamp - stake._startTimestamp) % stake._period) * stake._period),
+        stake._startTimestamp + (((block.timestamp - stake._startTimestamp) % stake._period) * stake._period),
         stake._period
       );
     }

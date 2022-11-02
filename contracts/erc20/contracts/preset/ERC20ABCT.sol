@@ -11,11 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "./ERC20ABC.sol";
 
 contract ERC20ABCT is ERC20ABC, ERC20Permit {
-  constructor(
-    string memory name,
-    string memory symbol,
-    uint256 cap
-  ) ERC20ABC(name, symbol, cap) ERC20Permit(name) {}
+  constructor(string memory name, string memory symbol, uint256 cap) ERC20ABC(name, symbol, cap) ERC20Permit(name) {}
 
   function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
     return

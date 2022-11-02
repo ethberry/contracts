@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract DummyBeacon1 is Initializable {
+contract Beacon1 is Initializable {
   event Dummy(bool dummy);
 
   /// @custom:oz-upgrades-unsafe-allow constructor
@@ -19,7 +19,7 @@ contract DummyBeacon1 is Initializable {
   }
 }
 
-contract DummyBeacon2 is Initializable {
+contract Beacon2 is Initializable {
   event Dummy(bool dummy);
 
   /// @custom:oz-upgrades-unsafe-allow constructor

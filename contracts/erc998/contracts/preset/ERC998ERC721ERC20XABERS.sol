@@ -13,11 +13,7 @@ import "../extensions/ERC998ERC20.sol";
 import "../extensions/ERC998ERC20Enumerable.sol";
 
 contract ERC998ERC721ERC20XABERS is ERC998ERC721ABERS, ERC998ERC20Enumerable {
-  constructor(
-    string memory name,
-    string memory symbol,
-    uint96 royalty
-  ) ERC998ERC721ABERS(name, symbol, royalty) {}
+  constructor(string memory name, string memory symbol, uint96 royalty) ERC998ERC721ABERS(name, symbol, royalty) {}
 
   function ownerOf(uint256 tokenId) public view virtual override(ERC998ERC721ABERS, ERC998ERC20) returns (address) {
     return super.ownerOf(tokenId);
@@ -34,6 +30,6 @@ contract ERC998ERC721ERC20XABERS is ERC998ERC721ABERS, ERC998ERC20Enumerable {
   }
 
   function _ownerOrApproved(address sender, uint256 tokenId) internal view override(ERC998ERC721, ERC998Utils) {
-     super._ownerOrApproved(sender, tokenId);
+    super._ownerOrApproved(sender, tokenId);
   }
 }

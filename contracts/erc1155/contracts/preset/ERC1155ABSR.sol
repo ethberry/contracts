@@ -10,8 +10,7 @@ import "./ERC1155ABS.sol";
 import "../extensions/ERC1155ARoyalty.sol";
 
 contract ERC1155ABSR is ERC1155ABS, ERC1155ARoyalty {
-  constructor(uint96 royaltyNumerator, string memory uri) ERC1155ABS(uri) ERC1155ARoyalty(royaltyNumerator) {
-  }
+  constructor(uint96 royaltyNumerator, string memory uri) ERC1155ABS(uri) ERC1155ARoyalty(royaltyNumerator) {}
 
   function supportsInterface(bytes4 interfaceId)
     public

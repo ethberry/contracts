@@ -1,11 +1,12 @@
 # Project
-/typechain-types
-/besu
-/cache
-/artifacts
-/coverage
-/abi
-/sol
+**/typechain-types/
+**/.openzeppelin/
+**/artifacts/
+**/cache/
+**/dist/
+/code/
+/besu/
+/besu/**
 
 # IDE
 .idea
@@ -19,7 +20,11 @@ node_modules/
 npm-debug.log
 package-lock.json
 yarn.lock
+/lerna-debug.log
 /report.*.json
 
-.env
-coverage.json
+# env
+.env.*
+!.env.sample
+
+gemunion-firebase-key.json

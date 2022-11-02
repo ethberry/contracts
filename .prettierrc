@@ -3,5 +3,13 @@
   "bracketSpacing": true,
   "printWidth": 120,
   "trailingComma": "all",
-  "singleQuote": false
+  "singleQuote": false,
+  "overrides": [
+    {
+      "files": "*.sol",
+      "options": {
+        "compiler": "0.8.9"
+      }
+    }
+  ]
 }

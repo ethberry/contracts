@@ -1,5 +1,3 @@
-/typechain-types
-/besu
-/cache
-/artifacts
-/coverage
+**/node_modules/*
+**/dist/*
+besu/**

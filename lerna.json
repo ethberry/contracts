@@ -1,0 +1,5 @@
+{
+  "packages": ["contracts/*", "examples/*"],
+  "version": "independent",
+  "useNx": true
+}

@@ -4,12 +4,12 @@ import { ethers, web3 } from "hardhat";
 import { ContractFactory } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
-import { AuctionERC721ETHTemplate, ERC721AB } from "../../typechain-types";
-import { amount, tokenId, tokenName, tokenSymbol } from "../constants";
+import { AuctionERC721ETHTemplate, ERC721AB } from "../typechain-types";
+import { amount, tokenId, tokenName, tokenSymbol } from "./constants";
 
-import { shouldHaveOwner } from "../shared/ownable/owner";
-import { shouldTransferOwnership } from "../shared/ownable/transferOwnership";
-import { shouldRenounceOwnership } from "../shared/ownable/renounceOwnership";
+import { shouldHaveOwner } from "./shared/ownable/owner";
+import { shouldTransferOwnership } from "./shared/ownable/transferOwnership";
+import { shouldRenounceOwnership } from "./shared/ownable/renounceOwnership";
 
 use(solidity);
 

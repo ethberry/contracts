@@ -1,5 +1,4 @@
 import { task } from "hardhat/config";
-import "@nomiclabs/hardhat-web3";
 
 task("balance-eth", "Prints an ETH balance")
   .addParam("account", "The account's address")

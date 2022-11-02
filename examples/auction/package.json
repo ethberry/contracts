@@ -6,12 +6,17 @@
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
+    "@gemunion/contracts-erc998": "1.0.0",
+    "@gemunion/contracts-erc721": "1.0.0",
+    "@gemunion/contracts-erc20": "1.0.0",
+    "@gemunion/contracts-erc1155": "1.0.0",
     "@chainlink/contracts": "0.5.1",
     "@ethersproject/networks": "5.7.1",
     "@gemunion/eslint-config": "2.0.5",
     "@nomiclabs/hardhat-ethers": "2.2.1",
     "@nomiclabs/hardhat-etherscan": "3.1.2",
     "@nomiclabs/hardhat-waffle": "2.0.3",
+    "@nomiclabs/hardhat-web3": "2.0.0",
     "@openzeppelin/contracts": "4.7.3",
     "@openzeppelin/test-helpers": "0.5.16",
     "@typechain/ethers-v5": "10.1.0",
@@ -19,6 +24,8 @@
     "@types/chai": "4.3.3",
     "@types/mocha": "10.0.0",
     "@types/node": "16.18.2",
+    "@typescript-eslint/eslint-plugin": "5.41.0",
+    "@typescript-eslint/parser": "5.41.0",
     "chai": "4.3.6",
     "dotenv": "16.0.3",
     "eth-sig-util": "3.0.1",
@@ -28,7 +35,6 @@
     "hardhat": "2.12.1",
     "hardhat-deploy": "0.11.19",
     "hardhat-gas-reporter": "1.0.9",
-    "rimraf": "3.0.2",
     "solhint": "3.3.7",
     "solhint-plugin-prettier": "0.0.5",
     "solidity-coverage": "0.8.2",
@@ -38,13 +44,9 @@
   "engines": {
     "node": ">=12.13"
   },
-  "files": [
-    "/sol/**/*.sol",
-    "/abi/*.json"
-  ],
   "license": "UNLICENSED",
   "main": "./dist/index.js",
-  "name": "@gemunion/contracts-access-list",
+  "name": "@gemunion/contracts-examples-auction",
   "peerDependencies": {
     "@openzeppelin/contracts": "^4.6.0",
     "ethers": "^5.6.0"
@@ -56,21 +58,21 @@
     "type": "git",
     "url": "https://github.com/gemunion/contracts"
   },
+  "files": [
+    "/sol/**/*.sol",
+    "/abi/*.json"
+  ],
   "scripts": {
     "build": "hardhat compile",
     "clean": "hardhat clean",
-    "deploy:mainnet": "hardhat --network mainnet deploy",
-    "deploy:mumbai": "hardhat --network mumbai deploy",
-    "deploy:polygon": "hardhat --network polygon deploy",
-    "deploy:rinkeby": "hardhat --network rinkeby deploy",
-    "lint": "eslint  --fix",
+    "deploy": "hardhat deploy",
+    "lint": "eslint . --fix",
     "prebuild": "hardhat clean",
-    "prepare": "npm run build",
-    "preversion": "npm run build && npm run test",
-    "release:abi": "sh scripts/publish-abi.sh",
+    "preversion": "npm run build",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test",
-    "test:coverage": "hardhat coverage"
+    "test:coverage": "hardhat coverage",
+    "release:abi": "sh scripts/publish-abi.sh"
   },
   "types": "./typechain-types/index.ts",
   "version": "1.0.0"

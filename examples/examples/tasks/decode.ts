@@ -1,5 +1,4 @@
 import { task } from "hardhat/config";
-import "@nomiclabs/hardhat-web3";
 
 task("decode", "Decode error message")
   .addParam("data", "encoded data")

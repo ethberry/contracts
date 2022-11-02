@@ -4,15 +4,15 @@ import { ethers } from "hardhat";
 import { ContractFactory } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
-import { AuctionFactory, ERC721AB } from "../../typechain-types";
-import { amount, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenId, tokenName, tokenSymbol } from "../constants";
+import { AuctionFactory, ERC721AB } from "../typechain-types";
+import { amount, DEFAULT_ADMIN_ROLE, PAUSER_ROLE, tokenId, tokenName, tokenSymbol } from "./constants";
 
-import { shouldHaveRole } from "../shared/accessible/hasRoles";
-import { shouldGetRoleAdmin } from "../shared/accessible/getRoleAdmin";
-import { shouldGrantRole } from "../shared/accessible/grantRole";
-import { shouldRevokeRole } from "../shared/accessible/revokeRole";
-import { shouldRenounceRole } from "../shared/accessible/renounceRole";
-import { shouldPause } from "../shared/pausable";
+import { shouldHaveRole } from "./shared/accessible/hasRoles";
+import { shouldGetRoleAdmin } from "./shared/accessible/getRoleAdmin";
+import { shouldGrantRole } from "./shared/accessible/grantRole";
+import { shouldRevokeRole } from "./shared/accessible/revokeRole";
+import { shouldRenounceRole } from "./shared/accessible/renounceRole";
+import { shouldPause } from "./shared/pausable";
 
 use(solidity);
 

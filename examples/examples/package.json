@@ -46,7 +46,7 @@
   },
   "license": "UNLICENSED",
   "main": "./dist/index.js",
-  "name": "@gemunion/examples",
+  "name": "@gemunion/contracts-examples",
   "peerDependencies": {
     "@openzeppelin/contracts": "^4.6.0",
     "ethers": "^5.6.0"
@@ -75,5 +75,5 @@
     "release:abi": "sh scripts/publish-abi.sh"
   },
   "types": "./typechain-types/index.ts",
-  "version": "1.0.3"
+  "version": "1.0.0"
 }

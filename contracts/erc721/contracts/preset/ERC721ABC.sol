@@ -16,11 +16,12 @@ contract ERC721ABC is ERC721AB, ERC721Capped {
     return super.supportsInterface(interfaceId);
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-    internal
-    virtual
-    override(ERC721, ERC721Capped)
-  {
-    super._beforeTokenTransfer(from, to, tokenId);
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 firstTokenId,
+    uint256 batchSize
+  ) internal virtual override(ERC721, ERC721Capped) {
+    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
   }
 }

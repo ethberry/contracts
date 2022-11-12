@@ -11,16 +11,16 @@ import "../extensions/ERC721ARoyalty.sol";
 
 contract ERC721ABCER is ERC721ABCE, ERC721ARoyalty {
   constructor(string memory name, string memory symbol, uint256 cap, uint96 royaltyNumerator)
-    ERC721ABCE(name, symbol, cap)
-    ERC721ARoyalty(royaltyNumerator)
+  ERC721ABCE(name, symbol, cap)
+  ERC721ARoyalty(royaltyNumerator)
   {}
 
   function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    virtual
-    override(ERC721ABCE, ERC721ARoyalty)
-    returns (bool)
+  public
+  view
+  virtual
+  override(ERC721ABCE, ERC721ARoyalty)
+  returns (bool)
   {
     return super.supportsInterface(interfaceId);
   }
@@ -29,11 +29,12 @@ contract ERC721ABCER is ERC721ABCE, ERC721ARoyalty {
     super._burn(tokenId);
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-    internal
-    virtual
-    override(ERC721, ERC721ABCE)
-  {
-    super._beforeTokenTransfer(from, to, tokenId);
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 firstTokenId,
+    uint256 batchSize
+  ) internal virtual override(ERC721, ERC721ABCE) {
+    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
   }
 }

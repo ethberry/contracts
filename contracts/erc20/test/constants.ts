@@ -4,8 +4,6 @@ export const baseTokenURI = "http://localhost:3000"; // no trailing slash
 export const tokenSymbol = "SYMBOL";
 export const tokenName = "Lorem ipsum...";
 export const tokenId = 1;
-export const templateId = 1;
-export const featureIds = [1, 3, 7];
 export const royalty = 100; // 1%
 export const nonce = ethers.utils.formatBytes32String("nonce");
 

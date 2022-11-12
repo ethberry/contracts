@@ -55,7 +55,7 @@ export function shouldBurnBatch(name: string) {
       await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
       const tx = contractInstance.connect(receiver).burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
 
-      await expect(tx).to.be.revertedWith(`ERC1155: caller is not token owner nor approved`);
+      await expect(tx).to.be.revertedWith(`ERC1155: caller is not token owner or approved`);
     });
 
     it("should fail: ids and amounts length mismatch", async function () {

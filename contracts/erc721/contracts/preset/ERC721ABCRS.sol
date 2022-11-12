@@ -31,11 +31,12 @@ contract ERC721ABCRS is ERC721ABCR, ERC721URIStorage {
     super._burn(tokenId);
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-    internal
-    virtual
-    override(ERC721, ERC721ABCR)
-  {
-    super._beforeTokenTransfer(from, to, tokenId);
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 firstTokenId,
+    uint256 batchSize
+  ) internal virtual override(ERC721, ERC721ABCR) {
+    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
   }
 }

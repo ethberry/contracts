@@ -30,11 +30,12 @@ contract ERC721ABCP is ERC721ABC, ERC721Pausable {
     return super.supportsInterface(interfaceId);
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-    internal
-    virtual
-    override(ERC721ABC, ERC721Pausable)
-  {
-    super._beforeTokenTransfer(from, to, tokenId);
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 firstTokenId,
+    uint256 batchSize
+  ) internal virtual override(ERC721Pausable, ERC721ABC) {
+    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
   }
 }

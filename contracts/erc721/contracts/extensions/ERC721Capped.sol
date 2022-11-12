@@ -28,11 +28,16 @@ abstract contract ERC721Capped is ERC721 {
     return _allTokens.length;
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override {
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 firstTokenId,
+    uint256 batchSize
+  ) internal virtual override {
     if (from == address(0)) {
       require(totalSupply() < cap(), "ERC721Capped: cap exceeded");
     }
-    _allTokens.push(tokenId);
-    super._beforeTokenTransfer(from, to, tokenId);
+    _allTokens.push(firstTokenId);
+    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
   }
 }

@@ -39,20 +39,21 @@ contract ERC721ABCE is AccessControl, ERC721Burnable, ERC721CappedEnumerable {
   }
 
   function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    virtual
-    override(AccessControl, ERC721, ERC721Enumerable)
-    returns (bool)
+  public
+  view
+  virtual
+  override(AccessControl, ERC721, ERC721Enumerable)
+  returns (bool)
   {
     return super.supportsInterface(interfaceId);
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-    internal
-    virtual
-    override(ERC721, ERC721CappedEnumerable)
-  {
-    super._beforeTokenTransfer(from, to, tokenId);
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 firstTokenId,
+    uint256 batchSize
+  ) internal virtual override(ERC721, ERC721CappedEnumerable) {
+    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
   }
 }

@@ -12,7 +12,7 @@ export function shouldERC721Burnable(name: string) {
       await contractInstance.mint(owner.address);
       const tx = contractInstance.connect(receiver).burn(0);
 
-      await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner nor approved`);
+      await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
     });
 
     it("should burn own token", async function () {

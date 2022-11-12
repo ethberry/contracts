@@ -13,7 +13,7 @@ export function shouldSafeTransferFrom(name: string) {
       const tx = erc1155Instance
         .connect(receiver)
         .safeTransferFrom(owner.address, receiver.address, tokenId, amount, "0x");
-      await expect(tx).to.be.revertedWith(`ERC1155: caller is not token owner nor approved`);
+      await expect(tx).to.be.revertedWith(`ERC1155: caller is not token owner or approved`);
     });
 
     it("should transfer own tokens to receiver contract", async function () {
@@ -48,7 +48,7 @@ export function shouldSafeTransferFrom(name: string) {
         amount,
         "0x",
       );
-      await expect(tx).to.be.revertedWith(`ERC1155: transfer to non ERC1155Receiver implementer`);
+      await expect(tx).to.be.revertedWith(`ERC1155: transfer to non-ERC1155Receiver implementer`);
     });
 
     it("should transfer approved tokens to receiver contract", async function () {

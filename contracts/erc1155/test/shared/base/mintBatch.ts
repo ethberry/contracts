@@ -39,7 +39,7 @@ export function shouldMintBatch(name: string) {
       const { contractInstance: erc1155NonReceiverInstance } = await deployErc1155NonReceiver();
 
       const tx1 = contractInstance.mintBatch(erc1155NonReceiverInstance.address, [tokenId], [amount], "0x");
-      await expect(tx1).to.be.revertedWith(`ERC1155: transfer to non ERC1155Receiver implementer`);
+      await expect(tx1).to.be.revertedWith(`ERC1155: transfer to non-ERC1155Receiver implementer`);
     });
 
     it("should fail: account is missing role", async function () {

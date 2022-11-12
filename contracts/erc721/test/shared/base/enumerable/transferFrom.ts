@@ -12,7 +12,7 @@ export function shouldTransferFrom(name: string) {
       await contractInstance.mint(owner.address);
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, 0);
 
-      await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner nor approved`);
+      await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
     });
 
     it("should fail: zero addr", async function () {

@@ -14,7 +14,7 @@ export function shouldSafeTransferFrom(name: string) {
         .connect(receiver)
         ["safeTransferFrom(address,address,uint256)"](owner.address, receiver.address, 0);
 
-      await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner nor approved`);
+      await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
     });
 
     it("should fail: burned token", async function () {
@@ -259,7 +259,7 @@ export function shouldSafeTransferFrom(name: string) {
 
       const tx3 = erc721Instance["safeTransferFrom(address,address,uint256)"](owner.address, receiver.address, 2);
       // DOUBLE CHECK
-      await expect(tx3).to.be.revertedWith(`ERC721: caller is not token owner nor approved`);
+      await expect(tx3).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
     });
 
     it("should not transfer token to its child token", async function () {

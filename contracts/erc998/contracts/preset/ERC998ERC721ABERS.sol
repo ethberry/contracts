@@ -35,13 +35,14 @@ contract ERC998ERC721ABERS is ERC721ABERS, ERC998ERC721 {
     return ERC998ERC721.getApproved(_tokenId);
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-    internal
-    virtual
-    override(ERC721ABERS, ERC998ERC721)
-  {
-    ERC998ERC721._beforeTokenTransfer(from, to, tokenId);
-    super._beforeTokenTransfer(from, to, tokenId);
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 firstTokenId,
+    uint256 batchSize
+  ) internal virtual override(ERC721ABERS, ERC998ERC721) {
+    ERC998ERC721._beforeTokenTransfer(from, to, firstTokenId, batchSize);
+    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
   }
 
   function supportsInterface(bytes4 interfaceId)

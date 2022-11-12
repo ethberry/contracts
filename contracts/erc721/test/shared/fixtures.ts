@@ -16,6 +16,12 @@ export async function deployErc721Base(name: string) {
     return {
       contractInstance: erc721Instance,
     };
+  } else if (name === "ERC721ABERM") {
+    const erc721Instance = await erc721Factory.deploy(tokenName, tokenSymbol, 1, { gasLimit: 40966424 });
+
+    return {
+      contractInstance: erc721Instance,
+    };
   } else {
     const args = name
       .substr(6)

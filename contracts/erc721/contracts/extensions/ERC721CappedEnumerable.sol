@@ -23,10 +23,15 @@ abstract contract ERC721CappedEnumerable is ERC721Enumerable {
     return _cap;
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override(ERC721Enumerable) {
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 firstTokenId,
+    uint256 batchSize
+  ) internal virtual override(ERC721Enumerable) {
     if (from == address(0)) {
       require(super.totalSupply() < cap(), "ERC721CappedEnumerable: cap exceeded");
     }
-    super._beforeTokenTransfer(from, to, tokenId);
+    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
   }
 }

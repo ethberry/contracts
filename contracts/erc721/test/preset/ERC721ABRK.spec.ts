@@ -10,8 +10,8 @@ import { shouldSupportsInterface } from "../shared/supportInterface";
 
 use(solidity);
 
-describe("ERC721ABRM", function () {
-  const name = "ERC721ABRM";
+describe("ERC721ABRK", function () {
+  const name = "ERC721ABRK";
 
   shouldERC721Base(name);
   shouldERC721Accessible(name)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);

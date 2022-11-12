@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Consecutive.sol";
 
 import "./ERC721ABR.sol";
 
-contract ERC721ABRM is ERC721ABR, ERC721Consecutive {
+contract ERC721ABRK is ERC721ABR, ERC721Consecutive {
   constructor(
     string memory name,
     string memory symbol,

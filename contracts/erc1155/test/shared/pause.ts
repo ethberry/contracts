@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount, PAUSER_ROLE, tokenId } from "../constants";
+import { amount, PAUSER_ROLE, tokenId } from "@gemunion/contracts-test-constants";
+
 import { deployErc1155Base } from "./fixtures";
 
 export function shouldERC1155Pause(name: string) {

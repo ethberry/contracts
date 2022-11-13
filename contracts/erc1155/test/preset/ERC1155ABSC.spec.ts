@@ -1,4 +1,5 @@
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "../constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-test-constants";
+
 import { shouldERC1155Base } from "../shared/base";
 import { shouldERC1155Accessible } from "../shared/accessible";
 import { shouldERC1155Burnable } from "../shared/burnable";

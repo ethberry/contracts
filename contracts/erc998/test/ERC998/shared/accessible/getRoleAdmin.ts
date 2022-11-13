@@ -1,7 +1,8 @@
 import { expect } from "chai";
 
+import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-test-constants";
+
 import { deployErc998Base } from "../../../ERC721/shared/fixtures";
-import { DEFAULT_ADMIN_ROLE } from "../../../constants";
 
 export function shouldGetRoleAdmin(name: string) {
   return (...roles: Array<string>) => {

@@ -2,11 +2,11 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 import { parseEther } from "ethers/lib/utils";
-
 import { ContractFactory, ContractTransaction } from "ethers";
 
+import { decimals, MINTER_ROLE, tokenName, tokenSymbol } from "@gemunion/contracts-test-constants";
+
 import { ChainLinkLootboxMock, ChainLinkTokenMock, LINK, VRFCoordinatorMock } from "../../typechain-types";
-import { decimals, MINTER_ROLE, tokenName, tokenSymbol } from "../constants";
 
 const linkAmountInWei = ethers.BigNumber.from("1000").mul(decimals);
 

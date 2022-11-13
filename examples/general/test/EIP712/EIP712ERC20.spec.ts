@@ -5,8 +5,9 @@ import { ContractFactory } from "ethers";
 import { Network } from "@ethersproject/networks";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
+import { amount, MINTER_ROLE, nonce, tokenName, tokenSymbol } from "@gemunion/contracts-test-constants";
+
 import { EIP712ERC20, ERC20AB } from "../../typechain-types";
-import { amount, MINTER_ROLE, nonce, tokenName, tokenSymbol } from "../constants";
 
 use(solidity);
 

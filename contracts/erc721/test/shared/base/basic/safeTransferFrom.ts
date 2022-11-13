@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { tokenId } from "../../../constants";
+import { tokenId } from "@gemunion/contracts-test-constants";
+
 import { deployErc721Base, deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures";
 
 export function shouldSafeTransferFrom(name: string) {

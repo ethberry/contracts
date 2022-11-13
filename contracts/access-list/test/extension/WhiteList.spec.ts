@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId } from "../constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@gemunion/contracts-test-constants";
+
 import { shouldSupportsInterface } from "../shared/supportInterface";
 import { shouldBeAccessible } from "../shared/accessible";
 import { deployAccessList } from "../shared/fixtures";

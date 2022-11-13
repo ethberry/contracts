@@ -2,7 +2,8 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { utils } from "ethers";
 
-import { royalty } from "../../constants";
+import { royalty } from "@gemunion/contracts-test-constants";
+
 import { deployErc1155Base } from "../fixtures";
 
 export function shouldGetRoyaltyInfo(name: string) {

@@ -1,7 +1,14 @@
 import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId } from "../constants";
+import {
+  baseTokenURI,
+  DEFAULT_ADMIN_ROLE,
+  InterfaceId,
+  MINTER_ROLE,
+  tokenId,
+} from "@gemunion/contracts-test-constants";
+
 import { shouldSupportsInterface } from "../shared/supportInterface";
 import { shouldERC1155Accessible } from "../shared/accessible";
 import { shouldERC1155Burnable } from "../shared/burnable";

@@ -1,6 +1,7 @@
 import { expect } from "chai";
 
-import { baseTokenURI } from "../../constants";
+import { baseTokenURI } from "@gemunion/contracts-test-constants";
+
 import { deployErc1155Base } from "../fixtures";
 
 export function shouldURI(name: string) {

@@ -2,7 +2,8 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants } from "ethers";
 
-import { amount, tokenId } from "../../constants";
+import { amount, tokenId } from "@gemunion/contracts-test-constants";
+
 import { deployErc1155Base } from "../fixtures";
 
 export function shouldBurn(name: string) {

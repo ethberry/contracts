@@ -2,7 +2,8 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "../../constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-test-constants";
+
 import { shouldWhiteListChild } from "../shared/whitelist/whiteListChild";
 import { shouldERC721Base } from "../../ERC721/shared/base/enumerable";
 import { shouldERC721Accessible } from "../shared/accessible";

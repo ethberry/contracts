@@ -1,5 +1,5 @@
 {
-  "packages": ["contracts/*", "examples/*", "utils/*"],
+  "packages": ["contracts/*", "examples/*", "helpers/*"],
   "version": "independent",
   "useNx": true
 }

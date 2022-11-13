@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+
 import { deployErc20Base } from "../fixtures";
 
 export function shouldFlashFeeReceiver(name: string) {

@@ -1,7 +1,8 @@
 import { expect } from "chai";
-
-import { DEFAULT_ADMIN_ROLE } from "../../constants";
 import { ethers } from "hardhat";
+
+import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-test-constants";
+
 import { deployErc20Base } from "../fixtures";
 
 export function shouldRenounceRole(name: string) {

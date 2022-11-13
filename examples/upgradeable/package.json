@@ -31,12 +31,17 @@
     "solhint": "3.3.7",
     "solhint-plugin-prettier": "0.0.5",
     "solidity-coverage": "0.8.2",
+    "ts-node": "10.9.1",
     "typechain": "8.1.1",
     "web3": "1.8.1"
   },
   "engines": {
     "node": ">=12.13"
   },
+  "files": [
+    "/sol/**/*.sol",
+    "/abi/*.json"
+  ],
   "license": "UNLICENSED",
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-examples-upgradeable",
@@ -51,10 +56,6 @@
     "type": "git",
     "url": "https://github.com/gemunion/contracts"
   },
-  "files": [
-    "/sol/**/*.sol",
-    "/abi/*.json"
-  ],
   "scripts": {
     "build": "hardhat compile",
     "clean": "hardhat clean",
@@ -65,10 +66,10 @@
     "lint": "eslint . --fix",
     "prebuild": "hardhat clean",
     "preversion": "npm run build",
+    "release:abi": "sh scripts/publish-abi.sh",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test",
-    "test:coverage": "hardhat coverage",
-    "release:abi": "sh scripts/publish-abi.sh"
+    "test:coverage": "hardhat coverage"
   },
   "types": "./typechain-types/index.ts",
   "version": "1.0.0"

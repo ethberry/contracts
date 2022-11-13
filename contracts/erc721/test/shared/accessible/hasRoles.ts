@@ -1,6 +1,7 @@
 import { expect } from "chai";
-import { deployErc721Base } from "../fixtures";
 import { ethers } from "hardhat";
+
+import { deployErc721Base } from "../fixtures";
 
 export function shouldHaveRole(name: string) {
   return (...roles: Array<string>) => {

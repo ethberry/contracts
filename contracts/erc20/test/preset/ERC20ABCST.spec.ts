@@ -1,7 +1,8 @@
 import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, SNAPSHOT_ROLE } from "../constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, SNAPSHOT_ROLE } from "@gemunion/contracts-test-constants";
+
 import { shouldSnapshot } from "../shared/snapshot";
 import { shouldERC20Permit } from "../shared/permit";
 import { shouldERC20Base } from "../shared/base";

@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { accessControlInterfaceId, MINTER_ROLE } from "../../../../constants";
+import { accessControlInterfaceId, MINTER_ROLE } from "@gemunion/contracts-test-constants";
+
 import { deployErc998Base, deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures";
 
 export function shouldMint(name: string) {

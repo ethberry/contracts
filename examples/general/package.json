@@ -6,11 +6,12 @@
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
-    "@gemunion/contracts-erc998": "1.0.0",
-    "@gemunion/contracts-erc721": "1.0.0",
-    "@gemunion/contracts-erc20": "1.0.0",
-    "@gemunion/contracts-erc1155": "1.0.0",
     "@ethersproject/networks": "5.7.1",
+    "@gemunion/contracts-erc1155": "1.0.0",
+    "@gemunion/contracts-erc20": "1.0.0",
+    "@gemunion/contracts-erc721": "1.0.0",
+    "@gemunion/contracts-erc998": "1.0.0",
+    "@gemunion/contracts-test-constants": "1.0.0",
     "@nomiclabs/hardhat-ethers": "2.2.1",
     "@nomiclabs/hardhat-etherscan": "3.1.2",
     "@nomiclabs/hardhat-waffle": "2.0.3",
@@ -33,12 +34,17 @@
     "solhint": "3.3.7",
     "solhint-plugin-prettier": "0.0.5",
     "solidity-coverage": "0.8.2",
+    "ts-node": "10.9.1",
     "typechain": "8.1.1",
     "web3": "1.8.1"
   },
   "engines": {
     "node": ">=12.13"
   },
+  "files": [
+    "/sol/**/*.sol",
+    "/abi/*.json"
+  ],
   "license": "UNLICENSED",
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-examples-general",
@@ -53,10 +59,6 @@
     "type": "git",
     "url": "https://github.com/gemunion/contracts"
   },
-  "files": [
-    "/sol/**/*.sol",
-    "/abi/*.json"
-  ],
   "scripts": {
     "build": "hardhat compile",
     "clean": "hardhat clean",
@@ -64,10 +66,10 @@
     "lint": "eslint . --fix",
     "prebuild": "hardhat clean",
     "preversion": "npm run build",
+    "release:abi": "sh scripts/publish-abi.sh",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test",
-    "test:coverage": "hardhat coverage",
-    "release:abi": "sh scripts/publish-abi.sh"
+    "test:coverage": "hardhat coverage"
   },
   "types": "./typechain-types/index.ts",
   "version": "1.0.0"

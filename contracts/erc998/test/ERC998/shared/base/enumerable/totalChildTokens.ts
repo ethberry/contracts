@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+
 import { deployErc998Base } from "../../../../ERC721/shared/fixtures";
 
 export function shouldTotalChildTokens(name: string) {

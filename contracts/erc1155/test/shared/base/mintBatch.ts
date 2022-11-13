@@ -2,7 +2,8 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants } from "ethers";
 
-import { accessControlInterfaceId, amount, MINTER_ROLE, tokenId } from "../../constants";
+import { accessControlInterfaceId, amount, MINTER_ROLE, tokenId } from "@gemunion/contracts-test-constants";
+
 import { deployErc1155Base, deployErc1155NonReceiver, deployErc1155Receiver } from "../fixtures";
 
 export function shouldMintBatch(name: string) {

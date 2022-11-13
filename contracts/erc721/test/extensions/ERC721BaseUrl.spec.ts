@@ -2,7 +2,14 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId } from "../constants";
+import {
+  baseTokenURI,
+  DEFAULT_ADMIN_ROLE,
+  InterfaceId,
+  MINTER_ROLE,
+  tokenId,
+} from "@gemunion/contracts-test-constants";
+
 import { shouldSupportsInterface } from "../shared/supportInterface";
 import { deployErc721Base } from "../shared/fixtures";
 import { shouldERC721Base } from "../shared/base/basic";

@@ -1,6 +1,7 @@
 import { expect } from "chai";
-import { deployErc20Base } from "../fixtures";
 import { ethers } from "hardhat";
+
+import { deployErc20Base } from "../fixtures";
 
 export function shouldHaveOwner(name: string) {
   describe("owner", function () {

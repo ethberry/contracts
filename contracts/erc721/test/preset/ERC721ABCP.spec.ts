@@ -1,4 +1,5 @@
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, PAUSER_ROLE } from "../constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, PAUSER_ROLE } from "@gemunion/contracts-test-constants";
+
 import { shouldERC721Burnable } from "../shared/burnable/basic/burn";
 import { shouldERC721Capped } from "../shared/capped/basic/capped";
 import { shouldERC721Pause } from "../shared/pausable/basic/pausable";

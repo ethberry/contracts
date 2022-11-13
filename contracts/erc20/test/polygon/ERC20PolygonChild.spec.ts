@@ -2,7 +2,8 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
-import { amount, DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE } from "../constants";
+import { amount, DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE } from "@gemunion/contracts-test-constants";
+
 import { shouldERC20Accessible } from "../shared/accessible";
 import { deployErc20Base } from "../shared/fixtures";
 

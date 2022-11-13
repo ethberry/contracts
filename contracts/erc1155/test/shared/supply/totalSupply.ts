@@ -1,7 +1,8 @@
 import { expect } from "chai";
-
-import { amount, tokenId } from "../../constants";
 import { ethers } from "hardhat";
+
+import { amount, tokenId } from "@gemunion/contracts-test-constants";
+
 import { deployErc1155Base } from "../fixtures";
 
 export function shouldGetTotalSupply(name: string) {

@@ -2,7 +2,8 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
-import { MINTER_ROLE, tokenId, tokenName } from "../constants";
+import { MINTER_ROLE, tokenId, tokenName } from "@gemunion/contracts-test-constants";
+
 import { deployErc721Base } from "../shared/fixtures";
 
 use(solidity);

@@ -2,7 +2,8 @@ import { expect } from "chai";
 import { web3, ethers } from "hardhat";
 import { time } from "@openzeppelin/test-helpers";
 
-import { tokenId } from "../../../constants";
+import { tokenId } from "@gemunion/contracts-test-constants";
+
 import { deployErc721Base } from "../../fixtures";
 
 export function shouldUserExprires(name: string) {

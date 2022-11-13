@@ -1,6 +1,7 @@
 import { expect } from "chai";
 
-import { InterfaceId } from "../../constants";
+import { InterfaceId } from "@gemunion/contracts-test-constants";
+
 import { deployErc998Base } from "../../ERC721/shared/fixtures";
 
 export function shouldSupportsInterface(name: string) {

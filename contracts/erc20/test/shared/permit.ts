@@ -4,7 +4,8 @@ import { constants, utils } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 import { Network } from "@ethersproject/networks";
 
-import { amount, tokenName } from "../constants";
+import { amount, tokenName } from "@gemunion/contracts-test-constants";
+
 import { deployErc20Base } from "./fixtures";
 
 export function shouldERC20Permit(name: string) {

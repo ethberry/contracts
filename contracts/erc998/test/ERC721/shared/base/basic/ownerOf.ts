@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { tokenId } from "../../../../constants";
+import { tokenId } from "@gemunion/contracts-test-constants";
+
 import { deployErc998Base } from "../../fixtures";
 
 export function shouldGetOwnerOf(name: string) {

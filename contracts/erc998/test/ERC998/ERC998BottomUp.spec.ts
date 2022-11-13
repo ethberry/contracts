@@ -1,7 +1,8 @@
 import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "../constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-test-constants";
+
 import { shouldERC721Base } from "../ERC721/shared/base/enumerable";
 import { shouldERC721Accessible } from "./shared/accessible";
 import { shouldERC721Burnable } from "../ERC721/shared/burnable/enumerable/burn";

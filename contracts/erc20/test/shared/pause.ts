@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount, PAUSER_ROLE } from "../constants";
+import { amount, PAUSER_ROLE } from "@gemunion/contracts-test-constants";
+
 import { deployErc20Base } from "./fixtures";
 
 export function shouldERC20Pause(name: string) {

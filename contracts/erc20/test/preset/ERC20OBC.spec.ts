@@ -1,12 +1,13 @@
 import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
+import { InterfaceId } from "@gemunion/contracts-test-constants";
+
 import { shouldERC20Base } from "../shared/base";
 import { shouldERC20Burnable } from "../shared/burnable";
 import { shouldERC20Ownable } from "../shared/ownable";
 import { shouldERC20Capped } from "../shared/capped";
 import { shouldSupportsInterface } from "../shared/supportInterface";
-import { InterfaceId } from "../constants";
 
 use(solidity);
 

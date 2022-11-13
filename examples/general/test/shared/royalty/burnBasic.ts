@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { royalty, tokenId } from "../../constants";
+
+import { royalty, tokenId } from "@gemunion/contracts-test-constants";
 
 export function shouldBurnBasic(enumerable = false) {
   describe("burn (basic)", function () {

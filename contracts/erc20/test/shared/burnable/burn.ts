@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount } from "../../constants";
+import { amount } from "@gemunion/contracts-test-constants";
+
 import { deployErc20Base } from "../fixtures";
 
 export function shouldBurn(name: string) {

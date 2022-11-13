@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { royalty } from "../../constants";
+
+import { royalty } from "@gemunion/contracts-test-constants";
 
 export function shouldGetRoyaltyInfo() {
   describe("royaltyInfo", function () {

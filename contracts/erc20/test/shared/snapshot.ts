@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { accessControlInterfaceId, amount, SNAPSHOT_ROLE } from "../constants";
+import { accessControlInterfaceId, amount, SNAPSHOT_ROLE } from "@gemunion/contracts-test-constants";
+
 import { deployErc20Base } from "./fixtures";
 
 export function shouldSnapshot(name: string) {

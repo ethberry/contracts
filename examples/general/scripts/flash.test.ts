@@ -1,5 +1,6 @@
 import { ethers } from "hardhat";
-import { amount, tokenName, tokenSymbol } from "../test/constants";
+
+import { amount, tokenName, tokenSymbol } from "@gemunion/contracts-test-constants";
 
 async function main() {
   const erc20 = await ethers.getContractFactory("ERC20AF");

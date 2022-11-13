@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount, tokenId } from "../../constants";
+import { amount, tokenId } from "@gemunion/contracts-test-constants";
+
 import { deployErc1155Base, deployErc1155NonReceiver, deployErc1155Receiver } from "../fixtures";
 
 export function shouldSafeBatchTransferFrom(name: string) {

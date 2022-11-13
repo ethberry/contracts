@@ -1,6 +1,7 @@
 import { expect } from "chai";
 
-import { InterfaceId } from "../constants";
+import { InterfaceId } from "@gemunion/contracts-test-constants";
+
 import { deployErc721Base } from "./fixtures";
 
 export function shouldSupportsInterface(name: string) {

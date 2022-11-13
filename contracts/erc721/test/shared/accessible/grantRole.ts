@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { DEFAULT_ADMIN_ROLE } from "../../constants";
+import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-test-constants";
+
 import { deployErc721Base } from "../fixtures";
 
 export function shouldGrantRole(name: string) {

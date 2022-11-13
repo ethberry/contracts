@@ -1,8 +1,9 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
+import { whiteListChildInterfaceId } from "@gemunion/contracts-test-constants";
+
 import { deployErc998Base } from "../../../../ERC721/shared/fixtures";
-import { whiteListChildInterfaceId } from "../../../../constants";
 
 export function shouldChildContractsFor(name: string) {
   describe("childContractsFor", function () {

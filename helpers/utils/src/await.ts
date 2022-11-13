@@ -1,3 +1,5 @@
+import "@nomiclabs/hardhat-waffle";
+
 import { ethers, network } from "hardhat";
 
 function delayMs(ms: number) {

@@ -7,6 +7,7 @@
   "description": "Collection of contracts and presets",
   "devDependencies": {
     "@ethersproject/networks": "5.7.1",
+    "@gemunion/contracts-utils": "1.0.0",
     "@gemunion/contracts-erc1155": "1.0.0",
     "@gemunion/contracts-erc20": "1.0.0",
     "@gemunion/contracts-erc721": "1.0.0",

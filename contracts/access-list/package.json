@@ -60,7 +60,7 @@
     "deploy:mumbai": "hardhat --network mumbai deploy",
     "deploy:polygon": "hardhat --network polygon deploy",
     "deploy:rinkeby": "hardhat --network rinkeby deploy",
-    "lint": "eslint  --fix",
+    "lint": "eslint . --fix",
     "prebuild": "hardhat clean",
     "prepare": "npm run build",
     "preversion": "npm run build && npm run test",

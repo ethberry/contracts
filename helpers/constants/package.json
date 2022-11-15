@@ -17,7 +17,7 @@
   ],
   "license": "UNLICENSED",
   "main": "./dist/index.js",
-  "name": "@gemunion/contracts-test-constants",
+  "name": "@gemunion/contracts-constants",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },

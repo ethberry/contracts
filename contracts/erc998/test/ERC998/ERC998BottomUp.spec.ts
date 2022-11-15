@@ -1,29 +1,29 @@
 import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-test-constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
+import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldERC721Base } from "../ERC721/shared/base/enumerable";
-import { shouldERC721Accessible } from "./shared/accessible";
 import { shouldERC721Burnable } from "../ERC721/shared/burnable/enumerable/burn";
 import { shouldERC721Enumerable } from "../ERC721/shared/enumerable";
 import { shouldERC721Royalty } from "../ERC721/shared/royalty/enumerable";
 import { shouldERC721Storage } from "../ERC721/shared/storage/enumerable/storage";
-import { shouldSupportsInterface } from "./shared/supportInterface";
+import { deployErc998Base } from "../ERC721/shared/fixtures";
 
 use(solidity);
 
 describe("ERC998BottomUp", function () {
-  const name = "ERC998BottomUp";
+  const factory = () => deployErc998Base(this.title);
 
-  shouldERC721Base(name);
-  shouldERC721Accessible(name)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldERC721Burnable(name);
-  shouldERC721Enumerable(name);
-  shouldERC721Royalty(name);
-  shouldERC721Storage(name);
+  shouldERC721Base(factory);
+  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC721Burnable(factory);
+  shouldERC721Enumerable(factory);
+  shouldERC721Royalty(factory);
+  shouldERC721Storage(factory);
 
-  shouldSupportsInterface(name)(
+  shouldSupportsInterface(factory)(
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC721,

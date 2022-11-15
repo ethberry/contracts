@@ -1,14 +1,15 @@
 import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { DEFAULT_ADMIN_ROLE, PREDICATE_ROLE } from "@gemunion/contracts-test-constants";
+import { DEFAULT_ADMIN_ROLE, PREDICATE_ROLE } from "@gemunion/contracts-constants";
+import { shouldBeAccessible } from "@gemunion/contracts-mocha";
 
-import { shouldERC20Accessible } from "../shared/accessible";
+import { deployErc20Base } from "../shared/fixtures";
 
 use(solidity);
 
 describe("ERC20PolygonParentMock", function () {
-  const name = "ERC20PolygonParentMock";
+  const factory = () => deployErc20Base(this.title);
 
-  shouldERC20Accessible(name)(DEFAULT_ADMIN_ROLE, PREDICATE_ROLE);
+  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, PREDICATE_ROLE);
 });

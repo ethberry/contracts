@@ -1,16 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants } from "ethers";
+import { constants, Contract } from "ethers";
 
-import { accessControlInterfaceId, DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-test-constants";
+import { accessControlInterfaceId, DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
 
-import { deployErc1155Base } from "../fixtures";
-
-export function shouldSetDefaultRoyalty(name: string) {
+export function shouldSetDefaultRoyalty(factory: () => Promise<Contract>) {
   describe("setDefaultRoyalty", function () {
     it("should set token royalty", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       const royalty = 5000;
 
@@ -20,7 +18,7 @@ export function shouldSetDefaultRoyalty(name: string) {
 
     it("should fail: royalty fee will exceed salePrice", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       const royalty = 11000;
 
@@ -29,7 +27,7 @@ export function shouldSetDefaultRoyalty(name: string) {
     });
 
     it("should fail: invalid parameters", async function () {
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       const royalty = 5000;
 
@@ -39,7 +37,7 @@ export function shouldSetDefaultRoyalty(name: string) {
 
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       const royalty = 5000;
 

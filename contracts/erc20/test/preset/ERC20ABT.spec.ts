@@ -1,25 +1,25 @@
 import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-test-constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
+import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldERC20Base } from "../shared/base";
 import { shouldERC20Permit } from "../shared/permit";
 import { shouldERC20Burnable } from "../shared/burnable";
-import { shouldERC20Accessible } from "../shared/accessible";
-import { shouldSupportsInterface } from "../shared/supportInterface";
+import { deployErc20Base } from "../shared/fixtures";
 
 use(solidity);
 
 describe("ERC20ABT", function () {
-  const name = "ERC20ABT";
+  const factory = () => deployErc20Base(this.title);
 
-  shouldERC20Base(name);
-  shouldERC20Accessible(name)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldERC20Burnable(name);
-  shouldERC20Permit(name);
+  shouldERC20Base(factory);
+  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC20Burnable(factory);
+  shouldERC20Permit(factory);
 
-  shouldSupportsInterface(name)(
+  shouldSupportsInterface(factory)(
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC20,

@@ -1,15 +1,15 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { accessControlInterfaceId, MINTER_ROLE } from "@gemunion/contracts-test-constants";
+import { accessControlInterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
+import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
 
-import { deployErc998Base, deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures";
-
-export function shouldMint(name: string) {
+export function shouldMint(factory: () => Promise<Contract>) {
   describe("mint", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
 
@@ -23,7 +23,7 @@ export function shouldMint(name: string) {
 
     it("should mint to wallet", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       const tx = contractInstance.mint(receiver.address);
       await expect(tx)
@@ -35,7 +35,7 @@ export function shouldMint(name: string) {
     });
 
     it("should mint to non receiver", async function () {
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
 
@@ -46,7 +46,7 @@ export function shouldMint(name: string) {
     });
 
     it("should mint to receiver", async function () {
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
 

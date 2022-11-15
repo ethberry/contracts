@@ -1,3 +1,5 @@
+import { Contract } from "ethers";
+
 import { shouldMint } from "./mint";
 import { shouldBalanceOf } from "./balanceOf";
 import { shouldMintBatch } from "./mintBatch";
@@ -7,13 +9,13 @@ import { shouldSetApprovalForAll } from "./setApprovalForAll";
 import { shouldSafeTransferFrom } from "./safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "./safeBatchTransferFrom";
 
-export function shouldERC1155Base(name: string) {
-  shouldMint(name);
-  shouldMintBatch(name);
-  shouldBalanceOf(name);
-  shouldBalanceOfBatch(name);
-  shouldURI(name);
-  shouldSetApprovalForAll(name);
-  shouldSafeTransferFrom(name);
-  shouldSafeBatchTransferFrom(name);
+export function shouldERC1155Base(factory: () => Promise<Contract>) {
+  shouldMint(factory);
+  shouldMintBatch(factory);
+  shouldBalanceOf(factory);
+  shouldBalanceOfBatch(factory);
+  shouldURI(factory);
+  shouldSetApprovalForAll(factory);
+  shouldSafeTransferFrom(factory);
+  shouldSafeBatchTransferFrom(factory);
 }

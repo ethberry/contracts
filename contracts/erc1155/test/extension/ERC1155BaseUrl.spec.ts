@@ -1,18 +1,10 @@
 import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import {
-  baseTokenURI,
-  DEFAULT_ADMIN_ROLE,
-  InterfaceId,
-  MINTER_ROLE,
-  tokenId,
-} from "@gemunion/contracts-test-constants";
+import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
+import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldSupportsInterface } from "../shared/supportInterface";
-import { shouldERC1155Accessible } from "../shared/accessible";
 import { shouldERC1155Burnable } from "../shared/burnable";
-import { deployErc1155Base } from "../shared/fixtures";
 import { shouldMint } from "../shared/base/mint";
 import { shouldMintBatch } from "../shared/base/mintBatch";
 import { shouldBalanceOf } from "../shared/base/balanceOf";
@@ -20,33 +12,34 @@ import { shouldBalanceOfBatch } from "../shared/base/balanceOfBatch";
 import { shouldSetApprovalForAll } from "../shared/base/setApprovalForAll";
 import { shouldSafeTransferFrom } from "../shared/base/safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "../shared/base/safeBatchTransferFrom";
+import { deployErc1155Base } from "../shared/fixtures";
 
 use(solidity);
 
-describe("ERC1155BaseUrl", function () {
-  const name = "ERC1155BaseUrlTest";
+describe("ERC1155BaseUrlTest", function () {
+  const factory = () => deployErc1155Base(this.title);
 
-  shouldMint(name);
-  shouldMintBatch(name);
-  shouldBalanceOf(name);
-  shouldBalanceOfBatch(name);
-  shouldSetApprovalForAll(name);
-  shouldSafeTransferFrom(name);
-  shouldSafeBatchTransferFrom(name);
+  shouldMint(factory);
+  shouldMintBatch(factory);
+  shouldBalanceOf(factory);
+  shouldBalanceOfBatch(factory);
+  shouldSetApprovalForAll(factory);
+  shouldSafeTransferFrom(factory);
+  shouldSafeBatchTransferFrom(factory);
 
-  shouldERC1155Accessible(name)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldERC1155Burnable(name);
+  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC1155Burnable(factory);
 
   describe("uri", function () {
     it("should get token uri", async function () {
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       const uri2 = await contractInstance.uri(tokenId);
       expect(uri2).to.equal(`${baseTokenURI}/${contractInstance.address.toLowerCase()}/{id}`);
     });
   });
 
-  shouldSupportsInterface(name)(
+  shouldSupportsInterface(factory)(
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC1155,

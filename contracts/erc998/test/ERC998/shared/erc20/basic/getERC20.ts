@@ -1,17 +1,17 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { amount } from "@gemunion/contracts-test-constants";
+import { amount } from "@gemunion/contracts-constants";
 
-import { deployErc998Base } from "../../../../ERC721/shared/fixtures";
 import { deployErc20Base } from "../../../../ERC20/shared/fixtures";
 
-export function shouldGetERC20(name: string) {
+export function shouldGetERC20(factory: () => Promise<Contract>) {
   describe("getERC20", function () {
     it("should get erc20 tokens", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
-      const { contractInstance: erc20Instance } = await deployErc20Base("ERC20ABCS");
+      const contractInstance = await factory();
+      const erc20Instance = await deployErc20Base("ERC20ABCS");
 
       await erc20Instance.mint(owner.address, amount);
       await erc20Instance.approve(contractInstance.address, amount);

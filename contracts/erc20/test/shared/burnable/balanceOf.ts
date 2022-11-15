@@ -1,15 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { amount } from "@gemunion/contracts-test-constants";
+import { amount } from "@gemunion/contracts-constants";
 
-import { deployErc20Base } from "../fixtures";
-
-export function shouldBalanceOf(name: string) {
+export function shouldBalanceOf(factory: () => Promise<Contract>) {
   describe("balanceOf", function () {
     it("should not fail for zero addr", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
 

@@ -1,13 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { deployErc721Base, deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures";
+import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
 
-export function shouldSafeTransferFrom(name: string) {
+export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
   describe("safeTransferFrom", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address);
       const tx = contractInstance
@@ -19,7 +20,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer own tokens to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
 
@@ -41,7 +42,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer own tokens to non receiver contract", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
       const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
 
       await contractInstance.mint(owner.address);
@@ -55,7 +56,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer approved tokens to receiver contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
 
@@ -77,7 +78,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer approved tokens to non receiver contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
 

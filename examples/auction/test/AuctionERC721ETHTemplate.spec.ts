@@ -4,7 +4,7 @@ import { ethers, web3 } from "hardhat";
 import { ContractFactory } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
-import { amount, tokenId, tokenName, tokenSymbol } from "@gemunion/contracts-test-constants";
+import { amount, tokenId, tokenName, tokenSymbol } from "@gemunion/contracts-constants";
 
 import { AuctionERC721ETHTemplate, ERC721AB } from "../typechain-types";
 import { shouldHaveOwner } from "./shared/ownable/owner";

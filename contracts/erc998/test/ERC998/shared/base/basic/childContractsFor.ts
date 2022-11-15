@@ -1,16 +1,17 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { whiteListChildInterfaceId } from "@gemunion/contracts-test-constants";
+import { whiteListChildInterfaceId } from "@gemunion/contracts-constants";
 
 import { deployErc998Base } from "../../../../ERC721/shared/fixtures";
 
-export function shouldChildContractsFor(name: string) {
+export function shouldChildContractsFor(factory: () => Promise<Contract>) {
   describe("childContractsFor", function () {
     it("should get array of child contracts by index", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
-      const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+      const erc721Instance = await factory();
+      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
       if (supportsWhiteListChild) {

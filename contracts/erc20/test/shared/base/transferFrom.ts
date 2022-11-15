@@ -1,15 +1,16 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { amount } from "@gemunion/contracts-test-constants";
+import { amount } from "@gemunion/contracts-constants";
 
-import { deployErc20Base, deployErc20Wallet } from "../fixtures";
+import { deployErc20Wallet } from "../fixtures";
 
-export function shouldTransferFrom(name: string) {
+export function shouldTransferFrom(factory: () => Promise<Contract>) {
   describe("transferFrom", function () {
     it("should transfer", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
       await contractInstance.approve(receiver.address, amount);
@@ -25,7 +26,7 @@ export function shouldTransferFrom(name: string) {
 
     it("should transfer to contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
       const { contractInstance: erc20NonReceiverInstance } = await deployErc20Wallet();
 
       await contractInstance.mint(owner.address, amount);
@@ -46,7 +47,7 @@ export function shouldTransferFrom(name: string) {
 
     it("should fail: double transfer, amount exceeds allowance", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
       await contractInstance.approve(receiver.address, amount);
@@ -60,7 +61,7 @@ export function shouldTransferFrom(name: string) {
 
     it("should fail: transfer to the zero address", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
       await contractInstance.approve(receiver.address, amount);
@@ -70,7 +71,7 @@ export function shouldTransferFrom(name: string) {
 
     it("should fail: transfer amount exceeds balance", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.approve(receiver.address, amount);
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
@@ -79,7 +80,7 @@ export function shouldTransferFrom(name: string) {
 
     it("should fail: transfer amount exceeds allowance", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);

@@ -1,7 +1,9 @@
+import { Contract } from "ethers";
+
 import { shouldBalanceOfERC20 } from "./balanceOfERC20";
 import { shouldGetERC20 } from "./getERC20";
 
-export function shouldERC998ERC20(name: string) {
-  shouldBalanceOfERC20(name);
-  shouldGetERC20(name);
+export function shouldERC998ERC20(factory: () => Promise<Contract>) {
+  shouldBalanceOfERC20(factory);
+  shouldGetERC20(factory);
 }

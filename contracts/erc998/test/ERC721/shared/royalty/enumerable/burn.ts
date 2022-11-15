@@ -1,15 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { royalty, tokenId } from "@gemunion/contracts-test-constants";
+import { royalty, tokenId } from "@gemunion/contracts-constants";
 
-import { deployErc998Base } from "../../fixtures";
-
-export function shouldBurn(name: string) {
+export function shouldBurn(factory: () => Promise<Contract>) {
   describe("burn", function () {
     it("should reset token royalty info", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address); // 0
       await contractInstance.mint(owner.address); // 1

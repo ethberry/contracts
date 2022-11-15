@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 
-import { baseTokenURI, royalty } from "@gemunion/contracts-test-constants";
+import { baseTokenURI, royalty } from "@gemunion/contracts-constants";
 
 export async function deployErc1155Base(name: string) {
   const erc1155Factory = await ethers.getContractFactory(name);
@@ -29,27 +29,15 @@ export async function deployErc1155Base(name: string) {
       );
   }
 
-  const erc1155Instance = await erc1155Factory.deploy(...args);
-
-  return {
-    contractInstance: erc1155Instance,
-  };
+  return erc1155Factory.deploy(...args);
 }
 
 export async function deployErc1155NonReceiver() {
   const erc1155NonReceiverFactory = await ethers.getContractFactory("ERC1155NonReceiverMock");
-  const erc1155NonReceiverInstance = await erc1155NonReceiverFactory.deploy();
-
-  return {
-    contractInstance: erc1155NonReceiverInstance,
-  };
+  return erc1155NonReceiverFactory.deploy();
 }
 
 export async function deployErc1155Receiver() {
   const erc1155ReceiverFactory = await ethers.getContractFactory("ERC1155ReceiverMock");
-  const erc1155ReceiverInstance = await erc1155ReceiverFactory.deploy();
-
-  return {
-    contractInstance: erc1155ReceiverInstance,
-  };
+  return erc1155ReceiverFactory.deploy();
 }

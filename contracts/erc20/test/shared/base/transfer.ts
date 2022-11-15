@@ -1,15 +1,16 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { amount } from "@gemunion/contracts-test-constants";
+import { amount } from "@gemunion/contracts-constants";
 
-import { deployErc20Base, deployErc20Wallet } from "../fixtures";
+import { deployErc20Wallet } from "../fixtures";
 
-export function shouldTransfer(name: string) {
+export function shouldTransfer(factory: () => Promise<Contract>) {
   describe("transfer", function () {
     it("should fail: transfer amount exceeds balance", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const tx = contractInstance.transfer(receiver.address, amount);
       await expect(tx).to.be.revertedWith("ERC20: transfer amount exceeds balance");
@@ -17,7 +18,7 @@ export function shouldTransfer(name: string) {
 
     it("should transfer", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
 
@@ -33,7 +34,7 @@ export function shouldTransfer(name: string) {
 
     it("should transfer to contract", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
       const { contractInstance: erc20NonReceiverInstance } = await deployErc20Wallet();
 
       await contractInstance.mint(owner.address, amount);

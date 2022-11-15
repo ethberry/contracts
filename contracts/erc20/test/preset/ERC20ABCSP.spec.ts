@@ -7,28 +7,29 @@ import {
   MINTER_ROLE,
   PAUSER_ROLE,
   SNAPSHOT_ROLE,
-} from "@gemunion/contracts-test-constants";
+} from "@gemunion/contracts-constants";
+import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+
 import { shouldSnapshot } from "../shared/snapshot";
 import { shouldERC20Pause } from "../shared/pause";
 import { shouldERC20Base } from "../shared/base";
-import { shouldERC20Accessible } from "../shared/accessible";
 import { shouldERC20Burnable } from "../shared/burnable";
 import { shouldERC20Capped } from "../shared/capped";
-import { shouldSupportsInterface } from "../shared/supportInterface";
+import { deployErc20Base } from "../shared/fixtures";
 
 use(solidity);
 
 describe("ERC20ABCSP", function () {
-  const name = "ERC20ABCSP";
+  const factory = () => deployErc20Base(this.title);
 
-  shouldERC20Base(name);
-  shouldERC20Accessible(name)(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, SNAPSHOT_ROLE);
-  shouldERC20Burnable(name);
-  shouldERC20Capped(name);
-  shouldSnapshot(name);
-  shouldERC20Pause(name);
+  shouldERC20Base(factory);
+  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, SNAPSHOT_ROLE);
+  shouldERC20Burnable(factory);
+  shouldERC20Capped(factory);
+  shouldSnapshot(factory);
+  shouldERC20Pause(factory);
 
-  shouldSupportsInterface(name)(
+  shouldSupportsInterface(factory)(
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC20,

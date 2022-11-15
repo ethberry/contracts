@@ -1,18 +1,19 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { amount } from "@gemunion/contracts-test-constants";
+import { amount } from "@gemunion/contracts-constants";
 
-import { deployErc20Base, deployErc20Borrower } from "../fixtures";
+import { deployErc20Borrower } from "../fixtures";
 
-export function shouldFlashCustom(name: string) {
+export function shouldFlashCustom(factory: () => Promise<Contract>) {
   describe("custom flash fee & custom fee receiver", function () {
     const borrowerInitialBalance = amount * 2;
     const customFlashFee = amount / 2;
 
     it("default flash fee receiver", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
 
@@ -67,7 +68,7 @@ export function shouldFlashCustom(name: string) {
 
     it("custom flash fee receiver", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
 

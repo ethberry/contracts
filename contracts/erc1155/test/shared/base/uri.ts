@@ -1,13 +1,12 @@
 import { expect } from "chai";
+import { Contract } from "ethers";
 
-import { baseTokenURI } from "@gemunion/contracts-test-constants";
+import { baseTokenURI } from "@gemunion/contracts-constants";
 
-import { deployErc1155Base } from "../fixtures";
-
-export function shouldURI(name: string) {
+export function shouldURI(factory: () => Promise<Contract>) {
   describe("uri", function () {
     it("should get default token URI", async function () {
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       const uri = await contractInstance.uri(0);
       expect(uri).to.equal(baseTokenURI);

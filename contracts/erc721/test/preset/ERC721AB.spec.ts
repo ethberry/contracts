@@ -1,23 +1,23 @@
 import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-test-constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
+import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldERC721Burnable } from "../shared/burnable/basic/burn";
-import { shouldERC721Accessible } from "../shared/accessible";
 import { shouldERC721Base } from "../shared/base/basic";
-import { shouldSupportsInterface } from "../shared/supportInterface";
+import { deployErc721Base } from "../shared/fixtures";
 
 use(solidity);
 
 describe("ERC721AB", function () {
-  const name = "ERC721AB";
+  const factory = () => deployErc721Base(this.title);
 
-  shouldERC721Base(name);
-  shouldERC721Accessible(name)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldERC721Burnable(name);
+  shouldERC721Base(factory);
+  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC721Burnable(factory);
 
-  shouldSupportsInterface(name)(
+  shouldSupportsInterface(factory)(
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC721,

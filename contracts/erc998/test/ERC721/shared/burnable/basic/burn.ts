@@ -1,15 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { tokenId } from "@gemunion/contracts-test-constants";
+import { tokenId } from "@gemunion/contracts-constants";
 
-import { deployErc998Base } from "../../fixtures";
-
-export function shouldERC721Burnable(name: string) {
+export function shouldERC721Burnable(factory: () => Promise<Contract>) {
   describe("burn", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, tokenId);
       const tx = contractInstance.connect(receiver).burn(tokenId);
@@ -19,7 +18,7 @@ export function shouldERC721Burnable(name: string) {
 
     it("should burn own token", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, tokenId);
       const tx = await contractInstance.burn(tokenId);
@@ -34,7 +33,7 @@ export function shouldERC721Burnable(name: string) {
 
     it("should burn approved token", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, tokenId);
       await contractInstance.approve(receiver.address, tokenId);

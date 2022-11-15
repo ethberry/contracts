@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { amount } from "@gemunion/contracts-test-constants";
+import { amount } from "@gemunion/contracts-constants";
 
 export function shouldTotalERC20Contracts() {
   describe("totalERC20Contracts", function () {

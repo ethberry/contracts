@@ -1,15 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { accessControlInterfaceId, amount, MINTER_ROLE } from "@gemunion/contracts-test-constants";
+import { accessControlInterfaceId, amount, MINTER_ROLE } from "@gemunion/contracts-constants";
 
-import { deployErc20Base } from "../fixtures";
-
-export function shouldMint(name: string) {
+export function shouldMint(factory: () => Promise<Contract>) {
   describe("mint", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
 
@@ -23,7 +22,7 @@ export function shouldMint(name: string) {
 
     it("should mint", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const tx = contractInstance.mint(owner.address, amount);
       await expect(tx)

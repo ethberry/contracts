@@ -4,7 +4,7 @@ import { ethers } from "hardhat";
 import { parseEther } from "ethers/lib/utils";
 import { ContractFactory, ContractTransaction } from "ethers";
 
-import { decimals, MINTER_ROLE, tokenName, tokenSymbol } from "@gemunion/contracts-test-constants";
+import { decimals, MINTER_ROLE, tokenName, tokenSymbol } from "@gemunion/contracts-constants";
 
 import { ChainLinkLootboxMock, ChainLinkTokenMock, LINK, VRFCoordinatorMock } from "../../typechain-types";
 

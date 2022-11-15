@@ -2,20 +2,20 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
-import { MINTER_ROLE, tokenId, tokenName } from "@gemunion/contracts-test-constants";
+import { MINTER_ROLE, tokenId, tokenName } from "@gemunion/contracts-constants";
 
 import { deployErc721Base } from "../shared/fixtures";
 
 use(solidity);
 
-describe("ERC721Dropbox", function () {
-  const name = "ERC721DropboxTest";
+describe("ERC721DropboxTest", function () {
+  const factory = () => deployErc721Base(this.title);
 
   describe("redeem", function () {
     it("should redeem", async function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const signature = await owner._signTypedData(
         // Domain
@@ -49,7 +49,7 @@ describe("ERC721Dropbox", function () {
     it("should fail: account is missing role", async function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const signature = await owner._signTypedData(
         // Domain
@@ -81,7 +81,7 @@ describe("ERC721Dropbox", function () {
 
     it("should fail: invalid signature", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const tx1 = contractInstance
         .connect(receiver)
@@ -92,7 +92,7 @@ describe("ERC721Dropbox", function () {
     it("should fail: token already minted", async function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const signature = await owner._signTypedData(
         // Domain
@@ -126,7 +126,7 @@ describe("ERC721Dropbox", function () {
     it("should fail: cap exceeded", async function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const signature = await owner._signTypedData(
         // Domain

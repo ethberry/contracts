@@ -1,15 +1,16 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { amount } from "@gemunion/contracts-test-constants";
+import { amount } from "@gemunion/contracts-constants";
 
-import { deployErc20Base, deployErc20Borrower } from "../fixtures";
+import { deployErc20Borrower } from "../fixtures";
 
-export function shouldFlashLoan(name: string) {
+export function shouldFlashLoan(factory: () => Promise<Contract>) {
   describe("flashLoan", function () {
     it("success", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
 
@@ -42,7 +43,7 @@ export function shouldFlashLoan(name: string) {
 
     it("missing return value", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
 
@@ -55,7 +56,7 @@ export function shouldFlashLoan(name: string) {
 
     it("missing approval", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
 
@@ -68,7 +69,7 @@ export function shouldFlashLoan(name: string) {
 
     it("unavailable funds", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
 
@@ -83,7 +84,7 @@ export function shouldFlashLoan(name: string) {
 
     it("more than maxFlashLoan", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
 

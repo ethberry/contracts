@@ -1,15 +1,13 @@
 import { expect } from "chai";
 
-import { InterfaceId } from "@gemunion/contracts-test-constants";
+import { InterfaceId } from "@gemunion/contracts-constants";
 
-import { deployErc721Base } from "./fixtures";
-
-export function shouldSupportsInterface(name: string) {
+export function shouldSupportsInterface(factory: () => Promise<Contract>) {
   return (...interfaces: Array<string>) => {
     describe("supportsInterface", function () {
       interfaces.forEach(iface => {
         it(`Should support ${iface}`, async function () {
-          const { contractInstance } = await deployErc721Base(name);
+          const contractInstance = await factory();
 
           const isSupported = await contractInstance.supportsInterface(iface);
           expect(isSupported).to.equal(true);
@@ -17,7 +15,7 @@ export function shouldSupportsInterface(name: string) {
       });
 
       it(`Should not support ${InterfaceId.Invalid}`, async function () {
-        const { contractInstance } = await deployErc721Base(name);
+        const contractInstance = await factory();
 
         const isSupported = await contractInstance.supportsInterface(InterfaceId.Invalid);
         expect(isSupported).to.equal(false);

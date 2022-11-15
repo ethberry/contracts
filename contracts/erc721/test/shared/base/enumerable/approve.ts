@@ -1,13 +1,12 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { deployErc721Base } from "../../fixtures";
-
-export function shouldApprove(name: string) {
+export function shouldApprove(factory: () => Promise<Contract>) {
   describe("approve", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address);
       const tx = contractInstance.connect(receiver).approve(owner.address, 0);
@@ -16,7 +15,7 @@ export function shouldApprove(name: string) {
 
     it("should fail: approve to self", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address);
       const tx = contractInstance.approve(owner.address, 0);
@@ -25,7 +24,7 @@ export function shouldApprove(name: string) {
 
     it("should approve", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address);
 

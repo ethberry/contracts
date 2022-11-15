@@ -1,21 +1,22 @@
 import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { InterfaceId } from "@gemunion/contracts-test-constants";
+import { InterfaceId } from "@gemunion/contracts-constants";
+import { shouldBeOwnable, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldERC721Burnable } from "../shared/burnable/basic/burn";
-import { shouldERC721Ownable } from "../shared/ownable";
 import { shouldERC721Base } from "../shared/base/basic";
-import { shouldSupportsInterface } from "../shared/supportInterface";
+import { deployErc721Base } from "../shared/fixtures";
 
 use(solidity);
 
 describe("ERC721OB", function () {
-  const name = "ERC721OB";
+  const factory = () => deployErc721Base(this.title);
 
-  shouldERC721Base(name);
-  shouldERC721Ownable(name);
-  shouldERC721Burnable(name);
+  shouldBeOwnable(factory);
 
-  shouldSupportsInterface(name)(InterfaceId.IERC165, InterfaceId.IERC721, InterfaceId.IERC721Metadata);
+  shouldERC721Base(factory);
+  shouldERC721Burnable(factory);
+
+  shouldSupportsInterface(factory)(InterfaceId.IERC165, InterfaceId.IERC721, InterfaceId.IERC721Metadata);
 });

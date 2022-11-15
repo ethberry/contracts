@@ -1,16 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants } from "ethers";
+import { constants, Contract } from "ethers";
 
-import { amount, tokenId } from "@gemunion/contracts-test-constants";
+import { amount, tokenId } from "@gemunion/contracts-constants";
 
-import { deployErc1155Base } from "../fixtures";
-
-export function shouldBurnBatch(name: string) {
+export function shouldBurnBatch(factory: () => Promise<Contract>) {
   describe("burnBatch", function () {
     it("should burn own tokens", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       const tokenId1 = tokenId + 1;
       await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
@@ -29,7 +27,7 @@ export function shouldBurnBatch(name: string) {
 
     it("should burn approved tokens", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       const tokenId1 = tokenId + 1;
       await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
@@ -50,7 +48,7 @@ export function shouldBurnBatch(name: string) {
 
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       const tokenId1 = tokenId + 1;
       await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
@@ -61,7 +59,7 @@ export function shouldBurnBatch(name: string) {
 
     it("should fail: ids and amounts length mismatch", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       const tokenId1 = tokenId + 1;
       await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
@@ -72,7 +70,7 @@ export function shouldBurnBatch(name: string) {
 
     it("should fail: burn amount exceeds totalSupply", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mintBatch(owner.address, [tokenId], [amount], "0x");
 
@@ -84,7 +82,7 @@ export function shouldBurnBatch(name: string) {
 
     it("should fail: burn amount exceeds balance", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mintBatch(owner.address, [tokenId], [amount], "0x");
 

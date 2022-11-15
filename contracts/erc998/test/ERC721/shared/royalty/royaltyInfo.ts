@@ -1,15 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { royalty } from "@gemunion/contracts-test-constants";
+import { royalty } from "@gemunion/contracts-constants";
 
-import { deployErc998Base } from "../fixtures";
-
-export function shouldGetRoyaltyInfo(name: string) {
+export function shouldGetRoyaltyInfo(factory: () => Promise<Contract>) {
   describe("royaltyInfo", function () {
     it("should get default royalty info", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       const amount = ethers.utils.parseUnits("1.00", "ether");
       const royaltyAmount = ethers.utils.parseUnits("0.01", "ether");
@@ -20,7 +19,7 @@ export function shouldGetRoyaltyInfo(name: string) {
 
     it("should get royalty info", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       const amount = ethers.utils.parseUnits("1.00", "ether");
       const royaltyAmount = ethers.utils.parseUnits("0.02", "ether");

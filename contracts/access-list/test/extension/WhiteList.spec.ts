@@ -1,21 +1,20 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@gemunion/contracts-test-constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@gemunion/contracts-constants";
+import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldSupportsInterface } from "../shared/supportInterface";
-import { shouldBeAccessible } from "../shared/accessible";
 import { deployAccessList } from "../shared/fixtures";
 
-describe("WhiteList", function () {
-  const name = "WhiteListTest";
+describe("WhiteListTest", function () {
+  const factory = () => deployAccessList(this.title);
 
-  shouldBeAccessible(name)(DEFAULT_ADMIN_ROLE);
+  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE);
 
   describe("White list", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployAccessList(name);
+      const contractInstance = await factory();
 
       const tx = contractInstance.connect(receiver).whitelist(receiver.address);
       await expect(tx).to.be.revertedWith(
@@ -25,7 +24,7 @@ describe("WhiteList", function () {
 
     it("should check white list", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployAccessList(name);
+      const contractInstance = await factory();
 
       const isWhitelisted = await contractInstance.isWhitelisted(receiver.address);
       expect(isWhitelisted).to.equal(false);
@@ -33,7 +32,7 @@ describe("WhiteList", function () {
 
     it("should add to white list", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployAccessList(name);
+      const contractInstance = await factory();
 
       const tx = contractInstance.whitelist(receiver.address);
       await expect(tx).to.emit(contractInstance, "Whitelisted").withArgs(receiver.address);
@@ -43,7 +42,7 @@ describe("WhiteList", function () {
 
     it("should delete from black list", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployAccessList(name);
+      const contractInstance = await factory();
 
       await contractInstance.whitelist(receiver.address);
       const tx = contractInstance.unWhitelist(receiver.address);
@@ -54,7 +53,7 @@ describe("WhiteList", function () {
 
     it("should fail: tests method", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployAccessList(name);
+      const contractInstance = await factory();
 
       const tx = contractInstance.connect(receiver).testMe();
       await expect(tx).to.be.revertedWith(`WhiteListError`).withArgs(receiver.address);
@@ -62,7 +61,7 @@ describe("WhiteList", function () {
 
     it("should pass", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployAccessList(name);
+      const contractInstance = await factory();
 
       await contractInstance.whitelist(receiver.address);
       const result = await contractInstance.connect(receiver).testMe();
@@ -70,5 +69,5 @@ describe("WhiteList", function () {
     });
   });
 
-  shouldSupportsInterface(name)(InterfaceId.IERC165, InterfaceId.IAccessControl);
+  shouldSupportsInterface(factory)(InterfaceId.IERC165, InterfaceId.IAccessControl);
 });

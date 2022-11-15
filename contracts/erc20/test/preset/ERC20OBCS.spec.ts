@@ -1,25 +1,26 @@
 import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { InterfaceId } from "@gemunion/contracts-test-constants";
+import { InterfaceId } from "@gemunion/contracts-constants";
+import { shouldSupportsInterface, shouldBeOwnable } from "@gemunion/contracts-mocha";
 
 import { shouldSnapshot } from "../shared/snapshot";
 import { shouldERC20Base } from "../shared/base";
 import { shouldERC20Burnable } from "../shared/burnable";
-import { shouldERC20Ownable } from "../shared/ownable";
 import { shouldERC20Capped } from "../shared/capped";
-import { shouldSupportsInterface } from "../shared/supportInterface";
+import { deployErc20Base } from "../shared/fixtures";
 
 use(solidity);
 
 describe("ERC20OBCS", function () {
-  const name = "ERC20OBCS";
+  const factory = () => deployErc20Base(this.title);
 
-  shouldERC20Base(name);
-  shouldERC20Ownable(name);
-  shouldERC20Burnable(name);
-  shouldERC20Capped(name);
-  shouldSnapshot(name);
+  shouldBeOwnable(factory);
 
-  shouldSupportsInterface(name)(InterfaceId.IERC165, InterfaceId.IERC20, InterfaceId.IERC20Metadata);
+  shouldERC20Base(factory);
+  shouldERC20Burnable(factory);
+  shouldERC20Capped(factory);
+  shouldSnapshot(factory);
+
+  shouldSupportsInterface(factory)(InterfaceId.IERC165, InterfaceId.IERC20, InterfaceId.IERC20Metadata);
 });

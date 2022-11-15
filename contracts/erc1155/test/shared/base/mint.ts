@@ -1,16 +1,15 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants } from "ethers";
+import { constants, Contract } from "ethers";
 
-import { accessControlInterfaceId, amount, MINTER_ROLE, tokenId } from "@gemunion/contracts-test-constants";
+import { accessControlInterfaceId, amount, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
+import { deployErc1155NonReceiver, deployErc1155Receiver } from "@gemunion/contracts-mocks";
 
-import { deployErc1155Base, deployErc1155NonReceiver, deployErc1155Receiver } from "../fixtures";
-
-export function shouldMint(name: string) {
+export function shouldMint(factory: () => Promise<Contract>) {
   describe("mint", function () {
     it("should mint to wallet", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       const tx1 = contractInstance.mint(receiver.address, tokenId, amount, "0x");
       await expect(tx1)
@@ -23,8 +22,8 @@ export function shouldMint(name: string) {
 
     it("should mint to receiver", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
-      const { contractInstance: erc1155ReceiverInstance } = await deployErc1155Receiver();
+      const contractInstance = await factory();
+      const erc1155ReceiverInstance = await deployErc1155Receiver();
 
       const tx1 = contractInstance.mint(erc1155ReceiverInstance.address, tokenId, amount, "0x");
       await expect(tx1)
@@ -36,8 +35,8 @@ export function shouldMint(name: string) {
     });
 
     it("should fail: non receiver", async function () {
-      const { contractInstance } = await deployErc1155Base(name);
-      const { contractInstance: erc1155NonReceiverInstance } = await deployErc1155NonReceiver();
+      const contractInstance = await factory();
+      const erc1155NonReceiverInstance = await deployErc1155NonReceiver();
 
       const tx1 = contractInstance.mint(erc1155NonReceiverInstance.address, tokenId, amount, "0x");
       await expect(tx1).to.be.revertedWith(`ERC1155: transfer to non-ERC1155Receiver implementer`);
@@ -45,7 +44,7 @@ export function shouldMint(name: string) {
 
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
 

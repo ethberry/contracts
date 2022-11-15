@@ -1,15 +1,16 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { accessControlInterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-test-constants";
+import { accessControlInterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
 
-import { deployErc721Base, deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures";
+import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
 
-export function shouldMint(name: string) {
+export function shouldMint(factory: () => Promise<Contract>) {
   describe("mint", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
 
@@ -23,7 +24,7 @@ export function shouldMint(name: string) {
 
     it("should mint to wallet", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const tx = contractInstance.mint(owner.address, tokenId);
       await expect(tx)
@@ -35,7 +36,7 @@ export function shouldMint(name: string) {
     });
 
     it("should mint to non receiver", async function () {
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
       const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
 
       const tx = contractInstance.mint(erc721NonReceiverInstance.address, tokenId);
@@ -45,7 +46,7 @@ export function shouldMint(name: string) {
     });
 
     it("should mint to receiver", async function () {
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
       const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
 
       const tx = contractInstance.mint(erc721ReceiverInstance.address, tokenId);

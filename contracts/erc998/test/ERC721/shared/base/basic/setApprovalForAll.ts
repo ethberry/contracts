@@ -1,15 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { tokenId } from "@gemunion/contracts-test-constants";
+import { tokenId } from "@gemunion/contracts-constants";
 
-import { deployErc998Base } from "../../fixtures";
-
-export function shouldSetApprovalForAll(name: string) {
+export function shouldSetApprovalForAll(factory: () => Promise<Contract>) {
   describe("setApprovalForAll", function () {
     it("should approve for all", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, 0);
       await contractInstance.mint(owner.address, tokenId);

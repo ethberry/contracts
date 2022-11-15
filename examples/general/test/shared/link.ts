@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 import { BigNumber } from "ethers";
 
-import { decimals, tokenName, tokenSymbol } from "@gemunion/contracts-test-constants";
+import { decimals, tokenName, tokenSymbol } from "@gemunion/contracts-constants";
 
 export async function deployLinkVrfFixture() {
   const [owner] = await ethers.getSigners();

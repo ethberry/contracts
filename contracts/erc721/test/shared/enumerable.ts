@@ -1,13 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { deployErc721Base, deployErc721Receiver } from "./fixtures";
+import { deployErc721Receiver } from "@gemunion/contracts-mocks";
 
-export function shouldERC721Enumerable(name: string) {
+export function shouldERC721Enumerable(factory: () => Promise<Contract>) {
   describe("tokenOfOwnerByIndex", function () {
     it("should match the token number of the owner", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
 

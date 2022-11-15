@@ -1,15 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { amount } from "@gemunion/contracts-test-constants";
+import { amount } from "@gemunion/contracts-constants";
 
-import { deployErc20Base } from "./fixtures";
-
-export function shouldERC20Capped(name: string) {
+export function shouldERC20Capped(factory: () => Promise<Contract>) {
   describe("mint", function () {
     it("should fail: cap exceeded", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const tx = contractInstance.mint(owner.address, amount + 1);
       await expect(tx).to.be.revertedWith("ERC20Capped: cap exceeded");

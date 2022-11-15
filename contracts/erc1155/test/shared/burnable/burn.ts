@@ -1,16 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants } from "ethers";
+import { constants, Contract } from "ethers";
 
-import { amount, tokenId } from "@gemunion/contracts-test-constants";
+import { amount, tokenId } from "@gemunion/contracts-constants";
 
-import { deployErc1155Base } from "../fixtures";
-
-export function shouldBurn(name: string) {
+export function shouldBurn(factory: () => Promise<Contract>) {
   describe("burn", function () {
     it("should burn own token", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, tokenId, amount, "0x");
       const tx = contractInstance.burn(owner.address, tokenId, amount);
@@ -25,7 +23,7 @@ export function shouldBurn(name: string) {
 
     it("should burn approved token", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, tokenId, amount, "0x");
       await contractInstance.setApprovalForAll(receiver.address, true);
@@ -41,7 +39,7 @@ export function shouldBurn(name: string) {
 
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, tokenId, amount, "0x");
       const tx = contractInstance.connect(receiver).burn(owner.address, tokenId, amount);
@@ -51,7 +49,7 @@ export function shouldBurn(name: string) {
 
     it("should fail: burn amount exceeds balance", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, tokenId, amount, "0x");
       await contractInstance.safeTransferFrom(owner.address, receiver.address, tokenId, amount, "0x");

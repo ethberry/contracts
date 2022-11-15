@@ -1,16 +1,18 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { whiteListChildInterfaceId } from "@gemunion/contracts-test-constants";
+import { whiteListChildInterfaceId } from "@gemunion/contracts-constants";
+import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
 
-import { deployErc998Base, deployErc721NonReceiver, deployErc721Receiver } from "../../../../ERC721/shared/fixtures";
+import { deployErc998Base } from "../../../../ERC721/shared/fixtures";
 
-export function shouldTransferChild(name: string) {
+export function shouldTransferChild(factory: () => Promise<Contract>) {
   describe("transferChild", function () {
     it("should transfer token owned by another token to wallet", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
-      const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+      const erc721Instance = await factory();
+      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
       if (supportsWhiteListChild) {
@@ -37,8 +39,8 @@ export function shouldTransferChild(name: string) {
 
     it("should transfer token owned by another token to the receiver contract", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
-      const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+      const erc721Instance = await factory();
+      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
       const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
@@ -66,8 +68,8 @@ export function shouldTransferChild(name: string) {
 
     it("should transfer token owned by another token to the non receiver contract", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
-      const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+      const erc721Instance = await factory();
+      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
       const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
@@ -95,8 +97,8 @@ export function shouldTransferChild(name: string) {
 
     it("should not transfer token which is not owned", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
-      const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+      const erc721Instance = await factory();
+      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
       if (supportsWhiteListChild) {
@@ -114,7 +116,7 @@ export function shouldTransferChild(name: string) {
 
     it("should transfer 998 token owned by another token to the wallet", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
+      const erc721Instance = await factory();
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
       if (supportsWhiteListChild) {

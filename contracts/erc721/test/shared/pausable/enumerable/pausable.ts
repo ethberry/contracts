@@ -1,15 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { PAUSER_ROLE } from "@gemunion/contracts-test-constants";
+import { PAUSER_ROLE } from "@gemunion/contracts-constants";
 
-import { deployErc721Base } from "../../fixtures";
-
-export function shouldERC721Pause(name: string) {
+export function shouldERC721Pause(factory: () => Promise<Contract>) {
   describe("pause", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const tx = contractInstance.connect(receiver).pause();
       await expect(tx).to.be.revertedWith(
@@ -24,7 +23,7 @@ export function shouldERC721Pause(name: string) {
 
     it("should pause/unpause", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       const tx1 = contractInstance.mint(owner.address);
       await expect(tx1).to.not.be.reverted;

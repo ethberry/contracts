@@ -1,15 +1,16 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { tokenId } from "@gemunion/contracts-test-constants";
+import { tokenId } from "@gemunion/contracts-constants";
 
-import { deployErc998Base, deployErc721NonReceiver, deployErc721Receiver } from "../../fixtures";
+import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
 
-export function shouldSafeTransferFrom(name: string) {
+export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
   describe("safeTransferFrom", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, tokenId);
       const tx = contractInstance
@@ -21,7 +22,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer own tokens to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
       const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
 
       await contractInstance.mint(owner.address, tokenId);
@@ -44,7 +45,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer own tokens to non receiver contract", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
       const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
 
       await contractInstance.mint(owner.address, tokenId);
@@ -58,7 +59,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer approved tokens to receiver contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
       const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
 
       await contractInstance.mint(owner.address, tokenId);
@@ -81,7 +82,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer approved tokens to non receiver contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
       const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
 
       await contractInstance.mint(owner.address, tokenId);

@@ -1,14 +1,12 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, utils } from "ethers";
+import { constants, Contract, utils } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 import { Network } from "@ethersproject/networks";
 
-import { amount, tokenName } from "@gemunion/contracts-test-constants";
+import { amount, tokenName } from "@gemunion/contracts-constants";
 
-import { deployErc20Base } from "./fixtures";
-
-export function shouldERC20Permit(name: string) {
+export function shouldERC20Permit(factory: () => Promise<Contract>) {
   describe("permit", function () {
     let network: Network;
 
@@ -18,14 +16,14 @@ export function shouldERC20Permit(name: string) {
 
     it("initial nonce is 0", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const nonces = await contractInstance.nonces(owner.address);
       expect(nonces).to.equal(0);
     });
 
     it("domain separator", async function () {
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const chainId = await contractInstance.getChainId();
       const actual = await contractInstance.DOMAIN_SEPARATOR();
@@ -40,7 +38,7 @@ export function shouldERC20Permit(name: string) {
 
     it("accepts owner signature", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const nonce = 0;
 
@@ -84,7 +82,7 @@ export function shouldERC20Permit(name: string) {
 
     it("rejects reused signature", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const nonce = 0;
 
@@ -126,7 +124,7 @@ export function shouldERC20Permit(name: string) {
 
     it("rejects other signature", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const nonce = 0;
 
@@ -166,7 +164,7 @@ export function shouldERC20Permit(name: string) {
 
     it("rejects expired permit", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const nonce = 0;
       const deadline = (await time.latest()) - time.duration.weeks(1);

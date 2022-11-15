@@ -1,13 +1,12 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { deployErc721Base } from "../../fixtures";
-
-export function getGetCurrentTokenIndex(name: string) {
+export function getGetCurrentTokenIndex(factory: () => Promise<Contract>) {
   describe("getCurrentTokenIndex", function () {
     it("should return current index after mint", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address);
 

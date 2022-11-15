@@ -1,15 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { amount } from "@gemunion/contracts-test-constants";
+import { amount } from "@gemunion/contracts-constants";
 
-import { deployErc20Base } from "../fixtures";
-
-export function shouldBurnFrom(name: string) {
+export function shouldBurnFrom(factory: () => Promise<Contract>) {
   describe("burnFrom", function () {
     it("should fail: not allowed", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);
       await expect(tx).to.be.revertedWith("ERC20: insufficient allowance");
@@ -17,7 +16,7 @@ export function shouldBurnFrom(name: string) {
 
     it("should fail: insufficient balance", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.approve(receiver.address, amount);
       const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);
@@ -26,7 +25,7 @@ export function shouldBurnFrom(name: string) {
 
     it("should burn from other account", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
 

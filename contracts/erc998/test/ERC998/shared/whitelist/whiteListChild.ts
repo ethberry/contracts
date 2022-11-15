@@ -1,16 +1,17 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-test-constants";
+import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
 
 import { deployErc998Base } from "../../../ERC721/shared/fixtures";
 
-export function shouldWhiteListChild(name: string) {
+export function shouldWhiteListChild(factory: () => Promise<Contract>) {
   describe("WhiteListChild", function () {
     describe("isWhitelisted", function () {
       it("should not in whiteListChild", async function () {
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         const tx1 = await erc721Instance.isWhitelisted(erc721InstanceMock.address);
         expect(tx1).to.equal(false);
@@ -19,8 +20,8 @@ export function shouldWhiteListChild(name: string) {
 
     describe("whiteListChild", function () {
       it("should add to whiteListChild", async function () {
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         const tx1 = erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
         await expect(tx1).to.emit(erc721Instance, "WhitelistedChild").withArgs(erc721InstanceMock.address, 0);
@@ -31,8 +32,8 @@ export function shouldWhiteListChild(name: string) {
 
       it("should fail: account is missing role", async function () {
         const [_owner, receiver] = await ethers.getSigners();
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         const tx = erc721Instance.connect(receiver).whiteListChild(erc721InstanceMock.address, 0);
         await expect(tx).to.be.revertedWith(
@@ -43,8 +44,8 @@ export function shouldWhiteListChild(name: string) {
 
     describe("unWhitelistChild", function () {
       it("should remove from whitelist", async function () {
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         const tx1 = erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
         await expect(tx1).to.emit(erc721Instance, "WhitelistedChild").withArgs(erc721InstanceMock.address, 0);
@@ -61,8 +62,8 @@ export function shouldWhiteListChild(name: string) {
 
       it("should fail: account is missing role", async function () {
         const [_owner, receiver] = await ethers.getSigners();
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         await erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
         const tx1 = await erc721Instance.isWhitelisted(erc721InstanceMock.address);
@@ -78,8 +79,8 @@ export function shouldWhiteListChild(name: string) {
     describe("getMaxChild", function () {
       describe("getMaxChild", function () {
         it("should get max child", async function () {
-          const { contractInstance: erc721Instance } = await deployErc998Base(name);
-          const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+          const erc721Instance = await factory();
+          const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
           const maxChild = await erc721Instance.getMaxChild(erc721InstanceMock.address);
           expect(maxChild).to.equal(0);
@@ -89,8 +90,8 @@ export function shouldWhiteListChild(name: string) {
 
     describe("setDefaultMaxChild", function () {
       it("should set max child", async function () {
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         const max = 10;
         const tx1 = await erc721Instance.setDefaultMaxChild(max);
@@ -102,7 +103,7 @@ export function shouldWhiteListChild(name: string) {
 
       it("should fail: account is missing role", async function () {
         const [_owner, receiver] = await ethers.getSigners();
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
+        const erc721Instance = await factory();
 
         const tx = erc721Instance.connect(receiver).setDefaultMaxChild(0);
         await expect(tx).to.be.revertedWith(
@@ -113,8 +114,8 @@ export function shouldWhiteListChild(name: string) {
 
     describe("setMaxChild", function () {
       it("should set max child", async function () {
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         const max = 10;
         const tx1 = await erc721Instance.setMaxChild(erc721InstanceMock.address, max);
@@ -126,8 +127,8 @@ export function shouldWhiteListChild(name: string) {
 
       it("should fail: account is missing role", async function () {
         const [_owner, receiver] = await ethers.getSigners();
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         const tx = erc721Instance.connect(receiver).setMaxChild(erc721InstanceMock.address, 0);
         await expect(tx).to.be.revertedWith(
@@ -139,8 +140,8 @@ export function shouldWhiteListChild(name: string) {
     describe("getChildCount", function () {
       it("should increment while safeTransferFrom", async function () {
         const [owner] = await ethers.getSigners();
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         await erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
         await erc721Instance.setDefaultMaxChild(0); // unlimited
@@ -164,8 +165,8 @@ export function shouldWhiteListChild(name: string) {
     describe("incrementChildCount/decrementChildCount", function () {
       it("should make increment for safeTransferFrom", async function () {
         const [owner] = await ethers.getSigners();
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         await erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
         await erc721Instance.setDefaultMaxChild(0);
@@ -199,8 +200,8 @@ export function shouldWhiteListChild(name: string) {
 
       it("should make increment/decriment for safeTransferFrom", async function () {
         const [owner, receiver] = await ethers.getSigners();
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         await erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
         await erc721Instance.setDefaultMaxChild(0);
@@ -236,8 +237,8 @@ export function shouldWhiteListChild(name: string) {
 
       it("should fail with excess number for safeTransferFrom", async function () {
         const [owner] = await ethers.getSigners();
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         await erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
         await erc721Instance.setDefaultMaxChild(1);
@@ -268,8 +269,8 @@ export function shouldWhiteListChild(name: string) {
 
       it("should make increment/decriment for safeTransferFrom and safeTransferChild", async function () {
         const [owner, receiver] = await ethers.getSigners();
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
-        const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+        const erc721Instance = await factory();
+        const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
         await erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
         await erc721Instance.setDefaultMaxChild(0);
@@ -304,7 +305,7 @@ export function shouldWhiteListChild(name: string) {
 
       it("should make increment/decriment for safeTransferFrom and transferChild", async function () {
         const [owner, receiver] = await ethers.getSigners();
-        const { contractInstance: erc721Instance } = await deployErc998Base(name);
+        const erc721Instance = await factory();
 
         await erc721Instance.whiteListChild(erc721Instance.address, 0);
         await erc721Instance.setDefaultMaxChild(0);

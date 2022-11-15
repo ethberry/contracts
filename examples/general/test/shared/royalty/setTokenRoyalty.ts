@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { accessControlInterfaceId, DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-test-constants";
+import { accessControlInterfaceId, DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
 
 export function shouldSetTokenRoyalty() {
   describe("setTokenRoyalty", function () {

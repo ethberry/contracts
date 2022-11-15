@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { accessControlInterfaceId, PAUSER_ROLE } from "@gemunion/contracts-test-constants";
+import { accessControlInterfaceId, PAUSER_ROLE } from "@gemunion/contracts-constants";
 
 export function shouldPause() {
   describe("pause", function () {

@@ -1,15 +1,17 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { whiteListChildInterfaceId } from "@gemunion/contracts-test-constants";
+import { whiteListChildInterfaceId } from "@gemunion/contracts-constants";
+import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
 
-import { deployErc998Base, deployErc721NonReceiver, deployErc721Receiver } from "../../../../ERC721/shared/fixtures";
+import { deployErc998Base } from "../../../../ERC721/shared/fixtures";
 
-export function shouldSafeTransferFrom(name: string) {
+export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
   describe("safeTransferFrom", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
+      const erc721Instance = await factory();
 
       await erc721Instance.mint(owner.address);
       const tx = erc721Instance
@@ -21,8 +23,8 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should fail: burned token", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
-      const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+      const erc721Instance = await factory();
+      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
       await erc721InstanceMock.mint(owner.address);
       await erc721Instance.mint(owner.address); // this is edge case
@@ -41,8 +43,8 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should fail: receiver is burned", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
-      const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+      const erc721Instance = await factory();
+      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
       if (supportsWhiteListChild) {
@@ -66,7 +68,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer own tokens to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
+      const erc721Instance = await factory();
       const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
 
       await erc721Instance.mint(owner.address);
@@ -90,7 +92,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer own tokens to non receiver contract", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
+      const erc721Instance = await factory();
       const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
 
       await erc721Instance.mint(owner.address);
@@ -104,7 +106,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer approved tokens to receiver contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
+      const erc721Instance = await factory();
       const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
 
       await erc721Instance.mint(owner.address);
@@ -128,7 +130,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer approved tokens to non receiver contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
+      const erc721Instance = await factory();
       const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
 
       await erc721Instance.mint(owner.address);
@@ -142,8 +144,8 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer token to another token", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
-      const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+      const erc721Instance = await factory();
+      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
       if (supportsWhiteListChild) {
@@ -173,7 +175,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should not transfer token to itself", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
+      const erc721Instance = await factory();
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
       if (supportsWhiteListChild) {
@@ -194,7 +196,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should transfer tree of tokens to wallet", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
+      const erc721Instance = await factory();
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
       if (supportsWhiteListChild) {
@@ -231,7 +233,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should not transfer token from the middle of the tree", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
+      const erc721Instance = await factory();
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
       if (supportsWhiteListChild) {
@@ -266,7 +268,7 @@ export function shouldSafeTransferFrom(name: string) {
 
     it("should not transfer token to its child token", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
+      const erc721Instance = await factory();
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
       if (supportsWhiteListChild) {

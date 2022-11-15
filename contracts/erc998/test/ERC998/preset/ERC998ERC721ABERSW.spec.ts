@@ -2,39 +2,38 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-test-constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
+import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldWhiteListChild } from "../shared/whitelist/whiteListChild";
 import { shouldERC721Base } from "../../ERC721/shared/base/enumerable";
-import { shouldERC721Accessible } from "../shared/accessible";
 import { shouldERC721Burnable } from "../../ERC721/shared/burnable/enumerable/burn";
 import { shouldERC721Enumerable } from "../../ERC721/shared/enumerable";
 import { shouldERC721Royalty } from "../../ERC721/shared/royalty/enumerable";
 import { shouldERC721Storage } from "../../ERC721/shared/storage/enumerable/storage";
 import { shouldERC998Base } from "../shared/base/basic";
 import { deployErc998Base } from "../../ERC721/shared/fixtures";
-import { shouldSupportsInterface } from "../shared/supportInterface";
 
 use(solidity);
 
 describe("ERC998ERC721ABERSW", function () {
-  const name = "ERC998ERC721ABERSW";
+  const factory = () => deployErc998Base(this.title);
 
-  shouldERC721Base(name);
-  shouldERC721Accessible(name)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldERC721Burnable(name);
-  shouldERC721Enumerable(name);
-  shouldERC721Royalty(name);
-  shouldERC721Storage(name);
+  shouldERC721Base(factory);
+  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldERC721Burnable(factory);
+  shouldERC721Enumerable(factory);
+  shouldERC721Royalty(factory);
+  shouldERC721Storage(factory);
 
-  shouldERC998Base(name);
-  shouldWhiteListChild(name);
+  shouldERC998Base(factory);
+  shouldWhiteListChild(factory);
 
   describe("getChild", function () {
     it("should get child", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance: erc721Instance } = await deployErc998Base(name);
-      const { contractInstance: erc721InstanceMock } = await deployErc998Base("ERC721ABCE");
+      const erc721Instance = await deployErc998Base("ERC998ERC721ABERSW");
+      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
 
       await erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
       await erc721Instance.setDefaultMaxChild(0);
@@ -49,7 +48,7 @@ describe("ERC998ERC721ABERSW", function () {
     });
   });
 
-  shouldSupportsInterface(name)(
+  shouldSupportsInterface(factory)(
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC721,

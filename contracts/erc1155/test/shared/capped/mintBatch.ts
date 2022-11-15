@@ -1,15 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { amount, tokenId } from "@gemunion/contracts-test-constants";
+import { amount, tokenId } from "@gemunion/contracts-constants";
 
-import { deployErc1155Base } from "../fixtures";
-
-export function shouldMintBatch(name: string) {
+export function shouldMintBatch(factory: () => Promise<Contract>) {
   describe("mintBatch", function () {
     it("should fail: double mint", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc1155Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(receiver.address, tokenId, amount, "0x");
       const tx1 = contractInstance.mintBatch(receiver.address, [tokenId], [amount], "0x");

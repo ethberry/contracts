@@ -1,13 +1,12 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { deployErc998Base } from "../../fixtures";
-
-export function shouldERC721Capped(name: string) {
+export function shouldERC721Capped(factory: () => Promise<Contract>) {
   describe("cap", function () {
     it("should fail: cap exceeded", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc998Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, 0);
       await contractInstance.mint(owner.address, 1);

@@ -1,15 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { accessControlInterfaceId, amount, SNAPSHOT_ROLE } from "@gemunion/contracts-test-constants";
+import { accessControlInterfaceId, amount, SNAPSHOT_ROLE } from "@gemunion/contracts-constants";
 
-import { deployErc20Base } from "./fixtures";
-
-export function shouldSnapshot(name: string) {
+export function shouldSnapshot(factory: () => Promise<Contract>) {
   describe("snapshot", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
 
@@ -23,7 +22,7 @@ export function shouldSnapshot(name: string) {
 
     it("should fail: nonexistent id", async function () {
       const [_owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const tx = contractInstance.snapshot();
       await expect(tx).to.emit(contractInstance, "Snapshot").withArgs("1");
@@ -34,7 +33,7 @@ export function shouldSnapshot(name: string) {
 
     it("should make snapshot", async function () {
       const [owner, receiver] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
 

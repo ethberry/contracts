@@ -1,15 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { tokenId } from "@gemunion/contracts-test-constants";
+import { tokenId } from "@gemunion/contracts-constants";
 
-import { deployErc721Base } from "../../fixtures";
-
-export function shouldGetOwnerOf(name: string) {
+export function shouldGetOwnerOf(factory: () => Promise<Contract>) {
   describe("ownerOf", function () {
     it("should get owner of token", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, tokenId);
       const ownerOfToken = await contractInstance.ownerOf(tokenId);
@@ -18,7 +17,7 @@ export function shouldGetOwnerOf(name: string) {
 
     it("should get owner of burned token", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc721Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, tokenId);
       const tx = contractInstance.burn(tokenId);

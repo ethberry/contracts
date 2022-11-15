@@ -1,14 +1,13 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-import { amount } from "@gemunion/contracts-test-constants";
+import { amount } from "@gemunion/contracts-constants";
 
-import { deployErc20Base } from "../fixtures";
-
-export function shouldMaxFlashLoan(name: string) {
+export function shouldMaxFlashLoan(factory: () => Promise<Contract>) {
   describe("maxFlashLoan", function () {
     it("token match (zero)", async function () {
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       const maxFlashLoan = await contractInstance.maxFlashLoan(contractInstance.address);
       expect(maxFlashLoan).to.equal(ethers.constants.MaxUint256);
@@ -16,7 +15,7 @@ export function shouldMaxFlashLoan(name: string) {
 
     it("token match (amount)", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
       const maxFlashLoan = await contractInstance.maxFlashLoan(contractInstance.address);
@@ -25,7 +24,7 @@ export function shouldMaxFlashLoan(name: string) {
 
     it("token mismatch", async function () {
       const [owner] = await ethers.getSigners();
-      const { contractInstance } = await deployErc20Base(name);
+      const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, amount);
       const maxFlashLoan = await contractInstance.maxFlashLoan(ethers.constants.AddressZero);

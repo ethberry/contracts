@@ -11,7 +11,7 @@ import {
   tokenId,
   tokenName,
   tokenSymbol,
-} from "@gemunion/contracts-test-constants";
+} from "@gemunion/contracts-constants";
 
 import { AuctionFactory, ERC721AB } from "../typechain-types";
 import { shouldHaveRole } from "./shared/accessible/hasRoles";

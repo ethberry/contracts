@@ -13,6 +13,7 @@ abstract contract ERC20PolygonChild is ERC20, AccessControl {
   bytes32 public constant DEPOSITOR_ROLE = keccak256("DEPOSITOR_ROLE");
 
   constructor() {
+    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(DEPOSITOR_ROLE, _msgSender());
   }
 

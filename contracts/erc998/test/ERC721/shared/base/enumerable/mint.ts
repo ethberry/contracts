@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { accessControlInterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
-import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
+import { deployErc721NonReceiver, deployErc721Receiver } from "../../../../../../mocks";
 
 export function shouldMint(factory: () => Promise<Contract>) {
   describe("mint", function () {

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
+import { deployErc721NonReceiver, deployErc721Receiver } from "../../../../../../mocks";
 
 export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
   describe("safeTransferFrom", function () {

@@ -1,20 +1,19 @@
-import { expect, use } from "chai";
-import { solidity } from "ethereum-waffle";
+import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { amount, DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE } from "@gemunion/contracts-constants";
 import { shouldBeAccessible } from "@gemunion/contracts-mocha";
 
-import { deployErc20Base } from "../shared/fixtures";
+import { deployErc20Base, shouldERC20Base } from "@gemunion/contracts-erc20";
 
-use(solidity);
-
-describe("ERC20PolygonChildMock", function () {
+describe("ERC20PolygonChildTest", function () {
   const factory = () => deployErc20Base(this.title);
 
   shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE);
 
-  describe("Deposit", function () {
+  shouldERC20Base(factory, { MINTER_ROLE: DEFAULT_ADMIN_ROLE });
+
+  describe("deposit", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();

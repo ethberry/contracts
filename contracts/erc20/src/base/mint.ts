@@ -2,20 +2,22 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { accessControlInterfaceId, amount, MINTER_ROLE } from "@gemunion/contracts-constants";
+import { amount, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldMint(factory: () => Promise<Contract>) {
+export function shouldMint(factory: () => Promise<Contract>, options: Record<string, any>) {
   describe("mint", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
+      const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
       const tx = contractInstance.connect(receiver).mint(receiver.address, amount);
       await expect(tx).to.be.revertedWith(
         supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`
+          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${
+              options.MINTER_ROLE || MINTER_ROLE
+            }`
           : "Ownable: caller is not the owner",
       );
     });

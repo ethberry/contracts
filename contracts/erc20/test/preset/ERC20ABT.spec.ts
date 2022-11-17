@@ -4,18 +4,19 @@ import { solidity } from "ethereum-waffle";
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldERC20Base } from "../shared/base";
-import { shouldERC20Permit } from "../shared/permit";
-import { shouldERC20Burnable } from "../shared/burnable";
-import { deployErc20Base } from "../shared/fixtures";
+import { shouldERC20Base } from "../../src/base";
+import { shouldERC20Permit } from "../../src/permit";
+import { shouldERC20Burnable } from "../../src/burnable";
+import { deployErc20Base } from "../../src/fixtures";
 
 use(solidity);
 
 describe("ERC20ABT", function () {
   const factory = () => deployErc20Base(this.title);
 
-  shouldERC20Base(factory);
   shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+
+  shouldERC20Base(factory);
   shouldERC20Burnable(factory);
   shouldERC20Permit(factory);
 

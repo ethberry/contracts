@@ -5,7 +5,7 @@ import { amount, tokenName, tokenSymbol } from "@gemunion/contracts-constants";
 export async function deployErc20Base(name: string) {
   const erc20Factory = await ethers.getContractFactory(name);
 
-  const isPolygon = name === "ERC20PolygonChildMock" || name === "ERC20PolygonParentMock";
+  const isPolygon = name === "ERC20PolygonChildTest" || name === "ERC20PolygonParentTest";
 
   if (isPolygon) {
     return erc20Factory.deploy(tokenName, tokenSymbol);

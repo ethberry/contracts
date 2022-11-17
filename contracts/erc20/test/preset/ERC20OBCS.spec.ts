@@ -4,11 +4,11 @@ import { solidity } from "ethereum-waffle";
 import { InterfaceId } from "@gemunion/contracts-constants";
 import { shouldSupportsInterface, shouldBeOwnable } from "@gemunion/contracts-mocha";
 
-import { shouldSnapshot } from "../shared/snapshot";
-import { shouldERC20Base } from "../shared/base";
-import { shouldERC20Burnable } from "../shared/burnable";
-import { shouldERC20Capped } from "../shared/capped";
-import { deployErc20Base } from "../shared/fixtures";
+import { shouldSnapshot } from "../../src/snapshot";
+import { shouldERC20Base } from "../../src/base";
+import { shouldERC20Burnable } from "../../src/burnable";
+import { shouldERC20Capped } from "../../src/capped";
+import { deployErc20Base } from "../../src/fixtures";
 
 use(solidity);
 

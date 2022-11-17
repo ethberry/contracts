@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { deployErc721Receiver } from "@gemunion/contracts-mocks";
+import { deployErc721Receiver } from "../../../../mocks";
 
 export function shouldERC721Enumerable(factory: () => Promise<Contract>) {
   describe("tokenOfOwnerByIndex", function () {

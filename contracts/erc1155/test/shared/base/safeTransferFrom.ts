@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
-import { deployErc1155NonReceiver, deployErc1155Receiver } from "@gemunion/contracts-mocks";
+import { deployErc1155NonReceiver, deployErc1155Receiver } from "../../../../mocks";
 
 export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
   describe("safeTransferFrom", function () {

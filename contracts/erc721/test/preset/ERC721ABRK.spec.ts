@@ -11,7 +11,7 @@ import { deployErc721Base } from "../../src/fixtures";
 
 use(solidity);
 
-describe("ERC721ABRK", function () {
+describe("ERC721ABRKTest", function () {
   const factory = () => deployErc721Base(this.title);
 
   shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);

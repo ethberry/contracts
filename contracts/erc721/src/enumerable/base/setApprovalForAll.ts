@@ -9,10 +9,9 @@ export function shouldSetApprovalForAll(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
 
       await contractInstance.mint(owner.address);
-      await contractInstance.mint(owner.address);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(2);
+      expect(balanceOfOwner).to.equal(1);
 
       const tx1 = contractInstance.setApprovalForAll(receiver.address, true);
       await expect(tx1).to.not.be.reverted;

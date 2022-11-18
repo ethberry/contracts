@@ -16,8 +16,9 @@ use(solidity);
 describe("ERC721ABERS", function () {
   const factory = () => deployErc721Base(this.title);
 
-  shouldERC721Base(factory);
   shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+
+  shouldERC721Base(factory);
   shouldERC721Burnable(factory);
   shouldERC721Enumerable(factory);
   shouldERC721Royalty(factory);

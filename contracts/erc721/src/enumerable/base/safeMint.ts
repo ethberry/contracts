@@ -38,7 +38,7 @@ export function shouldSafeMint(factory: () => Promise<Contract>) {
     it("should fail to mint to non receiver", async function () {
       const contractInstance = await factory();
 
-      const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
+      const erc721NonReceiverInstance = await deployErc721NonReceiver();
 
       const tx = contractInstance.safeMint(erc721NonReceiverInstance.address);
       await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
@@ -47,7 +47,7 @@ export function shouldSafeMint(factory: () => Promise<Contract>) {
     it("should mint to receiver", async function () {
       const contractInstance = await factory();
 
-      const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
+      const erc721ReceiverInstance = await deployErc721Receiver();
 
       const tx = contractInstance.safeMint(erc721ReceiverInstance.address);
       await expect(tx)

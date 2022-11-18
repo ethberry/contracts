@@ -11,8 +11,9 @@ import { deployErc721Base } from "../../src/fixtures";
 describe("ERC721ABCEP", function () {
   const factory = () => deployErc721Base(this.title);
 
-  shouldERC721Base(factory);
   shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+
+  shouldERC721Base(factory);
   shouldERC721Burnable(factory);
   shouldERC721Capped(factory);
   shouldERC721Enumerable(factory);

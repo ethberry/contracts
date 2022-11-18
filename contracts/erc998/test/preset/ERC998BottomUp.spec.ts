@@ -18,8 +18,9 @@ use(solidity);
 describe("ERC998BottomUp", function () {
   const factory = () => deployErc998Base(this.title);
 
-  shouldERC721Base(factory);
   shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+
+  shouldERC721Base(factory);
   shouldERC721Burnable(factory);
   shouldERC721Enumerable(factory);
   shouldERC721Royalty(factory);

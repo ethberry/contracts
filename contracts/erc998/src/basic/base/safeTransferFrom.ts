@@ -69,7 +69,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
     it("should transfer own tokens to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const erc721Instance = await factory();
-      const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
+      const erc721ReceiverInstance = await deployErc721Receiver();
 
       await erc721Instance.mint(owner.address);
       const tx = erc721Instance["safeTransferFrom(address,address,uint256)"](
@@ -93,7 +93,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
     it("should transfer own tokens to non receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const erc721Instance = await factory();
-      const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
+      const erc721NonReceiverInstance = await deployErc721NonReceiver();
 
       await erc721Instance.mint(owner.address);
       const tx = erc721Instance["safeTransferFrom(address,address,uint256)"](
@@ -107,7 +107,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
     it("should transfer approved tokens to receiver contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const erc721Instance = await factory();
-      const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
+      const erc721ReceiverInstance = await deployErc721Receiver();
 
       await erc721Instance.mint(owner.address);
       await erc721Instance.approve(receiver.address, 0);
@@ -131,7 +131,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
     it("should transfer approved tokens to non receiver contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const erc721Instance = await factory();
-      const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
+      const erc721NonReceiverInstance = await deployErc721NonReceiver();
 
       await erc721Instance.mint(owner.address);
       await erc721Instance.approve(receiver.address, 0);

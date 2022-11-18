@@ -22,7 +22,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
+      const erc721ReceiverInstance = await deployErc721Receiver();
 
       await contractInstance.mint(owner.address);
       const tx = contractInstance["safeTransferFrom(address,address,uint256)"](
@@ -43,7 +43,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
     it("should transfer own tokens to non receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
-      const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
+      const erc721NonReceiverInstance = await deployErc721NonReceiver();
 
       await contractInstance.mint(owner.address);
       const tx = contractInstance["safeTransferFrom(address,address,uint256)"](
@@ -58,7 +58,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
+      const erc721ReceiverInstance = await deployErc721Receiver();
 
       await contractInstance.mint(owner.address);
       await contractInstance.approve(receiver.address, 0);
@@ -80,7 +80,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
+      const erc721NonReceiverInstance = await deployErc721NonReceiver();
 
       await contractInstance.mint(owner.address);
       await contractInstance.approve(receiver.address, 0);

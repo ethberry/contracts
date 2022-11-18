@@ -38,7 +38,7 @@ export function shouldMint(factory: () => Promise<Contract>) {
     it("should mint to non receiver", async function () {
       const contractInstance = await factory();
 
-      const { contractInstance: erc721NonReceiverInstance } = await deployErc721NonReceiver();
+      const erc721NonReceiverInstance = await deployErc721NonReceiver();
 
       const tx = contractInstance.mint(erc721NonReceiverInstance.address);
       await expect(tx)
@@ -49,7 +49,7 @@ export function shouldMint(factory: () => Promise<Contract>) {
     it("should mint to receiver", async function () {
       const contractInstance = await factory();
 
-      const { contractInstance: erc721ReceiverInstance } = await deployErc721Receiver();
+      const erc721ReceiverInstance = await deployErc721Receiver();
 
       const tx = contractInstance.mint(erc721ReceiverInstance.address);
       await expect(tx)

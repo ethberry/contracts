@@ -4,7 +4,7 @@ import { ethers } from "hardhat";
 
 import { MINTER_ROLE, tokenId, tokenName } from "@gemunion/contracts-constants";
 
-import { deployErc721Base } from "../shared/fixtures";
+import { deployErc721Base } from "../../src/fixtures";
 
 use(solidity);
 

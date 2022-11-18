@@ -10,12 +10,14 @@ import {
 } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldSnapshot } from "../../src/snapshot";
-import { shouldERC20Pause } from "../../src/pause";
-import { shouldERC20Base } from "../../src/base";
-import { shouldERC20Burnable } from "../../src/burnable";
-import { shouldERC20Capped } from "../../src/capped";
-import { deployErc20Base } from "../../src/fixtures";
+import {
+  deployErc20Base,
+  shouldERC20Base,
+  shouldERC20Burnable,
+  shouldERC20Capped,
+  shouldERC20Pause,
+  shouldSnapshot,
+} from "../../src";
 
 use(solidity);
 

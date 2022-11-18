@@ -2,11 +2,9 @@ import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
 import { InterfaceId } from "@gemunion/contracts-constants";
-import { shouldSupportsInterface, shouldBeOwnable } from "@gemunion/contracts-mocha";
+import { shouldBeOwnable, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldERC20Base } from "../../src/base";
-import { shouldERC20Burnable } from "../../src/burnable";
-import { deployErc20Base } from "../../src/fixtures";
+import { deployErc20Base, shouldERC20Base, shouldERC20Burnable } from "../../src";
 
 use(solidity);
 

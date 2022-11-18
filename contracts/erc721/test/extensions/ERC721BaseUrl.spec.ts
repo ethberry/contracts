@@ -3,14 +3,13 @@ import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
-import { shouldBeAccessible } from "@gemunion/contracts-mocha";
+import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldSupportsInterface } from "../shared/supportInterface";
-import { deployErc721Base } from "../shared/fixtures";
-import { shouldERC721Base } from "../shared/base/basic";
+import { deployErc721Base } from "../../src/fixtures";
+import { shouldERC721Base } from "../../src/basic/base";
 
-import { shouldERC721Burnable } from "../shared/burnable/basic/burn";
-import { shouldERC721Royalty } from "../shared/royalty/basic";
+import { shouldERC721Burnable } from "../../src/basic/burnable/burn";
+import { shouldERC721Royalty } from "../../src/basic/royalty";
 
 use(solidity);
 

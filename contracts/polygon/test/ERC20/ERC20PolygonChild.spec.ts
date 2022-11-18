@@ -3,7 +3,6 @@ import { ethers } from "hardhat";
 
 import { amount, DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE } from "@gemunion/contracts-constants";
 import { shouldBeAccessible } from "@gemunion/contracts-mocha";
-
 import { deployErc20Base, shouldERC20Base } from "@gemunion/contracts-erc20";
 
 describe("ERC20PolygonChildTest", function () {

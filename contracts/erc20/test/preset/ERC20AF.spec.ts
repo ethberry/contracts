@@ -4,9 +4,7 @@ import { solidity } from "ethereum-waffle";
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldERC20Base } from "../../src/base";
-import { shouldERC20Flash } from "../../src/flash";
-import { deployErc20Base } from "../../src/fixtures";
+import { deployErc20Base, shouldERC20Base, shouldERC20Flash } from "../../src";
 
 use(solidity);
 

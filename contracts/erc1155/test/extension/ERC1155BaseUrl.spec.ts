@@ -4,15 +4,15 @@ import { solidity } from "ethereum-waffle";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldERC1155Burnable } from "../shared/burnable";
-import { shouldMint } from "../shared/base/mint";
-import { shouldMintBatch } from "../shared/base/mintBatch";
-import { shouldBalanceOf } from "../shared/base/balanceOf";
-import { shouldBalanceOfBatch } from "../shared/base/balanceOfBatch";
-import { shouldSetApprovalForAll } from "../shared/base/setApprovalForAll";
-import { shouldSafeTransferFrom } from "../shared/base/safeTransferFrom";
-import { shouldSafeBatchTransferFrom } from "../shared/base/safeBatchTransferFrom";
-import { deployErc1155Base } from "../shared/fixtures";
+import { shouldERC1155Burnable } from "../../src/burnable";
+import { shouldMint } from "../../src/base/mint";
+import { shouldMintBatch } from "../../src/base/mintBatch";
+import { shouldBalanceOf } from "../../src/base/balanceOf";
+import { shouldBalanceOfBatch } from "../../src/base/balanceOfBatch";
+import { shouldSetApprovalForAll } from "../../src/base/setApprovalForAll";
+import { shouldSafeTransferFrom } from "../../src/base/safeTransferFrom";
+import { shouldSafeBatchTransferFrom } from "../../src/base/safeBatchTransferFrom";
+import { deployErc1155Base } from "../../src/fixtures";
 
 use(solidity);
 

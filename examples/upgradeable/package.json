@@ -44,7 +44,7 @@
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-examples-upgradeable",
   "peerDependencies": {
-    "@openzeppelin/contracts": "^4.7.0",
+    "@openzeppelin/contracts": "^4.8.0",
     "ethers": "^5.6.0"
   },
   "publishConfig": {
@@ -57,14 +57,9 @@
   "scripts": {
     "build": "hardhat compile",
     "clean": "hardhat clean",
-    "deploy:mainnet": "hardhat --network mainnet deploy",
-    "deploy:mumbai": "hardhat --network mumbai deploy",
-    "deploy:polygon": "hardhat --network polygon deploy",
-    "deploy:rinkeby": "hardhat --network rinkeby deploy",
     "lint": "eslint . --fix",
     "prebuild": "hardhat clean",
     "preversion": "npm run build",
-    "release:abi": "sh scripts/publish-abi.sh",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test",
     "test:coverage": "hardhat coverage"

@@ -15,9 +15,7 @@ contract ERC721ABRK is ERC721ABR, ERC721Consecutive {
     string memory name,
     string memory symbol,
     uint96 royaltyNumerator
-  ) ERC721ABR(name, symbol, royaltyNumerator) {
-
-  }
+  ) ERC721ABR(name, symbol, royaltyNumerator) {}
 
   function _afterTokenTransfer(
     address from,

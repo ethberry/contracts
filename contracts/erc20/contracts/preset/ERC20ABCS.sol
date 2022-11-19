@@ -25,11 +25,11 @@ contract ERC20ABCS is ERC20ABC, ERC20Snapshot {
     super._mint(account, amount);
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 amount)
-    internal
-    virtual
-    override(ERC20, ERC20Snapshot)
-  {
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 amount
+  ) internal virtual override(ERC20, ERC20Snapshot) {
     super._beforeTokenTransfer(from, to, amount);
   }
 }

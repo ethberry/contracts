@@ -52,15 +52,10 @@
   "scripts": {
     "build": "hardhat compile",
     "clean": "hardhat clean",
-    "deploy:mainnet": "hardhat --network mainnet deploy",
-    "deploy:mumbai": "hardhat --network mumbai deploy",
-    "deploy:polygon": "hardhat --network polygon deploy",
-    "deploy:rinkeby": "hardhat --network rinkeby deploy",
     "lint": "eslint . --fix",
     "prebuild": "hardhat clean",
     "prepare": "npm run build",
     "preversion": "npm run build && npm run test",
-    "release:abi": "sh scripts/publish-abi.sh",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test",
     "test:coverage": "hardhat coverage"

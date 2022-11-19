@@ -29,11 +29,11 @@ contract ERC20ABCSP is ERC20ABCS, ERC20Pausable {
     super._mint(account, amount);
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 amount)
-    internal
-    virtual
-    override(ERC20ABCS, ERC20Pausable)
-  {
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 amount
+  ) internal virtual override(ERC20ABCS, ERC20Pausable) {
     super._beforeTokenTransfer(from, to, amount);
   }
 }

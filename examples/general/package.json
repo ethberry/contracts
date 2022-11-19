@@ -48,7 +48,7 @@
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-examples-general",
   "peerDependencies": {
-    "@openzeppelin/contracts": "^4.7.0",
+    "@openzeppelin/contracts": "^4.8.0",
     "ethers": "^5.6.0"
   },
   "publishConfig": {
@@ -65,7 +65,6 @@
     "lint": "eslint . --fix",
     "prebuild": "hardhat clean",
     "preversion": "npm run build",
-    "release:abi": "sh scripts/publish-abi.sh",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test",
     "test:coverage": "hardhat coverage"

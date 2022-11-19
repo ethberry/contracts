@@ -63,7 +63,6 @@
     "lint": "eslint . --fix",
     "prebuild": "hardhat clean",
     "preversion": "npm run build",
-    "release:abi": "sh scripts/publish-abi.sh",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test",
     "test:coverage": "hardhat coverage"

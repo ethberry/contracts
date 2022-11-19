@@ -7,8 +7,6 @@ export async function deployErc721Base(name: string) {
 
   if (name === "ERC721BaseUrlTest") {
     return erc721Factory.deploy(tokenName, tokenSymbol, royalty, baseTokenURI);
-  } else if (name === "ERC721DropboxTest") {
-    return erc721Factory.deploy(tokenName, tokenSymbol, 1);
   } else if (name === "ERC721ABERM") {
     return erc721Factory.deploy(tokenName, tokenSymbol, 1, { gasLimit: 40966424 });
   } else {

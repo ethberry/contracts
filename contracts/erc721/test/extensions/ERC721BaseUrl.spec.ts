@@ -6,10 +6,10 @@ import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId } f
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { deployErc721Base } from "../../src/fixtures";
-import { shouldERC721Base } from "../../src/basic/base";
+import { shouldBase } from "../../src/basic/base";
 
-import { shouldERC721Burnable } from "../../src/basic/burnable/burn";
-import { shouldERC721Royalty } from "../../src/basic/royalty";
+import { shouldBurnable } from "../../src/basic/burnable/burn";
+import { shouldRoyalty } from "../../src/basic/royalty";
 
 use(solidity);
 
@@ -18,9 +18,9 @@ describe("ERC721BaseUrlTest", function () {
 
   shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
 
-  shouldERC721Base(factory);
-  shouldERC721Burnable(factory);
-  shouldERC721Royalty(factory);
+  shouldBase(factory);
+  shouldBurnable(factory);
+  shouldRoyalty(factory);
 
   describe("tokenURI", function () {
     it("should get token uri", async function () {

@@ -41,10 +41,6 @@
   "engines": {
     "node": ">=12.13"
   },
-  "files": [
-    "/sol/**/*.sol",
-    "/abi/*.json"
-  ],
   "license": "UNLICENSED",
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-examples-lootbox",
@@ -52,6 +48,7 @@
     "@openzeppelin/contracts": "^4.8.0",
     "ethers": "^5.6.0"
   },
+  "private": true,
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },

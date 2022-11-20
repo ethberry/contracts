@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { amount, PAUSER_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldERC20Pause(factory: () => Promise<Contract>) {
+export function shouldPause(factory: () => Promise<Contract>) {
   describe("pause", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();

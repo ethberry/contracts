@@ -1,7 +1,9 @@
+@types
 artifacts
 cache
 coverage
 typechain-types
+src
 test
 
 hardhat.config.ts

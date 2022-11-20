@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { deployErc721Receiver } from "@gemunion/contracts-mocks";
 
-export function shouldERC721Enumerable(factory: () => Promise<Contract>) {
+export function shouldEnumerable(factory: () => Promise<Contract>) {
   describe("tokenOfOwnerByIndex", function () {
     it("should match the token number of the owner", async function () {
       const [owner] = await ethers.getSigners();

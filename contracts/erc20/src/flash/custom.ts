@@ -17,7 +17,7 @@ export function shouldFlashCustom(factory: () => Promise<Contract>) {
 
       await contractInstance.mint(owner.address, amount);
 
-      const { contractInstance: erc20FlashBorrowerInstance } = await deployErc20Borrower();
+      const erc20FlashBorrowerInstance = await deployErc20Borrower();
 
       const tx1 = await contractInstance.mint(erc20FlashBorrowerInstance.address, borrowerInitialBalance);
       await expect(tx1)
@@ -72,7 +72,7 @@ export function shouldFlashCustom(factory: () => Promise<Contract>) {
 
       await contractInstance.mint(owner.address, amount);
 
-      const { contractInstance: erc20FlashBorrowerInstance } = await deployErc20Borrower();
+      const erc20FlashBorrowerInstance = await deployErc20Borrower();
 
       const tx1 = await contractInstance.mint(erc20FlashBorrowerInstance.address, borrowerInitialBalance);
       await expect(tx1)

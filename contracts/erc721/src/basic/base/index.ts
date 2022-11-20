@@ -9,7 +9,7 @@ import { shouldGetOwnerOf } from "./ownerOf";
 import { shouldApprove } from "./approve";
 import { shouldTransferFrom } from "./transferFrom";
 
-export function shouldERC721Base(factory: () => Promise<Contract>) {
+export function shouldBase(factory: () => Promise<Contract>) {
   shouldMint(factory);
   shouldSafeMint(factory);
   shouldGetOwnerOf(factory);

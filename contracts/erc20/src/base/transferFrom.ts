@@ -3,8 +3,7 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
-
-import { deployErc20Wallet } from "../fixtures";
+import { deployErc20NonReceiver } from "@gemunion/contracts-mocks";
 
 export function shouldTransferFrom(factory: () => Promise<Contract>) {
   describe("transferFrom", function () {
@@ -27,7 +26,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>) {
     it("should transfer to contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
-      const { contractInstance: erc20NonReceiverInstance } = await deployErc20Wallet();
+      const erc20NonReceiverInstance = await deployErc20NonReceiver();
 
       await contractInstance.mint(owner.address, amount);
       await contractInstance.approve(receiver.address, amount);

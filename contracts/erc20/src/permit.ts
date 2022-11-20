@@ -6,7 +6,7 @@ import { Network } from "@ethersproject/networks";
 
 import { amount, tokenName } from "@gemunion/contracts-constants";
 
-export function shouldERC20Permit(factory: () => Promise<Contract>) {
+export function shouldPermit(factory: () => Promise<Contract>) {
   describe("permit", function () {
     let network: Network;
 

@@ -36,10 +36,6 @@
   "engines": {
     "node": ">=12.13"
   },
-  "files": [
-    "/sol/**/*.sol",
-    "/abi/*.json"
-  ],
   "license": "UNLICENSED",
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-erc1155",

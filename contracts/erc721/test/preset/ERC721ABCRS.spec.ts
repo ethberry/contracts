@@ -4,11 +4,11 @@ import { solidity } from "ethereum-waffle";
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldERC721Burnable } from "../../src/basic/burnable/burn";
-import { shouldERC721Storage } from "../../src/basic/storage/storage";
-import { shouldERC721Capped } from "../../src/basic/capped/capped";
-import { shouldERC721Base } from "../../src/basic/base";
-import { shouldERC721Royalty } from "../../src/basic/royalty";
+import { shouldBurnable } from "../../src/basic/burnable/burn";
+import { shouldStorage } from "../../src/basic/storage/storage";
+import { shouldCapped } from "../../src/basic/capped/capped";
+import { shouldBase } from "../../src/basic/base";
+import { shouldRoyalty } from "../../src/basic/royalty";
 import { deployErc721Base } from "../../src/fixtures";
 
 use(solidity);
@@ -18,11 +18,11 @@ describe("ERC721ABCRS", function () {
 
   shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
 
-  shouldERC721Base(factory);
-  shouldERC721Burnable(factory);
-  shouldERC721Capped(factory);
-  shouldERC721Royalty(factory);
-  shouldERC721Storage(factory);
+  shouldBase(factory);
+  shouldBurnable(factory);
+  shouldCapped(factory);
+  shouldRoyalty(factory);
+  shouldStorage(factory);
 
   shouldSupportsInterface(factory)(
     InterfaceId.IERC165,

@@ -3,13 +3,7 @@ import { solidity } from "ethereum-waffle";
 
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
-import {
-  shouldERC721Base,
-  shouldERC721Burnable,
-  shouldERC721Enumerable,
-  shouldERC721Royalty,
-  shouldERC721Storage,
-} from "@gemunion/contracts-erc721";
+import { shouldBase, shouldBurnable, shouldEnumerable, shouldRoyalty, shouldStorage } from "@gemunion/contracts-erc721";
 
 import { shouldERC998Base } from "../../src/basic";
 import { shouldERC998BaseEnumerable } from "../../src/enumerable";
@@ -22,11 +16,11 @@ describe("ERC998ERC721XABERS", function () {
 
   shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
 
-  shouldERC721Base(factory);
-  shouldERC721Burnable(factory);
-  shouldERC721Enumerable(factory);
-  shouldERC721Royalty(factory);
-  shouldERC721Storage(factory);
+  shouldBase(factory);
+  shouldBurnable(factory);
+  shouldEnumerable(factory);
+  shouldRoyalty(factory);
+  shouldStorage(factory);
 
   shouldERC998Base(factory);
   shouldERC998BaseEnumerable(factory);

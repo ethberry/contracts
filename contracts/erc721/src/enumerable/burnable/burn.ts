@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-export function shouldERC721Burnable(factory: () => Promise<Contract>) {
+export function shouldBurnable(factory: () => Promise<Contract>) {
   describe("burn", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();

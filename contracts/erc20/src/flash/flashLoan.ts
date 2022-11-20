@@ -14,7 +14,7 @@ export function shouldFlashLoan(factory: () => Promise<Contract>) {
 
       await contractInstance.mint(owner.address, amount);
 
-      const { contractInstance: erc20FlashBorrowerInstance } = await deployErc20Borrower();
+      const erc20FlashBorrowerInstance = await deployErc20Borrower();
 
       const tx = contractInstance.flashLoan(erc20FlashBorrowerInstance.address, contractInstance.address, amount, "0x");
 

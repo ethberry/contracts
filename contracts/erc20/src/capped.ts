@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
-export function shouldERC20Capped(factory: () => Promise<Contract>) {
+export function shouldCapped(factory: () => Promise<Contract>) {
   describe("mint", function () {
     it("should fail: cap exceeded", async function () {
       const [owner] = await ethers.getSigners();

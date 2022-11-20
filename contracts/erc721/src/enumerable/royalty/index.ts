@@ -5,7 +5,7 @@ import { shouldSetDefaultRoyalty } from "../../basic/royalty/setDefaultRoyalty";
 import { shouldGetRoyaltyInfo } from "../../basic/royalty/royaltyInfo";
 import { shouldBurn } from "./burn";
 
-export function shouldERC721Royalty(factory: () => Promise<Contract>) {
+export function shouldRoyalty(factory: () => Promise<Contract>) {
   shouldSetTokenRoyalty(factory);
   shouldSetDefaultRoyalty(factory);
   shouldGetRoyaltyInfo(factory);

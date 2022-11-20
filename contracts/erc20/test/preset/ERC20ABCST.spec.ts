@@ -6,9 +6,9 @@ import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts
 
 import {
   deployErc20Base,
-  shouldERC20Base,
-  shouldERC20Burnable,
-  shouldERC20Capped,
+  shouldBase,
+  shouldBurnable,
+  shouldCapped,
   shouldERC20Permit,
   shouldSnapshot,
 } from "../../src";
@@ -20,9 +20,9 @@ describe("ERC20ABCST", function () {
 
   shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE, SNAPSHOT_ROLE);
 
-  shouldERC20Base(factory);
-  shouldERC20Burnable(factory);
-  shouldERC20Capped(factory);
+  shouldBase(factory);
+  shouldBurnable(factory);
+  shouldCapped(factory);
   shouldSnapshot(factory);
   shouldERC20Permit(factory);
 

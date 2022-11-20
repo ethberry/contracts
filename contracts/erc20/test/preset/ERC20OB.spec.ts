@@ -4,7 +4,7 @@ import { solidity } from "ethereum-waffle";
 import { InterfaceId } from "@gemunion/contracts-constants";
 import { shouldBeOwnable, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { deployErc20Base, shouldERC20Base, shouldERC20Burnable } from "../../src";
+import { deployErc20Base, shouldBase, shouldBurnable } from "../../src";
 
 use(solidity);
 
@@ -13,8 +13,8 @@ describe("ERC20OB", function () {
 
   shouldBeOwnable(factory);
 
-  shouldERC20Base(factory);
-  shouldERC20Burnable(factory);
+  shouldBase(factory);
+  shouldBurnable(factory);
 
   shouldSupportsInterface(factory)(InterfaceId.IERC165, InterfaceId.IERC20, InterfaceId.IERC20Metadata);
 });

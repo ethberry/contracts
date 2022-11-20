@@ -1,4 +1,4 @@
-# NFT Framework
+# Gemunion Framework
 
 Welcome to Gemunion Contracts monorepo.
 

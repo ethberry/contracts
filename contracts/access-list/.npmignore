@@ -1,7 +1,8 @@
-/artifacts
-/cache
-/coverage
+artifacts
+cache
+coverage
 typechain-types
+test
 
 hardhat.config.ts
 tsconfig.json

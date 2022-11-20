@@ -34,7 +34,6 @@
   },
   "license": "UNLICENSED",
   "name": "@gemunion/contracts",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/gemunion/contracts"
@@ -45,6 +44,8 @@
     "clean": "sh scripts/clean.sh",
     "lint": "lerna run lint --stream",
     "precommit": "lint-staged",
+    "release": "npm run release:version && npm run release:publish",
+    "release:version": "lerna version",
     "test": "sh scripts/test.sh"
   },
   "version": "1.0.0"

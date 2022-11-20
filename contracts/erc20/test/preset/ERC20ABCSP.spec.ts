@@ -10,7 +10,8 @@ import {
 } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { deployErc20Base, shouldBase, shouldBurnable, shouldCapped, shouldPause, shouldSnapshot } from "../../src";
+import { shouldBase, shouldBurnable, shouldCapped, shouldPause, shouldSnapshot } from "../../src";
+import { deployErc20Base } from "../fixtures";
 
 use(solidity);
 

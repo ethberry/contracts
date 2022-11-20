@@ -4,7 +4,7 @@ import { solidity } from "ethereum-waffle";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldBurnable } from "../../src/burnable";
+import { shouldBurnable } from "../../src";
 import { shouldMint } from "../../src/base/mint";
 import { shouldMintBatch } from "../../src/base/mintBatch";
 import { shouldBalanceOf } from "../../src/base/balanceOf";
@@ -12,13 +12,16 @@ import { shouldBalanceOfBatch } from "../../src/base/balanceOfBatch";
 import { shouldSetApprovalForAll } from "../../src/base/setApprovalForAll";
 import { shouldSafeTransferFrom } from "../../src/base/safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "../../src/base/safeBatchTransferFrom";
-import { deployErc1155Base } from "../../src/fixtures";
+import { deployErc1155Base } from "../fixtures";
 
 use(solidity);
 
 describe("ERC1155BaseUrlTest", function () {
   const factory = () => deployErc1155Base(this.title);
 
+  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+
+  // base without uri
   shouldMint(factory);
   shouldMintBatch(factory);
   shouldBalanceOf(factory);
@@ -27,7 +30,6 @@ describe("ERC1155BaseUrlTest", function () {
   shouldSafeTransferFrom(factory);
   shouldSafeBatchTransferFrom(factory);
 
-  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
   shouldBurnable(factory);
 
   describe("uri", function () {

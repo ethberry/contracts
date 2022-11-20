@@ -1,7 +1,8 @@
 import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { deployAccessList, shouldWhiteList, shouldWhiteListMe } from "../../src";
+import { shouldWhiteList, shouldWhiteListMe } from "../../src";
+import { deployAccessList } from "../fixtures";
 
 describe("WhiteListTest", function () {
   const factory = () => deployAccessList(this.title);

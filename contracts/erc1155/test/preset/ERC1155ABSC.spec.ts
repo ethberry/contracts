@@ -1,11 +1,8 @@
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldBase } from "../../src/base";
-import { shouldBurnable } from "../../src/burnable";
-import { shouldSupply } from "../../src/supply";
-import { shouldCapped } from "../../src/capped";
-import { deployErc1155Base } from "../../src/fixtures";
+import { shouldBase, shouldBurnable, shouldCapped, shouldSupply } from "../../src";
+import { deployErc1155Base } from "../fixtures";
 
 describe("ERC1155ABSC", function () {
   const factory = () => deployErc1155Base(this.title);

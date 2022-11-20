@@ -4,7 +4,8 @@ import { solidity } from "ethereum-waffle";
 import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { deployAccessList, shouldBlackList, shouldBlackListMe } from "../../src";
+import { shouldBlackList, shouldBlackListMe } from "../../src";
+import { deployAccessList } from "../fixtures";
 
 use(solidity);
 

@@ -13,9 +13,6 @@
   "devDependencies": {
     "rimraf": "3.0.2"
   },
-  "files": [
-    "dist/*"
-  ],
   "license": "UNLICENSED",
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-mocks",

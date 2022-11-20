@@ -4,11 +4,8 @@ import { solidity } from "ethereum-waffle";
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldBase } from "../../src/base";
-import { shouldSupply } from "../../src/supply";
-import { shouldBurnable } from "../../src/burnable";
-import { shouldRoyalty } from "../../src/royalty";
-import { deployErc1155Base } from "../../src/fixtures";
+import { shouldBase, shouldBurnable, shouldRoyalty, shouldSupply } from "../../src";
+import { deployErc1155Base } from "../fixtures";
 
 use(solidity);
 

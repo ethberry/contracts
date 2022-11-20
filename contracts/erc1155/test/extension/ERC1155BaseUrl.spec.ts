@@ -1,18 +1,20 @@
-import { expect, use } from "chai";
+import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldBurnable } from "../../src";
-import { shouldMint } from "../../src/base/mint";
-import { shouldMintBatch } from "../../src/base/mintBatch";
-import { shouldBalanceOf } from "../../src/base/balanceOf";
-import { shouldBalanceOfBatch } from "../../src/base/balanceOfBatch";
-import { shouldSetApprovalForAll } from "../../src/base/setApprovalForAll";
-import { shouldSafeTransferFrom } from "../../src/base/safeTransferFrom";
-import { shouldSafeBatchTransferFrom } from "../../src/base/safeBatchTransferFrom";
-
+import {
+  shouldBalanceOf,
+  shouldBalanceOfBatch,
+  shouldBurnable,
+  shouldCustomURI,
+  shouldMint,
+  shouldMintBatch,
+  shouldSafeBatchTransferFrom,
+  shouldSafeTransferFrom,
+  shouldSetApprovalForAll,
+} from "../../src";
 import { deployErc1155Base } from "../../src/fixtures";
 
 use(solidity);
@@ -31,16 +33,9 @@ describe("ERC1155BaseUrlTest", function () {
   shouldSafeTransferFrom(factory);
   shouldSafeBatchTransferFrom(factory);
 
+  shouldCustomURI(factory);
+
   shouldBurnable(factory);
-
-  describe("uri", function () {
-    it("should get token uri", async function () {
-      const contractInstance = await factory();
-
-      const uri2 = await contractInstance.uri(tokenId);
-      expect(uri2).to.equal(`${baseTokenURI}/${contractInstance.address.toLowerCase()}/{id}`);
-    });
-  });
 
   shouldSupportsInterface(factory)(
     InterfaceId.IERC165,

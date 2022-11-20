@@ -21,3 +21,15 @@ export function shouldBase(factory: () => Promise<Contract>) {
   shouldSafeTransferFrom(factory);
   getGetCurrentTokenIndex(factory);
 }
+
+export {
+  shouldMint,
+  shouldSafeMint,
+  shouldGetOwnerOf,
+  shouldApprove,
+  shouldSetApprovalForAll,
+  shouldGetBalanceOf,
+  shouldTransferFrom,
+  shouldSafeTransferFrom,
+  getGetCurrentTokenIndex,
+};

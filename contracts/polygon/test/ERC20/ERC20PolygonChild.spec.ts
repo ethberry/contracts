@@ -3,7 +3,9 @@ import { ethers } from "hardhat";
 
 import { amount, DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE } from "@gemunion/contracts-constants";
 import { shouldBeAccessible } from "@gemunion/contracts-mocha";
-import { deployErc20Base, shouldBase } from "@gemunion/contracts-erc20";
+import { shouldBase } from "@gemunion/contracts-erc20";
+
+import { deployErc20Base } from "../../src/fixtures";
 
 describe("ERC20PolygonChildTest", function () {
   const factory = () => deployErc20Base(this.title);

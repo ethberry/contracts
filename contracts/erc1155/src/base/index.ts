@@ -19,3 +19,14 @@ export function shouldBase(factory: () => Promise<Contract>) {
   shouldSafeTransferFrom(factory);
   shouldSafeBatchTransferFrom(factory);
 }
+
+export {
+  shouldMint,
+  shouldBalanceOf,
+  shouldMintBatch,
+  shouldBalanceOfBatch,
+  shouldURI,
+  shouldSetApprovalForAll,
+  shouldSafeTransferFrom,
+  shouldSafeBatchTransferFrom,
+};

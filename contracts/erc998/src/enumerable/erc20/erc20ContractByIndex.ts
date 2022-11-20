@@ -3,7 +3,8 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
-import { deployErc20Base } from "@gemunion/contracts-erc20";
+
+import { deployErc20Base } from "../../basic/erc20/fixtures";
 
 export function shouldErc20ContractByIndex(factory: () => Promise<Contract>) {
   describe("erc20ContractByIndex", function () {

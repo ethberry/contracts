@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
 
-import { deployErc998Base } from "../fixtures";
+import { deployErc998Base } from "../../test/fixtures";
 
 export function shouldWhiteListChild(factory: () => Promise<Contract>) {
   describe("WhiteListChild", function () {

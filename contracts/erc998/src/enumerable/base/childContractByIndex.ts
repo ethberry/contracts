@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { deployErc998Base } from "../../fixtures";
+import { deployErc998Base } from "../../../test/fixtures";
 
 export function shouldChildContractByIndex(factory: () => Promise<Contract>) {
   describe("childContractByIndex", function () {

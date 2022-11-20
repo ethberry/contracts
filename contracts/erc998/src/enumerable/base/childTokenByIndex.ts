@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { deployErc998Base } from "../../fixtures";
+import { deployErc998Base } from "../../../test/fixtures";
 
 export function shouldChildTokenByIndex(factory: () => Promise<Contract>) {
   describe("childTokenByIndex", function () {

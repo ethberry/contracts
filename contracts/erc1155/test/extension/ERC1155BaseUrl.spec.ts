@@ -4,7 +4,7 @@ import { solidity } from "ethereum-waffle";
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldERC1155Burnable } from "../../src/burnable";
+import { shouldBurnable } from "../../src/burnable";
 import { shouldMint } from "../../src/base/mint";
 import { shouldMintBatch } from "../../src/base/mintBatch";
 import { shouldBalanceOf } from "../../src/base/balanceOf";
@@ -28,7 +28,7 @@ describe("ERC1155BaseUrlTest", function () {
   shouldSafeBatchTransferFrom(factory);
 
   shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
-  shouldERC1155Burnable(factory);
+  shouldBurnable(factory);
 
   describe("uri", function () {
     it("should get token uri", async function () {

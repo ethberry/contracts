@@ -9,7 +9,7 @@ import { shouldSetApprovalForAll } from "./setApprovalForAll";
 import { shouldSafeTransferFrom } from "./safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "./safeBatchTransferFrom";
 
-export function shouldERC1155Base(factory: () => Promise<Contract>) {
+export function shouldBase(factory: () => Promise<Contract>) {
   shouldMint(factory);
   shouldMintBatch(factory);
   shouldBalanceOf(factory);

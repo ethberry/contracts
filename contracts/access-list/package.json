@@ -51,16 +51,16 @@
     "url": "https://github.com/gemunion/contracts"
   },
   "scripts": {
-    "build": "hardhat compile",
+    "build": "tsc && hardhat compile",
     "clean": "hardhat clean",
     "lint": "eslint . --fix",
-    "prebuild": "hardhat clean",
+    "prebuild": "rimraf dist && hardhat clean",
     "prepare": "npm run build",
     "preversion": "npm run build && npm run test",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test",
     "test:coverage": "hardhat coverage"
   },
-  "types": "./typechain-types/index.ts",
+  "types": "./dist/index.d.ts",
   "version": "1.1.4"
 }

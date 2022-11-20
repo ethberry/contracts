@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
-import { deployErc20Base } from "../../basic/erc20/fixtures";
+import { deployErc20Base } from "../../fixtures";
 
 export function shouldErc20ContractByIndex(factory: () => Promise<Contract>) {
   describe("erc20ContractByIndex", function () {

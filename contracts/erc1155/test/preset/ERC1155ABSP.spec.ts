@@ -2,7 +2,7 @@ import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, PAUSER_ROLE } from "@gemu
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldBase, shouldBurnable, shouldPause, shouldSupply } from "../../src";
-import { deployErc1155Base } from "../fixtures";
+import { deployErc1155Base } from "../../src/fixtures";
 
 describe("ERC1155ABSP", function () {
   const factory = () => deployErc1155Base(this.title);

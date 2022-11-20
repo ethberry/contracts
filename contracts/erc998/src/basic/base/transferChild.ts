@@ -5,7 +5,7 @@ import { Contract } from "ethers";
 import { whiteListChildInterfaceId } from "@gemunion/contracts-constants";
 import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
 
-import { deployErc998Base } from "../../../test/fixtures";
+import { deployErc998Base } from "../../fixtures";
 
 export function shouldTransferChild(factory: () => Promise<Contract>) {
   describe("transferChild", function () {

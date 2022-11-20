@@ -11,7 +11,7 @@ import {
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldBase, shouldBurnable, shouldCapped, shouldPause, shouldSnapshot } from "../../src";
-import { deployErc20Base } from "../fixtures";
+import { deployErc20Base } from "../../src/fixtures";
 
 use(solidity);
 

@@ -7,7 +7,7 @@ import { shouldBase, shouldBurnable, shouldEnumerable, shouldRoyalty, shouldStor
 
 import { shouldERC998Base, shouldERC998ERC20 } from "../../src/basic";
 import { shouldERC998ERC20Enumerable } from "../../src/enumerable";
-import { deployErc998Base } from "../fixtures";
+import { deployErc998Base } from "../../src/fixtures";
 
 use(solidity);
 

@@ -5,7 +5,7 @@ import { InterfaceId } from "@gemunion/contracts-constants";
 import { shouldBeOwnable, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldBase, shouldBurnable } from "../../src";
-import { deployErc1155Base } from "../fixtures";
+import { deployErc1155Base } from "../../src/fixtures";
 
 use(solidity);
 

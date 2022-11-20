@@ -12,7 +12,8 @@ import { shouldBalanceOfBatch } from "../../src/base/balanceOfBatch";
 import { shouldSetApprovalForAll } from "../../src/base/setApprovalForAll";
 import { shouldSafeTransferFrom } from "../../src/base/safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "../../src/base/safeBatchTransferFrom";
-import { deployErc1155Base } from "../fixtures";
+
+import { deployErc1155Base } from "../../src/fixtures";
 
 use(solidity);
 

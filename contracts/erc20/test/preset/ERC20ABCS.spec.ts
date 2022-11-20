@@ -5,7 +5,7 @@ import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, SNAPSHOT_ROLE } from "@ge
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldBase, shouldBurnable, shouldCapped, shouldSnapshot } from "../../src";
-import { deployErc20Base } from "../fixtures";
+import { deployErc20Base } from "../../src/fixtures";
 
 use(solidity);
 

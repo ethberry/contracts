@@ -6,8 +6,8 @@ import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts
 import { shouldBase, shouldBurnable, shouldEnumerable, shouldRoyalty, shouldStorage } from "@gemunion/contracts-erc721";
 
 import { shouldERC998Base } from "../../src/basic";
-import { shouldERC998BaseEnumerable } from "../../src/enumerable";
-import { deployErc998Base } from "../fixtures";
+import { shouldERC998BaseEnumerable } from "../../src";
+import { deployErc998Base } from "../../src/fixtures";
 
 use(solidity);
 

@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { whiteListChildInterfaceId } from "@gemunion/contracts-constants";
 
-import { deployErc998Base } from "../../../test/fixtures";
+import { deployErc998Base } from "../../fixtures";
 
 export function shouldChildExists(factory: () => Promise<Contract>) {
   describe("childExists", function () {

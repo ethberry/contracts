@@ -10,7 +10,7 @@ import {
 } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { deployErc20Base, shouldBase, shouldBurnable, shouldCapped, shouldERC20Pause, shouldSnapshot } from "../../src";
+import { deployErc20Base, shouldBase, shouldBurnable, shouldCapped, shouldPause, shouldSnapshot } from "../../src";
 
 use(solidity);
 
@@ -23,7 +23,7 @@ describe("ERC20ABCSP", function () {
   shouldBurnable(factory);
   shouldCapped(factory);
   shouldSnapshot(factory);
-  shouldERC20Pause(factory);
+  shouldPause(factory);
 
   shouldSupportsInterface(factory)(
     InterfaceId.IERC165,

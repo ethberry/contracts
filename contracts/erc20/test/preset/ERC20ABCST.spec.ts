@@ -4,14 +4,7 @@ import { solidity } from "ethereum-waffle";
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, SNAPSHOT_ROLE } from "@gemunion/contracts-constants";
 import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import {
-  deployErc20Base,
-  shouldBase,
-  shouldBurnable,
-  shouldCapped,
-  shouldERC20Permit,
-  shouldSnapshot,
-} from "../../src";
+import { deployErc20Base, shouldBase, shouldBurnable, shouldCapped, shouldPermit, shouldSnapshot } from "../../src";
 
 use(solidity);
 
@@ -24,7 +17,7 @@ describe("ERC20ABCST", function () {
   shouldBurnable(factory);
   shouldCapped(factory);
   shouldSnapshot(factory);
-  shouldERC20Permit(factory);
+  shouldPermit(factory);
 
   shouldSupportsInterface(factory)(
     InterfaceId.IERC165,

@@ -31,13 +31,3 @@ export async function deployErc1155Base(name: string) {
 
   return erc1155Factory.deploy(...args);
 }
-
-export async function deployErc1155NonReceiver() {
-  const erc1155NonReceiverFactory = await ethers.getContractFactory("ERC1155NonReceiverMock");
-  return erc1155NonReceiverFactory.deploy();
-}
-
-export async function deployErc1155Receiver() {
-  const erc1155ReceiverFactory = await ethers.getContractFactory("ERC1155ReceiverMock");
-  return erc1155ReceiverFactory.deploy();
-}

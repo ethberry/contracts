@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
-import { deployErc20Borrower } from "../../test/fixtures";
+import { deployErc20Borrower } from "./fixtures";
 
 export function shouldFlashLoan(factory: () => Promise<Contract>) {
   describe("flashLoan", function () {

@@ -25,8 +25,3 @@ export async function deployErc20Base(name: string) {
 
   return erc20Factory.deploy(...args);
 }
-
-export async function deployErc20Borrower() {
-  const factory = await ethers.getContractFactory("ERC3156FlashBorrowerMock");
-  return factory.deploy(true, true);
-}

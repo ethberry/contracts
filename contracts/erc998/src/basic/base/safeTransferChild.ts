@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { whiteListChildInterfaceId } from "@gemunion/contracts-constants";
+import { InterfaceId } from "@gemunion/contracts-constants";
 
 import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
 
@@ -15,7 +15,7 @@ export function shouldSafeTransferChild(factory: () => Promise<Contract>) {
       const erc721Instance = await factory();
       const erc721InstanceMock = await deployERC998("ERC721ABCE");
 
-      const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
+      const supportsWhiteListChild = await erc721Instance.supportsInterface(InterfaceId.IERC998WL);
       if (supportsWhiteListChild) {
         await erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
       }
@@ -49,7 +49,7 @@ export function shouldSafeTransferChild(factory: () => Promise<Contract>) {
       const erc721InstanceMock = await deployERC998("ERC721ABCE");
       const erc721ReceiverInstance = await deployErc721Receiver();
 
-      const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
+      const supportsWhiteListChild = await erc721Instance.supportsInterface(InterfaceId.IERC998WL);
       if (supportsWhiteListChild) {
         await erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
       }
@@ -83,7 +83,7 @@ export function shouldSafeTransferChild(factory: () => Promise<Contract>) {
       const erc721InstanceMock = await deployERC998("ERC721ABCE");
       const erc721NonReceiverInstance = await deployErc721NonReceiver();
 
-      const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
+      const supportsWhiteListChild = await erc721Instance.supportsInterface(InterfaceId.IERC998WL);
       if (supportsWhiteListChild) {
         await erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
       }
@@ -132,7 +132,7 @@ export function shouldSafeTransferChild(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const erc721Instance = await factory();
 
-      const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
+      const supportsWhiteListChild = await erc721Instance.supportsInterface(InterfaceId.IERC998WL);
       if (supportsWhiteListChild) {
         await erc721Instance.whiteListChild(erc721Instance.address, 0);
       }

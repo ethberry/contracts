@@ -17,3 +17,4 @@ export const DEPOSITOR_ROLE = utils.id("DEPOSITOR_ROLE");
 
 export const decimals = BigNumber.from(10).pow(18);
 export const amount = 100000;
+export const span = 300;

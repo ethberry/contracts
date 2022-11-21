@@ -6,7 +6,7 @@ import {
   shouldBehaveLikeERC721Enumerable,
   shouldBehaveLikeERC721Royalty,
   shouldBehaveLikeERC721UriStorage,
-} from "@gemunion/contracts-erc721";
+} from "@gemunion/contracts-erc721-enumerable";
 
 export function shouldBehaveLikeERC721BERS(factory: () => Promise<Contract>) {
   shouldBehaveLikeERC721(factory);

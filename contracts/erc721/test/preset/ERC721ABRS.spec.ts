@@ -9,7 +9,7 @@ import {
   shouldBehaveLikeERC721Burnable,
   shouldBehaveLikeERC721Royalty,
   shouldBehaveLikeERC721UriStorage,
-} from "../../src/basic";
+} from "../../src";
 import { deployERC721 } from "../../src/fixtures";
 
 use(solidity);

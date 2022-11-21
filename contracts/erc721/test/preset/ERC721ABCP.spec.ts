@@ -6,7 +6,7 @@ import {
   shouldBehaveLikeERC721Burnable,
   shouldBehaveLikeERC721Capped,
   shouldBehaveLikeERC721Pausable,
-} from "../../src/basic";
+} from "../../src";
 import { deployERC721 } from "../../src/fixtures";
 
 describe("ERC721ABCP", function () {

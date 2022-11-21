@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.9;
 
-import "@gemunion/contracts-erc721/contracts/preset/ERC721ABERS.sol";
+import "@gemunion/contracts-erc721-enumerable/contracts/preset/ERC721ABERS.sol";
 
 import "../extensions/ERC998ERC721.sol";
 
@@ -17,13 +17,10 @@ contract ERC998ERC721ABERS is ERC721ABERS, ERC998ERC721 {
     return super.ownerOf(tokenId);
   }
 
-  function isApprovedForAll(address owner, address operator)
-    public
-    view
-    virtual
-    override(ERC721, ERC998ERC721)
-    returns (bool)
-  {
+  function isApprovedForAll(
+    address owner,
+    address operator
+  ) public view virtual override(ERC721, ERC998ERC721) returns (bool) {
     return super.isApprovedForAll(owner, operator);
   }
 
@@ -45,13 +42,9 @@ contract ERC998ERC721ABERS is ERC721ABERS, ERC998ERC721 {
     super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
   }
 
-  function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    virtual
-    override(ERC721ABERS, ERC998ERC721)
-    returns (bool)
-  {
+  function supportsInterface(
+    bytes4 interfaceId
+  ) public view virtual override(ERC721ABERS, ERC998ERC721) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 }

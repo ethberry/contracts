@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-import "@gemunion/contracts-erc721/contracts/preset/ERC721ABERS.sol";
+import "@gemunion/contracts-erc721-enumerable/contracts/preset/ERC721ABERS.sol";
 
 import "../interfaces/IERC998ERC721BottomUp.sol";
 import "../interfaces/IERC998ERC721BottomUpEnumerable.sol";
@@ -56,11 +56,9 @@ contract ERC998BottomUp is ERC721ABERS, IERC998ERC721BottomUp, IERC998ERC721Bott
 
   constructor(string memory name, string memory symbol, uint96 royalty) ERC721ABERS(name, symbol, royalty) {}
 
-  function _tokenOwnerOf(uint256 _tokenId)
-    internal
-    view
-    returns (address tokenOwner, uint256 parentTokenId, bool isParent)
-  {
+  function _tokenOwnerOf(
+    uint256 _tokenId
+  ) internal view returns (address tokenOwner, uint256 parentTokenId, bool isParent) {
     tokenOwner = tokenIdToTokenOwner[_tokenId].tokenOwner;
     require(tokenOwner != address(0), "ComposableBottomUp: _tokenOwnerOf tokenOwner zero address");
     parentTokenId = tokenIdToTokenOwner[_tokenId].parentTokenId;
@@ -80,12 +78,9 @@ contract ERC998BottomUp is ERC721ABERS, IERC998ERC721BottomUp, IERC998ERC721Bott
    * If tokenOwner address is a user address then isParent is false, otherwise isChild is true, which means that
    * tokenOwner is an ERC721 contract address and _tokenId is a child of tokenOwner and parentTokenId.
    */
-  function tokenOwnerOf(uint256 _tokenId)
-    external
-    view
-    override
-    returns (bytes32 tokenOwner, uint256 parentTokenId, bool isParent)
-  {
+  function tokenOwnerOf(
+    uint256 _tokenId
+  ) external view override returns (bytes32 tokenOwner, uint256 parentTokenId, bool isParent) {
     address tokenOwnerAddress = tokenIdToTokenOwner[_tokenId].tokenOwner;
     require(tokenOwnerAddress != address(0), "ComposableBottomUp: tokenOwnerOf tokenOwnerAddress zero address");
     parentTokenId = tokenIdToTokenOwner[_tokenId].parentTokenId;
@@ -271,10 +266,13 @@ contract ERC998BottomUp is ERC721ABERS, IERC998ERC721BottomUp, IERC998ERC721Bott
     emit TransferFromParent(_fromContract, _fromTokenId, _tokenId);
   }
 
-  function transferToParent(address _from, address _toContract, uint256 _toTokenId, uint256 _tokenId, bytes memory)
-    external
-    override
-  {
+  function transferToParent(
+    address _from,
+    address _toContract,
+    uint256 _toTokenId,
+    uint256 _tokenId,
+    bytes memory
+  ) external override {
     require(_from != address(0), "ComposableBottomUp: transferToParent _from zero address");
     require(
       tokenIdToTokenOwner[_tokenId].tokenOwner == _from,
@@ -439,12 +437,11 @@ contract ERC998BottomUp is ERC721ABERS, IERC998ERC721BottomUp, IERC998ERC721Bott
     return parentToChildTokenIds[_parentContract][_parentTokenId].length;
   }
 
-  function childTokenByIndex(address _parentContract, uint256 _parentTokenId, uint256 _index)
-    external
-    view
-    override
-    returns (uint256)
-  {
+  function childTokenByIndex(
+    address _parentContract,
+    uint256 _parentTokenId,
+    uint256 _index
+  ) external view override returns (uint256) {
     require(
       parentToChildTokenIds[_parentContract][_parentTokenId].length > _index,
       "ComposableBottomUp: childTokenByIndex invalid _index"

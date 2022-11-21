@@ -26,11 +26,10 @@
   },
   "scripts": {
     "build": "tsc",
-    "clean": "hardhat clean",
     "lint": "eslint . --fix",
-    "prebuild": "rimraf dist/",
+    "prebuild": "rimraf dist",
     "prepare": "npm run build",
-    "prepublish": "npm run build",
+    "preversion": "npm run build && npm run test",
     "test": "exit 0"
   },
   "sideEffects": false,

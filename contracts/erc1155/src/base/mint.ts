@@ -5,7 +5,7 @@ import { constants, Contract } from "ethers";
 import { amount, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
 import { deployErc1155NonReceiver, deployErc1155Receiver } from "@gemunion/contracts-mocks";
 
-export function shouldMint(factory: () => Promise<Contract>, options: Record<string, any>) {
+export function shouldMint(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
   describe("mint", function () {
     it("should mint to wallet", async function () {
       const [owner, receiver] = await ethers.getSigners();

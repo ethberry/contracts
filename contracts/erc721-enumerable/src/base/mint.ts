@@ -6,7 +6,7 @@ import { InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 
 import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
 
-export function shouldMint(factory: () => Promise<Contract>, options: Record<string, any>) {
+export function shouldMint(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
   describe("mint", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();

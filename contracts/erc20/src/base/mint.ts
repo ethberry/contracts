@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { amount, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldMint(factory: () => Promise<Contract>, options: Record<string, any>) {
+export function shouldMint(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
   describe("mint", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();

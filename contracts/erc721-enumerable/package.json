@@ -7,7 +7,7 @@
   "dependencies": {
     "@gemunion/contracts-chain-link": "^1.1.8",
     "@gemunion/contracts-constants": "1.1.4",
-    "@gemunion/contracts-erc721": "^1.1.11",
+    "@gemunion/contracts-erc721": "^1.1.12",
     "@gemunion/contracts-mocha": "^1.1.5",
     "@gemunion/contracts-mocks": "^1.1.7"
   },
@@ -69,5 +69,5 @@
     "test:coverage": "hardhat coverage"
   },
   "types": "./dist/index.d.ts",
-  "version": "1.1.11"
+  "version": "1.1.12"
 }

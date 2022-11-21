@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 
 import { amount, DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE } from "@gemunion/contracts-constants";
 import { shouldBehaveLikeAccessControl } from "@gemunion/contracts-mocha";
-import { shouldBase } from "@gemunion/contracts-erc20";
+import { shouldBehaveLikeERC20 } from "@gemunion/contracts-erc20";
 
 import { deployErc20 } from "../../src/fixtures";
 
@@ -12,7 +12,7 @@ describe("ERC20PolygonChildTest", function () {
 
   shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE);
 
-  shouldBase(factory, { MINTER_ROLE: DEFAULT_ADMIN_ROLE });
+  shouldBehaveLikeERC20(factory, { MINTER_ROLE: DEFAULT_ADMIN_ROLE });
 
   describe("deposit", function () {
     it("should fail: account is missing role", async function () {

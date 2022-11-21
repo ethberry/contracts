@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { accessControlInterfaceId, DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
+import { InterfaceId, DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
 
 export function shouldSetTokenRoyalty(factory: () => Promise<Contract>) {
   describe("setTokenRoyalty", function () {
@@ -41,7 +41,7 @@ export function shouldSetTokenRoyalty(factory: () => Promise<Contract>) {
 
       const royalty = 5000;
 
-      const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
+      const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
       const tx = contractInstance.connect(receiver).setTokenRoyalty(0, receiver.address, royalty);
       await expect(tx).to.be.revertedWith(

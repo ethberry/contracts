@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { accessControlInterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
+import { InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 
 import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
 
@@ -12,7 +12,7 @@ export function shouldSafeMint(factory: () => Promise<Contract>) {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
+      const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
       const tx = contractInstance.connect(receiver).safeMint(receiver.address);
       await expect(tx).to.be.revertedWith(

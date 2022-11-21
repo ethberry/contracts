@@ -1,6 +1,3 @@
-export const accessControlInterfaceId = "0x7965db0b";
-export const whiteListChildInterfaceId = "0x69906c17";
-
 export enum InterfaceId {
   IERC165 = "0x01ffc9a7",
   IERC20 = "0x36372b07",

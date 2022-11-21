@@ -1,40 +1,32 @@
 import { expect, use } from "chai";
-import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
-import { ContractFactory } from "ethers";
+import { solidity } from "ethereum-waffle";
 
-import { PriceOracle } from "../../typechain-types";
-
-import { shouldHaveOwner } from "../shared/ownable/owner";
-import { shouldTransferOwnership } from "../shared/ownable/transferOwnership";
-import { shouldRenounceOwnership } from "../shared/ownable/renounceOwnership";
+import { shouldBehaveLikeOwnable } from "@gemunion/contracts-mocha";
+import { deployPriceOracle } from "../shared/fixtures";
 
 use(solidity);
 
 describe("PriceOracle", function () {
-  let oracle: ContractFactory;
+  const factory = () => deployPriceOracle(this.title);
 
-  beforeEach(async function () {
-    oracle = await ethers.getContractFactory("PriceOracle");
-    [this.owner, this.receiver] = await ethers.getSigners();
-
-    this.contractInstance = (await oracle.deploy()) as PriceOracle;
-  });
-
-  shouldHaveOwner();
-  shouldTransferOwnership();
-  shouldRenounceOwnership();
+  shouldBehaveLikeOwnable(factory);
 
   describe("updatePrice", function () {
     const price = 10 ** 10;
 
     it("should update price", async function () {
-      const tx = this.contractInstance.updatePrice(price);
-      await expect(tx).to.emit(this.contractInstance, "PriceChanged").withArgs(price);
+      const contractInstance = await factory();
+
+      const tx = contractInstance.updatePrice(price);
+      await expect(tx).to.emit(contractInstance, "PriceChanged").withArgs(price);
     });
 
     it("should fail: not an owner", async function () {
-      const tx = this.contractInstance.connect(this.receiver).updatePrice(price);
+      const [_owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const tx = contractInstance.connect(receiver).updatePrice(price);
       await expect(tx).to.be.revertedWith("Ownable: caller is not the owner");
     });
   });

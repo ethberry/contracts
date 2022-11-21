@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { accessControlInterfaceId, amount, SNAPSHOT_ROLE } from "@gemunion/contracts-constants";
+import { InterfaceId, amount, SNAPSHOT_ROLE } from "@gemunion/contracts-constants";
 
 export function shouldBehaveLikeERC20Snapshot(factory: () => Promise<Contract>) {
   describe("snapshot", function () {
@@ -10,7 +10,7 @@ export function shouldBehaveLikeERC20Snapshot(factory: () => Promise<Contract>) 
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
+      const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
       const tx = contractInstance.connect(receiver).snapshot();
       await expect(tx).to.be.revertedWith(

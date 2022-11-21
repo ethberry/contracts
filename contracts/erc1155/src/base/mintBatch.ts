@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
-import { accessControlInterfaceId, amount, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
+import { InterfaceId, amount, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
 import { deployErc1155NonReceiver, deployErc1155Receiver } from "@gemunion/contracts-mocks";
 
 export function shouldMintBatch(factory: () => Promise<Contract>) {
@@ -46,7 +46,7 @@ export function shouldMintBatch(factory: () => Promise<Contract>) {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const supportsAccessControl = await contractInstance.supportsInterface(accessControlInterfaceId);
+      const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
       const tx1 = contractInstance.connect(receiver).mintBatch(receiver.address, [tokenId], [amount], "0x");
       await expect(tx1).to.be.revertedWith(

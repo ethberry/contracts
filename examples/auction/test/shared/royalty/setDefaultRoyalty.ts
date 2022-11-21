@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { accessControlInterfaceId, DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
+import { InterfaceId, DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
 
 export function shouldSetDefaultRoyalty() {
   describe("setDefaultRoyalty", function () {
@@ -29,7 +29,7 @@ export function shouldSetDefaultRoyalty() {
     it("should fail: account is missing role", async function () {
       const royalty = 5000;
 
-      const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
+      const supportsAccessControl = await this.contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
       const tx = this.contractInstance.connect(this.receiver).setDefaultRoyalty(this.receiver.address, royalty);
       await expect(tx).to.be.revertedWith(

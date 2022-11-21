@@ -1,11 +1,11 @@
 import { expect } from "chai";
 
-import { accessControlInterfaceId, PAUSER_ROLE } from "@gemunion/contracts-constants";
+import { InterfaceId, PAUSER_ROLE } from "@gemunion/contracts-constants";
 
 export function shouldPause() {
   describe("pause", function () {
     it("should fail: account is missing role", async function () {
-      const supportsAccessControl = await this.contractInstance.supportsInterface(accessControlInterfaceId);
+      const supportsAccessControl = await this.contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
       const tx = this.contractInstance.connect(this.receiver).pause();
       await expect(tx).to.be.revertedWith(

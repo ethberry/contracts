@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 
 import { amount, royalty, tokenName, tokenSymbol } from "@gemunion/contracts-constants";
 
-export async function deployErc998Base(name: string) {
+export async function deployERC998(name: string) {
   const erc721Factory = await ethers.getContractFactory(name);
   return erc721Factory.deploy(tokenName, tokenSymbol, royalty);
 }

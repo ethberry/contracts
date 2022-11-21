@@ -6,7 +6,7 @@ import { shouldTransfer } from "./transfer";
 import { shouldTransferFrom } from "./transferFrom";
 import { shouldApprove } from "./approve";
 
-export function shouldBase(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
+export function shouldBehaveLikeERC20(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
   shouldMint(factory, options);
   shouldBalanceOf(factory);
   shouldTransfer(factory);

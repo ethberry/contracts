@@ -5,14 +5,14 @@ import { Contract } from "ethers";
 import { whiteListChildInterfaceId } from "@gemunion/contracts-constants";
 import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
 
-import { deployErc998Base } from "../../fixtures";
+import { deployERC998 } from "../../fixtures";
 
 export function shouldTransferChild(factory: () => Promise<Contract>) {
   describe("transferChild", function () {
     it("should transfer token owned by another token to wallet", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const erc721Instance = await factory();
-      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
+      const erc721InstanceMock = await deployERC998("ERC721ABCE");
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
       if (supportsWhiteListChild) {
@@ -40,7 +40,7 @@ export function shouldTransferChild(factory: () => Promise<Contract>) {
     it("should transfer token owned by another token to the receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const erc721Instance = await factory();
-      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
+      const erc721InstanceMock = await deployERC998("ERC721ABCE");
       const erc721ReceiverInstance = await deployErc721Receiver();
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
@@ -69,7 +69,7 @@ export function shouldTransferChild(factory: () => Promise<Contract>) {
     it("should transfer token owned by another token to the non receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const erc721Instance = await factory();
-      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
+      const erc721InstanceMock = await deployERC998("ERC721ABCE");
       const erc721NonReceiverInstance = await deployErc721NonReceiver();
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
@@ -98,7 +98,7 @@ export function shouldTransferChild(factory: () => Promise<Contract>) {
     it("should not transfer token which is not owned", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const erc721Instance = await factory();
-      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
+      const erc721InstanceMock = await deployERC998("ERC721ABCE");
 
       const supportsWhiteListChild = await erc721Instance.supportsInterface(whiteListChildInterfaceId);
       if (supportsWhiteListChild) {

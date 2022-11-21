@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-export function shouldBlackListMe(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeBlackListMe(factory: () => Promise<Contract>) {
   describe("Black list me", function () {
     it("should fail: blacklisted", async function () {
       const [_owner, receiver] = await ethers.getSigners();

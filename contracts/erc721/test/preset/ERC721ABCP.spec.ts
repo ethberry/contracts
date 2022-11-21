@@ -1,20 +1,23 @@
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, PAUSER_ROLE } from "@gemunion/contracts-constants";
-import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldBurnable } from "../../src/basic/burnable/burn";
-import { shouldCapped } from "../../src/basic/capped/capped";
-import { shouldPause } from "../../src/basic/pausable/pausable";
-import { shouldBase } from "../../src/basic/base";
-import { deployErc721Base } from "../../src/fixtures";
+import {
+  shouldBehaveLikeERC721,
+  shouldBehaveLikeERC721Burnable,
+  shouldBehaveLikeERC721Capped,
+  shouldBehaveLikeERC721Pausable,
+} from "../../src/basic";
+import { deployERC721 } from "../../src/fixtures";
 
 describe("ERC721ABCP", function () {
-  const factory = () => deployErc721Base(this.title);
+  const factory = () => deployERC721(this.title);
 
-  shouldBase(factory);
-  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE);
-  shouldBurnable(factory);
-  shouldCapped(factory);
-  shouldPause(factory);
+  shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE);
+
+  shouldBehaveLikeERC721(factory);
+  shouldBehaveLikeERC721Burnable(factory);
+  shouldBehaveLikeERC721Capped(factory);
+  shouldBehaveLikeERC721Pausable(factory);
 
   shouldSupportsInterface(factory)(
     InterfaceId.IERC165,

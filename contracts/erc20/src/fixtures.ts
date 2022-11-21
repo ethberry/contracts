@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 
 import { amount, tokenName, tokenSymbol } from "@gemunion/contracts-constants";
 
-export async function deployErc20Base(name: string) {
+export async function deployERC20(name: string) {
   const erc20Factory = await ethers.getContractFactory(name);
 
   const args = name

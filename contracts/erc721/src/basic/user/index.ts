@@ -4,7 +4,7 @@ import { shouldSetUser } from "./setUser";
 import { shouldUserOf } from "./userOf";
 import { shouldUserExprires } from "./userExpires";
 
-export function shouldUser(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeERC721Usable(factory: () => Promise<Contract>) {
   shouldSetUser(factory);
   shouldUserOf(factory);
   shouldUserExprires(factory);

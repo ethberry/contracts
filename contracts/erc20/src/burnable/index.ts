@@ -4,7 +4,7 @@ import { shouldBalanceOf } from "./balanceOf";
 import { shouldBurnFrom } from "./burnFrom";
 import { shouldBurn } from "./burn";
 
-export function shouldBurnable(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeERC20Burnable(factory: () => Promise<Contract>) {
   shouldBalanceOf(factory);
   shouldBurn(factory);
   shouldBurnFrom(factory);

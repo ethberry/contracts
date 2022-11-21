@@ -2,9 +2,9 @@ import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
-import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldBase, shouldBurnable } from "../../src";
+import { shouldBehaveLikeERC1155, shouldBehaveLikeERC1155Burnable } from "../../src";
 import { deployErc1155Base } from "../../src/fixtures";
 
 use(solidity);
@@ -12,10 +12,10 @@ use(solidity);
 describe("ERC1155AB", function () {
   const factory = () => deployErc1155Base(this.title);
 
-  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
 
-  shouldBase(factory);
-  shouldBurnable(factory);
+  shouldBehaveLikeERC1155(factory);
+  shouldBehaveLikeERC1155Burnable(factory);
 
   shouldSupportsInterface(factory)(
     InterfaceId.IERC165,

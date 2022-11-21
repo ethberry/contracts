@@ -2,9 +2,9 @@ import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
 import { InterfaceId } from "@gemunion/contracts-constants";
-import { shouldBeOwnable, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+import { shouldBehaveLikeOwnable, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldBase, shouldRoyalty } from "../../src";
+import { shouldBehaveLikeERC1155, shouldBehaveLikeERC1155Royalty } from "../../src";
 import { deployErc1155Base } from "../../src/fixtures";
 
 use(solidity);
@@ -12,10 +12,10 @@ use(solidity);
 describe("ERC1155OBR", function () {
   const factory = () => deployErc1155Base(this.title);
 
-  shouldBeOwnable(factory);
+  shouldBehaveLikeOwnable(factory);
 
-  shouldBase(factory);
-  shouldRoyalty(factory);
+  shouldBehaveLikeERC1155(factory);
+  shouldBehaveLikeERC1155Royalty(factory);
 
   shouldSupportsInterface(factory)(
     InterfaceId.IERC165,

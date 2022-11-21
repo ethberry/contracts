@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { accessControlInterfaceId, amount, SNAPSHOT_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldSnapshot(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeERC20Snapshot(factory: () => Promise<Contract>) {
   describe("snapshot", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();

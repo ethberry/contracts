@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
 
-export function shouldBurnable(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeERC721Burnable(factory: () => Promise<Contract>) {
   describe("burn", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();

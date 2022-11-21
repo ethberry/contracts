@@ -2,20 +2,20 @@ import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
-import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldBase, shouldERC20Flash } from "../../src";
-import { deployErc20Base } from "../../src/fixtures";
+import { shouldBehaveLikeERC20, shouldBehaveLikeERC20FlashLoan } from "../../src";
+import { deployERC20 } from "../../src/fixtures";
 
 use(solidity);
 
 describe("ERC20AF", function () {
-  const factory = () => deployErc20Base(this.title);
+  const factory = () => deployERC20(this.title);
 
-  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
 
-  shouldBase(factory);
-  shouldERC20Flash(factory);
+  shouldBehaveLikeERC20(factory);
+  shouldBehaveLikeERC20FlashLoan(factory);
 
   shouldSupportsInterface(factory)(
     InterfaceId.IERC165,

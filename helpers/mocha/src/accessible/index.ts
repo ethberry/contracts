@@ -7,7 +7,7 @@ import { shouldGrantRole } from "./grantRole";
 import { shouldRevokeRole } from "./revokeRole";
 import { shouldRenounceRole } from "./renounceRole";
 
-export function shouldBeAccessible(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeAccessControl(factory: () => Promise<Contract>) {
   return (...roles: Array<string>) => {
     shouldHaveRole(factory)(...roles);
     shouldGetRoleAdmin(factory)(...roles);

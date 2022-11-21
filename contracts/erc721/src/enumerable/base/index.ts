@@ -10,7 +10,7 @@ import { shouldApprove } from "./approve";
 import { shouldTransferFrom } from "./transferFrom";
 import { getGetCurrentTokenIndex } from "./getCurrentTokenIndex";
 
-export function shouldBase(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeERC721(factory: () => Promise<Contract>) {
   shouldMint(factory);
   shouldSafeMint(factory);
   shouldGetOwnerOf(factory);

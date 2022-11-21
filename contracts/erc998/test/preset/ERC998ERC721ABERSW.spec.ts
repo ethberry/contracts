@@ -3,34 +3,26 @@ import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
-import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldBase, shouldBurnable, shouldEnumerable, shouldRoyalty, shouldStorage } from "@gemunion/contracts-erc721";
-
-import { shouldERC998Base, shouldWhiteListChild } from "../../src/basic";
-import { deployErc998Base } from "../../src/fixtures";
+import { shouldBehaveLikeERC998, shouldBehaveLikeERC998WhiteListChild } from "../../src/basic";
+import { deployERC998 } from "../../src/fixtures";
 
 use(solidity);
 
 describe("ERC998ERC721ABERSW", function () {
-  const factory = () => deployErc998Base(this.title);
+  const factory = () => deployERC998(this.title);
 
-  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
 
-  shouldBase(factory);
-  shouldBurnable(factory);
-  shouldEnumerable(factory);
-  shouldRoyalty(factory);
-  shouldStorage(factory);
-
-  shouldERC998Base(factory);
-  shouldWhiteListChild(factory);
+  shouldBehaveLikeERC998(factory);
+  shouldBehaveLikeERC998WhiteListChild(factory);
 
   describe("getChild", function () {
     it("should get child", async function () {
       const [owner] = await ethers.getSigners();
-      const erc721Instance = await deployErc998Base("ERC998ERC721ABERSW");
-      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
+      const erc721Instance = await deployERC998("ERC998ERC721ABERSW");
+      const erc721InstanceMock = await deployERC998("ERC721ABCE");
 
       await erc721Instance.whiteListChild(erc721InstanceMock.address, 0);
       await erc721Instance.setDefaultMaxChild(0);

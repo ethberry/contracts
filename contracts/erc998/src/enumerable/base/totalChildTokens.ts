@@ -2,14 +2,14 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { deployErc998Base } from "../../fixtures";
+import { deployERC998 } from "../../fixtures";
 
 export function shouldTotalChildTokens(factory: () => Promise<Contract>) {
   describe("totalChildTokens", function () {
     it("should get child contract tokens count", async function () {
       const [owner] = await ethers.getSigners();
       const erc721Instance = await factory();
-      const erc721InstanceMock = await deployErc998Base("ERC721ABCE");
+      const erc721InstanceMock = await deployERC998("ERC721ABCE");
 
       await erc721InstanceMock.mint(owner.address);
       await erc721Instance.mint(owner.address); // this is edge case

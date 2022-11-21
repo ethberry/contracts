@@ -6,7 +6,7 @@ import { shouldFlashFeeReceiver } from "./flashFeeReceiveer";
 import { shouldFlashLoan } from "./flashLoan";
 import { shouldFlashCustom } from "./custom";
 
-export function shouldERC20Flash(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeERC20FlashLoan(factory: () => Promise<Contract>) {
   shouldMaxFlashLoan(factory);
   shouldFlashFee(factory);
   shouldFlashFeeReceiver(factory);

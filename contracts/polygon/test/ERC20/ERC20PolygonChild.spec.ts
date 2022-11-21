@@ -2,15 +2,15 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { amount, DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE } from "@gemunion/contracts-constants";
-import { shouldBeAccessible } from "@gemunion/contracts-mocha";
+import { shouldBehaveLikeAccessControl } from "@gemunion/contracts-mocha";
 import { shouldBase } from "@gemunion/contracts-erc20";
 
-import { deployErc20Base } from "../../src/fixtures";
+import { deployErc20 } from "../../src/fixtures";
 
 describe("ERC20PolygonChildTest", function () {
-  const factory = () => deployErc20Base(this.title);
+  const factory = () => deployErc20(this.title);
 
-  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE);
+  shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE);
 
   shouldBase(factory, { MINTER_ROLE: DEFAULT_ADMIN_ROLE });
 

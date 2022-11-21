@@ -3,24 +3,21 @@ import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
 
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
-import { shouldBeAccessible, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { deployErc721Base } from "../../src/fixtures";
-import { shouldBase } from "../../src/basic/base";
-
-import { shouldBurnable } from "../../src/basic/burnable/burn";
-import { shouldRoyalty } from "../../src/basic/royalty";
+import { shouldBehaveLikeERC721, shouldBehaveLikeERC721Burnable, shouldBehaveLikeERC721Royalty } from "../../src/basic";
+import { deployERC721 } from "../../src/fixtures";
 
 use(solidity);
 
 describe("ERC721BaseUrlTest", function () {
-  const factory = () => deployErc721Base(this.title);
+  const factory = () => deployERC721(this.title);
 
-  shouldBeAccessible(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
+  shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
 
-  shouldBase(factory);
-  shouldBurnable(factory);
-  shouldRoyalty(factory);
+  shouldBehaveLikeERC721(factory);
+  shouldBehaveLikeERC721Burnable(factory);
+  shouldBehaveLikeERC721Royalty(factory);
 
   describe("tokenURI", function () {
     it("should get token uri", async function () {

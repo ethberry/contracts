@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-export function shouldStorage(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeERC721UriStorage(factory: () => Promise<Contract>) {
   describe("tokenURI", function () {
     it("should get default token URI", async function () {
       const [owner] = await ethers.getSigners();

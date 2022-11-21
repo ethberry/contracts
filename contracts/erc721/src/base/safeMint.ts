@@ -6,7 +6,7 @@ import { InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants
 
 import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
 
-export function shouldSafeMint(factory: () => Promise<Contract>) {
+export function shouldSafeMint(factory: () => Promise<Contract>, options: Record<string, any>) {
   describe("safeMint", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
@@ -17,7 +17,9 @@ export function shouldSafeMint(factory: () => Promise<Contract>) {
       const tx = contractInstance.connect(receiver).safeMint(receiver.address, tokenId);
       await expect(tx).to.be.revertedWith(
         supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`
+          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${
+              options.MINTER_ROLE || MINTER_ROLE
+            }`
           : "Ownable: caller is not the owner",
       );
     });

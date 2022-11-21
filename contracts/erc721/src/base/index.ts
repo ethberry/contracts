@@ -9,9 +9,9 @@ import { shouldGetOwnerOf } from "./ownerOf";
 import { shouldApprove } from "./approve";
 import { shouldTransferFrom } from "./transferFrom";
 
-export function shouldBehaveLikeERC721(factory: () => Promise<Contract>) {
-  shouldMint(factory);
-  shouldSafeMint(factory);
+export function shouldBehaveLikeERC721(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
+  shouldMint(factory, options);
+  shouldSafeMint(factory, options);
   shouldGetOwnerOf(factory);
   shouldApprove(factory);
   shouldSetApprovalForAll(factory);

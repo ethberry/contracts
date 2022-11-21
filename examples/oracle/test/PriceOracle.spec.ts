@@ -3,7 +3,8 @@ import { ethers } from "hardhat";
 import { solidity } from "ethereum-waffle";
 
 import { shouldBehaveLikeOwnable } from "@gemunion/contracts-mocha";
-import { deployPriceOracle } from "../shared/fixtures";
+
+import { deployPriceOracle } from "./shared/fixtures";
 
 use(solidity);
 

@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 
 import "@gemunion/contracts-chain-link/contracts/extensions/interfaces/IERC721ChainLink.sol";
 
-import "@gemunion/contracts-erc721/contracts/preset/ERC721ABCE.sol";
+import "@gemunion/contracts-erc721-enumerable/contracts/preset/ERC721ABCE.sol";
 
 contract ChainLinkLootboxMock is ERC721ABCE, Pausable {
   using Address for address;

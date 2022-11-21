@@ -9,9 +9,9 @@ import { shouldSetApprovalForAll } from "./setApprovalForAll";
 import { shouldSafeTransferFrom } from "./safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "./safeBatchTransferFrom";
 
-export function shouldBehaveLikeERC1155(factory: () => Promise<Contract>) {
-  shouldMint(factory);
-  shouldMintBatch(factory);
+export function shouldBehaveLikeERC1155(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
+  shouldMint(factory, options);
+  shouldMintBatch(factory, options);
   shouldBalanceOf(factory);
   shouldBalanceOfBatch(factory);
   shouldURI(factory);

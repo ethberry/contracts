@@ -1,8 +1,7 @@
 import { Contract } from "ethers";
 
-import { shouldSetTokenRoyalty } from "./setTokenRoyalty";
-import { shouldSetDefaultRoyalty } from "./setDefaultRoyalty";
-import { shouldGetRoyaltyInfo } from "./royaltyInfo";
+import { shouldGetRoyaltyInfo, shouldSetDefaultRoyalty, shouldSetTokenRoyalty } from "@gemunion/contracts-erc721";
+
 import { shouldBurn } from "./burn";
 
 export function shouldBehaveLikeERC721Royalty(factory: () => Promise<Contract>) {
@@ -11,3 +10,5 @@ export function shouldBehaveLikeERC721Royalty(factory: () => Promise<Contract>) 
   shouldGetRoyaltyInfo(factory);
   shouldBurn(factory);
 }
+
+export { shouldSetTokenRoyalty, shouldSetDefaultRoyalty, shouldGetRoyaltyInfo, shouldBurn };

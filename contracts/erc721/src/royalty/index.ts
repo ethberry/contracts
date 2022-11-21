@@ -1,8 +1,8 @@
 import { Contract } from "ethers";
 
-import { shouldSetTokenRoyalty } from "../../basic/royalty/setTokenRoyalty";
-import { shouldSetDefaultRoyalty } from "../../basic/royalty/setDefaultRoyalty";
-import { shouldGetRoyaltyInfo } from "../../basic/royalty/royaltyInfo";
+import { shouldSetTokenRoyalty } from "./setTokenRoyalty";
+import { shouldSetDefaultRoyalty } from "./setDefaultRoyalty";
+import { shouldGetRoyaltyInfo } from "./royaltyInfo";
 import { shouldBurn } from "./burn";
 
 export function shouldBehaveLikeERC721Royalty(factory: () => Promise<Contract>) {
@@ -11,3 +11,5 @@ export function shouldBehaveLikeERC721Royalty(factory: () => Promise<Contract>) 
   shouldGetRoyaltyInfo(factory);
   shouldBurn(factory);
 }
+
+export { shouldSetTokenRoyalty, shouldSetDefaultRoyalty, shouldGetRoyaltyInfo, shouldBurn };

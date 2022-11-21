@@ -9,10 +9,11 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 
-import "./utils/ProxyRegistry.sol";
-import "../preset/ERC721ABCES.sol";
+import "@gemunion/contracts-erc721-enumerable/contracts/preset/ERC721ABERS.sol";
 
-abstract contract ERC721OpenSea is ERC721ABCES, AccessControlEnumerable {
+import "./utils/ProxyRegistry.sol";
+
+abstract contract ERC721OpenSea is ERC721ABERS, AccessControlEnumerable {
   event PermanentURI(string _value, uint256 indexed _id);
 
   using Address for address;
@@ -57,21 +58,16 @@ abstract contract ERC721OpenSea is ERC721ABCES, AccessControlEnumerable {
   /**
    * @dev Overload {_revokeRole} to track enumerable memberships
    */
-  function _revokeRole(bytes32 role, address account)
-    internal
-    virtual
-    override(AccessControl, AccessControlEnumerable)
-  {
+  function _revokeRole(
+    bytes32 role,
+    address account
+  ) internal virtual override(AccessControl, AccessControlEnumerable) {
     super._revokeRole(role, account);
   }
 
-  function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    virtual
-    override(ERC721ABCES, AccessControlEnumerable)
-    returns (bool)
-  {
+  function supportsInterface(
+    bytes4 interfaceId
+  ) public view virtual override(ERC721ABERS, AccessControlEnumerable) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 }

@@ -6,22 +6,21 @@
 
 pragma solidity ^0.8.9;
 
+import "@gemunion/contracts-erc721/contracts/extensions/ERC721ARoyalty.sol";
+
 import "./ERC721ABCE.sol";
-import "../extensions/ERC721ARoyalty.sol";
 
 contract ERC721ABCER is ERC721ABCE, ERC721ARoyalty {
-  constructor(string memory name, string memory symbol, uint256 cap, uint96 royaltyNumerator)
-  ERC721ABCE(name, symbol, cap)
-  ERC721ARoyalty(royaltyNumerator)
-  {}
+  constructor(
+    string memory name,
+    string memory symbol,
+    uint256 cap,
+    uint96 royaltyNumerator
+  ) ERC721ABCE(name, symbol, cap) ERC721ARoyalty(royaltyNumerator) {}
 
-  function supportsInterface(bytes4 interfaceId)
-  public
-  view
-  virtual
-  override(ERC721ABCE, ERC721ARoyalty)
-  returns (bool)
-  {
+  function supportsInterface(
+    bytes4 interfaceId
+  ) public view virtual override(ERC721ABCE, ERC721ARoyalty) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 

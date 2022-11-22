@@ -167,8 +167,9 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
 
       const nonce = 0;
-      const deadline = (await time.latest()) - time.duration.weeks(1);
-
+      // const deadline = (await time.latest()) - time.duration.weeks(1);
+      const block = await ethers.provider.getBlock("latest");
+      const deadline = block.timestamp - time.duration.weeks(1).toNumber();
       const signature = await owner._signTypedData(
         // Domain
         {

@@ -10,8 +10,12 @@
     "ethers": "5.7.2",
     "hardhat": "2.12.2"
   },
+  "description": "Collection of contracts and presets",
   "devDependencies": {
     "rimraf": "3.0.2"
+  },
+  "engines": {
+    "node": ">=12.13"
   },
   "license": "UNLICENSED",
   "main": "./dist/index.js",
@@ -19,14 +23,20 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gemunion/contracts"
+  },
   "scripts": {
     "build": "tsc && hardhat compile",
     "clean": "hardhat clean",
     "lint": "eslint . --fix",
+    "prebuild": "rimraf dist && hardhat clean",
     "prepare": "npm run build",
-    "prebuild": "rimraf dist/ && hardhat clean",
-    "prepublish": "npm run build",
-    "test": "exit 0"
+    "preversion": "npm run build && npm run test",
+    "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
+    "test": "hardhat test",
+    "test:coverage": "hardhat coverage"
   },
   "sideEffects": false,
   "title": "-=Gemun Ion Studio=-",

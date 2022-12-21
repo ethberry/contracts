@@ -10,9 +10,9 @@ find . -type f -name "package-lock.json" | xargs rm -rf
 find . -type f -name "yarn.lock" | xargs rm -rf
 
 find . -type d -name ".openzeppelin" | xargs rm -rf
-find . -type f -name "artifacts" | xargs rm -rf
-find . -type f -name "cache" | xargs rm -rf
-find . -type f -name "typechain" | xargs rm -rf
-find . -type f -name "typechain-types" | xargs rm -rf
+find . -type d -name "artifacts" | xargs rm -rf
+find . -type d -name "cache" | xargs rm -rf
+find . -type d -name "typechain" | xargs rm -rf
+find . -type d -name "typechain-types" | xargs rm -rf
 
-find . -type f -name "besu" | xargs rm -rf
+find . -type d -name "besu" | xargs rm -rf

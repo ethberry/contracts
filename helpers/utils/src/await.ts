@@ -2,28 +2,26 @@ import "@nomiclabs/hardhat-waffle";
 
 import { ethers, network } from "hardhat";
 
-function delayMs(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+import { delay } from "@gemunion/utils";
 
-export const blockAwait = async function (blockDelay = 2, delay?: number): Promise<void> {
+export const blockAwait = async function (blockDelay = 2, ms = 0): Promise<void> {
   if (network.name !== "hardhat") {
-    await delayMs(delay || 0);
+    await delay(ms);
     const initialBlock = await ethers.provider.getBlock("latest");
     let currentBlock;
     let delayB;
     do {
-      await delayMs(delay || 0);
+      await delay(ms);
       currentBlock = await ethers.provider.getBlock("latest");
       delayB = currentBlock.number - initialBlock.number;
     } while (delayB < blockDelay);
   }
 };
 
-export const blockAwaitMs = async function (delay = 5000): Promise<void> {
+export const blockAwaitMs = async function (ms = 5000): Promise<void> {
   if (network.name === "hardhat") {
     await Promise.resolve();
   } else {
-    await delayMs(delay);
+    await delay(ms);
   }
 };

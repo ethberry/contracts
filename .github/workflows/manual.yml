@@ -63,7 +63,7 @@ jobs:
         continue-on-error: true
 
       - name: Version & Publish by lerna
-        run: lerna version --ignore-scripts && npm run release:publish
+        run: lerna version --yes --ignore-scripts && npm run release:publish
         if: steps.lerna_changed.outcome == 'success'
         env:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}

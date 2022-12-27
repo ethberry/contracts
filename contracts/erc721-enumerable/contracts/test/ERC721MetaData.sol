@@ -9,11 +9,11 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 import "@gemunion/contracts-erc721/contracts/extensions/ERC721ABaseUrl.sol";
+import "@gemunion/contracts-erc721/contracts/extensions/ERC721AMetaDataGetter.sol";
 
-import "../extensions/ERC721MetaDataGetter.sol";
 import "../preset/ERC721ABER.sol";
 
-contract ERC721MetaDataTest is ERC721ABER, ERC721MetaDataGetter {
+contract ERC721MetaDataTest is ERC721ABER, ERC721AMetaDataGetter {
   using Counters for Counters.Counter;
 
   constructor(

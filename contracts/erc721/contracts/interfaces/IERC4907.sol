@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 interface IERC4907 {
     // Logged when the user of a token assigns a new user or updates expires

@@ -65,7 +65,7 @@ contract GeneralizedCollection {
 
   // Insert a primary key. Field count defaults to 0.
 
-  function insertRecord(uint256 pk) internal returns (bool) {
+  function _insertRecord(uint256 pk) internal returns (bool) {
     require(!isRecord(pk), "GC: record already exists");
     recordList.push(pk);
     recordStructs[pk].recordListPointer = recordList.length - 1;
@@ -74,7 +74,7 @@ contract GeneralizedCollection {
 
   // Insert a field key in a specific record. Value default to 0x0
 
-  function insertRecordField(uint256 pk, bytes32 fieldKey) internal returns (bool) {
+  function _insertRecordField(uint256 pk, bytes32 fieldKey) internal returns (bool) {
     require(isRecord(pk), "GC: record not found");
     require(!isRecordFieldKey(pk, fieldKey), "GC: field already set");
     recordStructs[pk].fieldKeyList.push(fieldKey);
@@ -84,12 +84,12 @@ contract GeneralizedCollection {
 
   // Set a field key value in a specific record. Insert the primary key and/or field key if needed.
 
-  function upsertRecordField(uint256 pk, bytes32 fieldKey, uint256 value) internal returns (bool) {
+  function _upsertRecordField(uint256 pk, bytes32 fieldKey, uint256 value) internal returns (bool) {
     if (!isRecord(pk)) {
-      insertRecord(pk);
+      _insertRecord(pk);
     }
     if (!isRecordFieldKey(pk, fieldKey)) {
-      insertRecordField(pk, fieldKey);
+      _insertRecordField(pk, fieldKey);
     }
     recordStructs[pk].fieldStructs[fieldKey].value = value;
     return true;
@@ -104,7 +104,7 @@ contract GeneralizedCollection {
 
   // Delete a complete record. Useful for reducing list size.
 
-  function deleteRecord(uint256 pk) internal returns (bool) {
+  function _deleteRecord(uint256 pk) internal returns (bool) {
     require(isRecord(pk), "GC: record not found");
     uint256 rowToDelete = recordStructs[pk].recordListPointer;
     uint256 keyToMove = recordList[recordList.length - 1];
@@ -116,7 +116,7 @@ contract GeneralizedCollection {
 
   // Delete a field key/value from a record. Useful for reducing list size.
 
-  function deleteRecordField(uint256 pk, bytes32 fieldKey) internal returns (bool) {
+  function _deleteRecordField(uint256 pk, bytes32 fieldKey) internal returns (bool) {
     require(isRecordFieldKey(pk, fieldKey), "GC: field not found");
     uint256 rowToDelete = recordStructs[pk].fieldStructs[fieldKey].fieldKeyListPointer;
     uint256 recordFieldCount = recordStructs[pk].fieldKeyList.length;

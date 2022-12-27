@@ -9,7 +9,8 @@
     "@gemunion/contracts-constants": "^1.1.6",
     "@gemunion/contracts-erc721": "^1.1.14",
     "@gemunion/contracts-mocha": "^1.1.7",
-    "@gemunion/contracts-mocks": "^1.1.9"
+    "@gemunion/contracts-mocks": "^1.1.9",
+    "@gemunion/contracts-misc": "1.1.5"
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {

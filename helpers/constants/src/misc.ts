@@ -14,6 +14,7 @@ export const PAUSER_ROLE = utils.id("PAUSER_ROLE");
 export const SNAPSHOT_ROLE = utils.id("SNAPSHOT_ROLE");
 export const PREDICATE_ROLE = utils.id("PREDICATE_ROLE");
 export const DEPOSITOR_ROLE = utils.id("DEPOSITOR_ROLE");
+export const METADATA_ADMIN_ROLE = utils.id("METADATA_ADMIN_ROLE");
 
 export const decimals = BigNumber.from(10).pow(18);
 export const amount = 100000;

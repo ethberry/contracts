@@ -8,7 +8,7 @@ pragma solidity ^0.8.9;
 
 import "../preset/ERC721ABRK.sol";
 
-contract ERC721ABRKTest is ERC721ABRK {
+contract ERC721ConsecutiveTest is ERC721ABRK {
   constructor(
     string memory name,
     string memory symbol,

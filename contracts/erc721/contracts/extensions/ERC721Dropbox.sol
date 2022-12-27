@@ -16,6 +16,7 @@ abstract contract ERC721Dropbox is EIP712 {
 
   function _safeMint(address account, uint256 tokenId) internal virtual;
 
+  // TODO nonce
   function _redeem(address account, uint256 tokenId, address signer, bytes calldata signature) internal {
     require(_verify(signer, _hash(account, tokenId), signature), "ERC721Dropbox: Invalid signature");
     _safeMint(account, tokenId);

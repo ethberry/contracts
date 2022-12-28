@@ -8,13 +8,13 @@ pragma solidity ^0.8.9;
 
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 
-import "./ERC721ChainLink.sol";
+import "./ChainLinkTest.sol";
 
-abstract contract ERC721ChainLinkRinkeby is ERC721ChainLink {
+abstract contract ChainLinkGoerli is ChainLinkTest {
   constructor()
-    ERC721ChainLink(
-      address(0xb3dCcb4Cf7a26f6cf6B120Cf5A73875B7BBc655B), // vrfCoordinator
-      address(0x01BE23585060835E02B77ef475b0Cc51aA1e0709), // LINK token
+    ChainLinkTest(
+      address(0x199316A5ab4103f8d3e79DFd5A83a9C397694cB4), // vrfCoordinator
+      address(0x18C8044BEaf97a626E2130Fe324245b96F81A31F), // LINK token
       0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311, // system hash
       0.1 ether // fee
     )

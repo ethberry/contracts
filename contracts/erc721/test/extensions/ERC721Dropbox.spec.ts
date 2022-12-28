@@ -1,8 +1,9 @@
 import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers } from "hardhat";
+import { utils } from "ethers";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId, tokenName } from "@gemunion/contracts-constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, nonce, tokenId, tokenName } from "@gemunion/contracts-constants";
 import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldBehaveLikeERC721, shouldBehaveLikeERC721Burnable, shouldBehaveLikeERC721Royalty } from "../../src";
@@ -36,18 +37,20 @@ describe("ERC721DropboxTest", function () {
         // Types
         {
           EIP712: [
+            { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
             { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
         {
+          nonce,
           account: receiver.address,
           tokenId,
         },
       );
 
-      const tx1 = contractInstance.connect(receiver).redeem(receiver.address, tokenId, owner.address, signature);
+      const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver.address, tokenId, owner.address, signature);
       await expect(tx1).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId);
 
       const ownerOf = await contractInstance.ownerOf(tokenId);
@@ -70,18 +73,22 @@ describe("ERC721DropboxTest", function () {
         // Types
         {
           EIP712: [
+            { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
             { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
         {
+          nonce,
           account: receiver.address,
           tokenId,
         },
       );
 
-      const tx1 = contractInstance.connect(receiver).redeem(receiver.address, tokenId, receiver.address, signature);
+      const tx1 = contractInstance
+        .connect(receiver)
+        .redeem(nonce, receiver.address, tokenId, receiver.address, signature);
       await expect(tx1).to.be.revertedWith(
         `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
       );
@@ -93,8 +100,44 @@ describe("ERC721DropboxTest", function () {
 
       const tx1 = contractInstance
         .connect(receiver)
-        .redeem(receiver.address, tokenId, owner.address, ethers.utils.formatBytes32String("signature"));
+        .redeem(nonce, receiver.address, tokenId, owner.address, ethers.utils.formatBytes32String("signature"));
       await expect(tx1).to.be.revertedWith("ERC721Dropbox: Invalid signature");
+    });
+
+    it("should fail: expired signature", async function () {
+      const network = await ethers.provider.getNetwork();
+      const [owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const signature = await owner._signTypedData(
+        // Domain
+        {
+          name: tokenName,
+          version: "1.0.0",
+          chainId: network.chainId,
+          verifyingContract: contractInstance.address,
+        },
+        // Types
+        {
+          EIP712: [
+            { name: "nonce", type: "bytes32" },
+            { name: "account", type: "address" },
+            { name: "tokenId", type: "uint256" },
+          ],
+        },
+        // Value
+        {
+          nonce,
+          account: receiver.address,
+          tokenId,
+        },
+      );
+
+      const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver.address, tokenId, owner.address, signature);
+      await expect(tx1).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId);
+
+      const tx2 = contractInstance.connect(receiver).redeem(nonce, receiver.address, tokenId, owner.address, signature);
+      await expect(tx2).to.be.revertedWith("ERC721Dropbox: Expired signature");
     });
 
     it("should fail: token already minted", async function () {
@@ -113,21 +156,51 @@ describe("ERC721DropboxTest", function () {
         // Types
         {
           EIP712: [
+            { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
             { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
         {
+          nonce,
           account: receiver.address,
           tokenId,
         },
       );
 
-      const tx1 = contractInstance.connect(receiver).redeem(receiver.address, tokenId, owner.address, signature);
+      const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver.address, tokenId, owner.address, signature);
       await expect(tx1).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId);
 
-      const tx2 = contractInstance.connect(receiver).redeem(receiver.address, tokenId, owner.address, signature);
+      const newNonce = utils.formatBytes32String("nonce1");
+
+      const signature2 = await owner._signTypedData(
+        // Domain
+        {
+          name: tokenName,
+          version: "1.0.0",
+          chainId: network.chainId,
+          verifyingContract: contractInstance.address,
+        },
+        // Types
+        {
+          EIP712: [
+            { name: "nonce", type: "bytes32" },
+            { name: "account", type: "address" },
+            { name: "tokenId", type: "uint256" },
+          ],
+        },
+        // Value
+        {
+          nonce: newNonce,
+          account: receiver.address,
+          tokenId,
+        },
+      );
+
+      const tx2 = contractInstance
+        .connect(receiver)
+        .redeem(newNonce, receiver.address, tokenId, owner.address, signature2);
       await expect(tx2).to.be.revertedWith("ERC721: token already minted");
     });
 
@@ -147,21 +220,24 @@ describe("ERC721DropboxTest", function () {
         // Types
         {
           EIP712: [
+            { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
             { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
         {
+          nonce,
           account: receiver.address,
           tokenId,
         },
       );
 
-      const tx1 = contractInstance.connect(receiver).redeem(receiver.address, tokenId, owner.address, signature);
+      const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver.address, tokenId, owner.address, signature);
       await expect(tx1).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId);
 
-      const newTokenId = 2;
+      const tokenId2 = 2;
+      const nonce2 = utils.formatBytes32String("nonce2");
 
       const signature2 = await owner._signTypedData(
         // Domain
@@ -174,19 +250,55 @@ describe("ERC721DropboxTest", function () {
         // Types
         {
           EIP712: [
+            { name: "nonce", type: "bytes32" },
             { name: "account", type: "address" },
             { name: "tokenId", type: "uint256" },
           ],
         },
         // Value
         {
+          nonce: nonce2,
           account: receiver.address,
-          tokenId: newTokenId,
+          tokenId: tokenId2,
         },
       );
 
-      const tx2 = contractInstance.connect(receiver).redeem(receiver.address, newTokenId, owner.address, signature2);
-      await expect(tx2).to.be.revertedWith("ERC721Capped: cap exceeded");
+      const tx2 = contractInstance
+        .connect(receiver)
+        .redeem(nonce2, receiver.address, tokenId2, owner.address, signature2);
+      await expect(tx2).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId2);
+
+      const tokenId3 = 3;
+      const nonce3 = utils.formatBytes32String("nonce3");
+
+      const signature3 = await owner._signTypedData(
+        // Domain
+        {
+          name: tokenName,
+          version: "1.0.0",
+          chainId: network.chainId,
+          verifyingContract: contractInstance.address,
+        },
+        // Types
+        {
+          EIP712: [
+            { name: "nonce", type: "bytes32" },
+            { name: "account", type: "address" },
+            { name: "tokenId", type: "uint256" },
+          ],
+        },
+        // Value
+        {
+          nonce: nonce3,
+          account: receiver.address,
+          tokenId: tokenId3,
+        },
+      );
+
+      const tx3 = contractInstance
+        .connect(receiver)
+        .redeem(nonce3, receiver.address, tokenId3, owner.address, signature3);
+      await expect(tx3).to.be.revertedWith("ERC721Capped: cap exceeded");
     });
   });
 

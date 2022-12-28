@@ -21,8 +21,14 @@ contract ERC721DropboxTest is ERC721ABCRS, ERC721Dropbox {
     return super._safeMint(account, tokenId);
   }
 
-  function redeem(address account, uint256 tokenId, address signer, bytes calldata signature) public virtual {
+  function redeem(
+    bytes32 nonce,
+    address account,
+    uint256 tokenId,
+    address signer,
+    bytes calldata signature
+  ) public virtual {
     _checkRole(MINTER_ROLE, signer);
-    _redeem(account, tokenId, signer, signature);
+    _redeem(nonce, account, tokenId, signer, signature);
   }
 }

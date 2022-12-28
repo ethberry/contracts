@@ -8,7 +8,7 @@ export async function deployERC721(name: string) {
   if (name === "ERC721BaseUrlTest") {
     return erc721Factory.deploy(tokenName, tokenSymbol, royalty, baseTokenURI);
   } else if (name === "ERC721DropboxTest") {
-    return erc721Factory.deploy(tokenName, tokenSymbol, royalty);
+    return erc721Factory.deploy(tokenName, tokenSymbol, 1, royalty);
   } else if (name === "ERC721ConsecutiveTest") {
     return erc721Factory.deploy(tokenName, tokenSymbol, royalty);
   } else {

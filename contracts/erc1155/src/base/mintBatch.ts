@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
-import { amount, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
+import { amount, InterfaceId, tokenId } from "@gemunion/contracts-constants";
 import { deployErc1155NonReceiver, deployErc1155Receiver } from "@gemunion/contracts-mocks";
 
 export function shouldMintBatch(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
@@ -51,9 +51,7 @@ export function shouldMintBatch(factory: () => Promise<Contract>, options: Recor
       const tx1 = contractInstance.connect(receiver).mintBatch(receiver.address, [tokenId], [amount], "0x");
       await expect(tx1).to.be.revertedWith(
         supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${
-              options.MINTER_ROLE || MINTER_ROLE
-            }`
+          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${options.minterRole}`
           : "Ownable: caller is not the owner",
       );
     });

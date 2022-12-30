@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
 
-export function shouldGetBalanceOf(factory: () => Promise<Contract>) {
+export function shouldGetBalanceOf(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
       const contractInstance = await factory();
@@ -17,16 +17,16 @@ export function shouldGetBalanceOf(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, tokenId);
+      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
       const balance = await contractInstance.balanceOf(owner.address);
-      expect(balance).to.equal(1);
+      expect(balance).to.equal(options.initialBalance + 1);
     });
 
     it("should get balance of not owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, tokenId);
+      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
       const balance = await contractInstance.balanceOf(receiver.address);
       expect(balance).to.equal(0);
     });

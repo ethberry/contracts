@@ -9,6 +9,7 @@
   "root": true,
   "rules": {
     "@typescript-eslint/restrict-template-expressions": "off",
+    "@typescript-eslint/restrict-plus-operands": "off",
     "import/no-extraneous-dependencies": [
       "error",
       {

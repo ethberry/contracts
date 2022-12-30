@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { amount, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
+import { amount, InterfaceId } from "@gemunion/contracts-constants";
 
 export function shouldMint(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
   describe("mint", function () {
@@ -15,9 +15,7 @@ export function shouldMint(factory: () => Promise<Contract>, options: Record<str
       const tx = contractInstance.connect(receiver).mint(receiver.address, amount);
       await expect(tx).to.be.revertedWith(
         supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${
-              options.MINTER_ROLE || MINTER_ROLE
-            }`
+          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${options.minterRole}`
           : "Ownable: caller is not the owner",
       );
     });

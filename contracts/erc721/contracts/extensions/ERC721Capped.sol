@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 abstract contract ERC721Capped is ERC721 {
   uint256 internal _cap;
-  uint256[] private _allTokens;
+  uint256 private _allTokens;
 
   constructor(uint256 cap_) {
     require(cap_ > 0, "ERC721Capped: cap is 0");
@@ -25,7 +25,7 @@ abstract contract ERC721Capped is ERC721 {
   }
 
   function totalSupply() public view virtual returns (uint256) {
-    return _allTokens.length;
+    return _allTokens;
   }
 
   function _beforeTokenTransfer(
@@ -37,7 +37,7 @@ abstract contract ERC721Capped is ERC721 {
     if (from == address(0)) {
       require(totalSupply() < cap(), "ERC721Capped: cap exceeded");
     }
-    _allTokens.push(firstTokenId);
+    _allTokens += batchSize;
     super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
   }
 }

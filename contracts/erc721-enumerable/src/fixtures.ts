@@ -1,6 +1,13 @@
 import { ethers } from "hardhat";
 
-import { baseTokenURI, royalty, tokenName, tokenSymbol } from "@gemunion/contracts-constants";
+import {
+  baseTokenURI,
+  royalty,
+  tokenInitialAmount,
+  tokenMaxAmount,
+  tokenName,
+  tokenSymbol,
+} from "@gemunion/contracts-constants";
 
 export async function deployERC721(name: string) {
   const erc721Factory = await ethers.getContractFactory(name);
@@ -10,26 +17,20 @@ export async function deployERC721(name: string) {
   } else if (name === "ERC721MetaDataTest") {
     return erc721Factory.deploy(tokenName, tokenSymbol, royalty);
   } else {
-    const args = name
-      .substr(6)
-      .split("")
-      .reduce(
-        (memo, current) => {
-          switch (current) {
-            case "C":
-              memo.push(2);
-              break;
-            case "R":
-              memo.push(royalty);
-              break;
-            default:
-              break;
-          }
+    const args: Array<string | number> = [tokenName, tokenSymbol];
+    const parts = name.substr(6);
 
-          return memo;
-        },
-        [tokenName, tokenSymbol] as Array<string | number>,
-      );
+    if (parts.includes("C")) {
+      if (parts.includes("K")) {
+        args.push(tokenInitialAmount + tokenMaxAmount);
+      } else {
+        args.push(tokenMaxAmount);
+      }
+    }
+
+    if (parts.includes("R")) {
+      args.push(royalty);
+    }
 
     return erc721Factory.deploy(...args);
   }

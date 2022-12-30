@@ -3,7 +3,9 @@ import { BigNumber, utils, constants } from "ethers";
 export const baseTokenURI = "http://localhost:3000/metadata"; // no trailing slash
 export const tokenSymbol = "GEM";
 export const tokenName = "GEMUNION";
-export const tokenId = 666; // value less than 100 will break ERC721ABRK
+export const tokenId = 1337;
+export const tokenMaxAmount = 2;
+export const tokenInitialAmount = 10_000;
 export const royalty = 100; // 1%
 export const nonce = utils.formatBytes32String("nonce");
 

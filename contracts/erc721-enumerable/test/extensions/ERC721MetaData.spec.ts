@@ -6,6 +6,7 @@ import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunio
 
 import { shouldBehaveLikeERC721, shouldBehaveLikeERC721Burnable, shouldBehaveLikeERC721Royalty } from "../../src";
 import { deployERC721 } from "../../src/fixtures";
+import { shouldBehaveLikeERC721Metadata } from "../../src/metadata";
 
 use(solidity);
 
@@ -17,8 +18,7 @@ describe("ERC721MetaDataTest", function () {
   shouldBehaveLikeERC721(factory);
   shouldBehaveLikeERC721Burnable(factory);
   shouldBehaveLikeERC721Royalty(factory);
-
-  // TODO MetaData methods
+  shouldBehaveLikeERC721Metadata(factory);
 
   shouldSupportsInterface(factory)(
     InterfaceId.IERC165,

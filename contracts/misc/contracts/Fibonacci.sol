@@ -1,13 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 
-// Author: TrejGun
-// Email: trejgun+gemunion@gmail.com
-// Website: https://gemunion.io/
+// Website: https://medium.com/coinmonks/fibonacci-in-solidity-8477d907e22a
 
 pragma solidity ^0.8.9;
 
 contract Fibonacci {
-  // https://medium.com/coinmonks/fibonacci-in-solidity-8477d907e22a
   function fibonacci(uint256 n) external pure returns (uint256 a) {
     if (n == 0) {
       return 0;

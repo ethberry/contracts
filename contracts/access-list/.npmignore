@@ -5,6 +5,7 @@ coverage
 typechain-types
 src
 test
+scripts
 
 hardhat.config.ts
 tsconfig.json

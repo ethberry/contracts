@@ -16,7 +16,7 @@ contract ERC721ABRK is ERC721ABR, ERC721Consecutive {
     string memory symbol,
     uint96 royaltyNumerator
   ) ERC721ABR(name, symbol, royaltyNumerator) {
-    _mintConsecutive(_msgSender(), _maxBatchSize());
+//    _mintConsecutive(_msgSender(), _maxBatchSize());
   }
 
   function _afterTokenTransfer(
@@ -49,9 +49,9 @@ contract ERC721ABRK is ERC721ABR, ERC721Consecutive {
     return super._ownerOf(tokenId);
   }
 
-  function _maxBatchSize() internal view virtual override returns (uint96) {
-    return 10_000;
-  }
+//  function _maxBatchSize() internal view virtual override returns (uint96) {
+//    return 10_000;
+//  }
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721ABR, ERC721) returns (bool) {
     return super.supportsInterface(interfaceId);

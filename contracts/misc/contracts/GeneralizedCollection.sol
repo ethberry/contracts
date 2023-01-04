@@ -113,10 +113,7 @@ contract GeneralizedCollection {
     recordList[rowToDelete] = keyToMove;
     recordList.pop();
 
-    uint256 arrSize = recordStructs[pk].fieldKeyList.length;
-    for (uint8 i = 0; i < arrSize; i++) {
-      recordStructs[pk].fieldKeyList.pop();
-    }
+    delete recordStructs[pk].fieldKeyList;
     return true;
   }
 

@@ -26,7 +26,7 @@ export function shouldGetTokenMetadata(factory: () => Promise<Contract>) {
       expect(metadata.length).to.equal(0);
     });
 
-    it("should get metadata (deleted)", async function () {
+    it("should not get (deleted) metadata", async function () {
       const contractInstance = await factory();
 
       await contractInstance.setTokenMetadata(0, [{ key: utils.keccak256(utils.toUtf8Bytes("GRADE")), value: 1337 }]);

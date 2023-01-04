@@ -108,9 +108,15 @@ contract GeneralizedCollection {
     require(isRecord(pk), "GC: record not found");
     uint256 rowToDelete = recordStructs[pk].recordListPointer;
     uint256 keyToMove = recordList[recordList.length - 1];
+
     recordStructs[keyToMove].recordListPointer = rowToDelete;
     recordList[rowToDelete] = keyToMove;
     recordList.pop();
+
+    uint256 arrSize = recordStructs[pk].fieldKeyList.length;
+    for (uint8 i = 0; i < arrSize; i++) {
+      recordStructs[pk].fieldKeyList.pop();
+    }
     return true;
   }
 

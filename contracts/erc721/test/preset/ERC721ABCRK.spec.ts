@@ -8,10 +8,10 @@ import {
   shouldBehaveLikeERC721,
   shouldBehaveLikeERC721Burnable,
   shouldBehaveLikeERC721Capped,
+  shouldBehaveLikeERC721Consecutive,
   shouldBehaveLikeERC721Royalty,
 } from "../../src";
 import { deployERC721 } from "../../src/fixtures";
-import { shouldBehaveLikeERC721Consecutive } from "../../src/consecutive/consecutive";
 
 use(solidity);
 

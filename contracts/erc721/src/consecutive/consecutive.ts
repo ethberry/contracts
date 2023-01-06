@@ -14,7 +14,7 @@ export function shouldBehaveLikeERC721Consecutive(
 
       const contractInstance = await factory();
 
-      for (const e of new Array(100).fill(null).map((_e, i) => i)) {
+      for (const e of new Array(options.initialBalance).fill(null).map((_e, i) => i)) {
         const ownerOf = await contractInstance.ownerOf(e);
         expect(ownerOf).to.equal(owner.address);
       }

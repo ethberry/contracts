@@ -13,8 +13,8 @@ import "./ChainLinkBase.sol";
 abstract contract ChainLinkBesu is ChainLinkBase {
   constructor()
     ChainLinkBase(
-      address(0xEaAa2b3575b81f5DBE4cc59d6BA41A088C064647), // vrfCoordinator
-      address(0x8BCaF30fed623A721aB6A2E9A9ed4f0b2F141Bfd), // LINK token
+      address(0x9a3DBCa554e9f6b9257aAa24010DA8377C57c17e), // vrfCoordinator
+      address(0xa50a51c09a5c451C52BB714527E1974b686D8e77), // LINK token
       0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311, // system hash
       0.01 ether // fee
     )

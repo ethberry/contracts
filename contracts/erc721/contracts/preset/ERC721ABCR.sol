@@ -4,24 +4,22 @@
 // Email: trejgun+gemunion@gmail.com
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.13;
 
 import "./ERC721ABC.sol";
 import "../extensions/ERC721ARoyalty.sol";
 
 contract ERC721ABCR is ERC721ABC, ERC721ARoyalty {
-  constructor(string memory name, string memory symbol, uint256 cap, uint96 royaltyNumerator)
-    ERC721ABC(name, symbol, cap)
-    ERC721ARoyalty(royaltyNumerator)
-  {}
+  constructor(
+    string memory name,
+    string memory symbol,
+    uint256 cap,
+    uint96 royaltyNumerator
+  ) ERC721ABC(name, symbol, cap) ERC721ARoyalty(royaltyNumerator) {}
 
-  function supportsInterface(bytes4 interfaceId)
-    public
-    view
-    virtual
-    override(ERC721ABC, ERC721ARoyalty)
-    returns (bool)
-  {
+  function supportsInterface(
+    bytes4 interfaceId
+  ) public view virtual override(ERC721ABC, ERC721ARoyalty) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 

@@ -2,7 +2,7 @@
 
 // Website: https://medium.com/coinmonks/fibonacci-in-solidity-8477d907e22a
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.13;
 
 contract Fibonacci {
   function fibonacci(uint256 n) external pure returns (uint256 a) {

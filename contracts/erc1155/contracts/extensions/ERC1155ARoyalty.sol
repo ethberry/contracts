@@ -4,7 +4,7 @@
 // Email: trejgun+gemunion@gmail.com
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/common/ERC2981.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
@@ -16,22 +16,19 @@ abstract contract ERC1155ARoyalty is AccessControl, IERC1155Royalty, ERC2981 {
     _setDefaultRoyalty(_msgSender(), royaltyNumerator);
   }
 
-  function setDefaultRoyalty(address royaltyReceiver, uint96 royaltyNumerator)
-    public
-    virtual
-    override
-    onlyRole(DEFAULT_ADMIN_ROLE)
-  {
+  function setDefaultRoyalty(
+    address royaltyReceiver,
+    uint96 royaltyNumerator
+  ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
     super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
     emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
   }
 
-  function setTokenRoyalty(uint256 tokenId, address royaltyReceiver, uint96 royaltyNumerator)
-    public
-    virtual
-    override
-    onlyRole(DEFAULT_ADMIN_ROLE)
-  {
+  function setTokenRoyalty(
+    uint256 tokenId,
+    address royaltyReceiver,
+    uint96 royaltyNumerator
+  ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
     super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }

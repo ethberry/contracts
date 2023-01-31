@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 
 import "@gemunion/contracts-misc/contracts/GeneralizedCollection.sol";
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.13;
 
 abstract contract ERC721AMetaDataGetter is AccessControl, GeneralizedCollection {
   bytes32 public constant TEMPLATE_ID = keccak256("TEMPLATE_ID");

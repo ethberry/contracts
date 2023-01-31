@@ -4,7 +4,7 @@
 // Email: trejgun+gemunion@gmail.com
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
@@ -24,11 +24,12 @@ contract ERC1155AB is AccessControl, ERC1155Burnable {
     _mint(to, id, amount, data);
   }
 
-  function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
-    public
-    virtual
-    onlyRole(MINTER_ROLE)
-  {
+  function mintBatch(
+    address to,
+    uint256[] memory ids,
+    uint256[] memory amounts,
+    bytes memory data
+  ) public virtual onlyRole(MINTER_ROLE) {
     _mintBatch(to, ids, amounts, data);
   }
 

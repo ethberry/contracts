@@ -4,7 +4,7 @@
 // Email: trejgun+gemunion@gmail.com
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
@@ -39,7 +39,10 @@ abstract contract ERC721OpenSea is ERC721ABERS, AccessControlEnumerable {
   /**
    * Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
    */
-  function isApprovedForAll(address owner, address operator) public view virtual override returns (bool) {
+  function isApprovedForAll(
+    address owner,
+    address operator
+  ) public view virtual override(IERC721, ERC721) returns (bool) {
     // Whitelist OpenSea proxy contract for easy trading.
     if (address(_proxyRegistry.proxies(owner)) == operator) {
       return true;

@@ -4,7 +4,7 @@
 // Email: trejgun+undeads@gmail.com
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.13;
 
 interface IERC1155Royalty {
   event DefaultRoyaltyInfo(address royaltyReceiver, uint96 royaltyNumerator);

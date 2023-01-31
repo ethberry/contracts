@@ -4,16 +4,19 @@
 // Email: trejgun+gemunion@gmail.com
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 import "./ERC721ABCR.sol";
 
 contract ERC721ABCRS is ERC721ABCR, ERC721URIStorage {
-  constructor(string memory name, string memory symbol, uint256 cap, uint96 royaltyNumerator)
-    ERC721ABCR(name, symbol, cap, royaltyNumerator)
-  {}
+  constructor(
+    string memory name,
+    string memory symbol,
+    uint256 cap,
+    uint96 royaltyNumerator
+  ) ERC721ABCR(name, symbol, cap, royaltyNumerator) {}
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721ABCR) returns (bool) {
     return super.supportsInterface(interfaceId);

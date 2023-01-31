@@ -25,8 +25,8 @@ describe("ERC1155BaseUrlTest", function () {
   shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
 
   // base without uri
-  shouldMint(factory);
-  shouldMintBatch(factory);
+  shouldMint(factory, { minterRole: MINTER_ROLE });
+  shouldMintBatch(factory, { minterRole: MINTER_ROLE });
   shouldBalanceOf(factory);
   shouldBalanceOfBatch(factory);
   shouldSetApprovalForAll(factory);

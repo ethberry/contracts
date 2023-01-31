@@ -4,12 +4,11 @@
 // Email: trejgun+gemunion@gmail.com
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.13;
 
 import "../interfaces/IERC4907.sol";
 
 abstract contract ERC4907 is IERC4907 {
-
   struct UserInfo {
     address user; // address of user role
     uint64 expires; // unix timestamp, user expires
@@ -23,10 +22,7 @@ abstract contract ERC4907 is IERC4907 {
   /// @param user  The new user of the NFT
   /// @param expires  UNIX timestamp, The new user could use the NFT before expires
   function setUser(uint256 tokenId, address user, uint64 expires) public virtual {
-    require(
-      _isApprovedOrOwner(msg.sender, tokenId),
-      "ERC721: transfer caller is not owner nor approved"
-    );
+    require(_isApprovedOrOwner(msg.sender, tokenId), "ERC721: transfer caller is not owner nor approved");
     UserInfo storage info = _users[tokenId];
     info.user = user;
     info.expires = expires;
@@ -49,18 +45,12 @@ abstract contract ERC4907 is IERC4907 {
   /// @dev The zero value indicates that there is no user
   /// @param tokenId The NFT to get the user expires for
   /// @return The user expires for this NFT
-  function userExpires(uint256 tokenId)
-  public
-  view
-  virtual
-  returns (uint256)
-  {
+  function userExpires(uint256 tokenId) public view virtual returns (uint256) {
     return _users[tokenId].expires;
   }
 
   /// @dev See {IERC165-supportsInterface}.
-  function supportsInterface(bytes4 interfaceId) public view virtual returns (bool)
-  {
+  function supportsInterface(bytes4 interfaceId) public view virtual returns (bool) {
     return interfaceId == type(IERC4907).interfaceId;
     // super.supportsInterface(interfaceId);
   }

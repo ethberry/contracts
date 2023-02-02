@@ -4,7 +4,7 @@ import { ethers, network } from "hardhat";
 
 import { delay } from "@gemunion/utils";
 
-export const blockAwait = async function (blockDelay = 2, ms = 0): Promise<void> {
+export const blockAwait = async function (blockDelay = 2, ms = 1000): Promise<void> {
   if (network.name !== "hardhat") {
     await delay(ms);
     const initialBlock = await ethers.provider.getBlock("latest");

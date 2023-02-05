@@ -5,7 +5,7 @@ import { Contract } from "ethers";
 export function shouldBehaveLikeERC721Consecutive(
   factory: () => Promise<Contract>,
   options: Record<string, any> = {
-    initialBalance: 0,
+    batchSize: 0,
   },
 ) {
   describe("Consecutive", function () {
@@ -14,7 +14,7 @@ export function shouldBehaveLikeERC721Consecutive(
 
       const contractInstance = await factory();
 
-      for (const e of new Array(options.initialBalance).fill(null).map((_e, i) => i)) {
+      for (const e of new Array(options.batchSize).fill(null).map((_e, i) => i)) {
         const ownerOf = await contractInstance.ownerOf(e);
         expect(ownerOf).to.equal(owner.address);
       }
@@ -26,7 +26,7 @@ export function shouldBehaveLikeERC721Consecutive(
       const contractInstance = await factory();
 
       const balance = await contractInstance.balanceOf(owner.address);
-      expect(balance).to.equal(options.initialBalance);
+      expect(balance).to.equal(options.batchSize);
     });
   });
 }

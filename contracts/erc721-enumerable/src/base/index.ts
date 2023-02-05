@@ -16,14 +16,14 @@ export function shouldBehaveLikeERC721(
   factory: () => Promise<Contract>,
   options: Record<string, any> = {
     minterRole: MINTER_ROLE,
-    initialBalance: 0,
+    batchSize: 0,
   },
 ) {
   options = Object.assign(
     {},
     {
       minterRole: MINTER_ROLE,
-      initialBalance: 0,
+      batchSize: 0,
     },
     options,
   );

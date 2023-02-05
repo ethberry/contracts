@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import {
   baseTokenURI,
   royalty,
-  tokenInitialAmount,
+  batchSize,
   tokenMaxAmount,
   tokenName,
   tokenSymbol,
@@ -22,7 +22,7 @@ export async function deployERC721(name: string) {
 
     if (parts.includes("C")) {
       if (parts.includes("K")) {
-        args.push(tokenInitialAmount + tokenMaxAmount);
+        args.push(batchSize + tokenMaxAmount);
       } else {
         args.push(tokenMaxAmount);
       }

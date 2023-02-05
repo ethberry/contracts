@@ -5,7 +5,7 @@ export const tokenSymbol = "GEM";
 export const tokenName = "GEMUNION";
 export const tokenId = 1337;
 export const tokenMaxAmount = 2;
-export const tokenInitialAmount = 5000;
+export const batchSize = 5000;
 export const royalty = 100; // 1%
 export const nonce = utils.formatBytes32String("nonce");
 

@@ -10,10 +10,10 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: Re
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
       const tx = contractInstance
         .connect(receiver)
-        .transferFrom(owner.address, receiver.address, options.initialBalance + tokenId);
+        .transferFrom(owner.address, receiver.address, options.batchSize + tokenId);
 
       await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
     });
@@ -22,11 +22,11 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: Re
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
       const tx = contractInstance.transferFrom(
         owner.address,
         ethers.constants.AddressZero,
-        options.initialBalance + tokenId,
+        options.batchSize + tokenId,
       );
 
       await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
@@ -36,15 +36,15 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: Re
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
-      const tx = contractInstance.transferFrom(owner.address, receiver.address, options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      const tx = contractInstance.transferFrom(owner.address, receiver.address, options.batchSize + tokenId);
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, receiver.address, options.initialBalance + tokenId);
+        .withArgs(owner.address, receiver.address, options.batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(options.initialBalance);
+      expect(balanceOfOwner).to.equal(options.batchSize);
 
       const balanceOfReceiver = await contractInstance.balanceOf(receiver.address);
       expect(balanceOfReceiver).to.equal(1);
@@ -54,19 +54,19 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: Re
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
-      await contractInstance.approve(receiver.address, options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await contractInstance.approve(receiver.address, options.batchSize + tokenId);
 
       const tx = contractInstance
         .connect(receiver)
-        .transferFrom(owner.address, receiver.address, options.initialBalance + tokenId);
+        .transferFrom(owner.address, receiver.address, options.batchSize + tokenId);
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, receiver.address, options.initialBalance + tokenId);
+        .withArgs(owner.address, receiver.address, options.batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(options.initialBalance);
+      expect(balanceOfOwner).to.equal(options.batchSize);
 
       const balanceOfReceiver = await contractInstance.balanceOf(receiver.address);
       expect(balanceOfReceiver).to.equal(1);

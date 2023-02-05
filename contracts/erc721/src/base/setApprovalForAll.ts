@@ -10,15 +10,15 @@ export function shouldSetApprovalForAll(factory: () => Promise<Contract>, option
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(options.initialBalance + 1);
+      expect(balanceOfOwner).to.equal(options.batchSize + 1);
 
       const tx1 = contractInstance.setApprovalForAll(receiver.address, true);
       await expect(tx1).to.not.be.reverted;
 
-      const approved1 = await contractInstance.getApproved(options.initialBalance + tokenId);
+      const approved1 = await contractInstance.getApproved(options.batchSize + tokenId);
       expect(approved1).to.equal(ethers.constants.AddressZero);
 
       const isApproved1 = await contractInstance.isApprovedForAll(owner.address, receiver.address);
@@ -27,7 +27,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<Contract>, option
       const tx2 = contractInstance.setApprovalForAll(receiver.address, false);
       await expect(tx2).to.not.be.reverted;
 
-      const approved3 = await contractInstance.getApproved(options.initialBalance + tokenId);
+      const approved3 = await contractInstance.getApproved(options.batchSize + tokenId);
       expect(approved3).to.equal(ethers.constants.AddressZero);
 
       const isApproved2 = await contractInstance.isApprovedForAll(owner.address, receiver.address);

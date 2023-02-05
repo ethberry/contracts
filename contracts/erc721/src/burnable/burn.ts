@@ -7,7 +7,7 @@ import { tokenId } from "@gemunion/contracts-constants";
 export function shouldBehaveLikeERC721Burnable(
   factory: () => Promise<Contract>,
   options: Record<string, any> = {
-    initialBalance: 0,
+    batchSize: 0,
   },
 ) {
   describe("burn", function () {
@@ -15,8 +15,8 @@ export function shouldBehaveLikeERC721Burnable(
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
-      const tx = contractInstance.connect(receiver).burn(options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      const tx = contractInstance.connect(receiver).burn(options.batchSize + tokenId);
 
       await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
     });
@@ -25,32 +25,32 @@ export function shouldBehaveLikeERC721Burnable(
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
-      const tx = await contractInstance.burn(options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      const tx = await contractInstance.burn(options.batchSize + tokenId);
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, ethers.constants.AddressZero, options.initialBalance + tokenId);
+        .withArgs(owner.address, ethers.constants.AddressZero, options.batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(options.initialBalance);
+      expect(balanceOfOwner).to.equal(options.batchSize);
     });
 
     it("should burn approved token", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
-      await contractInstance.approve(receiver.address, options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await contractInstance.approve(receiver.address, options.batchSize + tokenId);
 
-      const tx = await contractInstance.burn(options.initialBalance + tokenId);
+      const tx = await contractInstance.burn(options.batchSize + tokenId);
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, ethers.constants.AddressZero, options.initialBalance + tokenId);
+        .withArgs(owner.address, ethers.constants.AddressZero, options.batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(options.initialBalance);
+      expect(balanceOfOwner).to.equal(options.batchSize);
     });
   });
 }

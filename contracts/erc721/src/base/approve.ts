@@ -10,8 +10,8 @@ export function shouldApprove(factory: () => Promise<Contract>, options: Record<
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
-      const tx = contractInstance.connect(receiver).approve(owner.address, options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      const tx = contractInstance.connect(receiver).approve(owner.address, options.batchSize + tokenId);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
 
@@ -19,8 +19,8 @@ export function shouldApprove(factory: () => Promise<Contract>, options: Record<
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
-      const tx = contractInstance.approve(owner.address, options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      const tx = contractInstance.approve(owner.address, options.batchSize + tokenId);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
 
@@ -28,23 +28,23 @@ export function shouldApprove(factory: () => Promise<Contract>, options: Record<
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
 
-      const tx = contractInstance.approve(receiver.address, options.initialBalance + tokenId);
+      const tx = contractInstance.approve(receiver.address, options.batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Approval")
-        .withArgs(owner.address, receiver.address, options.initialBalance + tokenId);
+        .withArgs(owner.address, receiver.address, options.batchSize + tokenId);
 
-      const approved = await contractInstance.getApproved(options.initialBalance + tokenId);
+      const approved = await contractInstance.getApproved(options.batchSize + tokenId);
       expect(approved).to.equal(receiver.address);
 
-      const tx1 = contractInstance.connect(receiver).burn(options.initialBalance + tokenId);
+      const tx1 = contractInstance.connect(receiver).burn(options.batchSize + tokenId);
       await expect(tx1)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, ethers.constants.AddressZero, options.initialBalance + tokenId);
+        .withArgs(owner.address, ethers.constants.AddressZero, options.batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(options.initialBalance);
+      expect(balanceOfOwner).to.equal(options.batchSize);
     });
   });
 }

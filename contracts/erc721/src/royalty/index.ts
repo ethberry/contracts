@@ -11,7 +11,7 @@ export function shouldBehaveLikeERC721Royalty(
   factory: () => Promise<Contract>,
   options: Record<string, any> = {
     minterRole: MINTER_ROLE,
-    initialBalance: 0,
+    batchSize: 0,
   },
 ) {
   shouldSetTokenRoyalty(factory);

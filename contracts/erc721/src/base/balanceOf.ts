@@ -17,16 +17,16 @@ export function shouldGetBalanceOf(factory: () => Promise<Contract>, options: Re
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
       const balance = await contractInstance.balanceOf(owner.address);
-      expect(balance).to.equal(options.initialBalance + 1);
+      expect(balance).to.equal(options.batchSize + 1);
     });
 
     it("should get balance of not owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.initialBalance + tokenId);
+      await contractInstance.mint(owner.address, options.batchSize + tokenId);
       const balance = await contractInstance.balanceOf(receiver.address);
       expect(balance).to.equal(0);
     });

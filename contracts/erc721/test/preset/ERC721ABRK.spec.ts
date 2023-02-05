@@ -1,7 +1,7 @@
 import { use } from "chai";
 import { solidity } from "ethereum-waffle";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenInitialAmount } from "@gemunion/contracts-constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, batchSize } from "@gemunion/contracts-constants";
 import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import {
@@ -19,10 +19,10 @@ describe("ERC721ABRK", function () {
 
   shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
 
-  shouldBehaveLikeERC721(factory, { initialBalance: tokenInitialAmount });
-  shouldBehaveLikeERC721Burnable(factory, { initialBalance: tokenInitialAmount });
-  shouldBehaveLikeERC721Royalty(factory, { initialBalance: tokenInitialAmount });
-  shouldBehaveLikeERC721Consecutive(factory, { initialBalance: tokenInitialAmount });
+  shouldBehaveLikeERC721(factory, { batchSize });
+  shouldBehaveLikeERC721Burnable(factory, { batchSize });
+  shouldBehaveLikeERC721Royalty(factory, { batchSize });
+  shouldBehaveLikeERC721Consecutive(factory, { batchSize });
 
   shouldSupportsInterface(factory)(
     InterfaceId.IERC165,

@@ -19,8 +19,8 @@ contract ERC721ABRK is ERC721ABR, ERC721Consecutive {
     _mintConsecutive2(address(0), 0);
   }
 
-  function _mintConsecutive2(address, uint96) internal virtual {
-    _mintConsecutive(_msgSender(), _maxBatchSize());
+  function _mintConsecutive2(address, uint96) internal virtual returns (uint96) {
+    return super._mintConsecutive(_msgSender(), _maxBatchSize());
   }
 
   function _afterTokenTransfer(

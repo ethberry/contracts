@@ -11,12 +11,6 @@ export const chainLinkAddr = {
     chainLinkFee: 2,
     chainLinkKeyHash: "0xAA77729D3466CA35AE8D28B3BBAC7CC36A5031EFDC430821C02BC31A238AF445",
   },
-  rinkeby: {
-    chainLinkVRFCoordinator: "0xb3dCcb4Cf7a26f6cf6B120Cf5A73875B7BBc655B",
-    chainLinkToken: "0x01BE23585060835E02B77ef475b0Cc51aA1e0709",
-    chainLinkFee: 0.1,
-    chainLinkKeyHash: "0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311",
-  },
   mumbai: {
     chainLinkVRFCoordinator: "0x8C7382F9D8f56b33781fE506E897a4F1e2d17255",
     chainLinkToken: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",

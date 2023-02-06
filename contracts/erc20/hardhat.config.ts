@@ -36,21 +36,6 @@ export default {
       timeout: 142000,
       // gas: 29999915,
     },
-    ropsten: {
-      url: process.env.ROPSTEN_RPC_URL,
-      accounts: [process.env.MM_PRIVATEKEY],
-    },
-    rinkeby: {
-      url: process.env.RINKEBY_RPC_URL,
-      gas: 2100000,
-      gasPrice: 8000000000,
-      timeout: 142000,
-      accounts: [process.env.MM_PRIVATEKEY],
-      // accounts: {
-      //   mnemonic: process.env.MM_MNEMONIC,
-      // },
-      saveDeployments: true,
-    },
     binancetest: {
       url: process.env.BINANCE_TEST_RPC_URL,
       chainId: 97,

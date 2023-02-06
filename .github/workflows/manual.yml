@@ -32,24 +32,28 @@ jobs:
         env:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
-          JSON_RPC_ADDR_BINANCE: "https://bsc-dataseed.binance.org/"
-          JSON_RPC_ADDR_BINANCE_TEST: "https://data-seed-prebsc-1-s1.binance.org:8545"
-          JSON_RPC_ADDR_POLYGON: ${{ secrets.JSON_RPC_ADDR_POLYGON }}
-          JSON_RPC_ADDR_MUMBAI: ${{ secrets.JSON_RPC_ADDR_MUMBAI }}
-          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
-          JSON_RPC_ADDR_BESU: ${{ secrets.JSON_RPC_ADDR_BESU }}
+          JSON_RPC_ADDR_ETHEREUM: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GORLY: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE_TEST: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_POLYGON: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_MUMBAI: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BESU: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GEMUNION: "http://127.0.0.1:8545/"
 
       - name: Bootstrap Packages
         run: npm run bootstrap && npm run build
         env:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
-          JSON_RPC_ADDR_BINANCE: "https://bsc-dataseed.binance.org/"
-          JSON_RPC_ADDR_BINANCE_TEST: "https://data-seed-prebsc-1-s1.binance.org:8545"
-          JSON_RPC_ADDR_POLYGON: ${{ secrets.JSON_RPC_ADDR_POLYGON }}
-          JSON_RPC_ADDR_MUMBAI: ${{ secrets.JSON_RPC_ADDR_MUMBAI }}
-          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
-          JSON_RPC_ADDR_BESU: ${{ secrets.JSON_RPC_ADDR_BESU }}
+          JSON_RPC_ADDR_ETHEREUM: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GORLY: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE_TEST: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_POLYGON: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_MUMBAI: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BESU: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GEMUNION: "http://127.0.0.1:8545/"
 
       - name: What changed
         run: lerna changed
@@ -62,10 +66,12 @@ jobs:
         env:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
-          JSON_RPC_ADDR_BINANCE: "https://bsc-dataseed.binance.org/"
-          JSON_RPC_ADDR_BINANCE_TEST: "https://data-seed-prebsc-1-s1.binance.org:8545"
-          JSON_RPC_ADDR_POLYGON: ${{ secrets.JSON_RPC_ADDR_POLYGON }}
-          JSON_RPC_ADDR_MUMBAI: ${{ secrets.JSON_RPC_ADDR_MUMBAI }}
-          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
-          JSON_RPC_ADDR_BESU: ${{ secrets.JSON_RPC_ADDR_BESU }}
+          JSON_RPC_ADDR_ETHEREUM: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GORLY: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE_TEST: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_POLYGON: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_MUMBAI: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BESU: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GEMUNION: "http://127.0.0.1:8545/"
 

@@ -6,6 +6,7 @@ import "@nomiclabs/hardhat-web3";
 import "@typechain/hardhat";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";
+import "hardhat-storage-layout";
 import "solidity-coverage";
 
 config();

@@ -32,24 +32,24 @@ jobs:
         env:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
-          BINANCE_RPC_URL: "https://bsc-dataseed.binance.org/"
-          BINANCE_TEST_RPC_URL: "https://data-seed-prebsc-1-s1.binance.org:8545"
-          POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
-          MUMBAI_RPC_URL: ${{ secrets.MUMBAI_RPC_URL }}
+          JSON_RPC_ADDR_BINANCE: "https://bsc-dataseed.binance.org/"
+          JSON_RPC_ADDR_BINANCE_TEST: "https://data-seed-prebsc-1-s1.binance.org:8545"
+          JSON_RPC_ADDR_POLYGON: ${{ secrets.JSON_RPC_ADDR_POLYGON }}
+          JSON_RPC_ADDR_MUMBAI: ${{ secrets.JSON_RPC_ADDR_MUMBAI }}
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
-          BESU_RPC_URL: ${{ secrets.BESU_RPC_URL }}
+          JSON_RPC_ADDR_BESU: ${{ secrets.JSON_RPC_ADDR_BESU }}
 
       - name: Bootstrap Packages
         run: npm run bootstrap && npm run build
         env:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
-          BINANCE_RPC_URL: "https://bsc-dataseed.binance.org/"
-          BINANCE_TEST_RPC_URL: "https://data-seed-prebsc-1-s1.binance.org:8545"
-          POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
-          MUMBAI_RPC_URL: ${{ secrets.MUMBAI_RPC_URL }}
+          JSON_RPC_ADDR_BINANCE: "https://bsc-dataseed.binance.org/"
+          JSON_RPC_ADDR_BINANCE_TEST: "https://data-seed-prebsc-1-s1.binance.org:8545"
+          JSON_RPC_ADDR_POLYGON: ${{ secrets.JSON_RPC_ADDR_POLYGON }}
+          JSON_RPC_ADDR_MUMBAI: ${{ secrets.JSON_RPC_ADDR_MUMBAI }}
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
-          BESU_RPC_URL: ${{ secrets.BESU_RPC_URL }}
+          JSON_RPC_ADDR_BESU: ${{ secrets.JSON_RPC_ADDR_BESU }}
 
       - name: What changed
         run: lerna changed
@@ -62,10 +62,10 @@ jobs:
         env:
           MM_PRIVATEKEY: ${{ secrets.MM_PRIVATEKEY }}
           MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
-          BINANCE_RPC_URL: "https://bsc-dataseed.binance.org/"
-          BINANCE_TEST_RPC_URL: "https://data-seed-prebsc-1-s1.binance.org:8545"
-          POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
-          MUMBAI_RPC_URL: ${{ secrets.MUMBAI_RPC_URL }}
+          JSON_RPC_ADDR_BINANCE: "https://bsc-dataseed.binance.org/"
+          JSON_RPC_ADDR_BINANCE_TEST: "https://data-seed-prebsc-1-s1.binance.org:8545"
+          JSON_RPC_ADDR_POLYGON: ${{ secrets.JSON_RPC_ADDR_POLYGON }}
+          JSON_RPC_ADDR_MUMBAI: ${{ secrets.JSON_RPC_ADDR_MUMBAI }}
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
-          BESU_RPC_URL: ${{ secrets.BESU_RPC_URL }}
+          JSON_RPC_ADDR_BESU: ${{ secrets.JSON_RPC_ADDR_BESU }}
 

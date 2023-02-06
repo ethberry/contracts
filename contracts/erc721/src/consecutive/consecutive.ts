@@ -8,7 +8,7 @@ export function shouldBehaveLikeERC721Consecutive(
     batchSize: 0,
   },
 ) {
-  describe("Consecutive", function () {
+  describe("consecutive", function () {
     it("ownerOf", async function () {
       const [owner] = await ethers.getSigners();
 

@@ -17,12 +17,9 @@ abstract contract ChainLinkBase is VRFConsumerBase {
     _keyHash = keyHash;
   }
 
-  event RandomRequest(bytes32 requestId);
-
   function getRandomNumber() internal virtual returns (bytes32 requestId) {
     require(LINK.balanceOf(address(this)) >= _fee, "ERC721ChainLink: Not enough LINK");
     requestId = VRFConsumerBase.requestRandomness(_keyHash, _fee);
-    emit RandomRequest(requestId);
     return requestId;
   }
 }

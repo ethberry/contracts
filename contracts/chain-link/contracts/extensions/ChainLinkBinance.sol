@@ -10,7 +10,7 @@ import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 
 import "./ChainLinkBase.sol";
 
-abstract contract ChainLinkBinanceMainnet is ChainLinkBase {
+abstract contract ChainLinkBinance is ChainLinkBase {
   constructor()
     ChainLinkBase(
       address(0x747973a5A2a4Ae1D3a8fDF5479f1514F65Db9C31), // vrfCoordinator

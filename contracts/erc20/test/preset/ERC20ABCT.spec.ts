@@ -29,5 +29,6 @@ describe("ERC20ABCT", function () {
     InterfaceId.IAccessControl,
     InterfaceId.IERC20,
     InterfaceId.IERC20Metadata,
+    InterfaceId.IERC1363,
   );
 });

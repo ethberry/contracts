@@ -9,7 +9,9 @@ pragma solidity ^0.8.13;
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract ERC20AB is AccessControl, ERC20Burnable {
+import "../extensions/ERC1363.sol";
+
+contract ERC20AB is AccessControl, ERC20Burnable, ERC1363 {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
   constructor(string memory name, string memory symbol) ERC20(name, symbol) {
@@ -21,7 +23,7 @@ contract ERC20AB is AccessControl, ERC20Burnable {
     _mint(to, amount);
   }
 
-  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControl, ERC1363) returns (bool) {
     return
       interfaceId == type(IERC20).interfaceId ||
       interfaceId == type(IERC20Metadata).interfaceId ||

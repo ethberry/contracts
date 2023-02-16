@@ -18,5 +18,10 @@ describe("ERC20OBC", function () {
   shouldBehaveLikeERC20Burnable(factory);
   shouldBehaveLikeERC20Capped(factory);
 
-  shouldSupportsInterface(factory)(InterfaceId.IERC165, InterfaceId.IERC20, InterfaceId.IERC20Metadata);
+  shouldSupportsInterface(factory)(
+    InterfaceId.IERC165,
+    InterfaceId.IERC20,
+    InterfaceId.IERC20Metadata,
+    InterfaceId.IERC1363,
+  );
 });

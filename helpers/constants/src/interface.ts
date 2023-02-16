@@ -18,4 +18,8 @@ export enum InterfaceId {
   IRoyalty = "0x2a55205a", // IERC2981
   IAccessControl = "0x7965db0b",
   Invalid = "0xffffffff",
+  IERC1363 = "0xb0202a11",
+  IERC1363Receiver = "0x88a7ca5c",
+  IERC4906 = "0x49064906",
+  IERC4907 = "0xad092b5c",
 }

@@ -32,12 +32,12 @@ export default {
       chainId: 97,
       gasPrice: 20000000000,
       accounts: {
-        mnemonic: process.env.MM_MNEMONIC,
+        mnemonic: process.env.MNEMONIC,
       },
     },
     goerli: {
       url: process.env.JSON_RPC_ADDR_GORLY,
-      accounts: [`0x${process.env.PRIVATE_KEY}`],
+      accounts: [`0x${process.env.PRIVATE_KEY as string}`],
       timeout: 142000,
     },
   },

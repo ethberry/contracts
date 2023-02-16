@@ -41,7 +41,7 @@ export default {
       chainId: 97,
       gasPrice: 20000000000,
       accounts: {
-        mnemonic: process.env.MM_MNEMONIC,
+        mnemonic: process.env.MNEMONIC,
       },
     },
     goerli: {

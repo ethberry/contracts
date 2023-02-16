@@ -33,7 +33,7 @@ export default {
     },
     mumbai: {
       url: process.env.JSON_RPC_ADDR_MUMBAI,
-      accounts: [process.env.MM_PRIVATEKEY],
+      accounts: [process.env.PRIVATE_KEY],
       gasPrice: 8000000000, // default is 'auto' which breaks chains without the london hardfork
       timeout: 142000,
       // gas: 29999915,
@@ -42,13 +42,13 @@ export default {
       url: process.env.JSON_RPC_ADDR_BINANCE_TEST,
       chainId: 97,
       gasPrice: 20000000000,
-      accounts: [process.env.MM_PRIVATEKEY],
+      accounts: [process.env.PRIVATE_KEY],
     },
     binancemain: {
       url: process.env.JSON_RPC_ADDR_BINANCE,
       chainId: 56,
       gasPrice: 20000000000,
-      accounts: [process.env.MM_PRIVATEKEY],
+      accounts: [process.env.PRIVATE_KEY],
     },
   },
   solidity: {

@@ -30,8 +30,8 @@ jobs:
       - name: Install Packages npm i
         run: npm i
         env:
-          PRIVATE_KEY: ${{ secrets.MM_PRIVATEKEY }}
-          MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          MNEMONIC: ${{ secrets.MNEMONIC }}
           JSON_RPC_ADDR_ETHEREUM: "http://127.0.0.1:8545/"
           JSON_RPC_ADDR_GORLY: "http://127.0.0.1:8545/"
           JSON_RPC_ADDR_BINANCE: "http://127.0.0.1:8545/"
@@ -44,8 +44,8 @@ jobs:
       - name: Bootstrap Packages
         run: npm run bootstrap && npm run build
         env:
-          PRIVATE_KEY: ${{ secrets.MM_PRIVATEKEY }}
-          MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          MNEMONIC: ${{ secrets.MNEMONIC }}
           JSON_RPC_ADDR_ETHEREUM: "http://127.0.0.1:8545/"
           JSON_RPC_ADDR_GORLY: "http://127.0.0.1:8545/"
           JSON_RPC_ADDR_BINANCE: "http://127.0.0.1:8545/"
@@ -64,8 +64,8 @@ jobs:
         run: lerna version patch --yes --ignore-scripts && npm run release:publish
         if: steps.lerna_changed.outcome == 'success'
         env:
-          PRIVATE_KEY: ${{ secrets.MM_PRIVATEKEY }}
-          MM_MNEMONIC: ${{ secrets.MM_MNEMONIC }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          MNEMONIC: ${{ secrets.MNEMONIC }}
           JSON_RPC_ADDR_ETHEREUM: "http://127.0.0.1:8545/"
           JSON_RPC_ADDR_GORLY: "http://127.0.0.1:8545/"
           JSON_RPC_ADDR_BINANCE: "http://127.0.0.1:8545/"

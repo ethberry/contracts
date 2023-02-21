@@ -10,7 +10,7 @@ import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
 import "./ChainLinkBaseV2.sol";
 
-abstract contract ChainLinkGemunion is ChainLinkBaseV2 {
+abstract contract ChainLinkGemunionV2 is ChainLinkBaseV2 {
   constructor(
     uint64 subId,
     uint16 minReqConfs,

@@ -360,7 +360,7 @@ ERC677ReceiverInterface
         uint256 randomness,
         RequestCommitment memory rc
     ) external nonReentrant returns (uint96) {
-        uint256 startGas = gasleft();
+//        uint256 startGas = gasleft();
 
         uint256[] memory randomWords = new uint256[](rc.numWords);
         for (uint256 i = 0; i < rc.numWords; i++) {
@@ -376,7 +376,7 @@ ERC677ReceiverInterface
         s_config.reentrancyLock = false;
 
         // Increment the req count for fee tier selection.
-        uint64 reqCount = s_subscriptions[rc.subId].reqCount;
+//        uint64 reqCount = s_subscriptions[rc.subId].reqCount;
         s_subscriptions[rc.subId].reqCount += 1;
 
         // We want to charge users exactly for how much gas they use in their callback.

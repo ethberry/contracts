@@ -6,6 +6,6 @@
 
 pragma solidity ^0.8.13;
 
-import "@gemunion/contracts-erc20/contracts/extensions/ERC1363Receiver.sol";
+import "../extensions/ERC1363Receiver.sol";
 
 contract ERC20NonReceiverMock is ERC1363Receiver {}

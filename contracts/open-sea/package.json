@@ -59,7 +59,7 @@
     "url": "https://github.com/gemunion/contracts"
   },
   "scripts": {
-    "build": "tsc && hardhat compile",
+    "build": "hardhat compile && tsc",
     "clean": "hardhat clean",
     "lint": "eslint . --fix",
     "prebuild": "rimraf dist && hardhat clean",

@@ -10,7 +10,6 @@ import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
 import "./ChainLinkBaseV2.sol";
 
-// TODO put subId in constructor
 abstract contract ChainLinkGoerliV2 is ChainLinkBaseV2 {
   constructor(
     uint64 subId,

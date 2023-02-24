@@ -72,7 +72,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish NPM by lerna
-        run: npm run release:publish:npm -- --force-publish
+        run: npm run release:publish:npm -- --force-publish --loglevel silly
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -23,6 +23,8 @@ jobs:
           npx npm-cli-login -u $NPM_USER -p $NPM_TOKEN -e $NPM_EMAIL -r https://registry.npmjs.org/ -s @gemunion --config-path="./"
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_USER: ${{ secrets.NPM_USER }}
+          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
 
       - name: Authenticate check via npm
         run: npm whoami --registry=https://registry.npmjs.org/

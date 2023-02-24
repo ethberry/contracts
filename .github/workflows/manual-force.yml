@@ -1,5 +1,5 @@
 
-name: Manual release Publish
+name: Manual release Publish --force
 on:
   workflow_dispatch:
 

@@ -1,0 +1,71 @@
+
+name: Manual Publish (NPM) --force
+on:
+  workflow_dispatch:
+
+jobs:
+  user-publish:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      # BEGIN INSTALL
+      - uses: actions/checkout@v3
+
+      - name: Authenticate Registry (NPM)
+        run: |
+          echo "save-exact=true" >> .npmrc
+          echo "package-lock=false" >> .npmrc
+          echo "unsafe-perm=true" >> .npmrc
+          echo "legacy-peer-deps=true" >> .npmrc
+          echo "@gemunion:registry=https://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+          git update-index --assume-unchanged .npmrc
+          npx npm-cli-login -u $NPM_USER -p $NPM_TOKEN -e $GITHUBEMAIL -r https://registry.npmjs.org/ -s @gemunion --config-path="./"
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Authenticate check via npm
+        run: npm whoami --registry=https://registry.npmjs.org/
+
+      - name: Install Packages npm i
+        run: npm i
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          MNEMONIC: ${{ secrets.MNEMONIC }}
+          JSON_RPC_ADDR_ETHEREUM: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GORLY: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE_TEST: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_POLYGON: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_MUMBAI: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BESU: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GEMUNION: "http://127.0.0.1:8545/"
+
+      - name: Bootstrap Packages
+        run: npm run bootstrap && npm run build
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          MNEMONIC: ${{ secrets.MNEMONIC }}
+          JSON_RPC_ADDR_ETHEREUM: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GORLY: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE_TEST: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_POLYGON: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_MUMBAI: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BESU: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GEMUNION: "http://127.0.0.1:8545/"
+
+      - name: Publish NPM with lerna
+        run: npm run release:publish:npm -- --force-publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          MNEMONIC: ${{ secrets.MNEMONIC }}
+          JSON_RPC_ADDR_ETHEREUM: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GORLY: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE_TEST: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_POLYGON: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_MUMBAI: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BESU: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GEMUNION: "http://127.0.0.1:8545/"

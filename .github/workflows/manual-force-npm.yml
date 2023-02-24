@@ -10,27 +10,22 @@ jobs:
     steps:
       # BEGIN INSTALL
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          always-auth: true
-          registry-url: https://registry.npmjs.org/
 
-      - name: Remove File
-        uses: JesseTG/rm@v1.0.3
-        with:
-          path: ./.npmrc
-
-      - name: Authenticate NPM Registry & Configure Git User
+      - name: Authenticate Registry & Configure Git User (GITHUB)
         run: |
-          echo "save-exact=true" > .npmrc
-          echo "package-lock=false" >> .npmrc
-          echo "legacy-peer-deps=true" >> .npmrc
+          echo "@gemunion:registry=https://npm.pkg.github.com/" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=$GITHUBTOKEN" >> .npmrc
           git update-index --assume-unchanged .npmrc
-          echo "@gemunion:registry=https://registry.npmjs.org/" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+          npx npm-cli-login -u $GITHUBUSER -p $GITHUBTOKEN -e $GITHUBEMAIL -r https://npm.pkg.github.com -s @gemunion --config-path="./"
+          git config --global user.name '@gemunion'
+          git config --global user.email $GITHUBEMAIL
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
+          GITHUBUSER: ${{ secrets.GITHUBUSER }}
+          GITHUBEMAIL: ${{ secrets.GITHUBEMAIL }}
+
+      - name: Authenticate check via npm
+        run: npm whoami --registry=https://npm.pkg.github.com/
 
       - name: Install Packages npm i
         run: npm i
@@ -60,12 +55,28 @@ jobs:
           JSON_RPC_ADDR_BESU: "http://127.0.0.1:8545/"
           JSON_RPC_ADDR_GEMUNION: "http://127.0.0.1:8545/"
 
-      - name: Publish NPM with lerna
-        run: npm run release:publish:npm -- --force-publish
+      - name: Remove File
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: ./.npmrc
+
+      - name: Authenticate NPM Registry & Configure Git User
+        run: |
+          echo "save-exact=true" > .npmrc
+          echo "package-lock=false" >> .npmrc
+          echo "legacy-peer-deps=true" >> .npmrc
+          git update-index --assume-unchanged .npmrc
+          echo "@gemunion:registry=https://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish NPM by lerna
+        run: npm run release:publish:npm -- --force-publish
+        if: steps.lerna_changed.outcome == 'success'
+        env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           MNEMONIC: ${{ secrets.MNEMONIC }}
           JSON_RPC_ADDR_ETHEREUM: "http://127.0.0.1:8545/"
           JSON_RPC_ADDR_GORLY: "http://127.0.0.1:8545/"

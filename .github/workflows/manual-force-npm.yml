@@ -32,9 +32,6 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Authenticate check via npm
-        run: npm whoami --registry=https://registry.npmjs.org/
-
       - name: Install Packages npm i
         run: npm i
         env:

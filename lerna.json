@@ -1,6 +1,5 @@
 {
   "packages": ["contracts/*", "helpers/*"],
   "version": "independent",
-  "useNx": true,
-  "access": "public"
+  "useNx": true
 }

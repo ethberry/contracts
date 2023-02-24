@@ -11,7 +11,7 @@ jobs:
       # BEGIN INSTALL
       - uses: actions/checkout@v3
 
-      - name: Authenticate Registry & Configure Git User
+      - name: Authenticate Registry & Configure Git User (GITHUB)
         run: |
           echo "@gemunion:registry=https://npm.pkg.github.com/" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=$GITHUBTOKEN" >> .npmrc
@@ -62,7 +62,6 @@ jobs:
 
       - name: Version & Publish by lerna
         run: lerna version patch --yes --ignore-scripts --force-publish && npm run release:publish -- --force-publish
-
         if: steps.lerna_changed.outcome == 'success'
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
@@ -76,3 +75,19 @@ jobs:
           JSON_RPC_ADDR_BESU: "http://127.0.0.1:8545/"
           JSON_RPC_ADDR_GEMUNION: "http://127.0.0.1:8545/"
 
+      - name: Remove File
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: ./.npmrc
+
+      - name: Authenticate Registry & Configure Git User (NPM)
+        run: |
+          echo "save-exact=true" >> .npmrc
+          echo "package-lock=false" >> .npmrc
+          echo "unsafe-perm=true" >> .npmrc
+          echo "legacy-peer-deps=true" >> .npmrc
+          echo "@gemunion:registry=https://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+          git update-index --assume-unchanged .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

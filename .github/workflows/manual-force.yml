@@ -89,6 +89,7 @@ jobs:
           echo "@gemunion:registry=https://registry.npmjs.org/" >> .npmrc
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
           git update-index --assume-unchanged .npmrc
+          npx npm-cli-login -u $NPM_USER -p $NPM_TOKEN -e $GITHUBEMAIL -r https://registry.npmjs.org/ -s @gemunion --config-path="./"
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -96,7 +97,7 @@ jobs:
         run: npm whoami --registry=https://registry.npmjs.org/
 
       - name: Publish NPM by lerna
-        run: npm run release:publish -- --force-publish
+        run: npm run release:publish:npm -- --force-publish
         if: steps.lerna_changed.outcome == 'success'
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}

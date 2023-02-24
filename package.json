@@ -46,6 +46,7 @@
     "precommit": "lint-staged",
     "release": "npm run release:version && npm run release:publish",
     "release:publish": "lerna publish from-package --yes --exact --ignore-scripts --registry=https://npm.pkg.github.com/",
+    "release:publish:npm": "lerna publish from-package --yes --exact --ignore-scripts --registry=https://registry.npmjs.org/",
     "release:version": "lerna version patch --yes --ignore-scripts",
     "test": "sh scripts/test.sh"
   },

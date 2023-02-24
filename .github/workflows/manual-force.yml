@@ -91,3 +91,21 @@ jobs:
           git update-index --assume-unchanged .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Authenticate check via npm
+        run: npm whoami --registry=https://registry.npmjs.org/
+
+      - name: Publish NPM by lerna
+        run: npm run release:publish -- --force-publish
+        if: steps.lerna_changed.outcome == 'success'
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          MNEMONIC: ${{ secrets.MNEMONIC }}
+          JSON_RPC_ADDR_ETHEREUM: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GORLY: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BINANCE_TEST: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_POLYGON: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_MUMBAI: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_BESU: "http://127.0.0.1:8545/"
+          JSON_RPC_ADDR_GEMUNION: "http://127.0.0.1:8545/"

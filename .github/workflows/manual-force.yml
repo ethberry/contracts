@@ -1,5 +1,5 @@
 
-name: Manual release Publish --force
+name: Manual Publish (GIT & NPM) --force
 on:
   workflow_dispatch:
 

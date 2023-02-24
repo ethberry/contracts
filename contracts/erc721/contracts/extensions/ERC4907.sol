@@ -1,8 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
-
-// Author: TrejGun
-// Email: trejgun+gemunion@gmail.com
-// Website: https://gemunion.io/
+// SPDX-License-Identifier: CC0-1.0
 
 pragma solidity ^0.8.13;
 

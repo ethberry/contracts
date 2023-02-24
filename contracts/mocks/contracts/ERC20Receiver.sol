@@ -8,4 +8,4 @@ pragma solidity ^0.8.13;
 
 import "./extensions/ERC1363Receiver.sol";
 
-contract ERC20NonReceiverMock is ERC1363Receiver {}
+contract ERC20ReceiverMock is ERC1363Receiver {}

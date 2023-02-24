@@ -73,7 +73,6 @@ jobs:
 
       - name: Publish NPM by lerna
         run: npm run release:publish:npm -- --force-publish
-        if: steps.lerna_changed.outcome == 'success'
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

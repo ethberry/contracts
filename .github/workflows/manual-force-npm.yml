@@ -10,6 +10,11 @@ jobs:
     steps:
       # BEGIN INSTALL
       - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          always-auth: true
+          registry-url: https://registry.npmjs.org/
 
       - name: Authenticate Registry (NPM)
         run: |
@@ -25,6 +30,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USER: ${{ secrets.NPM_USER }}
           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Authenticate check via npm
         run: npm whoami --registry=https://registry.npmjs.org/
@@ -61,6 +67,7 @@ jobs:
         run: npm run release:publish:npm -- --force-publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           MNEMONIC: ${{ secrets.MNEMONIC }}
           JSON_RPC_ADDR_ETHEREUM: "http://127.0.0.1:8545/"

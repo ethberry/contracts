@@ -8,19 +8,22 @@ pragma solidity ^0.8.13;
 
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
-import "./ChainLinkBaseV2.sol";
+import "./ChainLinkBase.sol";
 
-abstract contract ChainLinkGemunionV2 is ChainLinkBaseV2 {
+abstract contract ChainLinkGoerli is ChainLinkBase {
   constructor(
     uint64 subId,
     uint16 minReqConfs,
     uint32 callbackGasLimit,
     uint32 numWords
   )
-  ChainLinkBaseV2(
-      address(0x86C86939c631D53c6D812625bD6Ccd5Bf5BEb774), // vrfCoordinator
-        0xcaf3c3727e033261d383b315559476f48034c13b18f8cafed4d871abe5049186, // keyHash
-        subId, minReqConfs, callbackGasLimit, numWords
+    ChainLinkBase(
+      address(0x199316A5ab4103f8d3e79DFd5A83a9C397694cB4), // vrfCoordinator
+      0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311, // keyHash
+      subId,
+      minReqConfs,
+      callbackGasLimit,
+      numWords
     )
   {}
 }

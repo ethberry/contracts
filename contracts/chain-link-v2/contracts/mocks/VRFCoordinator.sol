@@ -11,7 +11,7 @@ import "@chainlink/contracts/src/v0.8/VRF.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
-contract VRFCoordinatorV2Mock is
+contract VRFCoordinatorMock is
 VRF,
 ConfirmedOwner,
 TypeAndVersionInterface,

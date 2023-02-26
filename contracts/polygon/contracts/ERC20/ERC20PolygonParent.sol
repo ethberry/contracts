@@ -9,9 +9,9 @@ pragma solidity ^0.8.2;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-abstract contract ERC20PolygonParent is ERC20, AccessControl {
-  bytes32 public constant PREDICATE_ROLE = keccak256("PREDICATE_ROLE");
+import "@gemunion/contracts-misc/contracts/constants.sol";
 
+abstract contract ERC20PolygonParent is ERC20, AccessControl {
   constructor() {
     _setupRole(PREDICATE_ROLE, _msgSender());
   }

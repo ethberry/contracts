@@ -10,12 +10,12 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+import "@gemunion/contracts-misc/contracts/constants.sol";
+
 import "../extensions/ERC721CappedEnumerable.sol";
 
 contract ERC721ABCE is AccessControl, ERC721Burnable, ERC721CappedEnumerable {
   using Counters for Counters.Counter;
-
-  bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
   Counters.Counter internal _tokenIdTracker;
 

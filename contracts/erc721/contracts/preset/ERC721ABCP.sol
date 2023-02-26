@@ -8,12 +8,12 @@ pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
 
+import "@gemunion/contracts-misc/contracts/constants.sol";
+
 import "../extensions/ERC721Capped.sol";
 import "./ERC721ABC.sol";
 
 contract ERC721ABCP is ERC721ABC, ERC721Pausable {
-  bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-
   constructor(string memory name, string memory symbol, uint256 cap) ERC721ABC(name, symbol, cap) {
     _setupRole(PAUSER_ROLE, _msgSender());
   }

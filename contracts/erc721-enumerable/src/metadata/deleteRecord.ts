@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract, utils } from "ethers";
 
-import { METADATA_ADMIN_ROLE } from "@gemunion/contracts-constants";
+import { METADATA_ROLE } from "@gemunion/contracts-constants";
 
 export function shouldDeleteRecord(factory: () => Promise<Contract>) {
   describe("deleteRecord", function () {
@@ -29,7 +29,7 @@ export function shouldDeleteRecord(factory: () => Promise<Contract>) {
       const tx = contractInstance.connect(receiver).deleteRecord(0);
 
       await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${METADATA_ADMIN_ROLE}`,
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${METADATA_ROLE}`,
       );
     });
   });

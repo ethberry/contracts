@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@gemunion/contracts-constants": "^1.1.40",
+    "@gemunion/contracts-misc": "^1.1.39",
     "@gemunion/contracts-mocha": "^1.1.41",
     "@gemunion/contracts-mocks": "^1.1.43"
   },
@@ -46,8 +47,8 @@
     "ethers": "5.7.2"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/",
-    "access": "public"
+    "access": "public",
+    "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
     "type": "git",

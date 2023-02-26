@@ -9,9 +9,9 @@ pragma solidity ^0.8.13;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract ERC721AB is AccessControl, ERC721Burnable {
-  bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+import "@gemunion/contracts-misc/contracts/constants.sol";
 
+contract ERC721AB is AccessControl, ERC721Burnable {
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {
     address account = _msgSender();
 

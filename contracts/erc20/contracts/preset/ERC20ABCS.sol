@@ -8,11 +8,11 @@ pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
 
+import "@gemunion/contracts-misc/contracts/constants.sol";
+
 import "./ERC20ABC.sol";
 
 contract ERC20ABCS is ERC20ABC, ERC20Snapshot {
-  bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
-
   constructor(string memory name, string memory symbol, uint256 cap) ERC20ABC(name, symbol, cap) {
     _setupRole(SNAPSHOT_ROLE, _msgSender());
   }

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract, utils } from "ethers";
 
-import { METADATA_ADMIN_ROLE } from "@gemunion/contracts-constants";
+import { METADATA_ROLE } from "@gemunion/contracts-constants";
 
 export function shouldSetTokenMetadata(factory: () => Promise<Contract>) {
   describe("setTokenMetadata", function () {
@@ -69,7 +69,7 @@ export function shouldSetTokenMetadata(factory: () => Promise<Contract>) {
         .setTokenMetadata(0, [{ key: utils.keccak256(utils.toUtf8Bytes("GRADE")), value: 1337 }]);
 
       await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${METADATA_ADMIN_ROLE}`,
+        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${METADATA_ROLE}`,
       );
     });
   });

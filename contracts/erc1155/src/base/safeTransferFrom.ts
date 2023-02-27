@@ -10,21 +10,25 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
-      await contractInstance.connect(owner).mint(owner.address, tokenId, amount, "0x");
+      await contractInstance.mint(owner.address, tokenId, amount, "0x");
       const tx = contractInstance
         .connect(receiver)
         .safeTransferFrom(owner.address, receiver.address, tokenId, amount, "0x");
-      await expect(tx).to.be.revertedWith(`ERC1155: caller is not token owner or approved`);
+      await expect(tx).to.be.revertedWith("ERC1155: caller is not token owner or approved");
     });
 
     it("should transfer own tokens to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
       const erc1155ReceiverInstance = await deployErc1155Receiver();
-      await contractInstance.connect(owner).mint(owner.address, tokenId, amount, "0x");
-      const tx = contractInstance
-        .connect(owner)
-        .safeTransferFrom(owner.address, erc1155ReceiverInstance.address, tokenId, amount, "0x");
+      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      const tx = contractInstance.safeTransferFrom(
+        owner.address,
+        erc1155ReceiverInstance.address,
+        tokenId,
+        amount,
+        "0x",
+      );
       await expect(tx)
         .to.emit(contractInstance, "TransferSingle")
         .withArgs(owner.address, owner.address, erc1155ReceiverInstance.address, tokenId, amount);
@@ -49,7 +53,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
         amount,
         "0x",
       );
-      await expect(tx).to.be.revertedWith(`ERC1155: transfer to non-ERC1155Receiver implementer`);
+      await expect(tx).to.be.revertedWith("ERC1155: transfer to non-ERC1155Receiver implementer");
     });
 
     it("should transfer approved tokens to receiver contract", async function () {

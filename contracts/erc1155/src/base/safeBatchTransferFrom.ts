@@ -58,7 +58,7 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<Contract>) {
         [amount, amount],
         "0x",
       );
-      await expect(tx).to.be.revertedWith(`ERC1155: transfer to non-ERC1155Receiver implementer`);
+      await expect(tx).to.be.revertedWith("ERC1155: transfer to non-ERC1155Receiver implementer");
     });
 
     it("should fail: not an owner", async function () {
@@ -78,7 +78,7 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<Contract>) {
           [amount, amount],
           "0x",
         );
-      await expect(tx).to.be.revertedWith(`ERC1155: caller is not token owner or approved`);
+      await expect(tx).to.be.revertedWith("ERC1155: caller is not token owner or approved");
     });
 
     it("should transfer approved tokens to receiver contract", async function () {

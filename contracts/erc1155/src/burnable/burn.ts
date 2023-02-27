@@ -51,8 +51,7 @@ export function shouldBurn(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
-      await contractInstance.safeTransferFrom(owner.address, receiver.address, tokenId, amount, "0x");
+      await contractInstance.mint(receiver.address, tokenId, amount, "0x");
 
       const tx = contractInstance.burn(owner.address, tokenId, amount);
       await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds balance");

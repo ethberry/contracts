@@ -72,9 +72,7 @@ export function shouldBurnBatch(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mintBatch(owner.address, [tokenId], [amount], "0x");
-
-      await contractInstance.safeBatchTransferFrom(owner.address, receiver.address, [tokenId], [amount], "0x");
+      await contractInstance.mintBatch(receiver.address, [tokenId], [amount], "0x");
 
       const tx = contractInstance.burnBatch(owner.address, [tokenId], [amount]);
       await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds balance");
@@ -84,9 +82,7 @@ export function shouldBurnBatch(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mintBatch(owner.address, [tokenId], [amount], "0x");
-
-      await contractInstance.safeBatchTransferFrom(owner.address, receiver.address, [tokenId], [amount], "0x");
+      await contractInstance.mintBatch(receiver.address, [tokenId], [amount], "0x");
 
       const tx = contractInstance.burnBatch(owner.address, [tokenId], [amount]);
       await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds balance");

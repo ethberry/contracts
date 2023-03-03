@@ -18,6 +18,8 @@ export const PREDICATE_ROLE = utils.id("PREDICATE_ROLE");
 export const DEPOSITOR_ROLE = utils.id("DEPOSITOR_ROLE");
 export const METADATA_ROLE = utils.id("METADATA_ROLE");
 
+export const TEMPLATE_ID = utils.id("TEMPLATE_ID");
+
 export const decimals = BigNumber.from(10).pow(18);
 export const amount = 100000;
 export const span = 300;

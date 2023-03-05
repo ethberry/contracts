@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.13;
 
-contract ETHReceiver {
+contract ETHReceiverMock {
   receive() external payable {
 
   }

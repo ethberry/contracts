@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 
-import "@gemunion/contracts-erc20/contracts/extensions/ERC1363Receiver.sol";
+import "./extensions/ERC1363Receiver.sol";
 
 contract Wallet is ERC165, ERC1363Receiver, ERC721Holder, ERC1155Holder {
   receive() external payable {}

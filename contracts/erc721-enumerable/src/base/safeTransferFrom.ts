@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
+import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
 
 export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
   describe("safeTransferFrom", function () {
@@ -22,7 +22,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc721ReceiverInstance = await deployErc721Receiver();
+      const erc721ReceiverInstance = await deployWallet();
 
       await contractInstance.mint(owner.address);
       const tx = contractInstance["safeTransferFrom(address,address,uint256)"](
@@ -43,7 +43,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
     it("should transfer own tokens to non receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc721NonReceiverInstance = await deployErc721NonReceiver();
+      const erc721NonReceiverInstance = await deployJerk();
 
       await contractInstance.mint(owner.address);
       const tx = contractInstance["safeTransferFrom(address,address,uint256)"](
@@ -58,7 +58,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc721ReceiverInstance = await deployErc721Receiver();
+      const erc721ReceiverInstance = await deployWallet();
 
       await contractInstance.mint(owner.address);
       await contractInstance.approve(receiver.address, 0);
@@ -80,7 +80,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc721NonReceiverInstance = await deployErc721NonReceiver();
+      const erc721NonReceiverInstance = await deployJerk();
 
       await contractInstance.mint(owner.address);
       await contractInstance.approve(receiver.address, 0);

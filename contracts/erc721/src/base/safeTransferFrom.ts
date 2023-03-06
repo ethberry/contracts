@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
 
-import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
+import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
 
 export function shouldSafeTransferFrom(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
   describe("safeTransferFrom", function () {
@@ -23,7 +23,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>, options
     it("should transfer own tokens to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc721ReceiverInstance = await deployErc721Receiver();
+      const erc721ReceiverInstance = await deployWallet();
 
       await contractInstance.mint(owner.address, options.batchSize + tokenId);
       const tx = contractInstance["safeTransferFrom(address,address,uint256)"](
@@ -46,7 +46,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>, options
     it("should transfer own tokens to non receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc721NonReceiverInstance = await deployErc721NonReceiver();
+      const erc721NonReceiverInstance = await deployJerk();
 
       await contractInstance.mint(owner.address, options.batchSize + tokenId);
       const tx = contractInstance["safeTransferFrom(address,address,uint256)"](
@@ -60,7 +60,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>, options
     it("should transfer approved tokens to receiver contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc721ReceiverInstance = await deployErc721Receiver();
+      const erc721ReceiverInstance = await deployWallet();
 
       await contractInstance.mint(owner.address, options.batchSize + tokenId);
       await contractInstance.approve(receiver.address, options.batchSize + tokenId);
@@ -87,7 +87,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>, options
     it("should transfer approved tokens to non receiver contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc721NonReceiverInstance = await deployErc721NonReceiver();
+      const erc721NonReceiverInstance = await deployJerk();
 
       await contractInstance.mint(owner.address, options.batchSize + tokenId);
       await contractInstance.approve(receiver.address, options.batchSize + tokenId);

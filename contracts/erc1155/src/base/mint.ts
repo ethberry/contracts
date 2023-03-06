@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { amount, InterfaceId, tokenId } from "@gemunion/contracts-constants";
-import { deployErc1155NonReceiver, deployErc1155Receiver } from "@gemunion/contracts-mocks";
+import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
 
 export function shouldMint(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
   describe("mint", function () {
@@ -23,7 +23,7 @@ export function shouldMint(factory: () => Promise<Contract>, options: Record<str
     it("should mint to receiver", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc1155ReceiverInstance = await deployErc1155Receiver();
+      const erc1155ReceiverInstance = await deployWallet();
 
       const tx1 = contractInstance.mint(erc1155ReceiverInstance.address, tokenId, amount, "0x");
       await expect(tx1)
@@ -36,7 +36,7 @@ export function shouldMint(factory: () => Promise<Contract>, options: Record<str
 
     it("should fail: non receiver", async function () {
       const contractInstance = await factory();
-      const erc1155NonReceiverInstance = await deployErc1155NonReceiver();
+      const erc1155NonReceiverInstance = await deployJerk();
 
       const tx1 = contractInstance.mint(erc1155NonReceiverInstance.address, tokenId, amount, "0x");
       await expect(tx1).to.be.revertedWith(`ERC1155: transfer to non-ERC1155Receiver implementer`);

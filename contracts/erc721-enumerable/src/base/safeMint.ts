@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { InterfaceId } from "@gemunion/contracts-constants";
 
-import { deployErc721NonReceiver, deployErc721Receiver } from "@gemunion/contracts-mocks";
+import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
 
 export function shouldSafeMint(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
   describe("safeMint", function () {
@@ -38,7 +38,7 @@ export function shouldSafeMint(factory: () => Promise<Contract>, options: Record
     it("should fail to mint to non receiver", async function () {
       const contractInstance = await factory();
 
-      const erc721NonReceiverInstance = await deployErc721NonReceiver();
+      const erc721NonReceiverInstance = await deployJerk();
 
       const tx = contractInstance.safeMint(erc721NonReceiverInstance.address);
       await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
@@ -47,7 +47,7 @@ export function shouldSafeMint(factory: () => Promise<Contract>, options: Record
     it("should mint to receiver", async function () {
       const contractInstance = await factory();
 
-      const erc721ReceiverInstance = await deployErc721Receiver();
+      const erc721ReceiverInstance = await deployWallet();
 
       const tx = contractInstance.safeMint(erc721ReceiverInstance.address);
       await expect(tx)

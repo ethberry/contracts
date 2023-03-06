@@ -5,10 +5,10 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
-    "@gemunion/contracts-constants": "^1.1.46",
-    "@gemunion/contracts-misc": "^1.1.45",
-    "@gemunion/contracts-mocha": "^1.1.47",
-    "@gemunion/contracts-mocks": "^1.1.49"
+    "@gemunion/contracts-constants": "^1.1.47",
+    "@gemunion/contracts-misc": "^1.1.46",
+    "@gemunion/contracts-mocha": "^1.1.48",
+    "@gemunion/contracts-mocks": "^1.1.50"
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
@@ -67,5 +67,5 @@
     "test:coverage": "hardhat coverage"
   },
   "types": "./dist/index.d.ts",
-  "version": "1.1.52"
+  "version": "1.1.53"
 }

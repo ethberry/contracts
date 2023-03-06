@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
-import { deployErc1155NonReceiver, deployErc1155Receiver } from "@gemunion/contracts-mocks";
+import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
 
 export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
   describe("safeTransferFrom", function () {
@@ -20,7 +20,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
     it("should transfer own tokens to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc1155ReceiverInstance = await deployErc1155Receiver();
+      const erc1155ReceiverInstance = await deployWallet();
       await contractInstance.mint(owner.address, tokenId, amount, "0x");
       const tx = contractInstance.safeTransferFrom(
         owner.address,
@@ -43,7 +43,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
     it("should fail: transfer to non ERC1155Receiver implementer", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc1155NonReceiverInstance = await deployErc1155NonReceiver();
+      const erc1155NonReceiverInstance = await deployJerk();
 
       await contractInstance.mint(owner.address, tokenId, amount, "0x");
       const tx = contractInstance.safeTransferFrom(
@@ -59,7 +59,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
     it("should transfer approved tokens to receiver contract", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc1155ReceiverInstance = await deployErc1155Receiver();
+      const erc1155ReceiverInstance = await deployWallet();
 
       await contractInstance.mint(owner.address, tokenId, amount, "0x");
       await contractInstance.setApprovalForAll(receiver.address, true);

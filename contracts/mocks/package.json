@@ -8,11 +8,11 @@
     "@gemunion/contracts-constants": "^1.1.49",
     "@nomiclabs/hardhat-waffle": "2.0.5",
     "ethers": "5.7.2",
-    "hardhat": "2.12.7"
+    "hardhat": "2.13.0"
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
-    "rimraf": "4.1.2"
+    "rimraf": "4.3.0"
   },
   "engines": {
     "node": ">=12.13"

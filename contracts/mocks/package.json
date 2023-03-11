@@ -12,7 +12,7 @@
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
-    "rimraf": "4.3.0"
+    "rimraf": "4.4.0"
   },
   "engines": {
     "node": ">=12.13"

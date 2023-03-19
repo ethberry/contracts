@@ -1,5 +1,9 @@
+import { config } from "dotenv";
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
+import "@typechain/hardhat";
+
+config();
 
 export default {
   defaultNetwork: "hardhat",
@@ -37,7 +41,7 @@ export default {
     },
     goerli: {
       url: process.env.JSON_RPC_ADDR_GORLY,
-      accounts: [`0x${process.env.PRIVATE_KEY as string}`],
+      accounts: [`0x${process.env.PRIVATE_KEY}`],
       timeout: 142000,
     },
   },

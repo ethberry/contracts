@@ -12,7 +12,7 @@ describe("ERC20PolygonChildTest", function () {
 
   shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE);
 
-  shouldBehaveLikeERC20(factory, { MINTER_ROLE: DEFAULT_ADMIN_ROLE });
+  shouldBehaveLikeERC20(factory, { minterRole: DEFAULT_ADMIN_ROLE });
 
   describe("deposit", function () {
     it("should fail: account is missing role", async function () {

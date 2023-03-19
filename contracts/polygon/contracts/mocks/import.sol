@@ -6,4 +6,4 @@
 
 pragma solidity ^0.8.13;
 
-import "@gemunion/contracts-mocks/contracts/ERC20NonReceiver.sol";
+import "@gemunion/contracts-mocks/contracts/Jerk.sol";

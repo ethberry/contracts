@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-import { deployErc721Receiver } from "@gemunion/contracts-mocks";
+import { deployWallet } from "@gemunion/contracts-mocks";
 
 export function shouldBehaveLikeERC721Enumerable(factory: () => Promise<Contract>) {
   describe("tokenOfOwnerByIndex", function () {
@@ -10,7 +10,7 @@ export function shouldBehaveLikeERC721Enumerable(factory: () => Promise<Contract
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc721ReceiverInstance = await deployErc721Receiver();
+      const erc721ReceiverInstance = await deployWallet();
 
       await contractInstance.mint(owner.address);
       const tx = contractInstance["safeTransferFrom(address,address,uint256)"](

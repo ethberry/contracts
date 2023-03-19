@@ -9,5 +9,5 @@ describe("ERC20PolygonParentTest", function () {
 
   shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, PREDICATE_ROLE);
 
-  shouldBehaveLikeERC20(factory, { MINTER_ROLE: PREDICATE_ROLE });
+  shouldBehaveLikeERC20(factory, { minterRole: PREDICATE_ROLE });
 });

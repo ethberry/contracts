@@ -5,19 +5,7 @@
       "runner": "nx/tasks-runners/default",
       "options": {
         "cacheableOperations": [
-          "build",
-          "clean",
-          "deploy:mainnet",
-          "lint",
-          "prebuild",
-          "prepare:contracts:besu",
-          "prepare:contracts:mainnet",
-          "prepublish",
-          "solhint",
-          "test",
-          "e2e",
-          "typeorm",
-          "postversion"
+          "build"
         ]
       }
     }

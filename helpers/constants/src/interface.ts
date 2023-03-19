@@ -4,6 +4,7 @@ export enum InterfaceId {
   IERC20Metadata = "0xa219a025",
   IERC998TDERC20 = "0x7294ffed",
   IERC998TDERC20Enumerable = "0xc5fd96cd",
+  IERC998TDERC1336 = "0x66e7efcb",
   IERC998TD = "0xd8e93edb",
   IERC998TDEnumerable = "0xa344afe4",
   IERC998TDERC1155 = "0x7064387e",

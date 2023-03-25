@@ -10,7 +10,7 @@
   "devDependencies": {
     "dotenv": "16.0.3",
     "ethers": "5.7.2",
-    "rimraf": "4.4.0"
+    "rimraf": "4.4.1"
   },
   "files": [
     "dist/*"

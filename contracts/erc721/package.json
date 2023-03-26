@@ -7,6 +7,7 @@
   "dependencies": {
     "@gemunion/contracts-chain-link": "^1.1.56",
     "@gemunion/contracts-constants": "^1.1.52",
+    "@gemunion/contracts-erc1363": "^1.0.0",
     "@gemunion/contracts-misc": "^1.1.51",
     "@gemunion/contracts-mocha": "^1.1.53",
     "@gemunion/contracts-mocks": "^1.1.55"

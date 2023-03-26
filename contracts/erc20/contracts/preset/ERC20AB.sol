@@ -10,8 +10,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
 import "@gemunion/contracts-misc/contracts/constants.sol";
-
-import "../extensions/ERC1363.sol";
+import "@gemunion/contracts-erc1363/contracts/extensions/ERC1363.sol";
 
 contract ERC20AB is AccessControl, ERC20Burnable, ERC1363 {
   constructor(string memory name, string memory symbol) ERC20(name, symbol) {

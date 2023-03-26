@@ -8,7 +8,7 @@ pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
-import "./extensions/ERC1363Receiver.sol";
+import "@gemunion/contracts-erc1363/contracts/extensions/ERC1363Receiver.sol";
 
 contract ERC20ReceiverMock is ERC165, ERC1363Receiver {
   function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {

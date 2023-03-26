@@ -5,8 +5,8 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
-    "@gemunion/contracts-constants": "^1.1.52",
-    "@gemunion/contracts-erc1363": "^1.0.0",
+    "@gemunion/contracts-constants": "^1.1.53",
+    "@gemunion/contracts-erc1363": "^1.0.1",
     "@nomiclabs/hardhat-waffle": "2.0.5",
     "ethers": "5.7.2",
     "hardhat": "2.13.0"
@@ -45,5 +45,5 @@
   "sideEffects": false,
   "title": "-=Gemun Ion Studio=-",
   "types": "./dist/index.d.ts",
-  "version": "1.1.55"
+  "version": "1.1.56"
 }

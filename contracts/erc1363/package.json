@@ -4,7 +4,6 @@
     "name": "TrejGun",
     "url": "https://gemunion.io/"
   },
-  "dependencies": {},
   "description": "Collection of contracts and presets",
   "devDependencies": {
     "@ethersproject/networks": "5.7.1",
@@ -62,5 +61,5 @@
     "test:coverage": "hardhat coverage"
   },
   "types": "./dist/index.d.ts",
-  "version": "1.0.0"
+  "version": "1.0.1"
 }

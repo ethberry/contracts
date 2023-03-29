@@ -5,15 +5,14 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
     "@gemunion/contracts-constants": "^1.1.54",
     "@gemunion/contracts-erc1363": "^1.0.2",
-    "@nomiclabs/hardhat-waffle": "2.0.5",
     "ethers": "5.7.2",
     "hardhat": "2.13.0"
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
-    "@typechain/hardhat": "6.1.5",
     "dotenv": "16.0.3",
     "rimraf": "4.4.1"
   },

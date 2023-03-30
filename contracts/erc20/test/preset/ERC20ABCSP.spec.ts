@@ -1,6 +1,3 @@
-import { use } from "chai";
-import { solidity } from "ethereum-waffle";
-
 import {
   DEFAULT_ADMIN_ROLE,
   InterfaceId,
@@ -18,8 +15,6 @@ import {
   shouldBehaveLikeERC20Snapshot,
 } from "../../src";
 import { deployERC20 } from "../../src/fixtures";
-
-use(solidity);
 
 describe("ERC20ABCSP", function () {
   const factory = () => deployERC20(this.title);

@@ -1,6 +1,3 @@
-import { use } from "chai";
-import { solidity } from "ethereum-waffle";
-
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
@@ -16,8 +13,6 @@ import {
   shouldSetApprovalForAll,
 } from "../../src";
 import { deployErc1155Base } from "../../src/fixtures";
-
-use(solidity);
 
 describe("ERC1155BaseUrlTest", function () {
   const factory = () => deployErc1155Base(this.title);

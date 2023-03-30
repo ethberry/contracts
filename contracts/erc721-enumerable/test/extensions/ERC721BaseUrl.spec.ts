@@ -1,5 +1,4 @@
-import { expect, use } from "chai";
-import { solidity } from "ethereum-waffle";
+import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
@@ -7,8 +6,6 @@ import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunio
 
 import { shouldBehaveLikeERC721, shouldBehaveLikeERC721Burnable, shouldBehaveLikeERC721Royalty } from "../../src";
 import { deployERC721 } from "../../src/fixtures";
-
-use(solidity);
 
 describe("ERC721BaseUrlTest", function () {
   const factory = () => deployERC721(this.title);

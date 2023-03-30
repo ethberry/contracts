@@ -1,14 +1,9 @@
-import { use } from "chai";
-import { solidity } from "ethereum-waffle";
-
 import { DEFAULT_ADMIN_ROLE, METADATA_ROLE, MINTER_ROLE, InterfaceId } from "@gemunion/contracts-constants";
 import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldBehaveLikeERC721, shouldBehaveLikeERC721Burnable, shouldBehaveLikeERC721Royalty } from "../../src";
 import { deployERC721 } from "../../src/fixtures";
 import { shouldBehaveLikeERC721Metadata } from "../../src/metadata";
-
-use(solidity);
 
 describe("ERC721MetaDataTest", function () {
   const factory = () => deployERC721(this.title);

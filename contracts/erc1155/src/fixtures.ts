@@ -1,5 +1,9 @@
 import { ethers } from "hardhat";
 
+// error TS2742: The inferred type of 'deployErc1155Base' cannot be named without a reference to '@gemunion/contracts-constants/node_modules/ethers'. This is likely not portable. A type annotation is necessary
+// https://github.com/microsoft/TypeScript/issues/47663
+import type {} from "ethers";
+
 import { baseTokenURI, royalty } from "@gemunion/contracts-constants";
 
 export async function deployErc1155Base(name: string) {

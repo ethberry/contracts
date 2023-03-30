@@ -1,13 +1,8 @@
-import { use } from "chai";
-import { solidity } from "ethereum-waffle";
-
 import { InterfaceId } from "@gemunion/contracts-constants";
 import { shouldBehaveLikeOwnable, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldBehaveLikeERC1155, shouldBehaveLikeERC1155Burnable } from "../../src";
 import { deployErc1155Base } from "../../src/fixtures";
-
-use(solidity);
 
 describe("ERC1155OB", function () {
   const factory = () => deployErc1155Base(this.title);

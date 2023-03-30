@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { ethers, web3 } from "hardhat";
-import { Contract } from "ethers";
+import { ethers } from "hardhat";
+import { Contract, BigNumber } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
 import { tokenId } from "@gemunion/contracts-constants";
@@ -14,7 +14,7 @@ export function shouldUserOf(factory: () => Promise<Contract>) {
       await contractInstance.mint(owner.address, tokenId);
 
       const current = await time.latest();
-      const deadline = current.sub(web3.utils.toBN(1));
+      const deadline = current.sub(BigNumber.from(1));
 
       await contractInstance.setUser(tokenId, receiver.address, deadline.toString());
       const userOf = await contractInstance.userOf(tokenId);
@@ -29,18 +29,18 @@ export function shouldUserOf(factory: () => Promise<Contract>) {
       await contractInstance.mint(owner.address, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current.add(BigNumber.from(100));
 
       await contractInstance.setUser(tokenId, receiver.address, deadline.toString());
 
       const current1 = await time.latest();
-      await time.increaseTo(current1.add(web3.utils.toBN(50)));
+      await time.increaseTo(current1.add(BigNumber.from(50)));
 
       const userOf1 = await contractInstance.userOf(tokenId);
       expect(userOf1).to.be.equal(receiver.address);
 
       const current2 = await time.latest();
-      await time.increaseTo(current2.add(web3.utils.toBN(50)));
+      await time.increaseTo(current2.add(BigNumber.from(50)));
 
       const userOf2 = await contractInstance.userOf(tokenId);
       expect(userOf2).to.be.equal(ethers.constants.AddressZero);
@@ -53,7 +53,7 @@ export function shouldUserOf(factory: () => Promise<Contract>) {
       await contractInstance.mint(owner.address, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current.add(BigNumber.from(100));
 
       await contractInstance.setUser(tokenId, receiver.address, deadline.toString());
 

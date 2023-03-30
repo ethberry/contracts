@@ -9,7 +9,7 @@ export function shouldBehaveLikeWhiteListMe(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
 
       const tx = contractInstance.connect(receiver).testMe();
-      await expect(tx).to.be.revertedWith(`WhiteListError`).withArgs(receiver.address);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, `WhiteListError`).withArgs(receiver.address);
     });
 
     it("should pass", async function () {

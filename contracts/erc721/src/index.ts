@@ -1,5 +1,4 @@
-import "@nomiclabs/hardhat-waffle";
-import "@nomiclabs/hardhat-web3";
+import "@nomicfoundation/hardhat-toolbox";
 
 export * from "./base";
 export * from "./burnable/burn";

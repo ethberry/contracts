@@ -1,13 +1,8 @@
-import { use } from "chai";
-import { solidity } from "ethereum-waffle";
-
 import { InterfaceId } from "@gemunion/contracts-constants";
 import { shouldBehaveLikeOwnable, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
 import { shouldBehaveLikeERC20, shouldBehaveLikeERC20Burnable } from "../../src";
 import { deployERC20 } from "../../src/fixtures";
-
-use(solidity);
 
 describe("ERC20OB", function () {
   const factory = () => deployERC20(this.title);

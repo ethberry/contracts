@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { ethers, web3 } from "hardhat";
-import { Contract } from "ethers";
+import { ethers } from "hardhat";
+import { BigNumber, Contract } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
 import { tokenId } from "@gemunion/contracts-constants";
@@ -14,7 +14,7 @@ export function shouldSetUser(factory: () => Promise<Contract>) {
       await contractInstance.mint(owner.address, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current.add(BigNumber.from(100));
 
       await contractInstance.setUser(tokenId, receiver.address, deadline.toString());
 
@@ -30,7 +30,7 @@ export function shouldSetUser(factory: () => Promise<Contract>) {
       await contractInstance.mint(owner.address, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current.add(BigNumber.from(100));
 
       const tx = contractInstance.connect(receiver).setUser(tokenId, receiver.address, deadline.toString());
       await expect(tx).to.be.revertedWith("ERC721: transfer caller is not owner nor approved");
@@ -43,7 +43,7 @@ export function shouldSetUser(factory: () => Promise<Contract>) {
       await contractInstance.mint(owner.address, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current.add(BigNumber.from(100));
 
       await contractInstance.approve(receiver.address, tokenId);
       await contractInstance.setUser(tokenId, receiver.address, deadline.toString());
@@ -60,7 +60,7 @@ export function shouldSetUser(factory: () => Promise<Contract>) {
       await contractInstance.mint(owner.address, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current.add(BigNumber.from(100));
 
       await contractInstance.setApprovalForAll(receiver.address, true);
       await contractInstance.setUser(tokenId, receiver.address, deadline.toString());
@@ -77,7 +77,7 @@ export function shouldSetUser(factory: () => Promise<Contract>) {
       await contractInstance.mint(owner.address, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current.add(BigNumber.from(100));
 
       const tx = contractInstance.setUser(tokenId, receiver.address, deadline.toString());
 

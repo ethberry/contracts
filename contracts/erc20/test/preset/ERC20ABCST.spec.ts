@@ -1,6 +1,3 @@
-import { use } from "chai";
-import { solidity } from "ethereum-waffle";
-
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, SNAPSHOT_ROLE } from "@gemunion/contracts-constants";
 import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
@@ -12,8 +9,6 @@ import {
   shouldBehaveLikeERC20Snapshot,
 } from "../../src";
 import { deployERC20 } from "../../src/fixtures";
-
-use(solidity);
 
 describe("ERC20ABCST", function () {
   const factory = () => deployERC20(this.title);

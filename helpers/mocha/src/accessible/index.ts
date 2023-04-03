@@ -1,4 +1,4 @@
-import "@nomiclabs/hardhat-waffle";
+import "@nomicfoundation/hardhat-toolbox";
 import { Contract } from "ethers";
 
 import { shouldHaveRole } from "./hasRoles";

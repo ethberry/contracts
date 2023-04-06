@@ -1,5 +1,5 @@
 import { ethers } from "hardhat";
-import { utils } from "ethers";
+import { constants, utils } from "ethers";
 import { expect } from "chai";
 
 export async function deployLinkVrfFixtureV2() {
@@ -22,12 +22,12 @@ export async function deployLinkVrfFixtureV2() {
 
     const tx01 = linkInstance.transferAndCall(
       vrfInstance.address,
-      ethers.constants.WeiPerEther.mul(18),
-      utils.hexZeroPad(ethers.utils.hexlify(~~subsriptionId.toString()), 32),
+      constants.WeiPerEther.mul(18),
+      utils.hexZeroPad(utils.hexlify(~~subsriptionId.toString()), 32),
     );
     await expect(tx01)
       .to.emit(vrfInstance, "SubscriptionFunded")
-      .withArgs(subsriptionId, 0, ethers.constants.WeiPerEther.mul(18));
+      .withArgs(subsriptionId, 0, constants.WeiPerEther.mul(18));
   }
   // console.info(`VRF_ADDR=${vrfInstance.address}`);
   return { linkInstance, vrfInstance };

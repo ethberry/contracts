@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
-import { InterfaceId, DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@gemunion/contracts-constants";
 
 export function shouldSetDefaultRoyalty(factory: () => Promise<Contract>) {
   describe("setDefaultRoyalty", function () {
@@ -31,7 +31,7 @@ export function shouldSetDefaultRoyalty(factory: () => Promise<Contract>) {
 
       const royalty = 5000;
 
-      const tx = contractInstance.setDefaultRoyalty(ethers.constants.AddressZero, royalty);
+      const tx = contractInstance.setDefaultRoyalty(constants.AddressZero, royalty);
       await expect(tx).to.be.revertedWith("ERC2981: invalid receiver");
     });
 

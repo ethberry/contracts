@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 import { deployJerk } from "@gemunion/contracts-mocks";
@@ -64,7 +64,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>) {
 
       await contractInstance.mint(owner.address, amount);
       await contractInstance.approve(receiver.address, amount);
-      const tx = contractInstance.connect(receiver).transferFrom(owner.address, ethers.constants.AddressZero, amount);
+      const tx = contractInstance.connect(receiver).transferFrom(owner.address, constants.AddressZero, amount);
       await expect(tx).to.be.revertedWith(`ERC20: transfer to the zero address`);
     });
 

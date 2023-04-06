@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
@@ -18,7 +18,7 @@ export function shouldBurn(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
 
       const tx = contractInstance.burn(0);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, 0);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, constants.AddressZero, 0);
     });
 
     it("should burn tokens", async function () {
@@ -28,9 +28,7 @@ export function shouldBurn(factory: () => Promise<Contract>) {
       await contractInstance.mint(owner.address, amount);
 
       const tx = contractInstance.burn(amount);
-      await expect(tx)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, ethers.constants.AddressZero, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, constants.AddressZero, amount);
 
       const balance = await contractInstance.balanceOf(owner.address);
       expect(balance).to.equal(0);

@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
-import { InterfaceId, DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@gemunion/contracts-constants";
 
 export function shouldSetTokenRoyalty(factory: () => Promise<Contract>) {
   describe("setTokenRoyalty", function () {
@@ -31,7 +31,7 @@ export function shouldSetTokenRoyalty(factory: () => Promise<Contract>) {
 
       const royalty = 5000;
 
-      const tx = contractInstance.setTokenRoyalty(0, ethers.constants.AddressZero, royalty);
+      const tx = contractInstance.setTokenRoyalty(0, constants.AddressZero, royalty);
       await expect(tx).to.be.revertedWith("ERC2981: Invalid parameters");
     });
 

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 import { InterfaceId, tokenId } from "@gemunion/contracts-constants";
 
@@ -29,7 +29,7 @@ export function shouldMint(factory: () => Promise<Contract>, options: Record<str
       const tx = contractInstance.mint(owner.address, options.batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, owner.address, options.batchSize + tokenId);
+        .withArgs(constants.AddressZero, owner.address, options.batchSize + tokenId);
 
       const balance = await contractInstance.balanceOf(owner.address);
       expect(balance).to.equal(options.batchSize + 1);
@@ -42,7 +42,7 @@ export function shouldMint(factory: () => Promise<Contract>, options: Record<str
       const tx = contractInstance.mint(erc721NonReceiverInstance.address, options.batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, erc721NonReceiverInstance.address, options.batchSize + tokenId);
+        .withArgs(constants.AddressZero, erc721NonReceiverInstance.address, options.batchSize + tokenId);
     });
 
     it("should mint to receiver", async function () {
@@ -52,7 +52,7 @@ export function shouldMint(factory: () => Promise<Contract>, options: Record<str
       const tx = contractInstance.mint(erc721ReceiverInstance.address, options.batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, erc721ReceiverInstance.address, options.batchSize + tokenId);
+        .withArgs(constants.AddressZero, erc721ReceiverInstance.address, options.batchSize + tokenId);
 
       const balance = await contractInstance.balanceOf(erc721ReceiverInstance.address);
       expect(balance).to.equal(1);

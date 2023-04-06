@@ -1,6 +1,5 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
@@ -16,7 +15,7 @@ export function shouldFlashFee(factory: () => Promise<Contract>) {
     it("token mismatch", async function () {
       const contractInstance = await factory();
 
-      const tx = contractInstance.flashFee(ethers.constants.AddressZero, amount);
+      const tx = contractInstance.flashFee(constants.AddressZero, amount);
       await expect(tx).to.be.revertedWith("ERC20FlashMint: wrong token");
     });
   });

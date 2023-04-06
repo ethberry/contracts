@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
 
@@ -19,7 +19,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<Contract>, option
       await expect(tx1).to.not.be.reverted;
 
       const approved1 = await contractInstance.getApproved(options.batchSize + tokenId);
-      expect(approved1).to.equal(ethers.constants.AddressZero);
+      expect(approved1).to.equal(constants.AddressZero);
 
       const isApproved1 = await contractInstance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved1).to.equal(true);
@@ -28,7 +28,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<Contract>, option
       await expect(tx2).to.not.be.reverted;
 
       const approved3 = await contractInstance.getApproved(options.batchSize + tokenId);
-      expect(approved3).to.equal(ethers.constants.AddressZero);
+      expect(approved3).to.equal(constants.AddressZero);
 
       const isApproved2 = await contractInstance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved2).to.equal(false);

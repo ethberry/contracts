@@ -1,6 +1,5 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 export function shouldFlashFeeReceiver(factory: () => Promise<Contract>) {
   describe("flashFeeReceiver", function () {
@@ -8,7 +7,7 @@ export function shouldFlashFeeReceiver(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
 
       const flashFeeReceiver = await contractInstance.flashFeeReceiver();
-      expect(flashFeeReceiver).to.equal(ethers.constants.AddressZero);
+      expect(flashFeeReceiver).to.equal(constants.AddressZero);
     });
   });
 }

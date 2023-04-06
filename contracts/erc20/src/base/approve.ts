@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
@@ -9,7 +9,7 @@ export function shouldApprove(factory: () => Promise<Contract>) {
     it("should fail: approve to zero address", async function () {
       const contractInstance = await factory();
 
-      const tx = contractInstance.approve(ethers.constants.AddressZero, amount);
+      const tx = contractInstance.approve(constants.AddressZero, amount);
       await expect(tx).to.be.revertedWith("ERC20: approve to the zero address");
     });
 

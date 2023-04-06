@@ -97,7 +97,7 @@ describe("ERC721DropboxTest", function () {
 
       const tx1 = contractInstance
         .connect(receiver)
-        .redeem(nonce, receiver.address, tokenId, owner.address, ethers.utils.formatBytes32String("signature"));
+        .redeem(nonce, receiver.address, tokenId, owner.address, utils.formatBytes32String("signature"));
       await expect(tx1).to.be.revertedWith("ERC721Dropbox: Invalid signature");
     });
 

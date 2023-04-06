@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
@@ -22,7 +22,7 @@ export function shouldFlashCustom(factory: () => Promise<Contract>) {
       const tx1 = await contractInstance.mint(erc20FlashBorrowerInstance.address, borrowerInitialBalance);
       await expect(tx1)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, erc20FlashBorrowerInstance.address, borrowerInitialBalance);
+        .withArgs(constants.AddressZero, erc20FlashBorrowerInstance.address, borrowerInitialBalance);
 
       const balanceOf = await contractInstance.balanceOf(erc20FlashBorrowerInstance.address);
       expect(balanceOf).to.equal(borrowerInitialBalance);
@@ -32,7 +32,7 @@ export function shouldFlashCustom(factory: () => Promise<Contract>) {
       expect(flashFee).to.equal(customFlashFee);
 
       const feeReceiver = await contractInstance.flashFeeReceiver();
-      expect(feeReceiver).to.equal(ethers.constants.AddressZero);
+      expect(feeReceiver).to.equal(constants.AddressZero);
 
       const tx2 = await contractInstance.flashLoan(
         erc20FlashBorrowerInstance.address,
@@ -42,10 +42,10 @@ export function shouldFlashCustom(factory: () => Promise<Contract>) {
       );
       await expect(tx2)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, erc20FlashBorrowerInstance.address, amount);
+        .withArgs(constants.AddressZero, erc20FlashBorrowerInstance.address, amount);
       await expect(tx2)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(erc20FlashBorrowerInstance.address, ethers.constants.AddressZero, amount + customFlashFee);
+        .withArgs(erc20FlashBorrowerInstance.address, constants.AddressZero, amount + customFlashFee);
       await expect(tx2)
         .to.emit(erc20FlashBorrowerInstance, "BalanceOf")
         .withArgs(contractInstance.address, erc20FlashBorrowerInstance.address, borrowerInitialBalance + amount);
@@ -77,7 +77,7 @@ export function shouldFlashCustom(factory: () => Promise<Contract>) {
       const tx1 = await contractInstance.mint(erc20FlashBorrowerInstance.address, borrowerInitialBalance);
       await expect(tx1)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, erc20FlashBorrowerInstance.address, borrowerInitialBalance);
+        .withArgs(constants.AddressZero, erc20FlashBorrowerInstance.address, borrowerInitialBalance);
 
       const balanceOf1 = await contractInstance.balanceOf(erc20FlashBorrowerInstance.address);
       expect(balanceOf1).to.equal(borrowerInitialBalance);
@@ -102,10 +102,10 @@ export function shouldFlashCustom(factory: () => Promise<Contract>) {
 
       await expect(tx2)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, erc20FlashBorrowerInstance.address, amount);
+        .withArgs(constants.AddressZero, erc20FlashBorrowerInstance.address, amount);
       await expect(tx2)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(erc20FlashBorrowerInstance.address, ethers.constants.AddressZero, amount);
+        .withArgs(erc20FlashBorrowerInstance.address, constants.AddressZero, amount);
       await expect(tx2)
         .to.emit(contractInstance, "Transfer")
         .withArgs(erc20FlashBorrowerInstance.address, receiver.address, customFlashFee);

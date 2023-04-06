@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
@@ -30,7 +30,7 @@ export function shouldBalanceOf(factory: () => Promise<Contract>) {
 
       await contractInstance.mint(owner.address, amount);
 
-      const balance = await contractInstance.balanceOf(ethers.constants.AddressZero);
+      const balance = await contractInstance.balanceOf(constants.AddressZero);
       expect(balance).to.equal(0);
     });
   });

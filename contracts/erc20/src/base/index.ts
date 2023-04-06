@@ -15,3 +15,5 @@ export function shouldBehaveLikeERC20(factory: () => Promise<Contract>, options:
   shouldTransferFrom(factory);
   shouldApprove(factory);
 }
+
+export { shouldMint, shouldBalanceOf, shouldTransfer, shouldTransferFrom, shouldApprove };

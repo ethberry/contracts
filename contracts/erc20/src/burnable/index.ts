@@ -9,3 +9,5 @@ export function shouldBehaveLikeERC20Burnable(factory: () => Promise<Contract>) 
   shouldBurn(factory);
   shouldBurnFrom(factory);
 }
+
+export { shouldBalanceOf, shouldBurnFrom, shouldBurn };

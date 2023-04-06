@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { ethers, utils } from "hardhat";
-import { Contract } from "ethers";
+import { ethers } from "hardhat";
+import { Contract, utils } from "ethers";
 
 import { royalty } from "@gemunion/contracts-constants";
 

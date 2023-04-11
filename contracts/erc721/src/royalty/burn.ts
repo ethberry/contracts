@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 import { royalty, tokenId } from "@gemunion/contracts-constants";
 
@@ -20,7 +20,7 @@ export function shouldBurn(factory: () => Promise<Contract>, options: Record<str
       const tx = await contractInstance.burn(options.batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, ethers.constants.AddressZero, options.batchSize + tokenId);
+        .withArgs(owner.address, constants.AddressZero, options.batchSize + tokenId);
 
       const [receiver2, amount2] = await contractInstance.royaltyInfo(options.batchSize + tokenId, 1e6);
       expect(receiver2).to.equal(owner.address);

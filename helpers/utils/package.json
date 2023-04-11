@@ -17,13 +17,13 @@
     "@typechain/hardhat": "6.1.5",
     "chai": "4.3.7",
     "ethers": "5.7.2",
-    "hardhat": "2.13.0",
+    "hardhat": "2.13.1",
     "hardhat-gas-reporter": "1.0.9",
     "solidity-coverage": "0.8.2",
     "typechain": "8.1.1"
   },
   "devDependencies": {
-    "rimraf": "4.4.1"
+    "rimraf": "5.0.0"
   },
   "files": [
     "dist/*"
@@ -50,5 +50,5 @@
   "sideEffects": false,
   "title": "-=Gemun Ion Studio=-",
   "types": "./dist/index.d.ts",
-  "version": "2.0.2"
+  "version": "2.0.3"
 }

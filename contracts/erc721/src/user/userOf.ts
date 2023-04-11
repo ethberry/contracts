@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract, BigNumber } from "ethers";
+import { BigNumber, constants, Contract } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
 import { tokenId } from "@gemunion/contracts-constants";
@@ -19,7 +19,7 @@ export function shouldUserOf(factory: () => Promise<Contract>) {
       await contractInstance.setUser(tokenId, receiver.address, deadline.toString());
       const userOf = await contractInstance.userOf(tokenId);
 
-      expect(userOf).to.be.equal(ethers.constants.AddressZero);
+      expect(userOf).to.be.equal(constants.AddressZero);
     });
 
     it("should return 0, when time is expired", async function () {
@@ -43,7 +43,7 @@ export function shouldUserOf(factory: () => Promise<Contract>) {
       await time.increaseTo(current2.add(BigNumber.from(50)));
 
       const userOf2 = await contractInstance.userOf(tokenId);
-      expect(userOf2).to.be.equal(ethers.constants.AddressZero);
+      expect(userOf2).to.be.equal(constants.AddressZero);
     });
 
     it("Owner is still the owner of NFT", async function () {

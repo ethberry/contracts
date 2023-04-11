@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
 
@@ -23,11 +23,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: Re
       const contractInstance = await factory();
 
       await contractInstance.mint(owner.address, options.batchSize + tokenId);
-      const tx = contractInstance.transferFrom(
-        owner.address,
-        ethers.constants.AddressZero,
-        options.batchSize + tokenId,
-      );
+      const tx = contractInstance.transferFrom(owner.address, constants.AddressZero, options.batchSize + tokenId);
 
       await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
     });

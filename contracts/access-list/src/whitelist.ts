@@ -17,10 +17,11 @@ export function shouldBehaveLikeWhiteList(factory: () => Promise<Contract>) {
     });
 
     it("should check white list", async function () {
-      const [_owner, receiver] = await ethers.getSigners();
+      const [_owner, _receiver, stranger] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const isWhitelisted = await contractInstance.isWhitelisted(receiver.address);
+      // stranger is used to test erc20/erc721 tokens
+      const isWhitelisted = await contractInstance.isWhitelisted(stranger.address);
       expect(isWhitelisted).to.equal(false);
     });
 

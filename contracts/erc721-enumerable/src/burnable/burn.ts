@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 export function shouldBehaveLikeERC721Burnable(factory: () => Promise<Contract>) {
   describe("burn", function () {
@@ -21,7 +21,7 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<Contract>)
       await contractInstance.mint(owner.address);
       const tx = await contractInstance.burn(0);
 
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, 0);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, constants.AddressZero, 0);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
@@ -36,7 +36,7 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<Contract>)
 
       const tx = await contractInstance.burn(0);
 
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ethers.constants.AddressZero, 0);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, constants.AddressZero, 0);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);

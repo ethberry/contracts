@@ -13,3 +13,5 @@ export function shouldBehaveLikeERC20FlashLoan(factory: () => Promise<Contract>)
   shouldFlashLoan(factory);
   shouldFlashCustom(factory);
 }
+
+export { shouldMaxFlashLoan, shouldFlashFee, shouldFlashFeeReceiver, shouldFlashLoan, shouldFlashCustom };

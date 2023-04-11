@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 import { amount, InterfaceId } from "@gemunion/contracts-constants";
 
@@ -25,9 +25,7 @@ export function shouldMint(factory: () => Promise<Contract>, options: Record<str
       const contractInstance = await factory();
 
       const tx = contractInstance.mint(owner.address, amount);
-      await expect(tx)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, owner.address, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(constants.AddressZero, owner.address, amount);
 
       const balance = await contractInstance.balanceOf(owner.address);
       expect(balance).to.equal(amount);

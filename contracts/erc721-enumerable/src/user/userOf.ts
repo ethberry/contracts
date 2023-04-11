@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers, web3 } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
 export function shouldUserOf(factory: () => Promise<Contract>) {
@@ -17,7 +17,7 @@ export function shouldUserOf(factory: () => Promise<Contract>) {
       await contractInstance.setUser(0, receiver.address, deadline.toString());
       const userOf = await contractInstance.userOf(0);
 
-      expect(userOf).to.be.equal(ethers.constants.AddressZero);
+      expect(userOf).to.be.equal(constants.AddressZero);
     });
 
     it("should return 0, when time is expired", async function () {
@@ -41,7 +41,7 @@ export function shouldUserOf(factory: () => Promise<Contract>) {
       await time.increaseTo(current2.add(web3.utils.toBN(50)));
 
       const userOf2 = await contractInstance.userOf(0);
-      expect(userOf2).to.be.equal(ethers.constants.AddressZero);
+      expect(userOf2).to.be.equal(constants.AddressZero);
     });
 
     it("Owner is still the owner of NFT", async function () {

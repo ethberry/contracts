@@ -10,7 +10,7 @@ export function shouldSetTokenMetadata(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
 
       const tx = contractInstance.setTokenMetadata(0, [
-        { key: ethers.utils.keccak256(ethers.utils.toUtf8Bytes("GRADE")), value: 1337 },
+        { key: utils.keccak256(utils.toUtf8Bytes("GRADE")), value: 1337 },
       ]);
 
       await expect(tx).to.not.be.reverted;

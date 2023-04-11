@@ -10,7 +10,7 @@
   "devDependencies": {
     "dotenv": "16.0.3",
     "ethers": "5.7.2",
-    "rimraf": "4.4.1"
+    "rimraf": "5.0.0"
   },
   "files": [
     "dist/*"
@@ -37,5 +37,5 @@
   "sideEffects": false,
   "title": "-=Gemun Ion Studio=-",
   "types": "./dist/index.d.ts",
-  "version": "2.0.2"
+  "version": "2.0.3"
 }

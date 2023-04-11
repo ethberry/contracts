@@ -1,13 +1,13 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 export function shouldGetBalanceOf(factory: () => Promise<Contract>) {
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
       const contractInstance = await factory();
 
-      const tx = contractInstance.balanceOf(ethers.constants.AddressZero);
+      const tx = contractInstance.balanceOf(constants.AddressZero);
       await expect(tx).to.be.revertedWith(`ERC721: address zero is not a valid owner`);
     });
 

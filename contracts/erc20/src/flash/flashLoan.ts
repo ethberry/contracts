@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
@@ -20,10 +20,10 @@ export function shouldFlashLoan(factory: () => Promise<Contract>) {
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ethers.constants.AddressZero, erc20FlashBorrowerInstance.address, amount);
+        .withArgs(constants.AddressZero, erc20FlashBorrowerInstance.address, amount);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(erc20FlashBorrowerInstance.address, ethers.constants.AddressZero, amount);
+        .withArgs(erc20FlashBorrowerInstance.address, constants.AddressZero, amount);
       await expect(tx)
         .to.emit(erc20FlashBorrowerInstance, "BalanceOf")
         .withArgs(contractInstance.address, erc20FlashBorrowerInstance.address, amount);
@@ -97,7 +97,7 @@ export function shouldFlashLoan(factory: () => Promise<Contract>) {
       const tx = contractInstance.flashLoan(
         erc20FlashBorrowerInstance.address,
         contractInstance.address,
-        ethers.constants.MaxUint256,
+        constants.MaxUint256,
         data,
       );
       await expect(tx).to.be.revertedWith("ERC20FlashMint: amount exceeds maxFlashLoan");

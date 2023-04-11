@@ -27,7 +27,7 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<Contract>) {
 
       const chainId = await contractInstance.getChainId();
       const actual = await contractInstance.DOMAIN_SEPARATOR();
-      const expected = ethers.utils._TypedDataEncoder.hashDomain({
+      const expected = utils._TypedDataEncoder.hashDomain({
         name: tokenName,
         version: "1",
         chainId,

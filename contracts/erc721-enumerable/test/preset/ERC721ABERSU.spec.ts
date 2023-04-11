@@ -9,7 +9,7 @@ import {
   shouldBehaveLikeERC721UriStorage,
 } from "../../src";
 import { deployERC721 } from "../../src/fixtures";
-import { shouldBehaveLikeERC721Usable } from "../../src/user";
+import { shouldBehaveLikeERC721Rentable } from "../../src/user";
 
 describe("ERC721ABERSU", function () {
   const factory = () => deployERC721(this.title);
@@ -21,7 +21,7 @@ describe("ERC721ABERSU", function () {
   shouldBehaveLikeERC721Enumerable(factory);
   shouldBehaveLikeERC721Royalty(factory);
   shouldBehaveLikeERC721UriStorage(factory);
-  shouldBehaveLikeERC721Usable(factory);
+  shouldBehaveLikeERC721Rentable(factory);
 
   shouldSupportsInterface(factory)(
     InterfaceId.IERC165,

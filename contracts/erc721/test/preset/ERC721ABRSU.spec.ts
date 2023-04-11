@@ -6,7 +6,7 @@ import {
   shouldBehaveLikeERC721Burnable,
   shouldBehaveLikeERC721Royalty,
   shouldBehaveLikeERC721UriStorage,
-  shouldBehaveLikeERC721Usable,
+  shouldBehaveLikeERC721Rentable,
 } from "../../src";
 import { deployERC721 } from "../../src/fixtures";
 
@@ -18,7 +18,7 @@ describe("ERC721ABRSU", function () {
   shouldBehaveLikeERC721Burnable(factory);
   shouldBehaveLikeERC721Royalty(factory);
   shouldBehaveLikeERC721UriStorage(factory);
-  shouldBehaveLikeERC721Usable(factory);
+  shouldBehaveLikeERC721Rentable(factory);
 
   shouldSupportsInterface(factory)(
     InterfaceId.IERC165,

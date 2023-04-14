@@ -15,7 +15,7 @@
     "@nomicfoundation/hardhat-chai-matchers": "1.0.6",
     "@nomicfoundation/hardhat-network-helpers": "1.0.8",
     "@nomicfoundation/hardhat-toolbox": "2.0.2",
-    "@nomiclabs/hardhat-ethers": "2.2.2",
+    "@nomiclabs/hardhat-ethers": "2.2.3",
     "@nomiclabs/hardhat-etherscan": "3.1.7",
     "@typechain/ethers-v5": "10.2.0",
     "@typechain/hardhat": "6.1.5",
@@ -28,7 +28,7 @@
   "description": "Collection of contracts and presets",
   "devDependencies": {
     "@ethersproject/networks": "5.7.1",
-    "@openzeppelin/contracts": "4.8.2",
+    "@openzeppelin/contracts": "4.8.3",
     "@types/chai": "4.3.4",
     "@types/mocha": "10.0.1",
     "@types/node": "18.15.11",
@@ -47,7 +47,7 @@
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-polygon",
   "peerDependencies": {
-    "@openzeppelin/contracts": "4.8.2",
+    "@openzeppelin/contracts": "4.8.3",
     "ethers": "5.7.2"
   },
   "publishConfig": {

@@ -2,9 +2,11 @@
 
 pragma solidity ^0.8.13;
 
+import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+
 import "../interfaces/IERC4907.sol";
 
-abstract contract ERC4907 is IERC4907 {
+abstract contract ERC4907 is IERC4907, ERC165 {
   struct UserInfo {
     address user; // address of user role
     uint64 expires; // unix timestamp, user expires
@@ -46,9 +48,8 @@ abstract contract ERC4907 is IERC4907 {
   }
 
   /// @dev See {IERC165-supportsInterface}.
-  function supportsInterface(bytes4 interfaceId) public view virtual returns (bool) {
-    return interfaceId == type(IERC4907).interfaceId;
-    // super.supportsInterface(interfaceId);
+  function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+    return interfaceId == type(IERC4907).interfaceId || super.supportsInterface(interfaceId);
   }
 
   function _isApprovedOrOwner(address owner, uint256 tokenId) internal view virtual returns (bool);

@@ -21,6 +21,7 @@ export enum InterfaceId {
   Invalid = "0xffffffff",
   IERC1363 = "0xb0202a11",
   IERC1363Receiver = "0x88a7ca5c",
+  IERC1363Spender = "0x7b04a2d0",
   IERC4906 = "0x49064906",
   IERC4907 = "0xad092b5c",
 }

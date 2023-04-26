@@ -3,14 +3,15 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
+import { TMintERC20Fn } from "../shared/interfaces/IERC20MintFn";
 
-export function shouldBalanceOf(factory: () => Promise<Contract>) {
+export function shouldBalanceOf(factory: () => Promise<Contract>, mint: TMintERC20Fn) {
   describe("balanceOf", function () {
     it("should get balance of owner", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address);
 
       const balance = await contractInstance.balanceOf(owner.address);
       expect(balance).to.equal(amount);
@@ -28,7 +29,7 @@ export function shouldBalanceOf(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address);
 
       const balance = await contractInstance.balanceOf(constants.AddressZero);
       expect(balance).to.equal(0);

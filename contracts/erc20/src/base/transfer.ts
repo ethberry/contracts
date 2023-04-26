@@ -4,8 +4,9 @@ import { Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 import { deployJerk } from "@gemunion/contracts-mocks";
+import { TMintERC20Fn } from "../shared/interfaces/IERC20MintFn";
 
-export function shouldTransfer(factory: () => Promise<Contract>) {
+export function shouldTransfer(factory: () => Promise<Contract>, mint: TMintERC20Fn) {
   describe("transfer", function () {
     it("should fail: transfer amount exceeds balance", async function () {
       const [_owner, receiver] = await ethers.getSigners();
@@ -19,7 +20,7 @@ export function shouldTransfer(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address);
 
       const tx = contractInstance.transfer(receiver.address, amount);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, amount);
@@ -36,7 +37,7 @@ export function shouldTransfer(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
       const erc20NonReceiverInstance = await deployJerk();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address);
 
       const tx = contractInstance.transfer(erc20NonReceiverInstance.address, amount);
       await expect(tx)

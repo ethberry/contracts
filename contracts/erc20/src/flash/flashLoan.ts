@@ -5,14 +5,15 @@ import { constants, Contract } from "ethers";
 import { amount } from "@gemunion/contracts-constants";
 
 import { deployErc20Borrower } from "./fixtures";
+import { TMintAmountERC20Fn } from "../shared/interfaces/IERC20MintFn";
 
-export function shouldFlashLoan(factory: () => Promise<Contract>) {
+export function shouldFlashLoan(factory: () => Promise<Contract>, mint: TMintAmountERC20Fn) {
   describe("flashLoan", function () {
     it("success", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address, amount);
 
       const erc20FlashBorrowerInstance = await deployErc20Borrower();
 
@@ -45,7 +46,7 @@ export function shouldFlashLoan(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address, amount);
 
       const erc20FlashBorrower = await ethers.getContractFactory("ERC3156FlashBorrowerMock");
       const erc20FlashBorrowerInstance = await erc20FlashBorrower.deploy(false, true);
@@ -58,7 +59,7 @@ export function shouldFlashLoan(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address, amount);
 
       const erc20FlashBorrower = await ethers.getContractFactory("ERC3156FlashBorrowerMock");
       const erc20FlashBorrowerInstance = await erc20FlashBorrower.deploy(true, false);
@@ -71,7 +72,7 @@ export function shouldFlashLoan(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address, amount);
 
       const erc20FlashBorrower = await ethers.getContractFactory("ERC3156FlashBorrowerMock");
       const erc20FlashBorrowerInstance = await erc20FlashBorrower.deploy(true, true);
@@ -86,7 +87,7 @@ export function shouldFlashLoan(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address, amount);
 
       const erc20FlashBorrower = await ethers.getContractFactory("ERC3156FlashBorrowerMock");
       const erc20FlashBorrowerInstance = await erc20FlashBorrower.deploy(true, true);

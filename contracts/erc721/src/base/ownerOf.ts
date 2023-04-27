@@ -3,14 +3,19 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
+import { TMintERC721Fn } from "../shared/interfaces/IMintERC721Fn";
 
-export function shouldGetOwnerOf(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
+export function shouldGetOwnerOf(
+  factory: () => Promise<Contract>,
+  mint: TMintERC721Fn,
+  options: Record<string, any> = {},
+) {
   describe("ownerOf", function () {
     it("should get owner of token", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
       const ownerOfToken = await contractInstance.ownerOf(options.batchSize + tokenId);
       expect(ownerOfToken).to.equal(owner.address);
     });
@@ -19,7 +24,7 @@ export function shouldGetOwnerOf(factory: () => Promise<Contract>, options: Reco
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
       const tx = contractInstance.burn(options.batchSize + tokenId);
       await expect(tx).to.not.be.reverted;
 

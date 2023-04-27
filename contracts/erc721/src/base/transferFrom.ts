@@ -3,14 +3,19 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
+import { TMintERC721Fn } from "../shared/interfaces/IMintERC721Fn";
 
-export function shouldTransferFrom(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
+export function shouldTransferFrom(
+  factory: () => Promise<Contract>,
+  mint: TMintERC721Fn,
+  options: Record<string, any> = {},
+) {
   describe("transferFrom", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
       const tx = contractInstance
         .connect(receiver)
         .transferFrom(owner.address, receiver.address, options.batchSize + tokenId);
@@ -22,7 +27,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: Re
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
       const tx = contractInstance.transferFrom(owner.address, constants.AddressZero, options.batchSize + tokenId);
 
       await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
@@ -32,7 +37,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: Re
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
       const tx = contractInstance.transferFrom(owner.address, receiver.address, options.batchSize + tokenId);
 
       await expect(tx)
@@ -50,7 +55,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: Re
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
       await contractInstance.approve(receiver.address, options.batchSize + tokenId);
 
       const tx = contractInstance

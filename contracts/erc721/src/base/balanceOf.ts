@@ -3,8 +3,13 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
+import { TMintERC721Fn } from "../shared/interfaces/IMintERC721Fn";
 
-export function shouldGetBalanceOf(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
+export function shouldGetBalanceOf(
+  factory: () => Promise<Contract>,
+  mint: TMintERC721Fn,
+  options: Record<string, any> = {},
+) {
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
       const contractInstance = await factory();
@@ -17,7 +22,7 @@ export function shouldGetBalanceOf(factory: () => Promise<Contract>, options: Re
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
       const balance = await contractInstance.balanceOf(owner.address);
       expect(balance).to.equal(options.batchSize + 1);
     });
@@ -26,7 +31,7 @@ export function shouldGetBalanceOf(factory: () => Promise<Contract>, options: Re
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
       const balance = await contractInstance.balanceOf(receiver.address);
       expect(balance).to.equal(0);
     });

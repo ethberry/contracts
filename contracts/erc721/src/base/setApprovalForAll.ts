@@ -3,14 +3,19 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
+import { TMintERC721Fn } from "../shared/interfaces/IMintERC721Fn";
 
-export function shouldSetApprovalForAll(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
+export function shouldSetApprovalForAll(
+  factory: () => Promise<Contract>,
+  mint: TMintERC721Fn,
+  options: Record<string, any> = {},
+) {
   describe("setApprovalForAll", function () {
     it("should approve for all", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(options.batchSize + 1);

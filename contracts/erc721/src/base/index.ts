@@ -10,9 +10,12 @@ import { shouldSafeMint } from "./safeMint";
 import { shouldGetOwnerOf } from "./ownerOf";
 import { shouldApprove } from "./approve";
 import { shouldTransferFrom } from "./transferFrom";
+import { IMintERC721Fns } from "../shared/interfaces/IMintERC721Fn";
+import { defaultMintERC721Fns } from "../shared/defaultMintERC721";
 
 export function shouldBehaveLikeERC721(
   factory: () => Promise<Contract>,
+  fns: IMintERC721Fns = defaultMintERC721Fns,
   options: Record<string, any> = {
     minterRole: MINTER_ROLE,
     batchSize: 0,
@@ -26,12 +29,15 @@ export function shouldBehaveLikeERC721(
     },
     options,
   );
-  shouldMint(factory, options);
-  shouldSafeMint(factory, options);
-  shouldGetOwnerOf(factory, options);
-  shouldApprove(factory, options);
-  shouldSetApprovalForAll(factory, options);
-  shouldGetBalanceOf(factory, options);
-  shouldTransferFrom(factory, options);
-  shouldSafeTransferFrom(factory, options);
+  fns = Object.assign({}, defaultMintERC721Fns, fns);
+  const { mint, safeMint } = fns;
+
+  shouldMint(factory, mint, options);
+  shouldSafeMint(factory, safeMint, options);
+  shouldGetOwnerOf(factory, mint, options);
+  shouldApprove(factory, mint, options);
+  shouldSetApprovalForAll(factory, mint, options);
+  shouldGetBalanceOf(factory, mint, options);
+  shouldTransferFrom(factory, mint, options);
+  shouldSafeTransferFrom(factory, mint, options);
 }

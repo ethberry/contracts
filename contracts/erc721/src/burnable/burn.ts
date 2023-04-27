@@ -3,9 +3,12 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
+import { TMintERC721Fn } from "../shared/interfaces/IMintERC721Fn";
+import { defaultMintERC721 } from "../shared/defaultMintERC721";
 
 export function shouldBehaveLikeERC721Burnable(
   factory: () => Promise<Contract>,
+  mint: TMintERC721Fn = defaultMintERC721,
   options: Record<string, any> = {
     batchSize: 0,
   },
@@ -15,7 +18,7 @@ export function shouldBehaveLikeERC721Burnable(
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
       const tx = contractInstance.connect(receiver).burn(options.batchSize + tokenId);
 
       await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
@@ -25,7 +28,7 @@ export function shouldBehaveLikeERC721Burnable(
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
       const tx = await contractInstance.burn(options.batchSize + tokenId);
 
       await expect(tx)
@@ -40,7 +43,7 @@ export function shouldBehaveLikeERC721Burnable(
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
       await contractInstance.approve(receiver.address, options.batchSize + tokenId);
 
       const tx = await contractInstance.burn(options.batchSize + tokenId);

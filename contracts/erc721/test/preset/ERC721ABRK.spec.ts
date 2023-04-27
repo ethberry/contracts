@@ -14,9 +14,9 @@ describe("ERC721ABRK", function () {
 
   shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
 
-  shouldBehaveLikeERC721(factory, { batchSize });
-  shouldBehaveLikeERC721Burnable(factory, { batchSize });
-  shouldBehaveLikeERC721Royalty(factory, { batchSize });
+  shouldBehaveLikeERC721(factory, undefined, { batchSize });
+  shouldBehaveLikeERC721Burnable(factory, undefined, { batchSize });
+  shouldBehaveLikeERC721Royalty(factory, undefined, { batchSize });
   shouldBehaveLikeERC721Consecutive(factory, { batchSize });
 
   shouldSupportsInterface(factory)(

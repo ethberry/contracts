@@ -3,14 +3,20 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
+import { TMintERC721Fn } from "../shared/interfaces/IMintERC721Fn";
 
-export function shouldApprove(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
+export function shouldApprove(
+  factory: () => Promise<Contract>,
+  mint: TMintERC721Fn,
+  options: Record<string, any> = {},
+) {
   describe("approve", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
+      // await contractInstance.mint(owner.address, options.batchSize + tokenId);
       const tx = contractInstance.connect(receiver).approve(owner.address, options.batchSize + tokenId);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
@@ -19,7 +25,7 @@ export function shouldApprove(factory: () => Promise<Contract>, options: Record<
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
       const tx = contractInstance.approve(owner.address, options.batchSize + tokenId);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
@@ -28,7 +34,7 @@ export function shouldApprove(factory: () => Promise<Contract>, options: Record<
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
 
       const tx = contractInstance.approve(receiver.address, options.batchSize + tokenId);
       await expect(tx)

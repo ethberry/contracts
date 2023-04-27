@@ -10,16 +10,31 @@ import { shouldURI } from "./uri";
 import { shouldSetApprovalForAll } from "./setApprovalForAll";
 import { shouldSafeTransferFrom } from "./safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "./safeBatchTransferFrom";
+import { IMintERC1155Fns } from "../shared/interfaces/IMintERC1155Fn";
+import { defaultMintERC1155Fns } from "../shared/defaultMintERC1155";
 
-export function shouldBehaveLikeERC1155(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
-  shouldMint(factory, Object.assign({ minterRole: MINTER_ROLE }, options));
-  shouldMintBatch(factory, Object.assign({ minterRole: MINTER_ROLE }, options));
-  shouldBalanceOf(factory);
-  shouldBalanceOfBatch(factory);
+export function shouldBehaveLikeERC1155(
+  factory: () => Promise<Contract>,
+  fns: IMintERC1155Fns = defaultMintERC1155Fns,
+  options: Record<string, any> = {},
+) {
+  const { mint, mintBatch } = Object.assign({}, defaultMintERC1155Fns, fns);
+  options = Object.assign(
+    {},
+    {
+      minterRole: MINTER_ROLE,
+    },
+    options,
+  );
+
+  shouldMint(factory, mint, options);
+  shouldMintBatch(factory, mintBatch, options);
+  shouldBalanceOf(factory, mint);
+  shouldBalanceOfBatch(factory, mint);
   shouldURI(factory);
-  shouldSetApprovalForAll(factory);
-  shouldSafeTransferFrom(factory);
-  shouldSafeBatchTransferFrom(factory);
+  shouldSetApprovalForAll(factory, mint);
+  shouldSafeTransferFrom(factory, mint);
+  shouldSafeBatchTransferFrom(factory, mint);
 }
 
 export {

@@ -3,8 +3,13 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { deployWallet } from "@gemunion/contracts-mocks";
+import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721Fn";
+import { defaultMintERC721Enum } from "../shared/defaultMintERC721";
 
-export function shouldBehaveLikeERC721Enumerable(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeERC721Enumerable(
+  factory: () => Promise<Contract>,
+  mint: TMintERC721EnumFn = defaultMintERC721Enum,
+) {
   describe("tokenOfOwnerByIndex", function () {
     it("should match the token number of the owner", async function () {
       const [owner] = await ethers.getSigners();
@@ -12,7 +17,7 @@ export function shouldBehaveLikeERC721Enumerable(factory: () => Promise<Contract
 
       const erc721ReceiverInstance = await deployWallet();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const tx = contractInstance["safeTransferFrom(address,address,uint256)"](
         owner.address,
         erc721ReceiverInstance.address,

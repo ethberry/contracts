@@ -3,14 +3,19 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
+import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721Fn";
+import { defaultMintERC721Enum } from "../shared/defaultMintERC721";
 
-export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
+export function shouldSafeTransferFrom(
+  factory: () => Promise<Contract>,
+  mint: TMintERC721EnumFn = defaultMintERC721Enum,
+) {
   describe("safeTransferFrom", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const tx = contractInstance
         .connect(receiver)
         ["safeTransferFrom(address,address,uint256)"](owner.address, receiver.address, 0);
@@ -24,7 +29,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
 
       const erc721ReceiverInstance = await deployWallet();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const tx = contractInstance["safeTransferFrom(address,address,uint256)"](
         owner.address,
         erc721ReceiverInstance.address,
@@ -45,7 +50,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
       const erc721NonReceiverInstance = await deployJerk();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const tx = contractInstance["safeTransferFrom(address,address,uint256)"](
         owner.address,
         erc721NonReceiverInstance.address,
@@ -60,7 +65,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
 
       const erc721ReceiverInstance = await deployWallet();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       await contractInstance.approve(receiver.address, 0);
 
       const tx = contractInstance
@@ -82,7 +87,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
 
       const erc721NonReceiverInstance = await deployJerk();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       await contractInstance.approve(receiver.address, 0);
 
       const tx = contractInstance

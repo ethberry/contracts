@@ -1,14 +1,16 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
+import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721Fn";
+import { defaultMintERC721Enum } from "../shared/defaultMintERC721";
 
-export function shouldApprove(factory: () => Promise<Contract>) {
+export function shouldApprove(factory: () => Promise<Contract>, mint: TMintERC721EnumFn = defaultMintERC721Enum) {
   describe("approve", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const tx = contractInstance.connect(receiver).approve(owner.address, 0);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
@@ -17,7 +19,7 @@ export function shouldApprove(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const tx = contractInstance.approve(owner.address, 0);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
@@ -26,7 +28,7 @@ export function shouldApprove(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
 
       const tx = contractInstance.approve(receiver.address, 0);
       await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner.address, receiver.address, 0);

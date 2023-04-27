@@ -1,8 +1,10 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
+import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721Fn";
+import { defaultMintERC721Enum } from "../shared/defaultMintERC721";
 
-export function shouldGetBalanceOf(factory: () => Promise<Contract>) {
+export function shouldGetBalanceOf(factory: () => Promise<Contract>, mint: TMintERC721EnumFn = defaultMintERC721Enum) {
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
       const contractInstance = await factory();
@@ -15,7 +17,7 @@ export function shouldGetBalanceOf(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const balance = await contractInstance.balanceOf(owner.address);
       expect(balance).to.equal(1);
     });
@@ -24,7 +26,7 @@ export function shouldGetBalanceOf(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const balance = await contractInstance.balanceOf(receiver.address);
       expect(balance).to.equal(0);
     });

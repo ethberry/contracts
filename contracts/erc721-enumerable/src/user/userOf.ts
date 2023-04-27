@@ -2,14 +2,16 @@ import { expect } from "chai";
 import { ethers, web3 } from "hardhat";
 import { constants, Contract } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
+import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721Fn";
+import { defaultMintERC721Enum } from "../shared/defaultMintERC721";
 
-export function shouldUserOf(factory: () => Promise<Contract>) {
+export function shouldUserOf(factory: () => Promise<Contract>, mint: TMintERC721EnumFn = defaultMintERC721Enum) {
   describe("userOf", function () {
     it("should return 0", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
 
       const current = await time.latest();
       const deadline = current.sub(web3.utils.toBN(1));
@@ -24,7 +26,7 @@ export function shouldUserOf(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
@@ -48,7 +50,7 @@ export function shouldUserOf(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));

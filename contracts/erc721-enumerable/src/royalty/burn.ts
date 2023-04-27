@@ -3,15 +3,17 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { royalty } from "@gemunion/contracts-constants";
+import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721Fn";
+import { defaultMintERC721Enum } from "../shared/defaultMintERC721";
 
-export function shouldBurn(factory: () => Promise<Contract>) {
+export function shouldBurn(factory: () => Promise<Contract>, mint: TMintERC721EnumFn = defaultMintERC721Enum) {
   describe("burn", function () {
     it("should reset token royalty info", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address); // 0
-      await contractInstance.mint(owner.address); // 1
+      await mint(contractInstance, owner, owner.address); // 0
+      await mint(contractInstance, owner, owner.address); // 1
 
       await contractInstance.setTokenRoyalty(1, owner.address, royalty * 2);
       const [receiver, amount] = await contractInstance.royaltyInfo(1, 1e6);

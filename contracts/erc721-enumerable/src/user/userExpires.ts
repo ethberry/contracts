@@ -2,8 +2,8 @@ import { expect } from "chai";
 import { ethers, web3 } from "hardhat";
 import { Contract } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
-import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721Fn";
-import { defaultMintERC721Enum } from "../shared/defaultMintERC721";
+import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721EnumFn";
+import { defaultMintERC721Enum } from "../shared/defaultMintERC721Enum";
 
 export function shouldUserExprires(factory: () => Promise<Contract>, mint: TMintERC721EnumFn = defaultMintERC721Enum) {
   describe("userExprires", function () {

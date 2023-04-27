@@ -11,8 +11,8 @@ import { shouldGetOwnerOf } from "./ownerOf";
 import { shouldApprove } from "./approve";
 import { shouldTransferFrom } from "./transferFrom";
 import { getGetCurrentTokenIndex } from "./getCurrentTokenIndex";
-import { IMintERC721EnumFns } from "../shared/interfaces/IMintERC721Fn";
-import { defaultMintERC721Fns } from "../shared/defaultMintERC721";
+import { IMintERC721EnumFns } from "../shared/interfaces/IMintERC721EnumFn";
+import { defaultMintERC721Fns } from "../shared/defaultMintERC721Enum";
 
 export function shouldBehaveLikeERC721(
   factory: () => Promise<Contract>,

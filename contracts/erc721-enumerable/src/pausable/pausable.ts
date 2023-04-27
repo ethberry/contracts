@@ -3,8 +3,8 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { PAUSER_ROLE } from "@gemunion/contracts-constants";
-import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721Fn";
-import { defaultMintERC721Enum } from "../shared/defaultMintERC721";
+import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721EnumFn";
+import { defaultMintERC721Enum } from "../shared/defaultMintERC721Enum";
 
 export function shouldBehaveLikeERC721Pausable(
   factory: () => Promise<Contract>,

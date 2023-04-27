@@ -5,8 +5,8 @@ import { constants, Contract } from "ethers";
 import { InterfaceId } from "@gemunion/contracts-constants";
 
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
-import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721Fn";
-import { defaultSafeMintERC721Enum } from "../shared/defaultMintERC721";
+import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721EnumFn";
+import { defaultSafeMintERC721Enum } from "../shared/defaultMintERC721Enum";
 
 export function shouldSafeMint(
   factory: () => Promise<Contract>,

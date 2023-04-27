@@ -3,8 +3,8 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { royalty } from "@gemunion/contracts-constants";
-import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721Fn";
-import { defaultMintERC721Enum } from "../shared/defaultMintERC721";
+import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721EnumFn";
+import { defaultMintERC721Enum } from "../shared/defaultMintERC721Enum";
 
 export function shouldBurn(factory: () => Promise<Contract>, mint: TMintERC721EnumFn = defaultMintERC721Enum) {
   describe("burn", function () {

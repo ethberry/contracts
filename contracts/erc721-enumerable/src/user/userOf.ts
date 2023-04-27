@@ -2,8 +2,8 @@ import { expect } from "chai";
 import { ethers, web3 } from "hardhat";
 import { constants, Contract } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
-import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721Fn";
-import { defaultMintERC721Enum } from "../shared/defaultMintERC721";
+import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721EnumFn";
+import { defaultMintERC721Enum } from "../shared/defaultMintERC721Enum";
 
 export function shouldUserOf(factory: () => Promise<Contract>, mint: TMintERC721EnumFn = defaultMintERC721Enum) {
   describe("userOf", function () {

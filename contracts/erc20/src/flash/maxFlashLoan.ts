@@ -3,9 +3,13 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
-import { TMintAmountERC20Fn } from "../shared/interfaces/IERC20MintFn";
 
-export function shouldMaxFlashLoan(factory: () => Promise<Contract>, mint: TMintAmountERC20Fn) {
+import type { IERC20Options } from "../shared/defaultMint";
+import { defaultMintERC20 } from "../shared/defaultMint";
+
+export function shouldMaxFlashLoan(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+  const { mint = defaultMintERC20 } = options;
+
   describe("maxFlashLoan", function () {
     it("token match (zero)", async function () {
       const contractInstance = await factory();

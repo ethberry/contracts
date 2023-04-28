@@ -4,10 +4,13 @@ import { Contract } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
 import { tokenId } from "@gemunion/contracts-constants";
-import { TMintERC721Fn } from "../shared/interfaces/IMintERC721Fn";
-import { defaultMintERC721 } from "../shared/defaultMintERC721";
 
-export function shouldSetUser(factory: () => Promise<Contract>, mint: TMintERC721Fn = defaultMintERC721) {
+import type { IERC721Options } from "../shared/defaultMint";
+import { defaultMintERC721 } from "../shared/defaultMint";
+
+export function shouldSetUser(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+  const { mint = defaultMintERC721 } = options;
+
   describe("setUser", function () {
     it("should set a user to a token", async function () {
       const [owner, receiver] = await ethers.getSigners();

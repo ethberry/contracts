@@ -4,9 +4,12 @@ import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
-import { TMintERC20Fn } from "../shared/interfaces/IERC20MintFn";
+import type { IERC20Options } from "../shared/defaultMint";
+import { defaultMintERC20 } from "../shared/defaultMint";
 
-export function shouldBurnFrom(factory: () => Promise<Contract>, mint: TMintERC20Fn) {
+export function shouldBurnFrom(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+  const { mint = defaultMintERC20 } = options;
+
   describe("burnFrom", function () {
     it("should fail: not allowed", async function () {
       const [owner, receiver] = await ethers.getSigners();

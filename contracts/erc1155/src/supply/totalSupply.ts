@@ -3,15 +3,14 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
-import { IMintERC1155Fns } from "../shared/interfaces/IMintERC1155Fn";
-import { defaultMintERC1155Fns } from "../shared/defaultMintERC1155";
 
-export function shouldGetTotalSupply(
-  factory: () => Promise<Contract>,
-  mintFns: IMintERC1155Fns = defaultMintERC1155Fns,
-) {
+import type { IERC1155Options } from "../shared/defaultMint";
+import { defaultMintBatchERC1155, defaultMintERC1155 } from "../shared/defaultMint";
+
+export function shouldGetTotalSupply(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+  const { mint = defaultMintERC1155, mintBatch = defaultMintBatchERC1155 } = options;
+
   describe("totalSupply", function () {
-    const { mint, mintBatch } = mintFns;
     it("should get total supply (mint)", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();

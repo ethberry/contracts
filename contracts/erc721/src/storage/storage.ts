@@ -3,13 +3,13 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
-import { TMintERC721Fn } from "../shared/interfaces/IMintERC721Fn";
-import { defaultMintERC721 } from "../shared/defaultMintERC721";
 
-export function shouldBehaveLikeERC721UriStorage(
-  factory: () => Promise<Contract>,
-  mint: TMintERC721Fn = defaultMintERC721,
-) {
+import type { IERC721Options } from "../shared/defaultMint";
+import { defaultMintERC721 } from "../shared/defaultMint";
+
+export function shouldBehaveLikeERC721UriStorage(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+  const { mint = defaultMintERC721 } = options;
+
   describe("tokenURI", function () {
     it("should get default token URI", async function () {
       const [owner] = await ethers.getSigners();

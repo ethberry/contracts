@@ -3,21 +3,20 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
-import { TMintERC721Fn } from "../shared/interfaces/IMintERC721Fn";
 
-export function shouldApprove(
-  factory: () => Promise<Contract>,
-  mint: TMintERC721Fn,
-  options: Record<string, any> = {},
-) {
+import type { IERC721Options } from "../shared/defaultMint";
+import { defaultMintERC721 } from "../shared/defaultMint";
+
+export function shouldApprove(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+  const { mint = defaultMintERC721, batchSize = 0 } = options;
+
   describe("approve", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
-      // await contractInstance.mint(owner.address, options.batchSize + tokenId);
-      const tx = contractInstance.connect(receiver).approve(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
+      const tx = contractInstance.connect(receiver).approve(owner.address, batchSize + tokenId);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
 
@@ -25,8 +24,8 @@ export function shouldApprove(
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
-      const tx = contractInstance.approve(owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
+      const tx = contractInstance.approve(owner.address, batchSize + tokenId);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });
 
@@ -34,23 +33,23 @@ export function shouldApprove(
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
 
-      const tx = contractInstance.approve(receiver.address, options.batchSize + tokenId);
+      const tx = contractInstance.approve(receiver.address, batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Approval")
-        .withArgs(owner.address, receiver.address, options.batchSize + tokenId);
+        .withArgs(owner.address, receiver.address, batchSize + tokenId);
 
-      const approved = await contractInstance.getApproved(options.batchSize + tokenId);
+      const approved = await contractInstance.getApproved(batchSize + tokenId);
       expect(approved).to.equal(receiver.address);
 
-      const tx1 = contractInstance.connect(receiver).burn(options.batchSize + tokenId);
+      const tx1 = contractInstance.connect(receiver).burn(batchSize + tokenId);
       await expect(tx1)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, constants.AddressZero, options.batchSize + tokenId);
+        .withArgs(owner.address, constants.AddressZero, batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(options.batchSize);
+      expect(balanceOfOwner).to.equal(batchSize);
     });
   });
 }

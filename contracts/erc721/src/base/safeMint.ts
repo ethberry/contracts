@@ -2,28 +2,26 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
-import { InterfaceId, tokenId } from "@gemunion/contracts-constants";
-
+import { InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
-import { TMintERC721Fn } from "../shared/interfaces/IMintERC721Fn";
 
-export function shouldSafeMint(
-  factory: () => Promise<Contract>,
-  mint: TMintERC721Fn,
-  options: Record<string, any> = {},
-) {
+import type { IERC721Options } from "../shared/defaultMint";
+import { defaultSafeMintERC721 } from "../shared/defaultMint";
+
+export function shouldSafeMint(factory: () => Promise<Contract>, options: IERC721Options = {}) {
   describe("safeMint", function () {
+    const { safeMint = defaultSafeMintERC721, minterRole = MINTER_ROLE, batchSize = 0 } = options;
+
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
-      const tx = mint(contractInstance, receiver, receiver.address, options.batchSize + tokenId);
-      // const tx = contractInstance.connect(receiver).safeMint(receiver.address, options.batchSize + tokenId);
+      const tx = safeMint(contractInstance, receiver, receiver.address, batchSize + tokenId);
       await expect(tx).to.be.revertedWith(
         supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${options.minterRole}`
+          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${minterRole}`
           : "Ownable: caller is not the owner",
       );
     });
@@ -32,13 +30,13 @@ export function shouldSafeMint(
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
+      const tx = safeMint(contractInstance, owner, owner.address, batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(constants.AddressZero, owner.address, options.batchSize + tokenId);
+        .withArgs(constants.AddressZero, owner.address, batchSize + tokenId);
 
       const balance = await contractInstance.balanceOf(owner.address);
-      expect(balance).to.equal(options.batchSize + 1);
+      expect(balance).to.equal(batchSize + 1);
     });
 
     it("should fail to mint to non receiver", async function () {
@@ -46,7 +44,7 @@ export function shouldSafeMint(
       const contractInstance = await factory();
       const erc721NonReceiverInstance = await deployJerk();
 
-      const tx = mint(contractInstance, owner, erc721NonReceiverInstance.address, options.batchSize + tokenId);
+      const tx = safeMint(contractInstance, owner, erc721NonReceiverInstance.address, batchSize + tokenId);
       await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
     });
 
@@ -55,10 +53,10 @@ export function shouldSafeMint(
       const contractInstance = await factory();
       const erc721ReceiverInstance = await deployWallet();
 
-      const tx = mint(contractInstance, owner, erc721ReceiverInstance.address, options.batchSize + tokenId);
+      const tx = safeMint(contractInstance, owner, erc721ReceiverInstance.address, batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(constants.AddressZero, erc721ReceiverInstance.address, options.batchSize + tokenId);
+        .withArgs(constants.AddressZero, erc721ReceiverInstance.address, batchSize + tokenId);
 
       const balance = await contractInstance.balanceOf(erc721ReceiverInstance.address);
       expect(balance).to.equal(1);

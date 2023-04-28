@@ -3,13 +3,13 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
-import { TMintBatchERC1155Fn } from "../shared/interfaces/IMintERC1155Fn";
-import { defaultMintBatchERC1155 } from "../shared/defaultMintERC1155";
 
-export function shouldBurnBatch(
-  factory: () => Promise<Contract>,
-  mintBatch: TMintBatchERC1155Fn = defaultMintBatchERC1155,
-) {
+import type { IERC1155Options } from "../shared/defaultMint";
+import { defaultMintBatchERC1155 } from "../shared/defaultMint";
+
+export function shouldBurnBatch(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+  const { mintBatch = defaultMintBatchERC1155 } = options;
+
   describe("burnBatch", function () {
     it("should burn own tokens", async function () {
       const [owner] = await ethers.getSigners();

@@ -3,10 +3,13 @@ import { ethers } from "hardhat";
 import { BigNumber, constants, Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
-import { TMintERC1155Fn } from "../shared/interfaces/IMintERC1155Fn";
-import { defaultMintERC1155 } from "../shared/defaultMintERC1155";
 
-export function shouldBalanceOfBatch(factory: () => Promise<Contract>, mint: TMintERC1155Fn = defaultMintERC1155) {
+import type { IERC1155Options } from "../shared/defaultMint";
+import { defaultMintERC1155 } from "../shared/defaultMint";
+
+export function shouldBalanceOfBatch(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+  const { mint = defaultMintERC1155 } = options;
+
   describe("balanceOfBatch", function () {
     it("should fail for zero addr", async function () {
       const contractInstance = await factory();

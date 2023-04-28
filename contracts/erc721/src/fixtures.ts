@@ -1,11 +1,9 @@
 import { ethers } from "hardhat";
 
-import type {} from "ethers"; // The inferred type of 'deployERC721' cannot be named without a reference to '@gemunion/contracts-constants/node_modules/ethers'. This is likely not portable. A type annotation is necessary.ts(2742)
-// https://github.com/microsoft/TypeScript/issues/47663
 import {
   baseTokenURI,
-  royalty,
   batchSize,
+  royalty,
   tokenMaxAmount,
   tokenName,
   tokenSymbol,

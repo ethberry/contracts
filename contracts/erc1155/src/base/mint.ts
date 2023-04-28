@@ -2,16 +2,15 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
-import { amount, InterfaceId, tokenId } from "@gemunion/contracts-constants";
+import { amount, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
-import { TMintERC1155Fn } from "../shared/interfaces/IMintERC1155Fn";
-import { defaultMintERC1155 } from "../shared/defaultMintERC1155";
 
-export function shouldMint(
-  factory: () => Promise<Contract>,
-  mint: TMintERC1155Fn = defaultMintERC1155,
-  options: Record<string, any> = {},
-) {
+import type { IERC1155Options } from "../shared/defaultMint";
+import { defaultMintERC1155 } from "../shared/defaultMint";
+
+export function shouldMint(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+  const { mint = defaultMintERC1155, minterRole = MINTER_ROLE } = options;
+
   describe("mint", function () {
     it("should mint to wallet", async function () {
       const [owner, receiver] = await ethers.getSigners();
@@ -58,7 +57,7 @@ export function shouldMint(
       const tx1 = mint(contractInstance, receiver, owner.address, tokenId, amount, "0x");
       await expect(tx1).to.be.revertedWith(
         supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${options.minterRole}`
+          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${minterRole}`
           : "Ownable: caller is not the owner",
       );
     });

@@ -2,19 +2,18 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
-export function shouldBehaveLikeERC721Consecutive(
-  factory: () => Promise<Contract>,
-  options: Record<string, any> = {
-    batchSize: 0,
-  },
-) {
+import type { IERC721Options } from "../shared/defaultMint";
+
+export function shouldBehaveLikeERC721Consecutive(factory: () => Promise<Contract>, options: IERC721Options = {}) {
   describe("consecutive", function () {
+    const { batchSize = 0 } = options;
+
     it("ownerOf", async function () {
       const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
 
-      for (const e of new Array(options.batchSize).fill(null).map((_e, i) => i)) {
+      for (const e of new Array(batchSize).fill(null).map((_e, i) => i)) {
         const ownerOf = await contractInstance.ownerOf(e);
         expect(ownerOf).to.equal(owner.address);
       }
@@ -26,7 +25,7 @@ export function shouldBehaveLikeERC721Consecutive(
       const contractInstance = await factory();
 
       const balance = await contractInstance.balanceOf(owner.address);
-      expect(balance).to.equal(options.batchSize);
+      expect(balance).to.equal(batchSize);
     });
   });
 }

@@ -2,10 +2,14 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
-import { amount, InterfaceId } from "@gemunion/contracts-constants";
-import { TMintERC20Fn } from "../shared/interfaces/IERC20MintFn";
+import { amount, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldMint(factory: () => Promise<Contract>, mint: TMintERC20Fn, options: Record<string, any> = {}) {
+import type { IERC20Options } from "../shared/defaultMint";
+import { defaultMintERC20 } from "../shared/defaultMint";
+
+export function shouldMint(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+  const { mint = defaultMintERC20, minterRole = MINTER_ROLE } = options;
+
   describe("mint", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
@@ -17,7 +21,7 @@ export function shouldMint(factory: () => Promise<Contract>, mint: TMintERC20Fn,
 
       await expect(tx).to.be.revertedWith(
         supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${options.minterRole}`
+          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${minterRole}`
           : "Ownable: caller is not the owner",
       );
     });
@@ -27,7 +31,6 @@ export function shouldMint(factory: () => Promise<Contract>, mint: TMintERC20Fn,
       const contractInstance = await factory();
 
       const tx = mint(contractInstance, owner, owner.address);
-      // const tx = contractInstance.mintERC20(owner.address, amount);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(constants.AddressZero, owner.address, amount);
 
       const balance = await contractInstance.balanceOf(owner.address);

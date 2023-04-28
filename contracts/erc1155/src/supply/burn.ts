@@ -3,10 +3,13 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
-import { TMintERC1155Fn } from "../shared/interfaces/IMintERC1155Fn";
-import { defaultMintERC1155 } from "../shared/defaultMintERC1155";
 
-export function shouldBurn(factory: () => Promise<Contract>, mint: TMintERC1155Fn = defaultMintERC1155) {
+import type { IERC1155Options } from "../shared/defaultMint";
+import { defaultMintERC1155 } from "../shared/defaultMint";
+
+export function shouldBurn(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+  const { mint = defaultMintERC1155 } = options;
+
   describe("burn", function () {
     it("should fail: burn amount exceeds totalSupply", async function () {
       const [owner] = await ethers.getSigners();

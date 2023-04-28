@@ -2,18 +2,14 @@ import { Contract } from "ethers";
 
 import { shouldGetRoyaltyInfo, shouldSetDefaultRoyalty, shouldSetTokenRoyalty } from "@gemunion/contracts-erc721";
 
+import { IERC721EnumOptions } from "../shared/defaultMint";
 import { shouldBurn } from "./burn";
-import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721EnumFn";
-import { defaultMintERC721Enum } from "../shared/defaultMintERC721Enum";
 
-export function shouldBehaveLikeERC721Royalty(
-  factory: () => Promise<Contract>,
-  mint: TMintERC721EnumFn = defaultMintERC721Enum,
-) {
+export function shouldBehaveLikeERC721Royalty(factory: () => Promise<Contract>, options?: IERC721EnumOptions) {
   shouldSetTokenRoyalty(factory);
   shouldSetDefaultRoyalty(factory);
   shouldGetRoyaltyInfo(factory);
-  shouldBurn(factory, mint);
+  shouldBurn(factory, options);
 }
 
 export { shouldSetTokenRoyalty, shouldSetDefaultRoyalty, shouldGetRoyaltyInfo, shouldBurn };

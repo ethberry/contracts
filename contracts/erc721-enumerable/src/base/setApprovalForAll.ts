@@ -1,13 +1,13 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
-import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721EnumFn";
-import { defaultMintERC721Enum } from "../shared/defaultMintERC721Enum";
 
-export function shouldSetApprovalForAll(
-  factory: () => Promise<Contract>,
-  mint: TMintERC721EnumFn = defaultMintERC721Enum,
-) {
+import type { IERC721EnumOptions } from "../shared/defaultMint";
+import { defaultMintERC721 } from "../shared/defaultMint";
+
+export function shouldSetApprovalForAll(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+  const { mint = defaultMintERC721 } = options;
+
   describe("setApprovalForAll", function () {
     it("should approve for all", async function () {
       const [owner, receiver] = await ethers.getSigners();

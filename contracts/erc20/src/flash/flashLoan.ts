@@ -4,10 +4,13 @@ import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
+import type { IERC20Options } from "../shared/defaultMint";
+import { defaultMintERC20 } from "../shared/defaultMint";
 import { deployErc20Borrower } from "./fixtures";
-import { TMintAmountERC20Fn } from "../shared/interfaces/IERC20MintFn";
 
-export function shouldFlashLoan(factory: () => Promise<Contract>, mint: TMintAmountERC20Fn) {
+export function shouldFlashLoan(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+  const { mint = defaultMintERC20 } = options;
+
   describe("flashLoan", function () {
     it("success", async function () {
       const [owner] = await ethers.getSigners();

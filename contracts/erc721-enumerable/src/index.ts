@@ -10,3 +10,5 @@ export * from "./pausable/pausable";
 export * from "./royalty";
 export * from "./storage/storage";
 export * from "./user";
+
+export * from "./shared/defaultMint";

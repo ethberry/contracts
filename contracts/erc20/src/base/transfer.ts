@@ -4,9 +4,13 @@ import { Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 import { deployJerk } from "@gemunion/contracts-mocks";
-import { TMintERC20Fn } from "../shared/interfaces/IERC20MintFn";
 
-export function shouldTransfer(factory: () => Promise<Contract>, mint: TMintERC20Fn) {
+import type { IERC20Options } from "../shared/defaultMint";
+import { defaultMintERC20 } from "../shared/defaultMint";
+
+export function shouldTransfer(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+  const { mint = defaultMintERC20 } = options;
+
   describe("transfer", function () {
     it("should fail: transfer amount exceeds balance", async function () {
       const [_owner, receiver] = await ethers.getSigners();

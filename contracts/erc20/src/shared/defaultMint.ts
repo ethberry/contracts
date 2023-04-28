@@ -1,15 +1,24 @@
 import { BigNumberish, Contract, Signer } from "ethers";
+
 import { amount } from "@gemunion/contracts-constants";
 
-export const defaultMintERC20 = async (contractInstance: Contract, signer: Signer, receiver: string): Promise<any> => {
-  return contractInstance.connect(signer).mint(receiver, amount) as Promise<any>;
-};
-
-export const defaultMintAmountERC20 = async (
+export type TMintERC20Fn = (
   contractInstance: Contract,
   signer: Signer,
   receiver: string,
-  amount: BigNumberish,
+  customAmount?: BigNumberish,
+) => Promise<any>;
+
+export interface IERC20Options {
+  mint?: TMintERC20Fn;
+  minterRole?: string;
+}
+
+export const defaultMintERC20 = (
+  contractInstance: Contract,
+  signer: Signer,
+  receiver: string,
+  value: BigNumberish = amount,
 ): Promise<any> => {
-  return contractInstance.connect(signer).mint(receiver, amount) as Promise<any>;
+  return contractInstance.connect(signer).mint(receiver, value) as Promise<any>;
 };

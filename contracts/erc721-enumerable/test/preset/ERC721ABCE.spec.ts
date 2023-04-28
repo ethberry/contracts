@@ -8,19 +8,13 @@ import {
   shouldBehaveLikeERC721Enumerable,
 } from "../../src";
 import { deployERC721 } from "../../src/fixtures";
-import { Contract, Signer } from "ethers";
 
 describe("ERC721ABCE", function () {
   const factory = () => deployERC721(this.title);
 
   shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);
 
-  shouldBehaveLikeERC721(factory, {
-    // In case if it is mintCommin that supports safeMint
-    safeMint: (contractInstance: Contract, signer: Signer, receiver: string) => {
-      return contractInstance.connect(signer).safeMint(receiver) as Promise<any>;
-    },
-  });
+  shouldBehaveLikeERC721(factory);
   shouldBehaveLikeERC721Burnable(factory);
   shouldBehaveLikeERC721Capped(factory);
   shouldBehaveLikeERC721Enumerable(factory);

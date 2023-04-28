@@ -3,13 +3,13 @@ import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
-import { TMintERC721Fn } from "../shared/interfaces/IMintERC721Fn";
 
-export function shouldGetBalanceOf(
-  factory: () => Promise<Contract>,
-  mint: TMintERC721Fn,
-  options: Record<string, any> = {},
-) {
+import type { IERC721Options } from "../shared/defaultMint";
+import { defaultMintERC721 } from "../shared/defaultMint";
+
+export function shouldGetBalanceOf(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+  const { mint = defaultMintERC721, batchSize = 0 } = options;
+
   describe("balanceOf", function () {
     it("should fail for zero addr", async function () {
       const contractInstance = await factory();
@@ -22,16 +22,16 @@ export function shouldGetBalanceOf(
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
       const balance = await contractInstance.balanceOf(owner.address);
-      expect(balance).to.equal(options.batchSize + 1);
+      expect(balance).to.equal(batchSize + 1);
     });
 
     it("should get balance of not owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, options.batchSize + tokenId);
+      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
       const balance = await contractInstance.balanceOf(receiver.address);
       expect(balance).to.equal(0);
     });

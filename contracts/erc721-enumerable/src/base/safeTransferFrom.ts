@@ -3,13 +3,13 @@ import { ethers } from "hardhat";
 import { Contract } from "ethers";
 
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
-import { TMintERC721EnumFn } from "../shared/interfaces/IMintERC721EnumFn";
-import { defaultMintERC721Enum } from "../shared/defaultMintERC721Enum";
 
-export function shouldSafeTransferFrom(
-  factory: () => Promise<Contract>,
-  mint: TMintERC721EnumFn = defaultMintERC721Enum,
-) {
+import type { IERC721EnumOptions } from "../shared/defaultMint";
+import { defaultMintERC721 } from "../shared/defaultMint";
+
+export function shouldSafeTransferFrom(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+  const { mint = defaultMintERC721 } = options;
+
   describe("safeTransferFrom", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();

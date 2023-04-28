@@ -4,13 +4,13 @@ import { Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
-import { TMintERC1155Fn } from "../shared/interfaces/IMintERC1155Fn";
-import { defaultMintERC1155 } from "../shared/defaultMintERC1155";
 
-export function shouldSafeBatchTransferFrom(
-  factory: () => Promise<Contract>,
-  mint: TMintERC1155Fn = defaultMintERC1155,
-) {
+import type { IERC1155Options } from "../shared/defaultMint";
+import { defaultMintERC1155 } from "../shared/defaultMint";
+
+export function shouldSafeBatchTransferFrom(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+  const { mint = defaultMintERC1155 } = options;
+
   describe("safeBatchTransferFrom", function () {
     it("should transfer own tokens to receiver contract", async function () {
       const [owner] = await ethers.getSigners();

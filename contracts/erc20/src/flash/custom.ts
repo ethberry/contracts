@@ -4,10 +4,13 @@ import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
+import type { IERC20Options } from "../shared/defaultMint";
+import { defaultMintERC20 } from "../shared/defaultMint";
 import { deployErc20Borrower } from "./fixtures";
-import { TMintAmountERC20Fn } from "../shared/interfaces/IERC20MintFn";
 
-export function shouldFlashCustom(factory: () => Promise<Contract>, mint: TMintAmountERC20Fn) {
+export function shouldFlashCustom(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+  const { mint = defaultMintERC20 } = options;
+
   describe("custom flash fee & custom fee receiver", function () {
     const borrowerInitialBalance = amount * 2;
     const customFlashFee = amount / 2;
@@ -20,8 +23,7 @@ export function shouldFlashCustom(factory: () => Promise<Contract>, mint: TMintA
 
       const erc20FlashBorrowerInstance = await deployErc20Borrower();
 
-      const tx1 = await mint(contractInstance, owner, erc20FlashBorrowerInstance.address, borrowerInitialBalance);
-      // const tx1 = await contractInstance.mint(erc20FlashBorrowerInstance.address, borrowerInitialBalance);
+      const tx1 = mint(contractInstance, owner, erc20FlashBorrowerInstance.address, borrowerInitialBalance);
       await expect(tx1)
         .to.emit(contractInstance, "Transfer")
         .withArgs(constants.AddressZero, erc20FlashBorrowerInstance.address, borrowerInitialBalance);
@@ -76,7 +78,7 @@ export function shouldFlashCustom(factory: () => Promise<Contract>, mint: TMintA
 
       const erc20FlashBorrowerInstance = await deployErc20Borrower();
 
-      const tx1 = await mint(contractInstance, owner, erc20FlashBorrowerInstance.address, borrowerInitialBalance);
+      const tx1 = mint(contractInstance, owner, erc20FlashBorrowerInstance.address, borrowerInitialBalance);
       await expect(tx1)
         .to.emit(contractInstance, "Transfer")
         .withArgs(constants.AddressZero, erc20FlashBorrowerInstance.address, borrowerInitialBalance);

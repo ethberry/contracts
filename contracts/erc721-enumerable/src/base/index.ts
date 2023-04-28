@@ -22,7 +22,8 @@ export function shouldBehaveLikeERC721(
     batchSize: 0,
   },
 ) {
-  const { mint, safeMint } = Object.assign({}, defaultMintERC721Fns, fns);
+  const { mint, safeMint } = fns;
+  // const { mint, safeMint } = Object.assign({}, defaultMintERC721Fns, fns);
   options = Object.assign(
     {},
     {
@@ -31,15 +32,15 @@ export function shouldBehaveLikeERC721(
     },
     options,
   );
-  shouldMint(factory, mint, options);
-  shouldSafeMint(factory, safeMint, options);
-  shouldGetOwnerOf(factory, mint);
-  shouldApprove(factory, mint);
-  shouldSetApprovalForAll(factory, mint);
-  shouldGetBalanceOf(factory, mint);
-  shouldTransferFrom(factory, mint);
-  shouldSafeTransferFrom(factory, mint);
-  getGetCurrentTokenIndex(factory, mint);
+  if (mint) shouldMint(factory, mint, options);
+  if (safeMint) shouldSafeMint(factory, safeMint, options);
+  shouldGetOwnerOf(factory, mint || safeMint);
+  shouldApprove(factory, mint || safeMint);
+  shouldSetApprovalForAll(factory, mint || safeMint);
+  shouldGetBalanceOf(factory, mint || safeMint);
+  shouldTransferFrom(factory, mint || safeMint);
+  shouldSafeTransferFrom(factory, mint || safeMint);
+  getGetCurrentTokenIndex(factory, mint || safeMint);
 }
 
 export {

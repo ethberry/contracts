@@ -11,6 +11,7 @@ export function shouldApprove(factory: () => Promise<Contract>, mint: TMintERC72
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address);
+      // ? suppose to be tokenId instead of 0
       const tx = contractInstance.connect(receiver).approve(owner.address, 0);
       await expect(tx).to.be.revertedWith("ERC721: approval to current owner");
     });

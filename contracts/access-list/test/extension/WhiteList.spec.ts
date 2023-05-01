@@ -12,5 +12,5 @@ describe("WhiteListTest", function () {
   shouldBehaveLikeWhiteList(factory);
   shouldBehaveLikeWhiteListMe(factory);
 
-  shouldSupportsInterface(factory)(InterfaceId.IERC165, InterfaceId.IAccessControl);
+  shouldSupportsInterface(factory)([InterfaceId.IERC165, InterfaceId.IAccessControl]);
 });

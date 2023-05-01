@@ -21,11 +21,11 @@ describe("ERC721ABCRK", function () {
   shouldBehaveLikeERC721Royalty(factory, { batchSize });
   shouldBehaveLikeERC721Consecutive(factory, { batchSize });
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC721,
     InterfaceId.IERC721Metadata,
     InterfaceId.IRoyalty,
-  );
+  ]);
 });

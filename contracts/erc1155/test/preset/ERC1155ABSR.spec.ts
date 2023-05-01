@@ -19,11 +19,11 @@ describe("ERC1155ABSR", function () {
   shouldBehaveLikeERC1155Supply(factory);
   shouldBehaveLikeERC1155Royalty(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC1155,
     InterfaceId.IERC1155Metadata,
     InterfaceId.IRoyalty,
-  );
+  ]);
 });

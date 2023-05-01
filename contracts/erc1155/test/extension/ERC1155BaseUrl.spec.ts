@@ -32,10 +32,10 @@ describe("ERC1155BaseUrlTest", function () {
 
   shouldBehaveLikeERC1155Burnable(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC1155,
     InterfaceId.IERC1155Metadata,
-  );
+  ]);
 });

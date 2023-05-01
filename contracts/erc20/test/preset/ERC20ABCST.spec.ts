@@ -21,11 +21,11 @@ describe("ERC20ABCST", function () {
   shouldBehaveLikeERC20Snapshot(factory);
   shouldBehaveLikeERC20Permit(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC20,
     InterfaceId.IERC20Metadata,
     InterfaceId.IERC1363,
-  );
+  ]);
 });

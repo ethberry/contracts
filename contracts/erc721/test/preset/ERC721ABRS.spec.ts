@@ -19,11 +19,11 @@ describe("ERC721ABRS", function () {
   shouldBehaveLikeERC721Royalty(factory);
   shouldBehaveLikeERC721UriStorage(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC721,
     InterfaceId.IERC721Metadata,
     InterfaceId.IRoyalty,
-  );
+  ]);
 });

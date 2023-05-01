@@ -12,10 +12,10 @@ describe("ERC1155OBR", function () {
   shouldBehaveLikeERC1155(factory);
   shouldBehaveLikeERC1155Royalty(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IERC1155,
     InterfaceId.IERC1155Metadata,
     InterfaceId.IRoyalty,
-  );
+  ]);
 });

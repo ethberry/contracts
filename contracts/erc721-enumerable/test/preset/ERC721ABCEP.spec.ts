@@ -21,11 +21,11 @@ describe("ERC721ABCEP", function () {
   shouldBehaveLikeERC721Enumerable(factory);
   shouldBehaveLikeERC721Pausable(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC721,
     InterfaceId.IERC721Metadata,
     InterfaceId.IERC721Enumerable,
-  );
+  ]);
 });

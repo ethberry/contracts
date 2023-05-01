@@ -12,5 +12,5 @@ describe("BlackListTest", function () {
   shouldBehaveLikeBlackList(factory);
   shouldBehaveLikeBlackListMe(factory);
 
-  shouldSupportsInterface(factory)(InterfaceId.IERC165, InterfaceId.IAccessControl);
+  shouldSupportsInterface(factory)([InterfaceId.IERC165, InterfaceId.IAccessControl]);
 });

@@ -19,11 +19,11 @@ describe("ERC20ABCS", function () {
   shouldBehaveLikeERC20Capped(factory);
   shouldBehaveLikeERC20Snapshot(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC20,
     InterfaceId.IERC20Metadata,
     InterfaceId.IERC1363,
-  );
+  ]);
 });

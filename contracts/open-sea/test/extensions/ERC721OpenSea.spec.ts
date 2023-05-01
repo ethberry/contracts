@@ -11,11 +11,11 @@ describe("ERC721OpenSeaTest", function () {
 
   // shouldBehaveLikeERC721(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC721,
     InterfaceId.IERC721Metadata,
     InterfaceId.IRoyalty,
-  );
+  ]);
 });

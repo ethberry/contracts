@@ -12,5 +12,5 @@ describe("ERC1155OB", function () {
   shouldBehaveLikeERC1155(factory);
   shouldBehaveLikeERC1155Burnable(factory);
 
-  shouldSupportsInterface(factory)(InterfaceId.IERC165, InterfaceId.IERC1155, InterfaceId.IERC1155Metadata);
+  shouldSupportsInterface(factory)([InterfaceId.IERC165, InterfaceId.IERC1155, InterfaceId.IERC1155Metadata]);
 });

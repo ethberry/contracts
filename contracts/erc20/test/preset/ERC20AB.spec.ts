@@ -12,11 +12,11 @@ describe("ERC20AB", function () {
   shouldBehaveLikeERC20(factory);
   shouldBehaveLikeERC20Burnable(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC20,
     InterfaceId.IERC20Metadata,
     InterfaceId.IERC1363,
-  );
+  ]);
 });

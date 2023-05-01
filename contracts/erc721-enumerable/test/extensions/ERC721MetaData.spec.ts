@@ -15,11 +15,11 @@ describe("ERC721MetaDataTest", function () {
   shouldBehaveLikeERC721Royalty(factory);
   shouldBehaveLikeERC721Metadata(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC721,
     InterfaceId.IERC721Metadata,
     InterfaceId.IRoyalty,
-  );
+  ]);
 });

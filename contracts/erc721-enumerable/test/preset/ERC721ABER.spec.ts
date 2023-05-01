@@ -19,12 +19,12 @@ describe("ERC721ABER", function () {
   shouldBehaveLikeERC721Enumerable(factory);
   shouldBehaveLikeERC721Royalty(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC721,
     InterfaceId.IERC721Metadata,
     InterfaceId.IERC721Enumerable,
     InterfaceId.IRoyalty,
-  );
+  ]);
 });

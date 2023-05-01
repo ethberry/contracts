@@ -19,10 +19,10 @@ describe("ERC1155ABSP", function () {
   shouldBehaveLikeERC1155Supply(factory);
   shouldBehaveLikeERC1155Pausable(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC1155,
     InterfaceId.IERC1155Metadata,
-  );
+  ]);
 });

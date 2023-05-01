@@ -19,11 +19,11 @@ describe("ERC721ABCE", function () {
   shouldBehaveLikeERC721Capped(factory);
   shouldBehaveLikeERC721Enumerable(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC721,
     InterfaceId.IERC721Metadata,
     InterfaceId.IERC721Enumerable,
-  );
+  ]);
 });

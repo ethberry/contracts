@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 import { InterfaceId } from "@gemunion/contracts-constants";
 
 export function shouldSupportsInterface(factory: () => Promise<Contract>) {
-  return (supportedInterfaces: Array<string>, unsupportedInterfaces: Array<string>) => {
+  return (supportedInterfaces: Array<string> = [], unsupportedInterfaces: Array<string> = []) => {
     describe("supportsInterface", function () {
       if (supportedInterfaces.length) {
         supportedInterfaces.forEach(iface => {

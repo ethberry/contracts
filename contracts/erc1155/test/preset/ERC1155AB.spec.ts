@@ -12,10 +12,10 @@ describe("ERC1155AB", function () {
   shouldBehaveLikeERC1155(factory);
   shouldBehaveLikeERC1155Burnable(factory);
 
-  shouldSupportsInterface(factory)(
+  shouldSupportsInterface(factory)([
     InterfaceId.IERC165,
     InterfaceId.IAccessControl,
     InterfaceId.IERC1155,
     InterfaceId.IERC1155Metadata,
-  );
+  ]);
 });

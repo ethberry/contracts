@@ -19,7 +19,7 @@ export function shouldSupportsInterface(factory: () => Promise<Contract>) {
 
       if (unsupportedInterfaces.length) {
         unsupportedInterfaces.forEach(iface => {
-          it(`Should support ${iface}`, async function () {
+          it(`Should not support ${iface}`, async function () {
             const contractInstance = await factory();
 
             const isSupported = await contractInstance.supportsInterface(iface);

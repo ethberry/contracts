@@ -15,7 +15,7 @@ import "@gemunion/contracts-erc1363/contracts/extensions/ERC1363Receiver.sol";
 /**
  *@dev Wallet contract can receive ETH, ERC1363 tokens, ERC721 tokens, and ERC1155 tokens.
  */
-contract Wallet is ERC165, ERC1363Receiver, ERC721Holder, ERC1155Holder {
+contract Wallet is ERC165, ERC721Holder, ERC1155Holder, ERC1363Receiver {
   receive() external payable virtual {}
 
   /**

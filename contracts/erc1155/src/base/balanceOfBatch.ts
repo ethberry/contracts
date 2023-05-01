@@ -4,7 +4,12 @@ import { BigNumber, constants, Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 
-export function shouldBalanceOfBatch(factory: () => Promise<Contract>) {
+import type { IERC1155Options } from "../shared/defaultMint";
+import { defaultMintERC1155 } from "../shared/defaultMint";
+
+export function shouldBalanceOfBatch(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+  const { mint = defaultMintERC1155 } = options;
+
   describe("balanceOfBatch", function () {
     it("should fail for zero addr", async function () {
       const contractInstance = await factory();
@@ -17,7 +22,7 @@ export function shouldBalanceOfBatch(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
       const balances = await contractInstance.balanceOfBatch([owner.address, owner.address], [tokenId, 0]);
       expect(balances).to.deep.equal([BigNumber.from(amount), BigNumber.from(0)]);
     });

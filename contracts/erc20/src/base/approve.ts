@@ -4,13 +4,24 @@ import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
-export function shouldApprove(factory: () => Promise<Contract>) {
+import type { IERC20Options } from "../shared/defaultMint";
+import { defaultMintERC20 } from "../shared/defaultMint";
+
+export function shouldApprove(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+  const { mint = defaultMintERC20 } = options;
+
   describe("approve", function () {
-    it("should fail: approve to zero address", async function () {
+    it("should approve", async function () {
+      const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance.approve(constants.AddressZero, amount);
-      await expect(tx).to.be.revertedWith("ERC20: approve to the zero address");
+      await mint(contractInstance, owner, owner.address);
+
+      const tx = contractInstance.approve(receiver.address, amount);
+      await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner.address, receiver.address, amount);
+
+      const approved = await contractInstance.allowance(owner.address, receiver.address);
+      expect(approved).to.equal(amount);
     });
 
     it("should approve with zero balance", async function () {
@@ -29,15 +40,11 @@ export function shouldApprove(factory: () => Promise<Contract>) {
       await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner.address, owner.address, amount);
     });
 
-    it("should approve", async function () {
-      const [owner, receiver] = await ethers.getSigners();
+    it("should fail: approve to zero address", async function () {
       const contractInstance = await factory();
 
-      const tx = contractInstance.approve(receiver.address, amount);
-      await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner.address, receiver.address, amount);
-
-      const approved = await contractInstance.allowance(owner.address, receiver.address);
-      expect(approved).to.equal(amount);
+      const tx = contractInstance.approve(constants.AddressZero, amount);
+      await expect(tx).to.be.revertedWith("ERC20: approve to the zero address");
     });
   });
 }

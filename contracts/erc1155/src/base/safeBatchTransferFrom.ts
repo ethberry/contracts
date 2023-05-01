@@ -5,7 +5,12 @@ import { Contract } from "ethers";
 import { amount, tokenId } from "@gemunion/contracts-constants";
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
 
-export function shouldSafeBatchTransferFrom(factory: () => Promise<Contract>) {
+import type { IERC1155Options } from "../shared/defaultMint";
+import { defaultMintERC1155 } from "../shared/defaultMint";
+
+export function shouldSafeBatchTransferFrom(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+  const { mint = defaultMintERC1155 } = options;
+
   describe("safeBatchTransferFrom", function () {
     it("should transfer own tokens to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
@@ -13,8 +18,8 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<Contract>) {
       const erc1155ReceiverInstance = await deployWallet();
 
       const tokenId_1 = 2;
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
-      await contractInstance.mint(owner.address, tokenId_1, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId_1, amount, "0x");
       const tx = contractInstance.safeBatchTransferFrom(
         owner.address,
         erc1155ReceiverInstance.address,
@@ -49,8 +54,8 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<Contract>) {
       const erc1155NonReceiverInstance = await deployJerk();
 
       const tokenId_1 = 2;
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
-      await contractInstance.mint(owner.address, tokenId_1, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId_1, amount, "0x");
       const tx = contractInstance.safeBatchTransferFrom(
         owner.address,
         erc1155NonReceiverInstance.address,
@@ -67,8 +72,8 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<Contract>) {
       const erc1155ReceiverInstance = await deployWallet();
 
       const tokenId_1 = 2;
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
-      await contractInstance.mint(owner.address, tokenId_1, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId_1, amount, "0x");
       const tx = contractInstance
         .connect(receiver)
         .safeBatchTransferFrom(
@@ -87,8 +92,8 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<Contract>) {
       const erc1155ReceiverInstance = await deployWallet();
 
       const tokenId_1 = 2;
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
-      await contractInstance.mint(owner.address, tokenId_1, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId_1, amount, "0x");
       await contractInstance.setApprovalForAll(receiver.address, true);
 
       const tx = contractInstance

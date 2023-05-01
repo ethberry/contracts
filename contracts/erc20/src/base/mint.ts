@@ -2,9 +2,14 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
-import { amount, InterfaceId } from "@gemunion/contracts-constants";
+import { amount, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldMint(factory: () => Promise<Contract>, options: Record<string, any> = {}) {
+import type { IERC20Options } from "../shared/defaultMint";
+import { defaultMintERC20 } from "../shared/defaultMint";
+
+export function shouldMint(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+  const { mint = defaultMintERC20, minterRole = MINTER_ROLE } = options;
+
   describe("mint", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
@@ -12,10 +17,11 @@ export function shouldMint(factory: () => Promise<Contract>, options: Record<str
 
       const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
-      const tx = contractInstance.connect(receiver).mint(receiver.address, amount);
+      const tx = mint(contractInstance, receiver, receiver.address);
+
       await expect(tx).to.be.revertedWith(
         supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${options.minterRole}`
+          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${minterRole}`
           : "Ownable: caller is not the owner",
       );
     });
@@ -24,7 +30,7 @@ export function shouldMint(factory: () => Promise<Contract>, options: Record<str
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance.mint(owner.address, amount);
+      const tx = mint(contractInstance, owner, owner.address);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(constants.AddressZero, owner.address, amount);
 
       const balance = await contractInstance.balanceOf(owner.address);

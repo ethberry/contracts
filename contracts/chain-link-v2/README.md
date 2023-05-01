@@ -1,3 +1,3 @@
 # ChainLink
 
-https://docs.chain.link/vrf/v1/supported-networks
+https://docs.chain.link/vrf/v2/subscription/supported-networks

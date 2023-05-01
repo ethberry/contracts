@@ -1,19 +1,12 @@
 import { Contract } from "ethers";
 
-import { MINTER_ROLE } from "@gemunion/contracts-constants";
-
+import { IERC721Options } from "../shared/defaultMint";
 import { shouldSetTokenRoyalty } from "./setTokenRoyalty";
 import { shouldSetDefaultRoyalty } from "./setDefaultRoyalty";
 import { shouldGetRoyaltyInfo } from "./royaltyInfo";
 import { shouldBurn } from "./burn";
 
-export function shouldBehaveLikeERC721Royalty(
-  factory: () => Promise<Contract>,
-  options: Record<string, any> = {
-    minterRole: MINTER_ROLE,
-    batchSize: 0,
-  },
-) {
+export function shouldBehaveLikeERC721Royalty(factory: () => Promise<Contract>, options: IERC721Options = {}) {
   shouldSetTokenRoyalty(factory);
   shouldSetDefaultRoyalty(factory);
   shouldGetRoyaltyInfo(factory);

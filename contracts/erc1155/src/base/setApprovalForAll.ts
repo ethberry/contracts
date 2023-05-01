@@ -4,13 +4,18 @@ import { Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 
-export function shouldSetApprovalForAll(factory: () => Promise<Contract>) {
+import type { IERC1155Options } from "../shared/defaultMint";
+import { defaultMintERC1155 } from "../shared/defaultMint";
+
+export function shouldSetApprovalForAll(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+  const { mint = defaultMintERC1155 } = options;
+
   describe("setApprovalForAll", function () {
     it("should approve for all", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
 
       const tx1 = contractInstance.setApprovalForAll(receiver.address, true);
       await expect(tx1).to.not.be.reverted;
@@ -29,7 +34,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
 
       const tx = contractInstance.setApprovalForAll(owner.address, true);
       await expect(tx).to.be.revertedWith(`ERC1155: setting approval status for self`);

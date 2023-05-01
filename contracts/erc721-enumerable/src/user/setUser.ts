@@ -3,13 +3,18 @@ import { ethers, web3 } from "hardhat";
 import { Contract } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
-export function shouldSetUser(factory: () => Promise<Contract>) {
+import type { IERC721EnumOptions } from "../shared/defaultMint";
+import { defaultMintERC721 } from "../shared/defaultMint";
+
+export function shouldSetUser(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+  const { mint = defaultMintERC721 } = options;
+
   describe("setUser", function () {
     it("should set a user to a token", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
@@ -25,7 +30,7 @@ export function shouldSetUser(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
@@ -38,7 +43,7 @@ export function shouldSetUser(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
@@ -55,7 +60,7 @@ export function shouldSetUser(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
@@ -72,7 +77,7 @@ export function shouldSetUser(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));

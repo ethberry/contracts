@@ -4,23 +4,28 @@ import { Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 
-export function shouldGetTotalSupply(factory: () => Promise<Contract>) {
+import type { IERC1155Options } from "../shared/defaultMint";
+import { defaultMintBatchERC1155, defaultMintERC1155 } from "../shared/defaultMint";
+
+export function shouldGetTotalSupply(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+  const { mint = defaultMintERC1155, mintBatch = defaultMintBatchERC1155 } = options;
+
   describe("totalSupply", function () {
     it("should get total supply (mint)", async function () {
-      const [_owner, receiver] = await ethers.getSigners();
+      const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(receiver.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, receiver.address, tokenId, amount, "0x");
 
       const totalSupply = await contractInstance.totalSupply(tokenId);
       expect(totalSupply).to.equal(amount);
     });
 
     it("should get total supply (mintBatch)", async function () {
-      const [_owner, receiver] = await ethers.getSigners();
+      const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mintBatch(receiver.address, [tokenId], [amount], "0x");
+      await mintBatch(contractInstance, owner, receiver.address, [tokenId], [amount], "0x");
 
       const totalSupply = await contractInstance.totalSupply(tokenId);
       expect(totalSupply).to.equal(amount);

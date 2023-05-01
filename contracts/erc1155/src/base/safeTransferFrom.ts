@@ -5,12 +5,17 @@ import { Contract } from "ethers";
 import { amount, tokenId } from "@gemunion/contracts-constants";
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
 
-export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
+import type { IERC1155Options } from "../shared/defaultMint";
+import { defaultMintERC1155 } from "../shared/defaultMint";
+
+export function shouldSafeTransferFrom(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+  const { mint = defaultMintERC1155 } = options;
+
   describe("safeTransferFrom", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
       const tx = contractInstance
         .connect(receiver)
         .safeTransferFrom(owner.address, receiver.address, tokenId, amount, "0x");
@@ -21,7 +26,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
       const erc1155ReceiverInstance = await deployWallet();
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
       const tx = contractInstance.safeTransferFrom(
         owner.address,
         erc1155ReceiverInstance.address,
@@ -45,7 +50,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
       const erc1155NonReceiverInstance = await deployJerk();
 
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
       const tx = contractInstance.safeTransferFrom(
         owner.address,
         erc1155NonReceiverInstance.address,
@@ -61,7 +66,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
       const erc1155ReceiverInstance = await deployWallet();
 
-      await contractInstance.mint(owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
       await contractInstance.setApprovalForAll(receiver.address, true);
       const checkApprove = await contractInstance.isApprovedForAll(owner.address, receiver.address);
       expect(checkApprove).to.equal(true);

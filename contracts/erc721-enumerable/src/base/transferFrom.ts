@@ -2,13 +2,18 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
-export function shouldTransferFrom(factory: () => Promise<Contract>) {
+import type { IERC721EnumOptions } from "../shared/defaultMint";
+import { defaultMintERC721 } from "../shared/defaultMint";
+
+export function shouldTransferFrom(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+  const { mint = defaultMintERC721 } = options;
+
   describe("transferFrom", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, 0);
 
       await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
@@ -18,7 +23,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const tx = contractInstance.transferFrom(owner.address, constants.AddressZero, 0);
 
       await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
@@ -28,7 +33,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const tx = contractInstance.transferFrom(owner.address, receiver.address, 0);
 
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, 0);
@@ -44,7 +49,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       await contractInstance.approve(receiver.address, 0);
 
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, 0);

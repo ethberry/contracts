@@ -1,7 +1,6 @@
 import { Contract } from "ethers";
 
-import { MINTER_ROLE } from "@gemunion/contracts-constants";
-
+import { IERC721Options } from "../shared/defaultMint";
 import { shouldMint } from "./mint";
 import { shouldGetBalanceOf } from "./balanceOf";
 import { shouldSetApprovalForAll } from "./setApprovalForAll";
@@ -11,21 +10,7 @@ import { shouldGetOwnerOf } from "./ownerOf";
 import { shouldApprove } from "./approve";
 import { shouldTransferFrom } from "./transferFrom";
 
-export function shouldBehaveLikeERC721(
-  factory: () => Promise<Contract>,
-  options: Record<string, any> = {
-    minterRole: MINTER_ROLE,
-    batchSize: 0,
-  },
-) {
-  options = Object.assign(
-    {},
-    {
-      minterRole: MINTER_ROLE,
-      batchSize: 0,
-    },
-    options,
-  );
+export function shouldBehaveLikeERC721(factory: () => Promise<Contract>, options: IERC721Options = {}) {
   shouldMint(factory, options);
   shouldSafeMint(factory, options);
   shouldGetOwnerOf(factory, options);

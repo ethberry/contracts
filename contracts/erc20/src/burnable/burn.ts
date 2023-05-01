@@ -4,7 +4,12 @@ import { constants, Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
-export function shouldBurn(factory: () => Promise<Contract>) {
+import type { IERC20Options } from "../shared/defaultMint";
+import { defaultMintERC20 } from "../shared/defaultMint";
+
+export function shouldBurn(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+  const { mint = defaultMintERC20 } = options;
+
   describe("burn", function () {
     it("should fail: burn amount exceeds balance", async function () {
       const contractInstance = await factory();
@@ -25,7 +30,7 @@ export function shouldBurn(factory: () => Promise<Contract>) {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address);
 
       const tx = contractInstance.burn(amount);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, constants.AddressZero, amount);

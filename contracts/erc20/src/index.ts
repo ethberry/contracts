@@ -7,3 +7,5 @@ export * from "./capped";
 export * from "./pause";
 export * from "./permit";
 export * from "./snapshot";
+
+export * from "./shared/defaultMint";

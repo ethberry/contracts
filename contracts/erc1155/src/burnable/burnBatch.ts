@@ -4,14 +4,19 @@ import { constants, Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 
-export function shouldBurnBatch(factory: () => Promise<Contract>) {
+import type { IERC1155Options } from "../shared/defaultMint";
+import { defaultMintBatchERC1155 } from "../shared/defaultMint";
+
+export function shouldBurnBatch(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+  const { mintBatch = defaultMintBatchERC1155 } = options;
+
   describe("burnBatch", function () {
     it("should burn own tokens", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
       const tokenId1 = tokenId + 1;
-      await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
+      await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
       const tx = contractInstance.burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
 
       await expect(tx)
@@ -30,7 +35,7 @@ export function shouldBurnBatch(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
 
       const tokenId1 = tokenId + 1;
-      await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
+      await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
       await contractInstance.setApprovalForAll(receiver.address, true);
 
       const tx = contractInstance.connect(receiver).burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
@@ -51,7 +56,7 @@ export function shouldBurnBatch(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
 
       const tokenId1 = tokenId + 1;
-      await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
+      await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
       const tx = contractInstance.connect(receiver).burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
 
       await expect(tx).to.be.revertedWith(`ERC1155: caller is not token owner or approved`);
@@ -62,7 +67,7 @@ export function shouldBurnBatch(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
 
       const tokenId1 = tokenId + 1;
-      await contractInstance.mintBatch(owner.address, [tokenId, tokenId1], [amount, amount], "0x");
+      await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
       const tx = contractInstance.burnBatch(owner.address, [tokenId, tokenId1], [amount]);
 
       await expect(tx).to.be.revertedWith(`ERC1155: ids and amounts length mismatch`);
@@ -72,7 +77,7 @@ export function shouldBurnBatch(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mintBatch(receiver.address, [tokenId], [amount], "0x");
+      await mintBatch(contractInstance, owner, receiver.address, [tokenId], [amount], "0x");
 
       const tx = contractInstance.burnBatch(owner.address, [tokenId], [amount]);
       await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds balance");
@@ -82,7 +87,7 @@ export function shouldBurnBatch(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mintBatch(receiver.address, [tokenId], [amount], "0x");
+      await mintBatch(contractInstance, owner, receiver.address, [tokenId], [amount], "0x");
 
       const tx = contractInstance.burnBatch(owner.address, [tokenId], [amount]);
       await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds balance");

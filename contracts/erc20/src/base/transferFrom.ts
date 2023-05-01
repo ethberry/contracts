@@ -5,13 +5,18 @@ import { constants, Contract } from "ethers";
 import { amount } from "@gemunion/contracts-constants";
 import { deployJerk } from "@gemunion/contracts-mocks";
 
-export function shouldTransferFrom(factory: () => Promise<Contract>) {
+import type { IERC20Options } from "../shared/defaultMint";
+import { defaultMintERC20 } from "../shared/defaultMint";
+
+export function shouldTransferFrom(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+  const { mint = defaultMintERC20 } = options;
+
   describe("transferFrom", function () {
     it("should transfer", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address);
       await contractInstance.approve(receiver.address, amount);
 
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
@@ -28,7 +33,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>) {
       const contractInstance = await factory();
       const erc20NonReceiverInstance = await deployJerk();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address);
       await contractInstance.approve(receiver.address, amount);
 
       const tx = contractInstance
@@ -48,7 +53,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address);
       await contractInstance.approve(receiver.address, amount);
 
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
@@ -62,7 +67,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address);
       await contractInstance.approve(receiver.address, amount);
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, constants.AddressZero, amount);
       await expect(tx).to.be.revertedWith(`ERC20: transfer to the zero address`);
@@ -72,6 +77,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
+      await mint(contractInstance, owner, receiver.address);
       await contractInstance.approve(receiver.address, amount);
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
       await expect(tx).to.be.revertedWith(`ERC20: transfer amount exceeds balance`);
@@ -81,7 +87,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address);
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
       await expect(tx).to.be.revertedWith(`ERC20: insufficient allowance`);
     });

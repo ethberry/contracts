@@ -4,13 +4,18 @@ import { Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
 
-export function shouldBehaveLikeERC721UriStorage(factory: () => Promise<Contract>) {
+import type { IERC721Options } from "../shared/defaultMint";
+import { defaultMintERC721 } from "../shared/defaultMint";
+
+export function shouldBehaveLikeERC721UriStorage(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+  const { mint = defaultMintERC721 } = options;
+
   describe("tokenURI", function () {
     it("should get default token URI", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, 0);
+      await mint(contractInstance, owner, owner.address, 0);
       const uri = await contractInstance.tokenURI(0);
       expect(uri).to.equal("");
     });
@@ -20,7 +25,7 @@ export function shouldBehaveLikeERC721UriStorage(factory: () => Promise<Contract
       const contractInstance = await factory();
 
       const newURI = "newURI";
-      await contractInstance.mint(owner.address, 0);
+      await mint(contractInstance, owner, owner.address, 0);
       await contractInstance.setTokenURI(0, newURI);
       const uri = await contractInstance.tokenURI(0);
       expect(uri).to.equal(newURI);

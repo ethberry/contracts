@@ -1,11 +1,12 @@
 import { Contract } from "ethers";
 
+import type { IERC721Options } from "../shared/defaultMint";
 import { shouldSetUser } from "./setUser";
 import { shouldUserOf } from "./userOf";
 import { shouldUserExprires } from "./userExpires";
 
-export function shouldBehaveLikeERC721Rentable(factory: () => Promise<Contract>) {
-  shouldSetUser(factory);
-  shouldUserOf(factory);
-  shouldUserExprires(factory);
+export function shouldBehaveLikeERC721Rentable(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+  shouldSetUser(factory, options);
+  shouldUserOf(factory, options);
+  shouldUserExprires(factory, options);
 }

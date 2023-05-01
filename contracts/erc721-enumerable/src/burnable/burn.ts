@@ -2,13 +2,18 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
-export function shouldBehaveLikeERC721Burnable(factory: () => Promise<Contract>) {
+import type { IERC721EnumOptions } from "../shared/defaultMint";
+import { defaultMintERC721 } from "../shared/defaultMint";
+
+export function shouldBehaveLikeERC721Burnable(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+  const { mint = defaultMintERC721 } = options;
+
   describe("burn", function () {
     it("should fail: not an owner", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const tx = contractInstance.connect(receiver).burn(0);
 
       await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
@@ -18,7 +23,7 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<Contract>)
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       const tx = await contractInstance.burn(0);
 
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, constants.AddressZero, 0);
@@ -31,7 +36,7 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<Contract>)
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address);
+      await mint(contractInstance, owner, owner.address);
       await contractInstance.approve(receiver.address, 0);
 
       const tx = await contractInstance.burn(0);

@@ -4,7 +4,12 @@ import { Contract } from "ethers";
 
 import { PAUSER_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldBehaveLikeERC721Pausable(factory: () => Promise<Contract>) {
+import type { IERC721EnumOptions } from "../shared/defaultMint";
+import { defaultMintERC721 } from "../shared/defaultMint";
+
+export function shouldBehaveLikeERC721Pausable(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+  const { mint = defaultMintERC721 } = options;
+
   describe("pause", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
@@ -25,7 +30,7 @@ export function shouldBehaveLikeERC721Pausable(factory: () => Promise<Contract>)
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx1 = contractInstance.mint(owner.address);
+      const tx1 = mint(contractInstance, owner, owner.address);
       await expect(tx1).to.not.be.reverted;
 
       const balanceOfOwner1 = await contractInstance.balanceOf(owner.address);

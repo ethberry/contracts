@@ -24,6 +24,10 @@ abstract contract BlackList is IBlackList, AccessControl {
   }
 
   function isBlacklisted(address account) external view returns (bool) {
+    return _isBlacklisted(account);
+  }
+
+  function _isBlacklisted(address account) internal view returns (bool) {
     return blackList[account];
   }
 

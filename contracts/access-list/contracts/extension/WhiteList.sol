@@ -24,6 +24,10 @@ abstract contract WhiteList is IWhiteList, AccessControl {
   }
 
   function isWhitelisted(address account) external view returns (bool) {
+    return _isWhitelisted(account);
+  }
+
+  function _isWhitelisted(address account) internal view returns (bool) {
     return whiteList[account];
   }
 

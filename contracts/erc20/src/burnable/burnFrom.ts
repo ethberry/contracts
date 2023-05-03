@@ -11,24 +11,7 @@ export function shouldBurnFrom(factory: () => Promise<Contract>, options: IERC20
   const { mint = defaultMintERC20 } = options;
 
   describe("burnFrom", function () {
-    it("should fail: not allowed", async function () {
-      const [owner, receiver] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);
-      await expect(tx).to.be.revertedWith("ERC20: insufficient allowance");
-    });
-
-    it("should fail: insufficient balance", async function () {
-      const [owner, receiver] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      await contractInstance.approve(receiver.address, amount);
-      const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);
-      await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds balance");
-    });
-
-    it("should burn from other account", async function () {
+    it("should burn tokens from other account", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -37,6 +20,36 @@ export function shouldBurnFrom(factory: () => Promise<Contract>, options: IERC20
       await contractInstance.approve(receiver.address, amount);
       const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, constants.AddressZero, amount);
+    });
+
+    it("should burn zero tokens from other account", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner.address, 0);
+
+      await contractInstance.approve(receiver.address, amount);
+      const tx = contractInstance.connect(receiver).burnFrom(owner.address, 0);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, constants.AddressZero, 0);
+    });
+
+    it("should fail: burn amount exceeds balance", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner.address, 0);
+
+      await contractInstance.approve(receiver.address, amount);
+      const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);
+      await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds balance");
+    });
+
+    it("should fail: not allowed", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);
+      await expect(tx).to.be.revertedWith("ERC20: insufficient allowance");
     });
   });
 }

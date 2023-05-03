@@ -4,7 +4,11 @@ import { Contract } from "ethers";
 
 import { InterfaceId, amount, SNAPSHOT_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldBehaveLikeERC20Snapshot(factory: () => Promise<Contract>) {
+import { defaultMintERC20, IERC20Options } from "./shared/defaultMint";
+
+export function shouldBehaveLikeERC20Snapshot(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+  const { mint = defaultMintERC20 } = options;
+
   describe("snapshot", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
@@ -35,7 +39,7 @@ export function shouldBehaveLikeERC20Snapshot(factory: () => Promise<Contract>) 
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.mint(owner.address, amount);
+      await mint(contractInstance, owner, owner.address);
 
       const tx = contractInstance.snapshot();
       await expect(tx).to.emit(contractInstance, "Snapshot").withArgs("1");

@@ -6,7 +6,7 @@ import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldBehaveLikeERC721Burnable(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
-  const { mint = defaultMintERC721 } = options;
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
 
   describe("burn", function () {
     it("should fail: not an owner", async function () {
@@ -14,7 +14,7 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<Contract>,
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address);
-      const tx = contractInstance.connect(receiver).burn(0);
+      const tx = contractInstance.connect(receiver).burn(defaultTokenId);
 
       await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
     });
@@ -24,9 +24,11 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<Contract>,
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address);
-      const tx = await contractInstance.burn(0);
+      const tx = await contractInstance.burn(defaultTokenId);
 
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, constants.AddressZero, 0);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(owner.address, constants.AddressZero, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
@@ -37,11 +39,13 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<Contract>,
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address);
-      await contractInstance.approve(receiver.address, 0);
+      await contractInstance.approve(receiver.address, defaultTokenId);
 
-      const tx = await contractInstance.burn(0);
+      const tx = await contractInstance.burn(defaultTokenId);
 
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, constants.AddressZero, 0);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(owner.address, constants.AddressZero, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);

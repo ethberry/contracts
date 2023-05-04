@@ -6,7 +6,7 @@ import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldTransferFrom(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
-  const { mint = defaultMintERC721 } = options;
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
 
   describe("transferFrom", function () {
     it("should fail: not an owner", async function () {
@@ -14,7 +14,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: IE
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address);
-      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, 0);
+      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, defaultTokenId);
 
       await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
     });
@@ -24,7 +24,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: IE
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address);
-      const tx = contractInstance.transferFrom(owner.address, constants.AddressZero, 0);
+      const tx = contractInstance.transferFrom(owner.address, constants.AddressZero, defaultTokenId);
 
       await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
     });
@@ -34,9 +34,9 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: IE
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address);
-      const tx = contractInstance.transferFrom(owner.address, receiver.address, 0);
+      const tx = contractInstance.transferFrom(owner.address, receiver.address, defaultTokenId);
 
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, 0);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
@@ -50,11 +50,11 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: IE
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address);
-      await contractInstance.approve(receiver.address, 0);
+      await contractInstance.approve(receiver.address, defaultTokenId);
 
-      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, 0);
+      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, defaultTokenId);
 
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, 0);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);

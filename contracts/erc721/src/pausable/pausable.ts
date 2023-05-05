@@ -40,7 +40,7 @@ export function shouldBehaveLikeERC721Pausable(factory: () => Promise<Contract>,
       await expect(tx2).to.emit(contractInstance, "Paused").withArgs(owner.address);
 
       const tx3 = mint(contractInstance, owner, owner.address, 1);
-      await expect(tx3).to.be.revertedWith(`ERC721Pausable: token transfer while paused`);
+      await expect(tx3).to.be.revertedWith("Pausable: paused");
 
       const tx4 = contractInstance.unpause();
       await expect(tx4).to.emit(contractInstance, "Unpaused").withArgs(owner.address);

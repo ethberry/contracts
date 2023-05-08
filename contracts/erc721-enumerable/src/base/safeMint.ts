@@ -2,14 +2,14 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
-import { InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
+import { InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultSafeMintERC721 } from "../shared/defaultMint";
 
 export function shouldSafeMint(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
-  const { safeMint = defaultSafeMintERC721, minterRole = MINTER_ROLE } = options;
+  const { safeMint = defaultSafeMintERC721, minterRole = MINTER_ROLE, tokenId: defaultTokenId = tokenId } = options;
 
   describe("safeMint", function () {
     it("should fail: account is missing role", async function () {
@@ -31,7 +31,9 @@ export function shouldSafeMint(factory: () => Promise<Contract>, options: IERC72
       const contractInstance = await factory();
 
       const tx = safeMint(contractInstance, owner, receiver.address);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(constants.AddressZero, receiver.address, 0);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(constants.AddressZero, receiver.address, defaultTokenId);
 
       const balance = await contractInstance.balanceOf(receiver.address);
       expect(balance).to.equal(1);
@@ -56,7 +58,7 @@ export function shouldSafeMint(factory: () => Promise<Contract>, options: IERC72
       const tx = safeMint(contractInstance, owner, erc721ReceiverInstance.address);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(constants.AddressZero, erc721ReceiverInstance.address, 0);
+        .withArgs(constants.AddressZero, erc721ReceiverInstance.address, defaultTokenId);
 
       const balance = await contractInstance.balanceOf(erc721ReceiverInstance.address);
       expect(balance).to.equal(1);

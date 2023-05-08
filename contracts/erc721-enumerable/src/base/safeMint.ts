@@ -2,14 +2,14 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants, Contract } from "ethers";
 
-import { InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
+import { InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultSafeMintERC721 } from "../shared/defaultMint";
 
 export function shouldSafeMint(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
-  const { safeMint = defaultSafeMintERC721, minterRole = MINTER_ROLE, tokenId: defaultTokenId = tokenId } = options;
+  const { safeMint = defaultSafeMintERC721, minterRole = MINTER_ROLE, tokenId: defaultTokenId = 0 } = options;
 
   describe("safeMint", function () {
     it("should fail: account is missing role", async function () {

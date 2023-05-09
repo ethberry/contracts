@@ -14,7 +14,7 @@ import "./ERC1155ABS.sol";
 
 contract ERC1155ABSP is ERC1155ABS, ERC1155Pausable {
   constructor(string memory uri) ERC1155ABS(uri) {
-    _setupRole(PAUSER_ROLE, _msgSender());
+    _grantRole(PAUSER_ROLE, _msgSender());
   }
 
   function pause() public virtual onlyRole(PAUSER_ROLE) {

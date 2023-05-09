@@ -14,7 +14,7 @@ import "./ERC20ABCS.sol";
 
 contract ERC20ABCSP is ERC20ABCS, ERC20Pausable {
   constructor(string memory name, string memory symbol, uint256 cap) ERC20ABCS(name, symbol, cap) {
-    _setupRole(PAUSER_ROLE, _msgSender());
+    _grantRole(PAUSER_ROLE, _msgSender());
   }
 
   function pause() public virtual onlyRole(PAUSER_ROLE) {

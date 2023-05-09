@@ -19,8 +19,8 @@ contract ERC721ABE is AccessControl, ERC721Burnable, ERC721Enumerable {
   Counters.Counter internal _tokenIdTracker;
 
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    _setupRole(MINTER_ROLE, _msgSender());
+    _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _grantRole(MINTER_ROLE, _msgSender());
   }
 
   function mint(address to) public virtual onlyRole(MINTER_ROLE) {

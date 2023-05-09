@@ -12,7 +12,7 @@ import "../strategies/FormulaRandomStrategy.sol";
 
 contract ERC721FormulaRandomStrategy is AccessControl, FormulaRandomStrategy {
   constructor() {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }
 
   function getDispersion(uint256 randomness) external pure returns (uint8) {

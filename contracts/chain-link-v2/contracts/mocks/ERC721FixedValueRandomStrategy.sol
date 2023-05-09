@@ -12,7 +12,7 @@ import "../strategies/FixedValuesRandomStrategy.sol";
 
 contract ERC721FixedValueRandomStrategy is AccessControl, FixedValuesRandomStrategy {
   constructor() {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }
 
   function setDispersion(uint8[] memory dispersion) external onlyRole(DEFAULT_ADMIN_ROLE) {

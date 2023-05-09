@@ -10,7 +10,7 @@ import "../extension/WhiteList.sol";
 
 contract WhiteListTest is WhiteList {
   constructor() {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }
 
   function testMe() external view onlyWhiteListed returns (bool success) {

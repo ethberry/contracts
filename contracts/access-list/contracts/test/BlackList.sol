@@ -10,7 +10,7 @@ import "../extension/BlackList.sol";
 
 contract BlackListTest is BlackList {
   constructor() {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }
 
   function testMe() external view onlyNotBlackListed returns (bool success) {

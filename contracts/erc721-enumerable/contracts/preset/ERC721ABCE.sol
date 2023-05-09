@@ -20,8 +20,8 @@ contract ERC721ABCE is AccessControl, ERC721Burnable, ERC721CappedEnumerable {
   Counters.Counter internal _tokenIdTracker;
 
   constructor(string memory name, string memory symbol, uint256 cap) ERC721(name, symbol) ERC721CappedEnumerable(cap) {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    _setupRole(MINTER_ROLE, _msgSender());
+    _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _grantRole(MINTER_ROLE, _msgSender());
   }
 
   function mint(address to) public virtual onlyRole(MINTER_ROLE) {

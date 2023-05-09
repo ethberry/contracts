@@ -16,8 +16,8 @@ contract ERC1155AB is AccessControl, ERC1155Burnable {
   constructor(string memory uri) ERC1155(uri) {
     address account = _msgSender();
 
-    _setupRole(DEFAULT_ADMIN_ROLE, account);
-    _setupRole(MINTER_ROLE, account);
+    _grantRole(DEFAULT_ADMIN_ROLE, account);
+    _grantRole(MINTER_ROLE, account);
   }
 
   function mint(address to, uint256 id, uint256 amount, bytes memory data) public virtual onlyRole(MINTER_ROLE) {

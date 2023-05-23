@@ -7,7 +7,7 @@ import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldUserExprires(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
-  const { mint = defaultMintERC721 } = options;
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
 
   describe("userExprires", function () {
     it("should return expiration time of user", async function () {
@@ -20,8 +20,8 @@ export function shouldUserExprires(factory: () => Promise<Contract>, options: IE
       const deadline = current.add(web3.utils.toBN(1000));
       // await time.increaseTo(current.add(web3.utils.toBN(2000)));
 
-      await contractInstance.setUser(0, receiver.address, deadline.toString());
-      const userExpires = await contractInstance.userExpires(0);
+      await contractInstance.setUser(defaultTokenId, receiver.address, deadline.toString());
+      const userExpires = await contractInstance.userExpires(defaultTokenId);
       expect(userExpires).to.be.equal(deadline.toString());
     });
   });

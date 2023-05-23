@@ -7,7 +7,7 @@ import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldSetUser(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
-  const { mint = defaultMintERC721 } = options;
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
 
   describe("setUser", function () {
     it("should set a user to a token", async function () {
@@ -19,9 +19,9 @@ export function shouldSetUser(factory: () => Promise<Contract>, options: IERC721
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
 
-      await contractInstance.setUser(0, receiver.address, deadline.toString());
+      await contractInstance.setUser(defaultTokenId, receiver.address, deadline.toString());
 
-      const userOf = await contractInstance.userOf(0);
+      const userOf = await contractInstance.userOf(defaultTokenId);
 
       expect(userOf).to.be.equal(receiver.address);
     });
@@ -35,7 +35,7 @@ export function shouldSetUser(factory: () => Promise<Contract>, options: IERC721
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
 
-      const tx = contractInstance.connect(receiver).setUser(0, receiver.address, deadline.toString());
+      const tx = contractInstance.connect(receiver).setUser(defaultTokenId, receiver.address, deadline.toString());
       await expect(tx).to.be.revertedWith("ERC721: transfer caller is not owner nor approved");
     });
 
@@ -48,10 +48,10 @@ export function shouldSetUser(factory: () => Promise<Contract>, options: IERC721
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
 
-      await contractInstance.approve(receiver.address, 0);
-      await contractInstance.setUser(0, receiver.address, deadline.toString());
+      await contractInstance.approve(receiver.address, defaultTokenId);
+      await contractInstance.setUser(defaultTokenId, receiver.address, deadline.toString());
 
-      const userOf = await contractInstance.userOf(0);
+      const userOf = await contractInstance.userOf(defaultTokenId);
 
       expect(userOf).to.be.equal(receiver.address);
     });
@@ -66,9 +66,9 @@ export function shouldSetUser(factory: () => Promise<Contract>, options: IERC721
       const deadline = current.add(web3.utils.toBN(100));
 
       await contractInstance.setApprovalForAll(receiver.address, true);
-      await contractInstance.setUser(0, receiver.address, deadline.toString());
+      await contractInstance.setUser(defaultTokenId, receiver.address, deadline.toString());
 
-      const userOf = await contractInstance.userOf(0);
+      const userOf = await contractInstance.userOf(defaultTokenId);
 
       expect(userOf).to.be.equal(receiver.address);
     });
@@ -82,9 +82,11 @@ export function shouldSetUser(factory: () => Promise<Contract>, options: IERC721
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
 
-      const tx = contractInstance.setUser(0, receiver.address, deadline.toString());
+      const tx = contractInstance.setUser(defaultTokenId, receiver.address, deadline.toString());
 
-      await expect(tx).to.emit(contractInstance, "UpdateUser").withArgs(0, receiver.address, deadline.toString());
+      await expect(tx)
+        .to.emit(contractInstance, "UpdateUser")
+        .withArgs(defaultTokenId, receiver.address, deadline.toString());
     });
   });
 }

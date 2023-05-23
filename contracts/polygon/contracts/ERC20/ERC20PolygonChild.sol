@@ -13,7 +13,7 @@ import "@gemunion/contracts-misc/contracts/constants.sol";
 
 abstract contract ERC20PolygonChild is ERC20, AccessControl {
   constructor() {
-    _setupRole(DEPOSITOR_ROLE, _msgSender());
+    _grantRole(DEPOSITOR_ROLE, _msgSender());
   }
 
   /**

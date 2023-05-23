@@ -14,7 +14,7 @@ import "./ERC721ABCE.sol";
 
 contract ERC721ABCEP is ERC721ABCE, Pausable {
   constructor(string memory name, string memory symbol, uint256 cap) ERC721ABCE(name, symbol, cap) {
-    _setupRole(PAUSER_ROLE, _msgSender());
+    _grantRole(PAUSER_ROLE, _msgSender());
   }
 
   function pause() public virtual onlyRole(PAUSER_ROLE) {

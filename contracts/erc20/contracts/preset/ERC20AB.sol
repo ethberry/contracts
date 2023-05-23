@@ -14,8 +14,8 @@ import "@gemunion/contracts-erc1363/contracts/extensions/ERC1363.sol";
 
 contract ERC20AB is AccessControl, ERC20Burnable, ERC1363 {
   constructor(string memory name, string memory symbol) ERC20(name, symbol) {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    _setupRole(MINTER_ROLE, _msgSender());
+    _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _grantRole(MINTER_ROLE, _msgSender());
   }
 
   function mint(address to, uint256 amount) public virtual onlyRole(MINTER_ROLE) {

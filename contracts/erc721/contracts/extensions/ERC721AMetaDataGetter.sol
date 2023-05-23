@@ -13,7 +13,7 @@ pragma solidity ^0.8.13;
 
 abstract contract ERC721AMetaDataGetter is AccessControl, GeneralizedCollection {
   constructor() {
-    _setupRole(METADATA_ROLE, _msgSender());
+    _grantRole(METADATA_ROLE, _msgSender());
   }
 
   struct Metadata {

@@ -13,6 +13,6 @@ import "../ERC20/ERC20PolygonParent.sol";
 
 contract ERC20PolygonParentTest is ERC20, AccessControl, ERC20PolygonParent {
   constructor(string memory name, string memory symbol) ERC20(name, symbol) {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }
 }

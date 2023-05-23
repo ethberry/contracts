@@ -16,8 +16,8 @@ contract ERC20AF is AccessControl, ERC20FlashMint {
   address _flashFeeReceiverAddress;
 
   constructor(string memory name, string memory symbol) ERC20(name, symbol) {
-    _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    _setupRole(MINTER_ROLE, _msgSender());
+    _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
+    _grantRole(MINTER_ROLE, _msgSender());
   }
 
   function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {

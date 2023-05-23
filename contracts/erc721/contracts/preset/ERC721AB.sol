@@ -15,8 +15,8 @@ contract ERC721AB is AccessControl, ERC721Burnable {
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {
     address account = _msgSender();
 
-    _setupRole(DEFAULT_ADMIN_ROLE, account);
-    _setupRole(MINTER_ROLE, account);
+    _grantRole(DEFAULT_ADMIN_ROLE, account);
+    _grantRole(MINTER_ROLE, account);
   }
 
   function mint(address to, uint256 tokenId) public virtual onlyRole(MINTER_ROLE) {

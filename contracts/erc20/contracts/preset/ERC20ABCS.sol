@@ -14,7 +14,7 @@ import "./ERC20ABC.sol";
 
 contract ERC20ABCS is ERC20ABC, ERC20Snapshot {
   constructor(string memory name, string memory symbol, uint256 cap) ERC20ABC(name, symbol, cap) {
-    _setupRole(SNAPSHOT_ROLE, _msgSender());
+    _grantRole(SNAPSHOT_ROLE, _msgSender());
   }
 
   function snapshot() public onlyRole(SNAPSHOT_ROLE) {

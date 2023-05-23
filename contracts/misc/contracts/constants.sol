@@ -8,6 +8,7 @@ pragma solidity ^0.8.13;
 
 bytes32 constant DEPOSITOR_ROLE = keccak256("DEPOSITOR_ROLE");
 bytes32 constant GENES = keccak256("GENES");
+bytes32 constant TRAITS = keccak256("TRAITS");
 bytes32 constant GRADE = keccak256("GRADE");
 bytes32 constant METADATA_ROLE = keccak256("METADATA_ROLE");
 bytes32 constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -24,4 +25,3 @@ bytes4 constant IERC4906_ID = 0x49064906;
 bytes4 constant IERC4907_ID = 0xad092b5c;
 
 // WARNING: project related InterfaceIds like SIMPLE and RANDOM should not be here
-

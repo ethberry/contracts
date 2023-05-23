@@ -10,3 +10,5 @@ export function shouldBehaveLikeERC721Rentable(factory: () => Promise<Contract>,
   shouldUserOf(factory, options);
   shouldUserExprires(factory, options);
 }
+
+export { shouldSetUser, shouldUserOf, shouldUserExprires };

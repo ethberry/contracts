@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@ethersproject/networks": "5.7.1",
-    "@openzeppelin/contracts": "4.8.3",
+    "@openzeppelin/contracts": "4.9.0",
     "@openzeppelin/test-helpers": "0.5.16",
     "@types/chai": "4.3.5",
     "@types/mocha": "10.0.1",
@@ -44,7 +44,7 @@
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-erc1363",
   "peerDependencies": {
-    "@openzeppelin/contracts": "4.8.3"
+    "@openzeppelin/contracts": "4.9.0"
   },
   "publishConfig": {
     "access": "public",
@@ -66,5 +66,5 @@
     "test:coverage": "hardhat coverage"
   },
   "types": "./dist/index.d.ts",
-  "version": "2.0.20"
+  "version": "3.0.0"
 }

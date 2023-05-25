@@ -17,7 +17,9 @@ contract ERC721ABRS is ERC721ABR, ERC721URIStorage {
     uint96 royaltyNumerator
   ) ERC721ABR(name, symbol, royaltyNumerator) {}
 
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721ABR) returns (bool) {
+  function supportsInterface(
+    bytes4 interfaceId
+  ) public view virtual override(ERC721ABR, ERC721URIStorage) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 

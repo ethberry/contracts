@@ -25,7 +25,9 @@ contract ERC721ABERS is ERC721ABER, ERC721URIStorage {
     _setTokenURI(tokenId, _tokenURI);
   }
 
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721ABER) returns (bool) {
+  function supportsInterface(
+    bytes4 interfaceId
+  ) public view virtual override(ERC721ABER, ERC721URIStorage) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 

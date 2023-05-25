@@ -18,7 +18,9 @@ contract ERC721ABCRS is ERC721ABCR, ERC721URIStorage {
     uint96 royaltyNumerator
   ) ERC721ABCR(name, symbol, cap, royaltyNumerator) {}
 
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721ABCR) returns (bool) {
+  function supportsInterface(
+    bytes4 interfaceId
+  ) public view virtual override(ERC721ABCR, ERC721URIStorage) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 

@@ -7,7 +7,7 @@
   "dependencies": {
     "@ethersproject/abi": "5.7.0",
     "@ethersproject/providers": "5.7.2",
-    "@gemunion/contracts-constants": "^2.0.20",
+    "@gemunion/contracts-constants": "3.0.0",
     "@nomicfoundation/hardhat-chai-matchers": "1.0.6",
     "@nomicfoundation/hardhat-network-helpers": "1.0.8",
     "@nomicfoundation/hardhat-toolbox": "2.0.2",
@@ -51,5 +51,5 @@
   "sideEffects": false,
   "title": "-=Gemun Ion Studio=-",
   "types": "./dist/index.d.ts",
-  "version": "2.0.20"
+  "version": "3.0.0"
 }

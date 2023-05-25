@@ -7,11 +7,11 @@
   "dependencies": {
     "@ethersproject/abi": "5.7.0",
     "@ethersproject/providers": "5.7.2",
-    "@gemunion/contracts-constants": "^2.0.20",
-    "@gemunion/contracts-erc20": "^2.0.20",
-    "@gemunion/contracts-misc": "^2.0.20",
-    "@gemunion/contracts-mocha": "^2.0.20",
-    "@gemunion/contracts-mocks": "^2.0.20",
+    "@gemunion/contracts-constants": "3.0.0",
+    "@gemunion/contracts-erc20": "3.0.0",
+    "@gemunion/contracts-misc": "3.0.0",
+    "@gemunion/contracts-mocha": "3.0.0",
+    "@gemunion/contracts-mocks": "3.0.0",
     "@nomicfoundation/hardhat-chai-matchers": "1.0.6",
     "@nomicfoundation/hardhat-network-helpers": "1.0.8",
     "@nomicfoundation/hardhat-toolbox": "2.0.2",
@@ -28,7 +28,7 @@
   "description": "Collection of contracts and presets",
   "devDependencies": {
     "@ethersproject/networks": "5.7.1",
-    "@openzeppelin/contracts": "4.8.3",
+    "@openzeppelin/contracts": "4.9.0",
     "@types/chai": "4.3.5",
     "@types/mocha": "10.0.1",
     "@types/node": "18.16.13",
@@ -47,7 +47,7 @@
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-polygon",
   "peerDependencies": {
-    "@openzeppelin/contracts": "4.8.3",
+    "@openzeppelin/contracts": "4.9.0",
     "ethers": "5.7.2"
   },
   "publishConfig": {
@@ -70,5 +70,5 @@
     "test:coverage": "hardhat coverage"
   },
   "types": "./typechain-types/index.ts",
-  "version": "2.0.20"
+  "version": "3.0.0"
 }

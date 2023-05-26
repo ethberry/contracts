@@ -14,5 +14,7 @@ find . -type d -name "artifacts" | xargs rm -rf
 find . -type d -name "cache" | xargs rm -rf
 find . -type d -name "typechain" | xargs rm -rf
 find . -type d -name "typechain-types" | xargs rm -rf
+find . -type d -name "coverage" | xargs rm -rf
+find . -type d -name "coverage.json" | xargs rm -rf
 
 find . -type d -name "besu" | xargs rm -rf

@@ -9,7 +9,7 @@ pragma solidity ^0.8.13;
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 
-import "@gemunion/contracts-erc721-enumerable/contracts/preset/ERC721ABERS.sol";
+import "@gemunion/contracts-erc721E/contracts/preset/ERC721ABERS.sol";
 
 import "./utils/ProxyRegistry.sol";
 

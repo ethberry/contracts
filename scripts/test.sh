@@ -13,7 +13,7 @@ lerna exec --scope @gemunion/contracts-chain-link -- npm run test
 lerna exec --scope @gemunion/contracts-chain-link-v2 -- npm run test
 lerna exec --scope @gemunion/contracts-erc20 -- npm run test
 lerna exec --scope @gemunion/contracts-erc721 -- npm run test
-lerna exec --scope @gemunion/contracts-erc721-enumerable -- npm run test
+lerna exec --scope @gemunion/contracts-erc721E -- npm run test
 lerna exec --scope @gemunion/contracts-erc1155 -- npm run test
 lerna exec --scope @gemunion/contracts-misc -- npm run test
 lerna exec --scope @gemunion/contracts-mocks -- npm run test

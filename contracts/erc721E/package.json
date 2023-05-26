@@ -50,7 +50,7 @@
   },
   "license": "UNLICENSED",
   "main": "./dist/index.js",
-  "name": "@gemunion/contracts-erc721-enumerable",
+  "name": "@gemunion/contracts-erc721E",
   "peerDependencies": {
     "@openzeppelin/contracts": "4.9.0",
     "ethers": "5.7.2"

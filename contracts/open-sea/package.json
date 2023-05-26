@@ -11,7 +11,7 @@
     "@gemunion/contracts-constants": "^3.0.1",
     "@gemunion/contracts-erc1363": "^3.0.1",
     "@gemunion/contracts-erc721": "^3.0.1",
-    "@gemunion/contracts-erc721-enumerable": "^3.0.1",
+    "@gemunion/contracts-erc721E": "^3.0.1",
     "@gemunion/contracts-misc": "^3.0.1",
     "@gemunion/contracts-mocha": "^3.0.1",
     "@gemunion/contracts-mocks": "^3.0.1",

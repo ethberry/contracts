@@ -8,15 +8,14 @@ pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Consecutive.sol";
 
-import "./ERC721ABCR.sol";
+import "@gemunion/contracts-erc721/contracts/preset/ERC721ABR.sol";
 
-contract ERC721ABCRK is ERC721ABCR, ERC721Consecutive {
+contract ERC721ABRK is ERC721ABR, ERC721Consecutive {
   constructor(
     string memory name,
     string memory symbol,
-    uint256 cap,
     uint96 royaltyNumerator
-  ) ERC721ABCR(name, symbol, cap, royaltyNumerator) {
+  ) ERC721ABR(name, symbol, royaltyNumerator) {
     _mintConsecutive2(address(0), 0);
   }
 
@@ -38,7 +37,7 @@ contract ERC721ABCRK is ERC721ABCR, ERC721Consecutive {
     address to,
     uint256 firstTokenId,
     uint256 batchSize
-  ) internal virtual override(ERC721, ERC721ABCR) {
+  ) internal virtual override(ERC721, ERC721ABR) {
     super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
   }
 
@@ -46,7 +45,7 @@ contract ERC721ABCRK is ERC721ABCR, ERC721Consecutive {
     super._mint(to, tokenId);
   }
 
-  function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721ABCR) {
+  function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721ABR) {
     super._burn(tokenId);
   }
 
@@ -54,7 +53,7 @@ contract ERC721ABCRK is ERC721ABCR, ERC721Consecutive {
     return super._ownerOf(tokenId);
   }
 
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721ABCR, ERC721) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721ABR, ERC721) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 }

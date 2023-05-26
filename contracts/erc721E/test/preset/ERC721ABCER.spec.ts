@@ -10,7 +10,7 @@ import {
 } from "../../src";
 import { deployERC721 } from "../../src/fixtures";
 
-describe("ERC721ABCER", function () {
+describe("ERC721ABECR", function () {
   const factory = () => deployERC721(this.title);
 
   shouldBehaveLikeAccessControl(factory)(DEFAULT_ADMIN_ROLE, MINTER_ROLE);

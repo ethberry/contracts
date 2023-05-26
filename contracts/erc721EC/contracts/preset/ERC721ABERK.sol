@@ -6,11 +6,11 @@
 
 pragma solidity ^0.8.13;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Consecutive.sol";
-
 import "@gemunion/contracts-erc721/contracts/preset/ERC721ABR.sol";
 
-contract ERC721ABRK is ERC721ABR, ERC721Consecutive {
+import "../extensions/ERC721ConsecutiveEnumerable.sol";
+
+contract ERC721ABERK is ERC721ABR, ERC721ConsecutiveEnumerable {
   constructor(
     string memory name,
     string memory symbol,
@@ -28,7 +28,7 @@ contract ERC721ABRK is ERC721ABR, ERC721Consecutive {
     address to,
     uint256 firstTokenId,
     uint256 batchSize
-  ) internal virtual override(ERC721, ERC721Consecutive) {
+  ) internal virtual override(ERC721, ERC721ConsecutiveEnumerable) {
     super._afterTokenTransfer(from, to, firstTokenId, batchSize);
   }
 
@@ -37,11 +37,11 @@ contract ERC721ABRK is ERC721ABR, ERC721Consecutive {
     address to,
     uint256 firstTokenId,
     uint256 batchSize
-  ) internal virtual override(ERC721, ERC721ABR) {
+  ) internal virtual override(ERC721ConsecutiveEnumerable, ERC721ABR) {
     super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
   }
 
-  function _mint(address to, uint256 tokenId) internal virtual override(ERC721, ERC721Consecutive) {
+  function _mint(address to, uint256 tokenId) internal virtual override(ERC721, ERC721ConsecutiveEnumerable) {
     super._mint(to, tokenId);
   }
 
@@ -49,11 +49,15 @@ contract ERC721ABRK is ERC721ABR, ERC721Consecutive {
     super._burn(tokenId);
   }
 
-  function _ownerOf(uint256 tokenId) internal view virtual override(ERC721, ERC721Consecutive) returns (address) {
+  function _ownerOf(
+    uint256 tokenId
+  ) internal view virtual override(ERC721, ERC721ConsecutiveEnumerable) returns (address) {
     return super._ownerOf(tokenId);
   }
 
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721ABR) returns (bool) {
+  function supportsInterface(
+    bytes4 interfaceId
+  ) public view virtual override(ERC721ConsecutiveEnumerable, ERC721ABR) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 }

@@ -1,12 +1,12 @@
 import { batchSize, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
-
 import {
   shouldBehaveLikeERC721,
   shouldBehaveLikeERC721Burnable,
-  shouldBehaveLikeERC721Consecutive,
   shouldBehaveLikeERC721Royalty,
-} from "../../src";
+} from "@gemunion/contracts-erc721";
+
+import { shouldBehaveLikeERC721Consecutive } from "../../src";
 import { deployERC721 } from "../../src/fixtures";
 
 describe("ERC721ABRK", function () {

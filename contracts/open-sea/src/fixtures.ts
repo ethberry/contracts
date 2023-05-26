@@ -1,4 +1,5 @@
 import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
 import { royalty, tokenName, tokenSymbol } from "@gemunion/contracts-constants";
 

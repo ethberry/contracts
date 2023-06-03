@@ -5,19 +5,16 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
-    "@ethersproject/abi": "5.7.0",
-    "@ethersproject/providers": "5.7.2",
     "@gemunion/contracts-constants": "^3.0.3",
     "@gemunion/contracts-erc1363": "^3.0.3",
-    "@nomicfoundation/hardhat-chai-matchers": "1.0.6",
+    "@nomicfoundation/hardhat-chai-matchers": "2.0.0",
     "@nomicfoundation/hardhat-network-helpers": "1.0.8",
     "@nomicfoundation/hardhat-toolbox": "2.0.2",
     "@nomiclabs/hardhat-ethers": "2.2.3",
     "@nomiclabs/hardhat-etherscan": "3.1.7",
-    "@typechain/ethers-v5": "11.0.0",
+    "@typechain/ethers-v6": "0.3.3",
     "@typechain/hardhat": "7.0.0",
     "chai": "4.3.7",
-    "ethers": "5.7.2",
     "hardhat": "2.14.1",
     "hardhat-gas-reporter": "1.0.9",
     "solidity-coverage": "0.8.2",
@@ -26,6 +23,7 @@
   "description": "Collection of contracts and presets",
   "devDependencies": {
     "dotenv": "16.1.3",
+    "ethers": "6.3.0",
     "rimraf": "5.0.1"
   },
   "engines": {
@@ -34,6 +32,9 @@
   "license": "UNLICENSED",
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-mocks",
+  "peerDependencies": {
+    "ethers": "^6.0.0"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://npm.pkg.github.com/"

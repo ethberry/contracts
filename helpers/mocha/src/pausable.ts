@@ -4,7 +4,7 @@ import { Contract } from "ethers";
 
 import { InterfaceId, PAUSER_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldBehaveLikePausable(factory: () => Promise<Contract>) {
+export function shouldBehaveLikePausable(factory: () => Promise<any>) {
   describe("pause", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();

@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+// import { Contract } from "ethers";
 
 import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldRevokeRole(factory: () => Promise<Contract>) {
+export function shouldRevokeRole(factory: () => Promise<any>) {
   describe("shouldRevokeRole", function () {
     it("Should revoke role (has no role)", async function () {
       const [_owner, receiver] = await ethers.getSigners();

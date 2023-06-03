@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+// import { Contract } from "ethers";
 
 import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldGrantRole(factory: () => Promise<Contract>) {
+export function shouldGrantRole(factory: () => Promise<any>) {
   describe("grantRole", function () {
     it("Should grant role", async function () {
       const [owner, receiver] = await ethers.getSigners();

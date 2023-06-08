@@ -20,7 +20,7 @@ export async function deployERC20(name: string) {
 
         return memo;
       },
-      [tokenName, tokenSymbol] as Array<string | number>,
+      [tokenName, tokenSymbol] as Array<string | bigint>,
     );
 
   return erc20Factory.deploy(...args);

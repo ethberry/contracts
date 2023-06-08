@@ -1,9 +1,8 @@
 import { expect } from "chai";
-import { Contract } from "ethers";
 
 import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldGetRoleAdmin(factory: () => Promise<Contract>) {
+export function shouldGetRoleAdmin(factory: () => Promise<any>) {
   return (...roles: Array<string>) => {
     describe("getRoleAdmin", function () {
       roles.forEach(role => {

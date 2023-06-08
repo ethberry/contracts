@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 import { deployJerk } from "@gemunion/contracts-mocks";
@@ -8,7 +8,7 @@ import { deployJerk } from "@gemunion/contracts-mocks";
 import type { IERC20Options } from "../shared/defaultMint";
 import { defaultMintERC20 } from "../shared/defaultMint";
 
-export function shouldTransferFrom(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+export function shouldTransferFrom(factory: () => Promise<any>, options: IERC20Options = {}) {
   const { mint = defaultMintERC20 } = options;
 
   describe("transferFrom", function () {
@@ -32,18 +32,15 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: IE
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
       const erc20NonReceiverInstance = await deployJerk();
+      const address = await erc20NonReceiverInstance.getAddress();
 
       await mint(contractInstance, owner, owner.address);
       await contractInstance.approve(receiver.address, amount);
 
-      const tx = contractInstance
-        .connect(receiver)
-        .transferFrom(owner.address, erc20NonReceiverInstance.address, amount);
-      await expect(tx)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, erc20NonReceiverInstance.address, amount);
+      const tx = contractInstance.connect(receiver).transferFrom(owner.address, address, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, address, amount);
 
-      const nonReceiverBalance = await contractInstance.balanceOf(erc20NonReceiverInstance.address);
+      const nonReceiverBalance = await contractInstance.balanceOf(address);
       expect(nonReceiverBalance).to.equal(amount);
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
@@ -69,7 +66,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: IE
 
       await mint(contractInstance, owner, owner.address);
       await contractInstance.approve(receiver.address, amount);
-      const tx = contractInstance.connect(receiver).transferFrom(owner.address, constants.AddressZero, amount);
+      const tx = contractInstance.connect(receiver).transferFrom(owner.address, ZeroAddress, amount);
       await expect(tx).to.be.revertedWith(`ERC20: transfer to the zero address`);
     });
 

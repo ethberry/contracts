@@ -4,11 +4,11 @@
     "name": "TrejGun",
     "url": "https://gemunion.io/"
   },
-  "description": "Collection of contracts and presets",
   "dependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "2.0.1",
     "@nomicfoundation/hardhat-network-helpers": "1.0.8",
     "@nomicfoundation/hardhat-toolbox": "3.0.0",
+    "@nomicfoundation/hardhat-verify": "1.0.1",
     "@nomiclabs/hardhat-ethers": "2.2.3",
     "@nomiclabs/hardhat-etherscan": "3.1.7",
     "@typechain/ethers-v6": "0.4.0",
@@ -18,12 +18,13 @@
     "solidity-coverage": "0.8.2",
     "typechain": "8.2.0"
   },
+  "description": "Collection of contracts and presets",
   "devDependencies": {
-    "ethers": "6.5.1",
     "@types/chai": "4.3.5",
     "@types/mocha": "10.0.1",
     "@types/node": "18.16.16",
     "dotenv": "16.1.4",
+    "ethers": "6.5.1",
     "hardhat": "2.15.0",
     "hardhat-deploy": "0.11.30",
     "solhint": "3.4.1",
@@ -60,5 +61,5 @@
     "test:coverage": "hardhat coverage"
   },
   "types": "./typechain-types/index.ts",
-  "version": "3.0.3"
+  "version": "4.0.0"
 }

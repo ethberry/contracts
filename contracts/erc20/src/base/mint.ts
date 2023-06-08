@@ -1,13 +1,13 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import { amount, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 
 import type { IERC20Options } from "../shared/defaultMint";
 import { defaultMintERC20 } from "../shared/defaultMint";
 
-export function shouldMint(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+export function shouldMint(factory: () => Promise<any>, options: IERC20Options = {}) {
   const { mint = defaultMintERC20, minterRole = MINTER_ROLE } = options;
 
   describe("mint", function () {
@@ -31,7 +31,7 @@ export function shouldMint(factory: () => Promise<Contract>, options: IERC20Opti
       const contractInstance = await factory();
 
       const tx = mint(contractInstance, owner, owner.address);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(constants.AddressZero, owner.address, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
 
       const balance = await contractInstance.balanceOf(owner.address);
       expect(balance).to.equal(amount);

@@ -19,11 +19,13 @@ describe("ERC721BaseUrlTest", function () {
   describe("tokenURI", function () {
     it("should get token uri", async function () {
       const [owner] = await ethers.getSigners();
+
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
       await contractInstance.mint(owner.address, tokenId);
       const uri = await contractInstance.tokenURI(tokenId);
-      expect(uri).to.equal(`${baseTokenURI}/${contractInstance.address.toLowerCase()}/${tokenId}`);
+      expect(uri).to.equal(`${baseTokenURI}/${address.toLowerCase()}/${tokenId}`);
     });
 
     // setTokenURI is not supported
@@ -39,13 +41,15 @@ describe("ERC721BaseUrlTest", function () {
   describe("setBaseURI", function () {
     it("should set token uri", async function () {
       const [owner] = await ethers.getSigners();
+
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
       const newURI = "http://example.com/";
       await contractInstance.mint(owner.address, tokenId);
       await contractInstance.setBaseURI(newURI);
       const uri = await contractInstance.tokenURI(tokenId);
-      expect(uri).to.equal(`${newURI}/${contractInstance.address.toLowerCase()}/${tokenId}`);
+      expect(uri).to.equal(`${newURI}/${address.toLowerCase()}/${tokenId}`);
     });
   });
 

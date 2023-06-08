@@ -1,13 +1,13 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
 
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldApprove(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+export function shouldApprove(factory: () => Promise<any>, options: IERC721Options = {}) {
   const { mint = defaultMintERC721, batchSize = 0 } = options;
 
   describe("approve", function () {
@@ -46,7 +46,7 @@ export function shouldApprove(factory: () => Promise<Contract>, options: IERC721
       const tx1 = contractInstance.connect(receiver).burn(batchSize + tokenId);
       await expect(tx1)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, constants.AddressZero, batchSize + tokenId);
+        .withArgs(owner.address, ZeroAddress, batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(batchSize);

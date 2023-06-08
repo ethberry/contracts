@@ -1,13 +1,13 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
 
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldTransferFrom(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721Options = {}) {
   const { mint = defaultMintERC721, batchSize = 0 } = options;
 
   describe("transferFrom", function () {
@@ -26,7 +26,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: IE
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address, batchSize + tokenId);
-      const tx = contractInstance.transferFrom(owner.address, constants.AddressZero, batchSize + tokenId);
+      const tx = contractInstance.transferFrom(owner.address, ZeroAddress, batchSize + tokenId);
 
       await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
     });

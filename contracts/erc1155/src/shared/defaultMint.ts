@@ -1,7 +1,7 @@
-import { BigNumberish, Contract, Signer } from "ethers";
+import { BigNumberish, Signer } from "ethers";
 
 export type TMintERC1155Fn = (
-  contractInstance: Contract,
+  contractInstance: any,
   signer: Signer,
   receiver: string,
   tokenId: BigNumberish,
@@ -10,7 +10,7 @@ export type TMintERC1155Fn = (
 ) => Promise<any>;
 
 export type TMintBatchERC1155Fn = (
-  contractInstance: Contract,
+  contractInstance: any,
   signer: Signer,
   receiver: string,
   tokenId: Array<BigNumberish>,
@@ -25,7 +25,7 @@ export interface IERC1155Options {
 }
 
 export const defaultMintERC1155 = (
-  contractInstance: Contract,
+  contractInstance: any,
   signer: Signer,
   receiver: string,
   tokenId: BigNumberish,
@@ -36,7 +36,7 @@ export const defaultMintERC1155 = (
 };
 
 export const defaultMintBatchERC1155 = (
-  contractInstance: Contract,
+  contractInstance: any,
   signer: Signer,
   receiver: string,
   tokenIds: Array<BigNumberish>,

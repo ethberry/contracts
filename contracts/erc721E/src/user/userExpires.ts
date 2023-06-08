@@ -1,12 +1,11 @@
 import { expect } from "chai";
 import { ethers, web3 } from "hardhat";
-import { Contract } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldUserExprires(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+export function shouldUserExprires(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
   const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
 
   describe("userExprires", function () {

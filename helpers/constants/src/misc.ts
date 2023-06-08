@@ -1,4 +1,4 @@
-import { encodeBytes32String, ZeroHash, id, WeiPerEther } from "ethers";
+import { encodeBytes32String, id, WeiPerEther, ZeroHash } from "ethers";
 
 export const baseTokenURI = "http://localhost:3000/metadata"; // no trailing slash
 export const tokenSymbol = "GEM";
@@ -21,5 +21,5 @@ export const METADATA_ROLE = id("METADATA_ROLE");
 export const TEMPLATE_ID = id("TEMPLATE_ID");
 
 export const decimals = WeiPerEther;
-export const amount = 100000;
+export const amount = 100000n;
 export const span = 300;

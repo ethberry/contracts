@@ -1,10 +1,9 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
 import { amount, PAUSER_ROLE, tokenId } from "@gemunion/contracts-constants";
 
-export function shouldBehaveLikeERC1155Pausable(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeERC1155Pausable(factory: () => Promise<any>) {
   describe("pause", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
@@ -44,7 +43,7 @@ export function shouldBehaveLikeERC1155Pausable(factory: () => Promise<Contract>
       await expect(tx5).to.not.be.reverted;
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
-      expect(balanceOfOwner).to.equal(2 * amount);
+      expect(balanceOfOwner).to.equal(amount * 2n);
     });
   });
 }

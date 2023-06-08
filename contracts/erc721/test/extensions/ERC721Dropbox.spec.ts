@@ -22,14 +22,15 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
-      const signature = await owner._signTypedData(
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -58,14 +59,15 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
-      const signature = await owner._signTypedData(
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -105,14 +107,15 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
-      const signature = await owner._signTypedData(
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -141,14 +144,15 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
-      const signature = await owner._signTypedData(
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -171,13 +175,13 @@ describe("ERC721DropboxTest", function () {
 
       const newNonce = encodeBytes32String("nonce1");
 
-      const signature2 = await owner._signTypedData(
+      const signature2 = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -205,14 +209,15 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
-      const signature = await owner._signTypedData(
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -236,13 +241,13 @@ describe("ERC721DropboxTest", function () {
       const tokenId2 = 2;
       const nonce2 = encodeBytes32String("nonce2");
 
-      const signature2 = await owner._signTypedData(
+      const signature2 = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -268,13 +273,13 @@ describe("ERC721DropboxTest", function () {
       const tokenId3 = 3;
       const nonce3 = encodeBytes32String("nonce3");
 
-      const signature3 = await owner._signTypedData(
+      const signature3 = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {

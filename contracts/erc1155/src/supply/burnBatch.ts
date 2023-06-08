@@ -1,13 +1,12 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 
 import type { IERC1155Options } from "../shared/defaultMint";
 import { defaultMintBatchERC1155 } from "../shared/defaultMint";
 
-export function shouldBurnBatch(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Options = {}) {
   const { mintBatch = defaultMintBatchERC1155 } = options;
 
   describe("burnBatch", function () {
@@ -17,7 +16,7 @@ export function shouldBurnBatch(factory: () => Promise<Contract>, options: IERC1
 
       await mintBatch(contractInstance, owner, owner.address, [tokenId], [amount], "0x");
 
-      const tx = contractInstance.burnBatch(owner.address, [tokenId], [amount * 2]);
+      const tx = contractInstance.burnBatch(owner.address, [tokenId], [amount * 2n]);
       await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds totalSupply");
     });
   });

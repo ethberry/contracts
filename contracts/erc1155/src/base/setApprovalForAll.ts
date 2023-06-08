@@ -1,13 +1,12 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 
 import type { IERC1155Options } from "../shared/defaultMint";
 import { defaultMintERC1155 } from "../shared/defaultMint";
 
-export function shouldSetApprovalForAll(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IERC1155Options = {}) {
   const { mint = defaultMintERC1155 } = options;
 
   describe("setApprovalForAll", function () {

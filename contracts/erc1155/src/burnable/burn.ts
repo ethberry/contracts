@@ -1,13 +1,13 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 
 import type { IERC1155Options } from "../shared/defaultMint";
 import { defaultMintERC1155 } from "../shared/defaultMint";
 
-export function shouldBurn(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+export function shouldBurn(factory: () => Promise<any>, options: IERC1155Options = {}) {
   const { mint = defaultMintERC1155 } = options;
 
   describe("burn", function () {
@@ -20,7 +20,7 @@ export function shouldBurn(factory: () => Promise<Contract>, options: IERC1155Op
 
       await expect(tx)
         .to.emit(contractInstance, "TransferSingle")
-        .withArgs(owner.address, owner.address, constants.AddressZero, tokenId, amount);
+        .withArgs(owner.address, owner.address, ZeroAddress, tokenId, amount);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
       expect(balanceOfOwner).to.equal(0);
@@ -36,7 +36,7 @@ export function shouldBurn(factory: () => Promise<Contract>, options: IERC1155Op
       const tx = contractInstance.connect(receiver).burn(owner.address, tokenId, amount);
       await expect(tx)
         .to.emit(contractInstance, "TransferSingle")
-        .withArgs(receiver.address, owner.address, constants.AddressZero, tokenId, amount);
+        .withArgs(receiver.address, owner.address, ZeroAddress, tokenId, amount);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
       expect(balanceOfOwner).to.equal(0);

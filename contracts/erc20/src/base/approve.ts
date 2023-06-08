@@ -1,13 +1,13 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
 import type { IERC20Options } from "../shared/defaultMint";
 import { defaultMintERC20 } from "../shared/defaultMint";
 
-export function shouldApprove(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+export function shouldApprove(factory: () => Promise<any>, options: IERC20Options = {}) {
   const { mint = defaultMintERC20 } = options;
 
   describe("approve", function () {
@@ -43,7 +43,7 @@ export function shouldApprove(factory: () => Promise<Contract>, options: IERC20O
     it("should fail: approve to zero address", async function () {
       const contractInstance = await factory();
 
-      const tx = contractInstance.approve(constants.AddressZero, amount);
+      const tx = contractInstance.approve(ZeroAddress, amount);
       await expect(tx).to.be.revertedWith("ERC20: approve to the zero address");
     });
   });

@@ -15,7 +15,7 @@ export const blockAwait = async function (blockDelay = 2, ms = 1000): Promise<vo
     do {
       await delay(ms);
       currentBlock = await ethers.provider.getBlock("latest");
-      delayB = currentBlock.number - initialBlock.number;
+      delayB = currentBlock.number - initialBlock!.number;
     } while (delayB < blockDelay);
   }
 };

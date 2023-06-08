@@ -8,6 +8,7 @@
     "@nomicfoundation/hardhat-chai-matchers": "2.0.1",
     "@nomicfoundation/hardhat-network-helpers": "1.0.8",
     "@nomicfoundation/hardhat-toolbox": "3.0.0",
+    "@nomicfoundation/hardhat-verify": "1.0.1",
     "@nomiclabs/hardhat-ethers": "2.2.3",
     "@nomiclabs/hardhat-etherscan": "3.1.7",
     "@typechain/ethers-v6": "0.4.0",
@@ -50,5 +51,5 @@
   "sideEffects": false,
   "title": "-=Gemun Ion Studio=-",
   "types": "./dist/index.d.ts",
-  "version": "3.0.3"
+  "version": "4.0.0"
 }

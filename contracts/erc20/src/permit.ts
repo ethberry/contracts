@@ -1,12 +1,11 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract, utils } from "ethers";
+import { MaxUint256, Network, Signature, TypedDataEncoder } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
-import { Network } from "@ethersproject/networks";
 
 import { amount, tokenName } from "@gemunion/contracts-constants";
 
-export function shouldBehaveLikeERC20Permit(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeERC20Permit(factory: () => Promise<any>) {
   describe("permit", function () {
     let network: Network;
 
@@ -24,14 +23,15 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<Contract>) {
 
     it("domain separator", async function () {
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
       const chainId = await contractInstance.getChainId();
       const actual = await contractInstance.DOMAIN_SEPARATOR();
-      const expected = utils._TypedDataEncoder.hashDomain({
+      const expected = TypedDataEncoder.hashDomain({
         name: tokenName,
         version: "1",
         chainId,
-        verifyingContract: contractInstance.address,
+        verifyingContract: address,
       });
       expect(actual).to.equal(expected);
     });
@@ -39,16 +39,17 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<Contract>) {
     it("accepts owner signature", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
       const nonce = 0;
 
-      const signature = await owner._signTypedData(
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -66,12 +67,12 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<Contract>) {
           spender: receiver.address,
           value: amount,
           nonce,
-          deadline: constants.MaxUint256,
+          deadline: MaxUint256,
         },
       );
-      const { v, r, s } = utils.splitSignature(signature);
+      const { v, r, s } = Signature.from(signature);
 
-      const tx = await contractInstance.permit(owner.address, receiver.address, amount, constants.MaxUint256, v, r, s);
+      const tx = await contractInstance.permit(owner.address, receiver.address, amount, MaxUint256, v, r, s);
 
       // besu
       await tx.wait();
@@ -83,16 +84,17 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<Contract>) {
     it("rejects reused signature", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
       const nonce = 0;
 
-      const signature = await owner._signTypedData(
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -110,14 +112,14 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<Contract>) {
           spender: receiver.address,
           value: amount,
           nonce,
-          deadline: constants.MaxUint256,
+          deadline: MaxUint256,
         },
       );
-      const { v, r, s } = utils.splitSignature(signature);
+      const { v, r, s } = Signature.from(signature);
 
-      await contractInstance.permit(owner.address, receiver.address, amount, constants.MaxUint256, v, r, s);
+      await contractInstance.permit(owner.address, receiver.address, amount, MaxUint256, v, r, s);
 
-      const tx = contractInstance.permit(owner.address, receiver.address, amount, constants.MaxUint256, v, r, s);
+      const tx = contractInstance.permit(owner.address, receiver.address, amount, MaxUint256, v, r, s);
 
       await expect(tx).to.be.revertedWith("ERC20Permit: invalid signature");
     });
@@ -125,16 +127,17 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<Contract>) {
     it("rejects other signature", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
       const nonce = 0;
 
-      const signature = await receiver._signTypedData(
+      const signature = await receiver.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -152,12 +155,12 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<Contract>) {
           spender: receiver.address,
           value: amount,
           nonce,
-          deadline: constants.MaxUint256,
+          deadline: MaxUint256,
         },
       );
-      const { v, r, s } = utils.splitSignature(signature);
+      const { v, r, s } = Signature.from(signature);
 
-      const tx = contractInstance.permit(owner.address, receiver.address, amount, constants.MaxUint256, v, r, s);
+      const tx = contractInstance.permit(owner.address, receiver.address, amount, MaxUint256, v, r, s);
 
       await expect(tx).to.be.revertedWith("ERC20Permit: invalid signature");
     });
@@ -165,18 +168,19 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<Contract>) {
     it("rejects expired permit", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
       const nonce = 0;
       // const deadline = (await time.latest()) - time.duration.weeks(1);
       const block = await ethers.provider.getBlock("latest");
-      const deadline = block.timestamp - time.duration.weeks(1).toNumber();
-      const signature = await owner._signTypedData(
+      const deadline = block!.timestamp - time.duration.weeks(1).toNumber();
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -197,7 +201,7 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<Contract>) {
           deadline,
         },
       );
-      const { v, r, s } = utils.splitSignature(signature);
+      const { v, r, s } = Signature.from(signature);
 
       const tx = contractInstance.permit(owner.address, receiver.address, amount, deadline, v, r, s);
 

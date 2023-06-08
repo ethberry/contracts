@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 import { deployJerk } from "@gemunion/contracts-mocks";
@@ -8,7 +7,7 @@ import { deployJerk } from "@gemunion/contracts-mocks";
 import type { IERC20Options } from "../shared/defaultMint";
 import { defaultMintERC20 } from "../shared/defaultMint";
 
-export function shouldTransfer(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+export function shouldTransfer(factory: () => Promise<any>, options: IERC20Options = {}) {
   const { mint = defaultMintERC20 } = options;
 
   describe("transfer", function () {
@@ -42,15 +41,14 @@ export function shouldTransfer(factory: () => Promise<Contract>, options: IERC20
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
       const erc20NonReceiverInstance = await deployJerk();
+      const address = await erc20NonReceiverInstance.getAddress();
 
       await mint(contractInstance, owner, owner.address);
 
-      const tx = contractInstance.transfer(erc20NonReceiverInstance.address, amount);
-      await expect(tx)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, erc20NonReceiverInstance.address, amount);
+      const tx = contractInstance.transfer(address, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, address, amount);
 
-      const nonReceiverBalance = await contractInstance.balanceOf(erc20NonReceiverInstance.address);
+      const nonReceiverBalance = await contractInstance.balanceOf(address);
       expect(nonReceiverBalance).to.equal(amount);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);

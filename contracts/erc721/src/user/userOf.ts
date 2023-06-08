@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers, web3 } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
 import { tokenId } from "@gemunion/contracts-constants";
@@ -8,7 +8,7 @@ import { tokenId } from "@gemunion/contracts-constants";
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldUserOf(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+export function shouldUserOf(factory: () => Promise<any>, options: IERC721Options = {}) {
   const { mint = defaultMintERC721 } = options;
 
   describe("userOf", function () {
@@ -24,7 +24,7 @@ export function shouldUserOf(factory: () => Promise<Contract>, options: IERC721O
       await contractInstance.setUser(tokenId, receiver.address, deadline.toString());
       const userOf = await contractInstance.userOf(tokenId);
 
-      expect(userOf).to.be.equal(constants.AddressZero);
+      expect(userOf).to.be.equal(ZeroAddress);
     });
 
     it("should return 0, when time is expired", async function () {
@@ -48,7 +48,7 @@ export function shouldUserOf(factory: () => Promise<Contract>, options: IERC721O
       await time.increaseTo(current2.add(web3.utils.toBN(50)));
 
       const userOf2 = await contractInstance.userOf(tokenId);
-      expect(userOf2).to.be.equal(constants.AddressZero);
+      expect(userOf2).to.be.equal(ZeroAddress);
     });
 
     it("Owner is still the owner of NFT", async function () {

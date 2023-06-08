@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import { ethers, web3 } from "hardhat";
-import { Contract } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
 import { tokenId } from "@gemunion/contracts-constants";
@@ -8,7 +7,7 @@ import { tokenId } from "@gemunion/contracts-constants";
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldSetUser(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+export function shouldSetUser(factory: () => Promise<any>, options: IERC721Options = {}) {
   const { mint = defaultMintERC721 } = options;
 
   describe("setUser", function () {

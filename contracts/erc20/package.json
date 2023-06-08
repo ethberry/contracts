@@ -5,14 +5,15 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
-    "@gemunion/contracts-constants": "^3.0.3",
-    "@gemunion/contracts-erc1363": "^3.0.3",
-    "@gemunion/contracts-misc": "^3.0.3",
-    "@gemunion/contracts-mocha": "^3.0.3",
-    "@gemunion/contracts-mocks": "^3.0.3",
+    "@gemunion/contracts-constants": "^4.0.0",
+    "@gemunion/contracts-erc1363": "^4.0.0",
+    "@gemunion/contracts-misc": "^4.0.0",
+    "@gemunion/contracts-mocha": "^4.0.0",
+    "@gemunion/contracts-mocks": "^4.0.0",
     "@nomicfoundation/hardhat-chai-matchers": "2.0.1",
     "@nomicfoundation/hardhat-network-helpers": "1.0.8",
     "@nomicfoundation/hardhat-toolbox": "3.0.0",
+    "@nomicfoundation/hardhat-verify": "1.0.1",
     "@nomiclabs/hardhat-ethers": "2.2.3",
     "@nomiclabs/hardhat-etherscan": "3.1.7",
     "@typechain/ethers-v6": "0.4.0",
@@ -24,13 +25,13 @@
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
-    "ethers": "6.5.1",
     "@openzeppelin/contracts": "4.9.0",
     "@openzeppelin/test-helpers": "0.5.16",
     "@types/chai": "4.3.5",
     "@types/mocha": "10.0.1",
     "@types/node": "18.16.16",
     "dotenv": "16.1.4",
+    "ethers": "6.5.1",
     "hardhat": "2.15.0",
     "hardhat-deploy": "0.11.30",
     "solhint": "3.4.1",
@@ -68,5 +69,5 @@
     "test:coverage": "hardhat coverage"
   },
   "types": "./dist/index.d.ts",
-  "version": "3.0.3"
+  "version": "4.0.0"
 }

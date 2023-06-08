@@ -1,13 +1,12 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 
 import type { IERC1155Options } from "../shared/defaultMint";
 import { defaultMintBatchERC1155, defaultMintERC1155 } from "../shared/defaultMint";
 
-export function shouldGetTotalSupply(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+export function shouldGetTotalSupply(factory: () => Promise<any>, options: IERC1155Options = {}) {
   const { mint = defaultMintERC1155, mintBatch = defaultMintBatchERC1155 } = options;
 
   describe("totalSupply", function () {

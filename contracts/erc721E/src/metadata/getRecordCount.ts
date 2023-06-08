@@ -1,12 +1,12 @@
 import { expect } from "chai";
-import { Contract, utils } from "ethers";
+import { keccak256, toUtf8Bytes } from "ethers";
 
-export function shouldGetRecordCount(factory: () => Promise<Contract>) {
+export function shouldGetRecordCount(factory: () => Promise<any>) {
   describe("getRecordCount", function () {
     it("should get count", async function () {
       const contractInstance = await factory();
 
-      await contractInstance.setTokenMetadata(0, [{ key: utils.keccak256(utils.toUtf8Bytes("GRADE")), value: 1337 }]);
+      await contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
 
       const count = await contractInstance.getRecordCount();
 
@@ -16,7 +16,7 @@ export function shouldGetRecordCount(factory: () => Promise<Contract>) {
     it("should get count (deleted)", async function () {
       const contractInstance = await factory();
 
-      await contractInstance.setTokenMetadata(0, [{ key: utils.keccak256(utils.toUtf8Bytes("GRADE")), value: 1337 }]);
+      await contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
       await contractInstance.deleteRecord(0);
 
       const count = await contractInstance.getRecordCount();
@@ -27,8 +27,8 @@ export function shouldGetRecordCount(factory: () => Promise<Contract>) {
     it("should get count (deleted by key)", async function () {
       const contractInstance = await factory();
 
-      await contractInstance.setTokenMetadata(0, [{ key: utils.keccak256(utils.toUtf8Bytes("GRADE")), value: 1337 }]);
-      await contractInstance.deleteRecordField(0, utils.keccak256(utils.toUtf8Bytes("GRADE")));
+      await contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
+      await contractInstance.deleteRecordField(0, keccak256(toUtf8Bytes("GRADE")));
 
       const count = await contractInstance.getRecordCount();
 

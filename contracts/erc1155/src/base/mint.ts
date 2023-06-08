@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import { amount, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
@@ -8,7 +8,7 @@ import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
 import type { IERC1155Options } from "../shared/defaultMint";
 import { defaultMintERC1155 } from "../shared/defaultMint";
 
-export function shouldMint(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+export function shouldMint(factory: () => Promise<any>, options: IERC1155Options = {}) {
   const { mint = defaultMintERC1155, minterRole = MINTER_ROLE } = options;
 
   describe("mint", function () {
@@ -19,7 +19,7 @@ export function shouldMint(factory: () => Promise<Contract>, options: IERC1155Op
       const tx1 = mint(contractInstance, owner, receiver.address, tokenId, amount, "0x");
       await expect(tx1)
         .to.emit(contractInstance, "TransferSingle")
-        .withArgs(owner.address, constants.AddressZero, receiver.address, tokenId, amount);
+        .withArgs(owner.address, ZeroAddress, receiver.address, tokenId, amount);
 
       const balance = await contractInstance.balanceOf(receiver.address, tokenId);
       expect(balance).to.equal(amount);
@@ -28,23 +28,27 @@ export function shouldMint(factory: () => Promise<Contract>, options: IERC1155Op
     it("should mint to receiver", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc1155ReceiverInstance = await deployWallet();
 
-      const tx1 = mint(contractInstance, owner, erc1155ReceiverInstance.address, tokenId, amount, "0x");
+      const erc1155ReceiverInstance = await deployWallet();
+      const address = await erc1155ReceiverInstance.getAddress();
+
+      const tx1 = mint(contractInstance, owner, address, tokenId, amount, "0x");
       await expect(tx1)
         .to.emit(contractInstance, "TransferSingle")
-        .withArgs(owner.address, constants.AddressZero, erc1155ReceiverInstance.address, tokenId, amount);
+        .withArgs(owner.address, ZeroAddress, address, tokenId, amount);
 
-      const balance = await contractInstance.balanceOf(erc1155ReceiverInstance.address, tokenId);
+      const balance = await contractInstance.balanceOf(address, tokenId);
       expect(balance).to.equal(amount);
     });
 
     it("should fail: non receiver", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc1155NonReceiverInstance = await deployJerk();
 
-      const tx1 = mint(contractInstance, owner, erc1155NonReceiverInstance.address, tokenId, amount, "0x");
+      const erc1155NonReceiverInstance = await deployJerk();
+      const address = await erc1155NonReceiverInstance.getAddress();
+
+      const tx1 = mint(contractInstance, owner, address, tokenId, amount, "0x");
       await expect(tx1).to.be.revertedWith(`ERC1155: transfer to non-ERC1155Receiver implementer`);
     });
 

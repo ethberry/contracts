@@ -10,7 +10,7 @@ import "@gemunion/contracts-erc721/contracts/preset/ERC721ABCR.sol";
 
 import "../extensions/ERC721ConsecutiveEnumerable.sol";
 
-contract ERC721ABCERK is ERC721ABCR, ERC721ConsecutiveEnumerable {
+contract ERC721ABECRK is ERC721ABCR, ERC721ConsecutiveEnumerable {
   constructor(
     string memory name,
     string memory symbol,

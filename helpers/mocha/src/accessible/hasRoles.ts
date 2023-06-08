@@ -1,8 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
-export function shouldHaveRole(factory: () => Promise<Contract>) {
+export function shouldHaveRole(factory: () => Promise<any>) {
   return (...roles: Array<string>) => {
     describe("hasRole", function () {
       roles.forEach(role => {

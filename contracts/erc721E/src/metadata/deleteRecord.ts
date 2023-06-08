@@ -1,15 +1,15 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract, utils } from "ethers";
+import { keccak256, toUtf8Bytes } from "ethers";
 
 import { METADATA_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldDeleteRecord(factory: () => Promise<Contract>) {
+export function shouldDeleteRecord(factory: () => Promise<any>) {
   describe("deleteRecord", function () {
     it("should delete record", async function () {
       const contractInstance = await factory();
 
-      await contractInstance.setTokenMetadata(0, [{ key: utils.keccak256(utils.toUtf8Bytes("GRADE")), value: 1337 }]);
+      await contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
 
       const tx = contractInstance.deleteRecord(0);
       await expect(tx).to.not.be.reverted;

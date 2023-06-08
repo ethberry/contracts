@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import { InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
@@ -8,7 +8,7 @@ import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldMint(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+export function shouldMint(factory: () => Promise<any>, options: IERC721Options = {}) {
   const { mint = defaultMintERC721, minterRole = MINTER_ROLE, batchSize = 0 } = options;
 
   describe("mint", function () {
@@ -33,7 +33,7 @@ export function shouldMint(factory: () => Promise<Contract>, options: IERC721Opt
       const tx = mint(contractInstance, owner, owner.address, batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(constants.AddressZero, owner.address, batchSize + tokenId);
+        .withArgs(ZeroAddress, owner.address, batchSize + tokenId);
 
       const balance = await contractInstance.balanceOf(owner.address);
       expect(balance).to.equal(batchSize + 1);
@@ -44,10 +44,11 @@ export function shouldMint(factory: () => Promise<Contract>, options: IERC721Opt
       const contractInstance = await factory();
       const erc721NonReceiverInstance = await deployJerk();
 
-      const tx = mint(contractInstance, owner, erc721NonReceiverInstance.address, batchSize + tokenId);
+      const address = await erc721NonReceiverInstance.getAddress();
+      const tx = mint(contractInstance, owner, address, batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(constants.AddressZero, erc721NonReceiverInstance.address, batchSize + tokenId);
+        .withArgs(ZeroAddress, await erc721NonReceiverInstance.getAddress(), batchSize + tokenId);
     });
 
     it("should mint to receiver", async function () {
@@ -55,12 +56,13 @@ export function shouldMint(factory: () => Promise<Contract>, options: IERC721Opt
       const contractInstance = await factory();
       const erc721ReceiverInstance = await deployWallet();
 
-      const tx = mint(contractInstance, owner, erc721ReceiverInstance.address, batchSize + tokenId);
+      const address = await erc721ReceiverInstance.getAddress();
+      const tx = mint(contractInstance, owner, address, batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(constants.AddressZero, erc721ReceiverInstance.address, batchSize + tokenId);
+        .withArgs(ZeroAddress, address, batchSize + tokenId);
 
-      const balance = await contractInstance.balanceOf(erc721ReceiverInstance.address);
+      const balance = await contractInstance.balanceOf(address);
       expect(balance).to.equal(1);
     });
   });

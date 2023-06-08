@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldTransferFrom(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
   const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
 
   describe("transferFrom", function () {
@@ -24,7 +24,7 @@ export function shouldTransferFrom(factory: () => Promise<Contract>, options: IE
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address);
-      const tx = contractInstance.transferFrom(owner.address, constants.AddressZero, defaultTokenId);
+      const tx = contractInstance.transferFrom(owner.address, ZeroAddress, defaultTokenId);
 
       await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
     });

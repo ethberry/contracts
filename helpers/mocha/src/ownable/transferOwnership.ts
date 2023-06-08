@@ -1,8 +1,9 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+// import { Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
-export function shouldTransferOwnership(factory: () => Promise<Contract>) {
+export function shouldTransferOwnership(factory: () => Promise<any>) {
   describe("transferOwnership", function () {
     it("Should transfer ownership", async function () {
       const [owner, receiver] = await ethers.getSigners();
@@ -23,7 +24,7 @@ export function shouldTransferOwnership(factory: () => Promise<Contract>) {
     it("Should fail: transfer to zero addr", async function () {
       const contractInstance = await factory();
 
-      const tx = contractInstance.transferOwnership(constants.AddressZero);
+      const tx = contractInstance.transferOwnership(ZeroAddress);
       await expect(tx).to.be.revertedWith("Ownable: new owner is the zero address");
     });
   });

@@ -1,10 +1,9 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
 import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldBehaveLikeWhiteList(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeWhiteList(factory: () => Promise<any>) {
   describe("White list", function () {
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();

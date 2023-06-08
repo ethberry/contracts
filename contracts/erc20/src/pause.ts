@@ -1,11 +1,10 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
 import { amount, PAUSER_ROLE } from "@gemunion/contracts-constants";
 import { defaultMintERC20, IERC20Options } from "./shared/defaultMint";
 
-export function shouldBehaveLikeERC20Pausable(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+export function shouldBehaveLikeERC20Pausable(factory: () => Promise<any>, options: IERC20Options = {}) {
   const { mint = defaultMintERC20 } = options;
   describe("pause", function () {
     it("should fail: account is missing role", async function () {

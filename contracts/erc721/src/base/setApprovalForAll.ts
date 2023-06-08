@@ -1,13 +1,13 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
 
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldSetApprovalForAll(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IERC721Options = {}) {
   const { mint = defaultMintERC721, batchSize = 0 } = options;
 
   describe("setApprovalForAll", function () {
@@ -24,7 +24,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<Contract>, option
       await expect(tx1).to.not.be.reverted;
 
       const approved1 = await contractInstance.getApproved(batchSize + tokenId);
-      expect(approved1).to.equal(constants.AddressZero);
+      expect(approved1).to.equal(ZeroAddress);
 
       const isApproved1 = await contractInstance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved1).to.equal(true);
@@ -33,7 +33,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<Contract>, option
       await expect(tx2).to.not.be.reverted;
 
       const approved3 = await contractInstance.getApproved(batchSize + tokenId);
-      expect(approved3).to.equal(constants.AddressZero);
+      expect(approved3).to.equal(ZeroAddress);
 
       const isApproved2 = await contractInstance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved2).to.equal(false);

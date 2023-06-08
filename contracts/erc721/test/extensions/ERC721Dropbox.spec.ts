@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { utils } from "ethers";
+import { encodeBytes32String } from "ethers";
 
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, nonce, tokenId, tokenName } from "@gemunion/contracts-constants";
 import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
@@ -22,14 +22,15 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
-      const signature = await owner._signTypedData(
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -58,14 +59,15 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
-      const signature = await owner._signTypedData(
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -97,7 +99,7 @@ describe("ERC721DropboxTest", function () {
 
       const tx1 = contractInstance
         .connect(receiver)
-        .redeem(nonce, receiver.address, tokenId, owner.address, utils.formatBytes32String("signature"));
+        .redeem(nonce, receiver.address, tokenId, owner.address, encodeBytes32String("signature"));
       await expect(tx1).to.be.revertedWith("ERC721Dropbox: Invalid signature");
     });
 
@@ -105,14 +107,15 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
-      const signature = await owner._signTypedData(
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -141,14 +144,15 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
-      const signature = await owner._signTypedData(
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -169,15 +173,15 @@ describe("ERC721DropboxTest", function () {
       const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver.address, tokenId, owner.address, signature);
       await expect(tx1).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId);
 
-      const newNonce = utils.formatBytes32String("nonce1");
+      const newNonce = encodeBytes32String("nonce1");
 
-      const signature2 = await owner._signTypedData(
+      const signature2 = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -205,14 +209,15 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
 
-      const signature = await owner._signTypedData(
+      const signature = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -234,15 +239,15 @@ describe("ERC721DropboxTest", function () {
       await expect(tx1).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId);
 
       const tokenId2 = 2;
-      const nonce2 = utils.formatBytes32String("nonce2");
+      const nonce2 = encodeBytes32String("nonce2");
 
-      const signature2 = await owner._signTypedData(
+      const signature2 = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {
@@ -266,15 +271,15 @@ describe("ERC721DropboxTest", function () {
       await expect(tx2).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId2);
 
       const tokenId3 = 3;
-      const nonce3 = utils.formatBytes32String("nonce3");
+      const nonce3 = encodeBytes32String("nonce3");
 
-      const signature3 = await owner._signTypedData(
+      const signature3 = await owner.signTypedData(
         // Domain
         {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: contractInstance.address,
+          verifyingContract: address,
         },
         // Types
         {

@@ -1,11 +1,10 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldGetOwnerOf(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+export function shouldGetOwnerOf(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
   const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
 
   describe("ownerOf", function () {

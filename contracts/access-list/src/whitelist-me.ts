@@ -1,8 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
-export function shouldBehaveLikeWhiteListMe(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeWhiteListMe(factory: () => Promise<any>) {
   describe("White list me", function () {
     it("should fail: tests method", async function () {
       const [_owner, receiver] = await ethers.getSigners();

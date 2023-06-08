@@ -1,5 +1,5 @@
 import { ethers } from "hardhat";
-import { constants, utils } from "ethers";
+import { EventLog, hexlify, WeiPerEther, zeroPadValue } from "ethers";
 import { expect } from "chai";
 
 export async function deployLinkVrfFixtureV2() {
@@ -15,19 +15,19 @@ export async function deployLinkVrfFixtureV2() {
   await vrfInstance.setConfig(3, 1000000, 1, 1, 1);
   await vrfInstance.createSubscription();
   const vrfEventFilter = vrfInstance.filters.SubscriptionCreated();
-  const vrfEvents = await vrfInstance.queryFilter(vrfEventFilter);
+  const vrfEvents = (await vrfInstance.queryFilter(vrfEventFilter)) as unknown as Array<EventLog>;
   if (vrfEvents && vrfEvents.length && vrfEvents[0].args) {
     const subsriptionId = vrfEvents[0].args.subId;
     expect(subsriptionId).to.equal(1);
 
     const tx01 = linkInstance.transferAndCall(
       vrfInstance.address,
-      constants.WeiPerEther.mul(18),
-      utils.hexZeroPad(utils.hexlify(~~subsriptionId.toString()), 32),
+      WeiPerEther * 18n,
+      zeroPadValue(hexlify(subsriptionId.toString()), 32),
     );
     await expect(tx01)
       .to.emit(vrfInstance, "SubscriptionFunded")
-      .withArgs(subsriptionId, 0, constants.WeiPerEther.mul(18));
+      .withArgs(subsriptionId, 0, WeiPerEther * 18n);
   }
   // console.info(`VRF_ADDR=${vrfInstance.address}`);
   return { linkInstance, vrfInstance };

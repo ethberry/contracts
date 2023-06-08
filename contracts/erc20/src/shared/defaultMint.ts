@@ -1,9 +1,9 @@
-import { BigNumberish, Contract, Signer } from "ethers";
+import { BigNumberish, Signer } from "ethers";
 
 import { amount as defaultAmount } from "@gemunion/contracts-constants";
 
 export type TMintERC20Fn = (
-  contractInstance: Contract,
+  contractInstance: any,
   signer: Signer,
   receiver: string,
   amount?: BigNumberish,
@@ -15,7 +15,7 @@ export interface IERC20Options {
 }
 
 export const defaultMintERC20 = (
-  contractInstance: Contract,
+  contractInstance: any,
   signer: Signer,
   receiver: string,
   amount: BigNumberish = defaultAmount,

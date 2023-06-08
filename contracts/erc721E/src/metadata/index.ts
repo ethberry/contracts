@@ -1,5 +1,3 @@
-import { Contract } from "ethers";
-
 import { shouldSetTokenMetadata } from "./setTokenMetadata";
 import { shouldGetTokenMetadata } from "./getTokenMetadata";
 import { shouldDeleteRecordField } from "./deleteRecordField";
@@ -10,7 +8,7 @@ import { shouldGetRecordFieldValue } from "./getRecordFieldValue";
 import { shouldIsRecordFieldKey } from "./isRecordFieldKey";
 import { shouldDeleteRecord } from "./deleteRecord";
 
-export function shouldBehaveLikeERC721Metadata(factory: () => Promise<Contract>) {
+export function shouldBehaveLikeERC721Metadata(factory: () => Promise<any>) {
   shouldSetTokenMetadata(factory);
   shouldGetTokenMetadata(factory);
   shouldDeleteRecord(factory);

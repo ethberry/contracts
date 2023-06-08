@@ -1,12 +1,11 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
-import { InterfaceId, amount, SNAPSHOT_ROLE } from "@gemunion/contracts-constants";
+import { amount, InterfaceId, SNAPSHOT_ROLE } from "@gemunion/contracts-constants";
 
 import { defaultMintERC20, IERC20Options } from "./shared/defaultMint";
 
-export function shouldBehaveLikeERC20Snapshot(factory: () => Promise<Contract>, options: IERC20Options = {}) {
+export function shouldBehaveLikeERC20Snapshot(factory: () => Promise<any>, options: IERC20Options = {}) {
   const { mint = defaultMintERC20 } = options;
 
   describe("snapshot", function () {

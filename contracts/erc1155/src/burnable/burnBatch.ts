@@ -1,13 +1,13 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 
 import type { IERC1155Options } from "../shared/defaultMint";
 import { defaultMintBatchERC1155 } from "../shared/defaultMint";
 
-export function shouldBurnBatch(factory: () => Promise<Contract>, options: IERC1155Options = {}) {
+export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Options = {}) {
   const { mintBatch = defaultMintBatchERC1155 } = options;
 
   describe("burnBatch", function () {
@@ -21,7 +21,7 @@ export function shouldBurnBatch(factory: () => Promise<Contract>, options: IERC1
 
       await expect(tx)
         .to.emit(contractInstance, "TransferBatch")
-        .withArgs(owner.address, owner.address, constants.AddressZero, [tokenId, tokenId1], [amount, amount]);
+        .withArgs(owner.address, owner.address, ZeroAddress, [tokenId, tokenId1], [amount, amount]);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
       expect(balanceOfOwner).to.equal(0);
@@ -42,7 +42,7 @@ export function shouldBurnBatch(factory: () => Promise<Contract>, options: IERC1
 
       await expect(tx)
         .to.emit(contractInstance, "TransferBatch")
-        .withArgs(receiver.address, owner.address, constants.AddressZero, [tokenId, tokenId1], [amount, amount]);
+        .withArgs(receiver.address, owner.address, ZeroAddress, [tokenId, tokenId1], [amount, amount]);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
       expect(balanceOfOwner).to.equal(0);

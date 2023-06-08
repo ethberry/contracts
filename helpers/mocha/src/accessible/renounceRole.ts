@@ -1,16 +1,17 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract, utils } from "ethers";
+// import { Contract } from "ethers";
+import { id } from "ethers";
 
 import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldRenounceRole(factory: () => Promise<Contract>) {
+export function shouldRenounceRole(factory: () => Promise<any>) {
   describe("shouldRenounceRole", function () {
     it("Should revoke role (has no role)", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const NON_EXISTING_ROLE = utils.id("NON_EXISTING_ROLE");
+      const NON_EXISTING_ROLE = id("NON_EXISTING_ROLE");
 
       const tx1 = await contractInstance.renounceRole(NON_EXISTING_ROLE, owner.address);
       await expect(tx1).to.not.emit(contractInstance, "RoleRevoked");

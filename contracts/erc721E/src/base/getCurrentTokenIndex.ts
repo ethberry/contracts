@@ -1,11 +1,10 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function getGetCurrentTokenIndex(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+export function getGetCurrentTokenIndex(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
   const { mint = defaultMintERC721 } = options;
 
   describe("getCurrentTokenIndex", function () {

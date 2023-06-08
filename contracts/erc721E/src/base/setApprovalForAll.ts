@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldSetApprovalForAll(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
   const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
 
   describe("setApprovalForAll", function () {
@@ -22,7 +22,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<Contract>, option
       await expect(tx1).to.not.be.reverted;
 
       const approved1 = await contractInstance.getApproved(defaultTokenId);
-      expect(approved1).to.equal(constants.AddressZero);
+      expect(approved1).to.equal(ZeroAddress);
 
       const isApproved1 = await contractInstance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved1).to.equal(true);
@@ -31,7 +31,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<Contract>, option
       await expect(tx2).to.not.be.reverted;
 
       const approved3 = await contractInstance.getApproved(defaultTokenId);
-      expect(approved3).to.equal(constants.AddressZero);
+      expect(approved3).to.equal(ZeroAddress);
 
       const isApproved2 = await contractInstance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved2).to.equal(false);

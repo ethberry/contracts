@@ -4,13 +4,13 @@
     "name": "TrejGun",
     "url": "https://gemunion.io/"
   },
-  "dependencies": {
-    "ethers": "5.7.2"
-  },
   "devDependencies": {
-    "dotenv": "16.1.3",
-    "ethers": "5.7.2",
+    "dotenv": "16.1.4",
+    "ethers": "6.5.1",
     "rimraf": "5.0.1"
+  },
+  "peerDependencies": {
+    "ethers": "^6.0.0"
   },
   "files": [
     "dist/*"
@@ -37,5 +37,5 @@
   "sideEffects": false,
   "title": "-=Gemun Ion Studio=-",
   "types": "./dist/index.d.ts",
-  "version": "3.0.3"
+  "version": "4.0.0"
 }

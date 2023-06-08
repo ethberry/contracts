@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldApprove(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+export function shouldApprove(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
   const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
 
   describe("approve", function () {
@@ -41,9 +41,7 @@ export function shouldApprove(factory: () => Promise<Contract>, options: IERC721
       expect(approved).to.equal(receiver.address);
 
       const tx1 = contractInstance.connect(receiver).burn(defaultTokenId);
-      await expect(tx1)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, constants.AddressZero, defaultTokenId);
+      await expect(tx1).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);

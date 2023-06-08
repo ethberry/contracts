@@ -1,13 +1,12 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
 
 import { tokenId } from "@gemunion/contracts-constants";
 
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldBehaveLikeERC721UriStorage(factory: () => Promise<Contract>, options: IERC721Options = {}) {
+export function shouldBehaveLikeERC721UriStorage(factory: () => Promise<any>, options: IERC721Options = {}) {
   const { mint = defaultMintERC721 } = options;
 
   describe("tokenURI", function () {

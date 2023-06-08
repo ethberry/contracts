@@ -1,12 +1,12 @@
 import { expect } from "chai";
 import { ethers, web3 } from "hardhat";
-import { constants, Contract } from "ethers";
+import { ZeroAddress } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
-export function shouldUserOf(factory: () => Promise<Contract>, options: IERC721EnumOptions = {}) {
+export function shouldUserOf(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
   const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
 
   describe("userOf", function () {
@@ -22,7 +22,7 @@ export function shouldUserOf(factory: () => Promise<Contract>, options: IERC721E
       await contractInstance.setUser(defaultTokenId, receiver.address, deadline.toString());
       const userOf = await contractInstance.userOf(defaultTokenId);
 
-      expect(userOf).to.be.equal(constants.AddressZero);
+      expect(userOf).to.be.equal(ZeroAddress);
     });
 
     it("should return 0, when time is expired", async function () {
@@ -46,7 +46,7 @@ export function shouldUserOf(factory: () => Promise<Contract>, options: IERC721E
       await time.increaseTo(current2.add(web3.utils.toBN(50)));
 
       const userOf2 = await contractInstance.userOf(defaultTokenId);
-      expect(userOf2).to.be.equal(constants.AddressZero);
+      expect(userOf2).to.be.equal(ZeroAddress);
     });
 
     it("Owner is still the owner of NFT", async function () {

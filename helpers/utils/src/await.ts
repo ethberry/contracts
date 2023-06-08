@@ -10,12 +10,11 @@ export const blockAwait = async function (blockDelay = 2, ms = 1000): Promise<vo
   if (network.name !== "hardhat") {
     await delay(ms);
     const initialBlock = await ethers.provider.getBlock("latest");
-    let currentBlock;
     let delayB;
     do {
       await delay(ms);
-      currentBlock = await ethers.provider.getBlock("latest");
-      delayB = currentBlock.number - initialBlock!.number;
+      const currentBlock = await ethers.provider.getBlock("latest");
+      delayB = currentBlock!.number - initialBlock!.number;
     } while (delayB < blockDelay);
   }
 };

@@ -8,7 +8,7 @@ import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721Options = {}) {
-  const { mint = defaultMintERC721, batchSize = 0 } = options;
+  const { mint = defaultMintERC721, batchSize = 0n } = options;
 
   describe("transferFrom", function () {
     it("should fail: not an owner", async function () {

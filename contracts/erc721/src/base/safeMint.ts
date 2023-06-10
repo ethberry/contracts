@@ -10,7 +10,7 @@ import { defaultSafeMintERC721 } from "../shared/defaultMint";
 
 export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Options = {}) {
   describe("safeMint", function () {
-    const { safeMint = defaultSafeMintERC721, minterRole = MINTER_ROLE, batchSize = 0 } = options;
+    const { safeMint = defaultSafeMintERC721, minterRole = MINTER_ROLE, batchSize = 0n } = options;
 
     it("should fail: account is missing role", async function () {
       const [_owner, receiver] = await ethers.getSigners();
@@ -36,7 +36,7 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
         .withArgs(ZeroAddress, owner.address, batchSize + tokenId);
 
       const balance = await contractInstance.balanceOf(owner.address);
-      expect(balance).to.equal(batchSize + 1);
+      expect(balance).to.equal(batchSize + 1n);
     });
 
     it("should fail to mint to non receiver", async function () {

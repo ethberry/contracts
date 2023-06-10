@@ -9,7 +9,7 @@ import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldMint(factory: () => Promise<any>, options: IERC721Options = {}) {
-  const { mint = defaultMintERC721, minterRole = MINTER_ROLE, batchSize = 0 } = options;
+  const { mint = defaultMintERC721, minterRole = MINTER_ROLE, batchSize = 0n } = options;
 
   describe("mint", function () {
     it("should fail: account is missing role", async function () {
@@ -36,7 +36,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC721Options 
         .withArgs(ZeroAddress, owner.address, batchSize + tokenId);
 
       const balance = await contractInstance.balanceOf(owner.address);
-      expect(balance).to.equal(batchSize + 1);
+      expect(balance).to.equal(batchSize + 1n);
     });
 
     it("should mint to non receiver", async function () {

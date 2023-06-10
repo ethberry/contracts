@@ -1,4 +1,5 @@
 import { ethers } from "hardhat";
+import { BigNumberish } from "ethers";
 
 import { baseTokenURI, royalty, tokenMaxAmount, tokenName, tokenSymbol } from "@gemunion/contracts-constants";
 
@@ -10,7 +11,7 @@ export async function deployERC721(name: string): Promise<any> {
   } else if (name === "ERC721DropboxTest") {
     return erc721Factory.deploy(tokenName, tokenSymbol, tokenMaxAmount, royalty);
   } else {
-    const args: Array<string | number> = [tokenName, tokenSymbol];
+    const args: Array<BigNumberish> = [tokenName, tokenSymbol];
     const parts = name.substr(6);
 
     if (parts.includes("C")) {

@@ -7,7 +7,7 @@ import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldGetOwnerOf(factory: () => Promise<any>, options: IERC721Options = {}) {
-  const { mint = defaultMintERC721, batchSize = 0 } = options;
+  const { mint = defaultMintERC721, batchSize = 0n } = options;
 
   describe("ownerOf", function () {
     it("should get owner of token", async function () {

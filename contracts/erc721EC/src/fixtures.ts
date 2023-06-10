@@ -1,5 +1,5 @@
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
+import { BigNumberish } from "ethers";
 
 import {
   baseTokenURI,
@@ -10,15 +10,15 @@ import {
   tokenSymbol,
 } from "@gemunion/contracts-constants";
 
-export async function deployERC721<T extends Contract>(name: string): Promise<T> {
+export async function deployERC721(name: string): Promise<any> {
   const erc721Factory = await ethers.getContractFactory(name);
 
   if (name === "ERC721BaseUrlTest") {
-    return erc721Factory.deploy(tokenName, tokenSymbol, royalty, baseTokenURI) as Promise<T>;
+    return erc721Factory.deploy(tokenName, tokenSymbol, royalty, baseTokenURI);
   } else if (name === "ERC721DropboxTest") {
-    return erc721Factory.deploy(tokenName, tokenSymbol, tokenMaxAmount, royalty) as Promise<T>;
+    return erc721Factory.deploy(tokenName, tokenSymbol, tokenMaxAmount, royalty);
   } else {
-    const args: Array<string | number> = [tokenName, tokenSymbol];
+    const args: Array<BigNumberish> = [tokenName, tokenSymbol];
     const parts = name.substr(6);
 
     if (parts.includes("C")) {
@@ -33,6 +33,6 @@ export async function deployERC721<T extends Contract>(name: string): Promise<T>
       args.push(royalty);
     }
 
-    return erc721Factory.deploy(...args) as Promise<T>;
+    return erc721Factory.deploy(...args);
   }
 }

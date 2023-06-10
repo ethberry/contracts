@@ -3,9 +3,9 @@ import { encodeBytes32String, id, ZeroHash } from "ethers";
 export const baseTokenURI = "http://localhost:3000/metadata"; // no trailing slash
 export const tokenSymbol = "GEM";
 export const tokenName = "GEMUNION";
-export const tokenId = 1337;
-export const tokenMaxAmount = 2;
-export const batchSize = 5000;
+export const tokenId = 1337n;
+export const tokenMaxAmount = 2n;
+export const batchSize = 5000n;
 export const royalty = 100; // 1%
 export const nonce = encodeBytes32String("nonce");
 

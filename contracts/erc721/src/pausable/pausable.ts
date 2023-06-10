@@ -29,7 +29,7 @@ export function shouldBehaveLikeERC721Pausable(factory: () => Promise<any>, opti
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx1 = mint(contractInstance, owner, owner.address, 0);
+      const tx1 = mint(contractInstance, owner, owner.address, 0n);
       await expect(tx1).to.not.be.reverted;
 
       const balanceOfOwner1 = await contractInstance.balanceOf(owner.address);
@@ -38,13 +38,13 @@ export function shouldBehaveLikeERC721Pausable(factory: () => Promise<any>, opti
       const tx2 = contractInstance.pause();
       await expect(tx2).to.emit(contractInstance, "Paused").withArgs(owner.address);
 
-      const tx3 = mint(contractInstance, owner, owner.address, 1);
+      const tx3 = mint(contractInstance, owner, owner.address, 1n);
       await expect(tx3).to.be.revertedWith("Pausable: paused");
 
       const tx4 = contractInstance.unpause();
       await expect(tx4).to.emit(contractInstance, "Unpaused").withArgs(owner.address);
 
-      const tx5 = mint(contractInstance, owner, owner.address, 2);
+      const tx5 = mint(contractInstance, owner, owner.address, 2n);
       await expect(tx5).to.not.be.reverted;
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);

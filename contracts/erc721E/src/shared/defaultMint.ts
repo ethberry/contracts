@@ -6,8 +6,8 @@ export interface IERC721EnumOptions {
   mint?: TMintERC721EnumFn;
   safeMint?: TMintERC721EnumFn;
   minterRole?: string;
-  batchSize?: number;
-  tokenId?: number;
+  batchSize?: bigint;
+  tokenId?: bigint;
 }
 
 export const defaultMintERC721 = (contractInstance: any, signer: Signer, receiver: string) => {

@@ -15,7 +15,7 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tokenId1 = tokenId + 1;
+      const tokenId1 = tokenId + 1n;
       await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
       const tx = contractInstance.burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
 
@@ -34,7 +34,7 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tokenId1 = tokenId + 1;
+      const tokenId1 = tokenId + 1n;
       await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
       await contractInstance.setApprovalForAll(receiver.address, true);
 
@@ -55,7 +55,7 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tokenId1 = tokenId + 1;
+      const tokenId1 = tokenId + 1n;
       await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
       const tx = contractInstance.connect(receiver).burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
 
@@ -66,7 +66,7 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tokenId1 = tokenId + 1;
+      const tokenId1 = tokenId + 1n;
       await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
       const tx = contractInstance.burnBatch(owner.address, [tokenId, tokenId1], [amount]);
 

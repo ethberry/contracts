@@ -1,28 +1,18 @@
-import { BigNumberish, Signer } from "ethers";
+import { Signer } from "ethers";
 
-export type TMintERC721Fn = (
-  contractInstance: any,
-  signer: Signer,
-  receiver: string,
-  tokenId: BigNumberish,
-) => Promise<any>;
+export type TMintERC721Fn = (contractInstance: any, signer: Signer, receiver: string, tokenId: bigint) => Promise<any>;
 
 export interface IERC721Options {
   mint?: TMintERC721Fn;
   safeMint?: TMintERC721Fn;
   minterRole?: string;
-  batchSize?: number;
+  batchSize?: bigint;
 }
 
-export const defaultMintERC721 = (contractInstance: any, signer: Signer, receiver: string, tokenId: BigNumberish) => {
+export const defaultMintERC721 = (contractInstance: any, signer: Signer, receiver: string, tokenId: bigint) => {
   return contractInstance.connect(signer).mint(receiver, tokenId) as Promise<any>;
 };
 
-export const defaultSafeMintERC721 = (
-  contractInstance: any,
-  signer: Signer,
-  receiver: string,
-  tokenId: BigNumberish,
-) => {
+export const defaultSafeMintERC721 = (contractInstance: any, signer: Signer, receiver: string, tokenId: bigint) => {
   return contractInstance.connect(signer).safeMint(receiver, tokenId) as Promise<any>;
 };

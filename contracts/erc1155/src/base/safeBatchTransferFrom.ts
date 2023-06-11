@@ -18,7 +18,7 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
       const erc1155ReceiverInstance = await deployWallet();
       const address = await erc1155ReceiverInstance.getAddress();
 
-      const tokenId_1 = 2;
+      const tokenId_1 = 2n;
       await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
       await mint(contractInstance, owner, owner.address, tokenId_1, amount, "0x");
       const tx = contractInstance.safeBatchTransferFrom(
@@ -50,7 +50,7 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
       const erc1155NonReceiverInstance = await deployJerk();
       const address = await erc1155NonReceiverInstance.getAddress();
 
-      const tokenId_1 = 2;
+      const tokenId_1 = 2n;
       await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
       await mint(contractInstance, owner, owner.address, tokenId_1, amount, "0x");
       const tx = contractInstance.safeBatchTransferFrom(
@@ -70,7 +70,7 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
       const erc1155ReceiverInstance = await deployWallet();
       const address = await erc1155ReceiverInstance.getAddress();
 
-      const tokenId_1 = 2;
+      const tokenId_1 = 2n;
       await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
       await mint(contractInstance, owner, owner.address, tokenId_1, amount, "0x");
       const tx = contractInstance
@@ -86,7 +86,7 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
       const erc1155ReceiverInstance = await deployWallet();
       const address = await erc1155ReceiverInstance.getAddress();
 
-      const tokenId_1 = 2;
+      const tokenId_1 = 2n;
       await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
       await mint(contractInstance, owner, owner.address, tokenId_1, amount, "0x");
       await contractInstance.setApprovalForAll(receiver.address, true);

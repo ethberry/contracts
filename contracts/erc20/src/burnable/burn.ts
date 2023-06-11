@@ -31,7 +31,7 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC20Options =
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, 0);
+      await mint(contractInstance, owner, owner.address, 0n);
 
       const tx = contractInstance.burn(0);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, 0);
@@ -41,7 +41,7 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC20Options =
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, 0);
+      await mint(contractInstance, owner, owner.address, 0n);
 
       const tx = contractInstance.burn(amount);
       await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds balance");

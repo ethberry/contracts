@@ -15,7 +15,7 @@ export function shouldTransfer(factory: () => Promise<any>, options: IERC20Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, 0);
+      await mint(contractInstance, owner, owner.address, 0n);
 
       const tx = contractInstance.transfer(receiver.address, amount);
       await expect(tx).to.be.revertedWith("ERC20: transfer amount exceeds balance");

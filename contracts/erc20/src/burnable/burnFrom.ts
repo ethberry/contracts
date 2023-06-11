@@ -26,7 +26,7 @@ export function shouldBurnFrom(factory: () => Promise<any>, options: IERC20Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, 0);
+      await mint(contractInstance, owner, owner.address, 0n);
 
       await contractInstance.approve(receiver.address, amount);
       const tx = contractInstance.connect(receiver).burnFrom(owner.address, 0);
@@ -37,7 +37,7 @@ export function shouldBurnFrom(factory: () => Promise<any>, options: IERC20Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, 0);
+      await mint(contractInstance, owner, owner.address, 0n);
 
       await contractInstance.approve(receiver.address, amount);
       const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);

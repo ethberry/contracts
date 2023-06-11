@@ -1,11 +1,11 @@
-import { BigNumberish, Signer } from "ethers";
+import { Signer } from "ethers";
 
 export type TMintERC1155Fn = (
   contractInstance: any,
   signer: Signer,
   receiver: string,
-  tokenId: BigNumberish,
-  amount: BigNumberish,
+  tokenId: bigint,
+  amount: bigint,
   data: string,
 ) => Promise<any>;
 
@@ -13,8 +13,8 @@ export type TMintBatchERC1155Fn = (
   contractInstance: any,
   signer: Signer,
   receiver: string,
-  tokenId: Array<BigNumberish>,
-  amount: Array<BigNumberish>,
+  tokenId: Array<bigint>,
+  amount: Array<bigint>,
   data: string,
 ) => Promise<any>;
 
@@ -28,8 +28,8 @@ export const defaultMintERC1155 = (
   contractInstance: any,
   signer: Signer,
   receiver: string,
-  tokenId: BigNumberish,
-  amount: BigNumberish,
+  tokenId: bigint,
+  amount: bigint,
   data: string,
 ) => {
   return contractInstance.connect(signer).mint(receiver, tokenId, amount, data) as Promise<any>;
@@ -39,8 +39,8 @@ export const defaultMintBatchERC1155 = (
   contractInstance: any,
   signer: Signer,
   receiver: string,
-  tokenIds: Array<BigNumberish>,
-  amounts: Array<BigNumberish>,
+  tokenIds: Array<bigint>,
+  amounts: Array<bigint>,
   data: string,
 ) => {
   return contractInstance.connect(signer).mintBatch(receiver, tokenIds, amounts, data) as Promise<any>;

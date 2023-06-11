@@ -40,15 +40,15 @@ abstract contract ERC721OpenSea is ERC721ABERS, AccessControlEnumerable {
    * Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
    */
   function isApprovedForAll(
-    address owner,
+    address _owner,
     address operator
   ) public view virtual override(IERC721, ERC721) returns (bool) {
     // Whitelist OpenSea proxy contract for easy trading.
-    if (address(_proxyRegistry.proxies(owner)) == operator) {
+    if (address(_proxyRegistry.proxies(_owner)) == operator) {
       return true;
     }
 
-    return super.isApprovedForAll(owner, operator);
+    return super.isApprovedForAll(_owner, operator);
   }
 
   /**

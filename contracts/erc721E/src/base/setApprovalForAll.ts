@@ -6,7 +6,7 @@ import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
-  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n, batchSize: defaultBatchSize = 0n } = options;
 
   describe("setApprovalForAll", function () {
     it("should approve for all", async function () {
@@ -16,7 +16,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IE
       await mint(contractInstance, owner, owner.address);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(1);
+      expect(balanceOfOwner).to.equal(defaultBatchSize + 1n);
 
       const tx1 = contractInstance.setApprovalForAll(receiver.address, true);
       await expect(tx1).to.not.be.reverted;

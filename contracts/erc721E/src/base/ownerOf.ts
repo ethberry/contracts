@@ -5,7 +5,7 @@ import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldGetOwnerOf(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
-  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n, batchSize: defaultBatchSize = 0n } = options;
 
   describe("ownerOf", function () {
     it("should get owner of token", async function () {
@@ -26,7 +26,7 @@ export function shouldGetOwnerOf(factory: () => Promise<any>, options: IERC721En
       await expect(tx).to.not.be.reverted;
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(0);
+      expect(balanceOfOwner).to.equal(defaultBatchSize);
 
       const tx2 = contractInstance.ownerOf(defaultTokenId);
       await expect(tx2).to.be.revertedWith(`ERC721: invalid token ID`);

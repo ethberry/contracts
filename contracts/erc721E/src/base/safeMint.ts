@@ -9,7 +9,12 @@ import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultSafeMintERC721 } from "../shared/defaultMint";
 
 export function shouldSafeMint(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
-  const { safeMint = defaultSafeMintERC721, minterRole = MINTER_ROLE, tokenId: defaultTokenId = 0 } = options;
+  const {
+    safeMint = defaultSafeMintERC721,
+    minterRole = MINTER_ROLE,
+    tokenId: defaultTokenId = 0n,
+    batchSize: defaultBatchSize = 0n,
+  } = options;
 
   describe("safeMint", function () {
     it("should fail: account is missing role", async function () {
@@ -31,10 +36,12 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Enum
       const contractInstance = await factory();
 
       const tx = safeMint(contractInstance, owner, receiver.address);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, receiver.address, defaultTokenId);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(ZeroAddress, receiver.address, defaultBatchSize + defaultTokenId);
 
       const balance = await contractInstance.balanceOf(receiver.address);
-      expect(balance).to.equal(1);
+      expect(balance).to.equal(1n);
     });
 
     it("should fail to mint to non receiver", async function () {
@@ -56,10 +63,12 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Enum
       const address = await erc721ReceiverInstance.getAddress();
 
       const tx = safeMint(contractInstance, owner, address);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, address, defaultTokenId);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(ZeroAddress, address, defaultBatchSize + defaultTokenId);
 
       const balance = await contractInstance.balanceOf(address);
-      expect(balance).to.equal(1);
+      expect(balance).to.equal(1n);
     });
   });
 }

@@ -6,7 +6,7 @@ import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldUserExprires(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
-  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n } = options;
 
   describe("userExprires", function () {
     it("should return expiration time of user", async function () {

@@ -341,7 +341,7 @@ abstract contract ERC721ConsecutiveEnumerable is ERC721, IERC721Enumerable, IERC
     return first;
   }
 
-  function _totalConsecutiveSupply() private view returns (uint96) {
+  function _totalConsecutiveSupply() internal view returns (uint96) {
     (bool exists, uint96 latestId, ) = _sequentialOwnership.latestCheckpoint();
     return exists ? latestId + 1 : 0;
   }

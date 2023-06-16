@@ -9,7 +9,12 @@ import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldMint(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
-  const { mint = defaultMintERC721, minterRole = MINTER_ROLE, tokenId: defaultTokenId = 0 } = options;
+  const {
+    mint = defaultMintERC721,
+    minterRole = MINTER_ROLE,
+    tokenId: defaultTokenId = 0n,
+    batchSize: defaultBatchSize = 0n,
+  } = options;
 
   describe("mint", function () {
     it("should fail: account is missing role", async function () {
@@ -31,10 +36,12 @@ export function shouldMint(factory: () => Promise<any>, options: IERC721EnumOpti
       const contractInstance = await factory();
 
       const tx = mint(contractInstance, owner, receiver.address);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, receiver.address, defaultTokenId);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(ZeroAddress, receiver.address, defaultBatchSize + defaultTokenId);
 
       const balance = await contractInstance.balanceOf(receiver.address);
-      expect(balance).to.equal(1);
+      expect(balance).to.equal(1n);
     });
 
     it("should mint to non receiver", async function () {
@@ -45,7 +52,9 @@ export function shouldMint(factory: () => Promise<any>, options: IERC721EnumOpti
       const address = await erc721NonReceiverInstance.getAddress();
 
       const tx = mint(contractInstance, owner, address);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, address, defaultTokenId);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(ZeroAddress, address, defaultBatchSize + defaultTokenId);
     });
 
     it("should mint to receiver", async function () {
@@ -56,10 +65,12 @@ export function shouldMint(factory: () => Promise<any>, options: IERC721EnumOpti
       const address = await erc721ReceiverInstance.getAddress();
 
       const tx = mint(contractInstance, owner, address);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, address, defaultTokenId);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(ZeroAddress, address, defaultBatchSize + defaultTokenId);
 
       const balance = await contractInstance.balanceOf(address);
-      expect(balance).to.equal(1);
+      expect(balance).to.equal(1n);
     });
   });
 }

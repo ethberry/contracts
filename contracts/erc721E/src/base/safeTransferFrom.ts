@@ -7,7 +7,7 @@ import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
-  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n, batchSize: defaultBatchSize = 0n } = options;
 
   describe("safeTransferFrom", function () {
     it("should fail: not an owner", async function () {
@@ -33,7 +33,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, address, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(0);
+      expect(balanceOfOwner).to.equal(defaultBatchSize);
 
       const balanceOfReceiver = await contractInstance.balanceOf(address);
       expect(balanceOfReceiver).to.equal(1);
@@ -65,7 +65,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, address, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(0);
+      expect(balanceOfOwner).to.equal(defaultBatchSize);
 
       const balanceOfReceiver = await contractInstance.balanceOf(address);
       expect(balanceOfReceiver).to.equal(1);

@@ -6,7 +6,7 @@ import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
 
 export function shouldBehaveLikeERC721Burnable(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
-  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0 } = options;
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n, batchSize: defaultBatchSize = 0n } = options;
 
   describe("burn", function () {
     it("should fail: not an owner", async function () {
@@ -29,7 +29,7 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<any>, opti
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(0);
+      expect(balanceOfOwner).to.equal(defaultBatchSize);
     });
 
     it("should burn approved token", async function () {
@@ -44,7 +44,7 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<any>, opti
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
-      expect(balanceOfOwner).to.equal(0);
+      expect(balanceOfOwner).to.equal(defaultBatchSize);
     });
   });
 }

@@ -21,7 +21,7 @@
     "typechain": "8.2.0"
   },
   "devDependencies": {
-    "ethers": "6.5.1",
+    "ethers": "6.6.0",
     "rimraf": "5.0.1"
   },
   "files": [

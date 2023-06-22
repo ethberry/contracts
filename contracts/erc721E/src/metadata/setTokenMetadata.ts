@@ -1,53 +1,44 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { keccak256, toUtf8Bytes } from "ethers";
 
-import { METADATA_ROLE } from "@gemunion/contracts-constants";
+import { METADATA_ROLE, RARITY, TEMPLATE_ID } from "@gemunion/contracts-constants";
+import { defaultMintERC721, IERC721EnumOptions } from "../shared/defaultMint";
 
-export function shouldSetTokenMetadata(factory: () => Promise<any>) {
+export function shouldSetTokenMetadata(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n } = options;
+
   describe("setTokenMetadata", function () {
     it("should set metadata", async function () {
+      const [owner] = await ethers.getSigners();
+
       const contractInstance = await factory();
 
-      const tx = contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
+      await mint(contractInstance, owner, owner.address);
+      const value1 = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
+      expect(value1).to.equal(42);
+
+      const tx = contractInstance.setTokenMetadata(defaultTokenId, [{ key: TEMPLATE_ID, value: 1337 }]);
 
       await expect(tx).to.not.be.reverted;
 
-      const value = await contractInstance.getRecordFieldValue(0, keccak256(toUtf8Bytes("GRADE")));
-
-      expect(value).to.equal(1337);
-    });
-
-    it("should set metadata (override)", async function () {
-      const contractInstance = await factory();
-
-      const tx = contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
-      await expect(tx).to.not.be.reverted;
-
-      const value1 = await contractInstance.getRecordFieldValue(0, keccak256(toUtf8Bytes("GRADE")));
-      expect(value1).to.equal(1337);
-
-      const tx1 = contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1338 }]);
-      await expect(tx1).to.not.be.reverted;
-
-      const value2 = await contractInstance.getRecordFieldValue(0, keccak256(toUtf8Bytes("GRADE")));
-      expect(value2).to.equal(1338);
+      const value2 = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
+      expect(value2).to.equal(1337);
     });
 
     it("should set metadata (combine)", async function () {
+      const [owner] = await ethers.getSigners();
+
       const contractInstance = await factory();
 
-      const tx = contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
+      await mint(contractInstance, owner, owner.address);
+      const value1 = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
+      expect(value1).to.equal(42);
+
+      const tx = contractInstance.setTokenMetadata(defaultTokenId, [{ key: RARITY, value: 1337 }]);
       await expect(tx).to.not.be.reverted;
 
-      const tx1 = contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("RARITY")), value: 1338 }]);
-      await expect(tx1).to.not.be.reverted;
-
-      const value1 = await contractInstance.getRecordFieldValue(0, keccak256(toUtf8Bytes("GRADE")));
-      expect(value1).to.equal(1337);
-
-      const value2 = await contractInstance.getRecordFieldValue(0, keccak256(toUtf8Bytes("RARITY")));
-      expect(value2).to.equal(1338);
+      const value2 = await contractInstance.getRecordFieldValue(defaultTokenId, RARITY);
+      expect(value2).to.equal(1337);
     });
 
     it("should fail: account is missing role", async function () {
@@ -56,7 +47,7 @@ export function shouldSetTokenMetadata(factory: () => Promise<any>) {
 
       const tx = contractInstance
         .connect(receiver)
-        .setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
+        .setTokenMetadata(defaultTokenId, [{ key: TEMPLATE_ID, value: 1337 }]);
 
       await expect(tx).to.be.revertedWith(
         `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${METADATA_ROLE}`,

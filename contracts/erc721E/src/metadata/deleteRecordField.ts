@@ -1,34 +1,42 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { keccak256, toUtf8Bytes } from "ethers";
 
-import { METADATA_ROLE } from "@gemunion/contracts-constants";
+import { METADATA_ROLE, TEMPLATE_ID } from "@gemunion/contracts-constants";
 
-export function shouldDeleteRecordField(factory: () => Promise<any>) {
+import { defaultMintERC721, IERC721EnumOptions } from "../shared/defaultMint";
+
+export function shouldDeleteRecordField(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n } = options;
+
   describe("deleteRecordField", function () {
     it("should delete field", async function () {
+      const [owner] = await ethers.getSigners();
+
       const contractInstance = await factory();
 
-      await contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
+      await mint(contractInstance, owner, owner.address);
 
-      const tx = contractInstance.deleteRecordField(0, keccak256(toUtf8Bytes("GRADE")));
+      const tx = contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
       await expect(tx).to.not.be.reverted;
     });
 
     it("should delete field (empty)", async function () {
       const contractInstance = await factory();
 
-      const tx = contractInstance.deleteRecordField(0, keccak256(toUtf8Bytes("GRADE")));
+      const tx = contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
       await expect(tx).to.be.revertedWith("GC: field not found");
     });
 
     it("should delete field (deleted)", async function () {
+      const [owner] = await ethers.getSigners();
+
       const contractInstance = await factory();
 
-      await contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
-      await contractInstance.deleteRecord(0);
+      await mint(contractInstance, owner, owner.address);
 
-      const tx = contractInstance.deleteRecordField(0, keccak256(toUtf8Bytes("GRADE")));
+      await contractInstance.deleteRecord(defaultTokenId);
+
+      const tx = contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
       await expect(tx).to.be.revertedWith("GC: field not found");
     });
 
@@ -36,8 +44,7 @@ export function shouldDeleteRecordField(factory: () => Promise<any>) {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance.connect(receiver).deleteRecordField(0, keccak256(toUtf8Bytes("GRADE")));
-
+      const tx = contractInstance.connect(receiver).deleteRecordField(defaultTokenId, TEMPLATE_ID);
       await expect(tx).to.be.revertedWith(
         `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${METADATA_ROLE}`,
       );

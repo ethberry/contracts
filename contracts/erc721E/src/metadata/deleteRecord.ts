@@ -1,17 +1,22 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { keccak256, toUtf8Bytes } from "ethers";
 
 import { METADATA_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldDeleteRecord(factory: () => Promise<any>) {
+import { defaultMintERC721, IERC721EnumOptions } from "../shared/defaultMint";
+
+export function shouldDeleteRecord(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n } = options;
+
   describe("deleteRecord", function () {
     it("should delete record", async function () {
+      const [owner] = await ethers.getSigners();
+
       const contractInstance = await factory();
 
-      await contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
+      await mint(contractInstance, owner, owner.address);
 
-      const tx = contractInstance.deleteRecord(0);
+      const tx = contractInstance.deleteRecord(defaultTokenId);
       await expect(tx).to.not.be.reverted;
     });
 
@@ -27,7 +32,6 @@ export function shouldDeleteRecord(factory: () => Promise<any>) {
       const contractInstance = await factory();
 
       const tx = contractInstance.connect(receiver).deleteRecord(0);
-
       await expect(tx).to.be.revertedWith(
         `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${METADATA_ROLE}`,
       );

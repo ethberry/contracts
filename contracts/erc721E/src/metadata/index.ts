@@ -7,17 +7,18 @@ import { shouldIsRecord } from "./isRecord";
 import { shouldGetRecordFieldValue } from "./getRecordFieldValue";
 import { shouldIsRecordFieldKey } from "./isRecordFieldKey";
 import { shouldDeleteRecord } from "./deleteRecord";
+import { IERC721EnumOptions } from "../shared/defaultMint";
 
-export function shouldBehaveLikeERC721Metadata(factory: () => Promise<any>) {
-  shouldSetTokenMetadata(factory);
-  shouldGetTokenMetadata(factory);
-  shouldDeleteRecord(factory);
-  shouldDeleteRecordField(factory);
-  shouldGetRecordCount(factory);
-  shouldGetRecordFieldKeyCount(factory);
-  shouldIsRecord(factory);
-  shouldIsRecordFieldKey(factory);
-  shouldGetRecordFieldValue(factory);
+export function shouldBehaveLikeERC721Metadata(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
+  shouldSetTokenMetadata(factory, options);
+  shouldGetTokenMetadata(factory, options);
+  shouldDeleteRecord(factory, options);
+  shouldDeleteRecordField(factory, options);
+  shouldGetRecordCount(factory, options);
+  shouldGetRecordFieldKeyCount(factory, options);
+  shouldIsRecord(factory, options);
+  shouldIsRecordFieldKey(factory, options);
+  shouldGetRecordFieldValue(factory, options);
 }
 
 export {

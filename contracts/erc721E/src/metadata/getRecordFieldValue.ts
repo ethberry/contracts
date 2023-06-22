@@ -1,41 +1,52 @@
 import { expect } from "chai";
-import { keccak256, toUtf8Bytes } from "ethers";
+import { ethers } from "hardhat";
 
-export function shouldGetRecordFieldValue(factory: () => Promise<any>) {
+import { TEMPLATE_ID } from "@gemunion/contracts-constants";
+
+import { defaultMintERC721, IERC721EnumOptions } from "../shared/defaultMint";
+
+export function shouldGetRecordFieldValue(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
+  const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n } = options;
+
   describe("getRecordFieldValue", function () {
     it("should get value", async function () {
+      const [owner] = await ethers.getSigners();
+
       const contractInstance = await factory();
 
-      await contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
-      const value = await contractInstance.getRecordFieldValue(0, keccak256(toUtf8Bytes("GRADE")));
+      await mint(contractInstance, owner, owner.address);
 
-      expect(value).to.equal(1337);
+      const value = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
+      expect(value).to.equal(42);
     });
 
     it("should get value (empty)", async function () {
       const contractInstance = await factory();
 
-      const tx = contractInstance.getRecordFieldValue(0, keccak256(toUtf8Bytes("GRADE")));
-
+      const tx = contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
       await expect(tx).to.be.revertedWith("GC: field not found");
     });
 
     it("should get value (deleted)", async function () {
+      const [owner] = await ethers.getSigners();
+
       const contractInstance = await factory();
 
-      await contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
-      await contractInstance.deleteRecord(0);
-      const tx = contractInstance.getRecordFieldValue(0, keccak256(toUtf8Bytes("GRADE")));
+      await mint(contractInstance, owner, owner.address);
+      await contractInstance.deleteRecord(defaultTokenId);
+      const tx = contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
 
       await expect(tx).to.be.revertedWith("GC: field not found");
     });
 
     it("should get value (deleted by key)", async function () {
+      const [owner] = await ethers.getSigners();
+
       const contractInstance = await factory();
 
-      await contractInstance.setTokenMetadata(0, [{ key: keccak256(toUtf8Bytes("GRADE")), value: 1337 }]);
-      await contractInstance.deleteRecordField(0, keccak256(toUtf8Bytes("GRADE")));
-      const tx = contractInstance.getRecordFieldValue(0, keccak256(toUtf8Bytes("GRADE")));
+      await mint(contractInstance, owner, owner.address);
+      await contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
+      const tx = contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
 
       await expect(tx).to.be.revertedWith("GC: field not found");
     });

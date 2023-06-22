@@ -1,9 +1,13 @@
-import { DEFAULT_ADMIN_ROLE, METADATA_ROLE, MINTER_ROLE, InterfaceId } from "@gemunion/contracts-constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, METADATA_ROLE, MINTER_ROLE } from "@gemunion/contracts-constants";
 import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
 
-import { shouldBehaveLikeERC721, shouldBehaveLikeERC721Burnable, shouldBehaveLikeERC721Royalty } from "../../src";
+import {
+  shouldBehaveLikeERC721,
+  shouldBehaveLikeERC721Burnable,
+  shouldBehaveLikeERC721Metadata,
+  shouldBehaveLikeERC721Royalty,
+} from "../../src";
 import { deployERC721 } from "../../src/fixtures";
-import { shouldBehaveLikeERC721Metadata } from "../../src/metadata";
 
 describe("ERC721MetaDataTest", function () {
   const factory = () => deployERC721(this.title);

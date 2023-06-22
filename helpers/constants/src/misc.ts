@@ -1,4 +1,4 @@
-import { encodeBytes32String, id, ZeroHash } from "ethers";
+import { encodeBytes32String, id, toUtf8Bytes, ZeroHash, zeroPadValue } from "ethers";
 
 export const baseTokenURI = "http://localhost:3000/metadata"; // no trailing slash
 export const tokenSymbol = "GEM";
@@ -18,7 +18,9 @@ export const PREDICATE_ROLE = id("PREDICATE_ROLE");
 export const DEPOSITOR_ROLE = id("DEPOSITOR_ROLE");
 export const METADATA_ROLE = id("METADATA_ROLE");
 
-export const TEMPLATE_ID = id("TEMPLATE_ID");
+export const TEMPLATE_ID = zeroPadValue(toUtf8Bytes("TEMPLATE_ID"), 32);
+export const RARITY = zeroPadValue(toUtf8Bytes("RARITY"), 32);
+export const LEVEL = zeroPadValue(toUtf8Bytes("LEVEL"), 32);
 
 export const decimals = 18;
 export const amount = 100000n;

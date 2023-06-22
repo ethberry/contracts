@@ -45,4 +45,12 @@ abstract contract ERC721AMetaDataGetter is AccessControl, GeneralizedCollection 
   function deleteRecordField(uint256 tokenId, bytes32 fieldKey) public onlyRole(METADATA_ROLE) returns (bool) {
     return _deleteRecordField(tokenId, fieldKey);
   }
+
+  function upsertRecordField(
+    uint256 pk,
+    bytes32 fieldKey,
+    uint256 value
+  ) public onlyRole(METADATA_ROLE) returns (bool) {
+    return _upsertRecordField(pk, fieldKey, value);
+  }
 }

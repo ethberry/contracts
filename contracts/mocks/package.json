@@ -29,7 +29,7 @@
     "rimraf": "5.0.1"
   },
   "engines": {
-    "node": ">=12.13"
+    "node": ">=18"
   },
   "license": "UNLICENSED",
   "main": "./dist/index.js",

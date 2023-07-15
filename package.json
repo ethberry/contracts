@@ -48,8 +48,6 @@
     "clean": "sh scripts/clean.sh",
     "lint": "lerna run lint --stream",
     "precommit": "lint-staged",
-    "release": "npm run release:version && npm run release:publish",
-    "release:version": "lerna version patch --yes --ignore-scripts",
     "test": "sh scripts/test.sh"
   },
   "version": "1.0.0"

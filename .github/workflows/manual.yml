@@ -146,7 +146,7 @@ jobs:
         continue-on-error: true
 
       - name: Version & Publish by lerna via npm
-        run: npm run release:publish:git
+        run: npm run lerna:publish:git
         if: steps.lerna_changed.outcome == 'success'
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
@@ -181,7 +181,7 @@ jobs:
           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
 
       - name: Publish NPM by lerna
-        run: npm run release:publish:npm
+        run: npm run lerna:publish:npm
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

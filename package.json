@@ -41,10 +41,10 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --concurrency 1 --hoist --ignore-scripts",
     "build": "lerna run build --concurrency 1",
-    "lerna:version": "lerna --version",
+    "lerna:version": "lerna version patch --yes --ignore-scripts",
     "lerna:changed": "lerna changed",
-    "lerna:publish:git": "lerna publish from-package --yes --exact --ignore-scripts --registry=https://npm.pkg.github.com/",
-    "lerna:publish:npm": "lerna publish from-package --yes --exact --ignore-scripts --registry=https://registry.npmjs.org/",
+    "lerna:publish:git": "lerna version patch --yes --ignore-scripts && lerna publish from-package --yes --exact --ignore-scripts --registry=https://npm.pkg.github.com/",
+    "lerna:publish:npm": "lerna version patch --yes --ignore-scripts && lerna publish from-package --yes --exact --ignore-scripts --registry=https://registry.npmjs.org/",
     "clean": "sh scripts/clean.sh",
     "lint": "lerna run lint --stream",
     "precommit": "lint-staged",

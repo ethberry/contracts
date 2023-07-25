@@ -477,4 +477,18 @@ ERC677ReceiverInterface
         //            s_feeConfig
         );
     }
+
+  function getSubscription(
+    uint64 subId
+  ) external view returns (uint96 balance, uint64 reqCount, address owner, address[] memory consumers) {
+    if (s_subscriptionConfigs[subId].owner == address(0)) {
+      revert InvalidSubscription();
+    }
+    return (
+    s_subscriptions[subId].balance,
+    s_subscriptions[subId].reqCount,
+    s_subscriptionConfigs[subId].owner,
+    s_subscriptionConfigs[subId].consumers
+    );
+  }
 }

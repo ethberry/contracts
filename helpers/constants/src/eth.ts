@@ -12,6 +12,4 @@ export const privateKeys = [
 ];
 export const privateKey = privateKeys[0];
 
-export const txHash = "0x4278f289076cfd8d70a3e2ab416e16bad69d643319c5c9e3945a1c5ecca87692";
-
 export const testChainId = 13378;

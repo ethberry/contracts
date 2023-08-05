@@ -5,14 +5,14 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
-    "@gemunion/contracts-chain-link": "^4.0.11",
-    "@gemunion/contracts-constants": "^4.0.11",
-    "@gemunion/contracts-erc1363": "^4.0.11",
-    "@gemunion/contracts-erc721": "^4.0.11",
-    "@gemunion/contracts-erc721e": "^4.0.11",
-    "@gemunion/contracts-misc": "^4.0.11",
-    "@gemunion/contracts-mocha": "^4.0.11",
-    "@gemunion/contracts-mocks": "^4.0.11",
+    "@gemunion/contracts-chain-link": "^4.0.12",
+    "@gemunion/contracts-constants": "^4.0.12",
+    "@gemunion/contracts-erc1363": "^4.0.12",
+    "@gemunion/contracts-erc721": "^4.0.12",
+    "@gemunion/contracts-erc721e": "^4.0.12",
+    "@gemunion/contracts-misc": "^4.0.12",
+    "@gemunion/contracts-mocha": "^4.0.12",
+    "@gemunion/contracts-mocks": "^4.0.12",
     "@nomicfoundation/hardhat-chai-matchers": "2.0.1",
     "@nomicfoundation/hardhat-ethers": "3.0.4",
     "@nomicfoundation/hardhat-network-helpers": "1.0.8",
@@ -75,5 +75,5 @@
     "test:coverage": "hardhat coverage"
   },
   "types": "./dist/index.d.ts",
-  "version": "4.0.11"
+  "version": "4.0.12"
 }

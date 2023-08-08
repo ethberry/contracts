@@ -6,7 +6,8 @@
   },
   "dependencies": {
     "@lerna/legacy-package-management": "7.1.4",
-    "lerna": "7.1.4"
+    "lerna": "7.1.4",
+    "nx": "16.5.5"
   },
   "devDependencies": {
     "@gemunion/eslint-config": "4.0.3",

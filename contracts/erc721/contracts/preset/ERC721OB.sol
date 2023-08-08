@@ -9,8 +9,6 @@ pragma solidity ^0.8.13;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-import "@gemunion/contracts-misc/contracts/constants.sol";
-
 contract ERC721OB is Ownable, ERC721Burnable {
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
 

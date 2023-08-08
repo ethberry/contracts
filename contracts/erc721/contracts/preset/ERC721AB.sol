@@ -9,7 +9,7 @@ pragma solidity ^0.8.13;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "@gemunion/contracts-misc/contracts/constants.sol";
+import "@gemunion/contracts-misc/contracts/roles.sol";
 
 contract ERC721AB is AccessControl, ERC721Burnable {
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {

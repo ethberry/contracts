@@ -9,7 +9,7 @@ pragma solidity ^0.8.13;
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "@gemunion/contracts-misc/contracts/constants.sol";
+import "@gemunion/contracts-misc/contracts/roles.sol";
 import "@gemunion/contracts-erc1363/contracts/extensions/ERC1363.sol";
 
 contract ERC20AB is AccessControl, ERC20Burnable, ERC1363 {

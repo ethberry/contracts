@@ -8,8 +8,6 @@ pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/security/Pausable.sol";
 
-import "@gemunion/contracts-misc/contracts/constants.sol";
-
 import "../extensions/ERC721Capped.sol";
 import "./ERC721ABC.sol";
 

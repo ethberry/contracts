@@ -8,8 +8,6 @@ pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 
-import "@gemunion/contracts-misc/contracts/constants.sol";
-
 import "./ERC20ABCS.sol";
 
 contract ERC20ABCSP is ERC20ABCS, ERC20Pausable {

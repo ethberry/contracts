@@ -8,8 +8,6 @@ pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
 
-import "@gemunion/contracts-misc/contracts/constants.sol";
-
 import "./ERC20ABC.sol";
 
 contract ERC20ABCS is ERC20ABC, ERC20Snapshot {

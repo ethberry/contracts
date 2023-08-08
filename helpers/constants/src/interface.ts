@@ -21,10 +21,13 @@ export enum InterfaceId {
   IERC1155Receiver = "0x4e2312e0",
   IRoyalty = "0x2a55205a", // IERC2981
   IAccessControl = "0x7965db0b",
+  IGovernor = "0xf2e09f74",
+  IVotes = "0xe90fb3f6",
   Invalid = "0xffffffff",
   IERC1363 = "0xb0202a11",
   IERC1363Receiver = "0x88a7ca5c",
   IERC1363Spender = "0x7b04a2d0",
-  IERC4906 = "0x49064906",
-  IERC4907 = "0xad092b5c",
+  IERC4906 = "0x49064906", // OpenSea metadata
+  IERC4907 = "0xad092b5c", // rent
+  IERC5267 = "0x84b0196e", // EIP 712 domain
 }

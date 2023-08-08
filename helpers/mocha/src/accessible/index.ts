@@ -15,3 +15,5 @@ export function shouldBehaveLikeAccessControl(factory: () => Promise<any>) {
     shouldRenounceRole(factory);
   };
 }
+
+export { shouldHaveRole, shouldGetRoleAdmin, shouldGrantRole, shouldRevokeRole, shouldRenounceRole };

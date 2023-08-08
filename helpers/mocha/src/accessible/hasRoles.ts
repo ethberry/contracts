@@ -5,7 +5,7 @@ export function shouldHaveRole(factory: () => Promise<any>) {
   return (...roles: Array<string>) => {
     describe("hasRole", function () {
       roles.forEach(role => {
-        it(`Should set ${role} to deployer`, async function () {
+        it(`Should have ${role} on deployer`, async function () {
           const [owner] = await ethers.getSigners();
           const contractInstance = await factory();
 

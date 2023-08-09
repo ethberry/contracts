@@ -5,14 +5,15 @@ import { shouldGetRoleAdmin } from "./getRoleAdmin";
 import { shouldGrantRole } from "./grantRole";
 import { shouldRevokeRole } from "./revokeRole";
 import { shouldRenounceRole } from "./renounceRole";
+import { IAccessControlOptions } from "../shared/interfaces";
 
-export function shouldBehaveLikeAccessControl(factory: () => Promise<any>) {
+export function shouldBehaveLikeAccessControl(factory: () => Promise<any>, options?: IAccessControlOptions) {
   return (...roles: Array<string>) => {
     shouldHaveRole(factory)(...roles);
-    shouldGetRoleAdmin(factory)(...roles);
-    shouldGrantRole(factory);
-    shouldRevokeRole(factory);
-    shouldRenounceRole(factory);
+    shouldGetRoleAdmin(factory, options)(...roles);
+    shouldGrantRole(factory, options);
+    shouldRevokeRole(factory, options);
+    shouldRenounceRole(factory, options);
   };
 }
 

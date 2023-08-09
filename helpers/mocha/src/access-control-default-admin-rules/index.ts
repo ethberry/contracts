@@ -1,11 +1,14 @@
 import "@nomicfoundation/hardhat-toolbox";
 
-import { shouldGetRoleAdmin, shouldHaveRole } from "../access-control";
+import { shouldBehaveLikeAccessControl } from "../access-control";
+import { IAccessControlOptions } from "../shared/interfaces";
 
-export function shouldBehaveLikeAccessControlDefaultAdminRules(factory: () => Promise<any>) {
+export function shouldBehaveLikeAccessControlDefaultAdminRules(
+  factory: () => Promise<any>,
+  options?: IAccessControlOptions,
+) {
   return (...roles: Array<string>) => {
-    shouldHaveRole(factory)(...roles);
-    shouldGetRoleAdmin(factory)(...roles);
+    shouldBehaveLikeAccessControl(factory, options)(...roles);
 
     // TODO test rest of the methods
   };

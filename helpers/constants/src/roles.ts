@@ -10,6 +10,7 @@ export const DEPOSITOR_ROLE = id("DEPOSITOR_ROLE");
 // OpenZeppelin
 // # Default
 export const DEFAULT_ADMIN_ROLE = ZeroHash;
+export const DEFAULT_TEST_ROLE = id("DEFAULT_TEST_ROLE");
 // # Tokens
 export const MINTER_ROLE = id("MINTER_ROLE");
 export const SNAPSHOT_ROLE = id("SNAPSHOT_ROLE");

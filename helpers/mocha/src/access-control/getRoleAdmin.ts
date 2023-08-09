@@ -2,7 +2,11 @@ import { expect } from "chai";
 
 import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
 
-export function shouldGetRoleAdmin(factory: () => Promise<any>) {
+import { IAccessControlOptions } from "../shared/interfaces";
+
+export function shouldGetRoleAdmin(factory: () => Promise<any>, options: IAccessControlOptions = {}) {
+  const { adminRole = DEFAULT_ADMIN_ROLE } = options;
+
   return (...roles: Array<string>) => {
     describe("getRoleAdmin", function () {
       roles.forEach(role => {
@@ -10,7 +14,7 @@ export function shouldGetRoleAdmin(factory: () => Promise<any>) {
           const contractInstance = await factory();
 
           const roleAdmin = await contractInstance.getRoleAdmin(role);
-          expect(roleAdmin).to.equal(DEFAULT_ADMIN_ROLE);
+          expect(roleAdmin).to.equal(adminRole);
         });
       });
     });

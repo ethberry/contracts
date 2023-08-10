@@ -4,6 +4,8 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
+pragma solidity ^0.8.13;
+
 // NOTE: project related InterfaceIds like SIMPLE and RANDOM should be stored in the project
 
 bytes4 constant IERC1363_ID = 0xb0202a11;

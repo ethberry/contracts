@@ -24,7 +24,7 @@ export function shouldUserOf(factory: () => Promise<any>, options: IERC721Option
       await contractInstance.setUser(tokenId, receiver.address, deadline.toString());
       const userOf = await contractInstance.userOf(tokenId);
 
-      expect(userOf).to.be.equal(ZeroAddress);
+      expect(userOf).to.equal(ZeroAddress);
     });
 
     it("should return 0, when time is expired", async function () {
@@ -42,13 +42,13 @@ export function shouldUserOf(factory: () => Promise<any>, options: IERC721Option
       await time.increaseTo(current1.add(web3.utils.toBN(50)));
 
       const userOf1 = await contractInstance.userOf(tokenId);
-      expect(userOf1).to.be.equal(receiver.address);
+      expect(userOf1).to.equal(receiver.address);
 
       const current2 = await time.latest();
       await time.increaseTo(current2.add(web3.utils.toBN(50)));
 
       const userOf2 = await contractInstance.userOf(tokenId);
-      expect(userOf2).to.be.equal(ZeroAddress);
+      expect(userOf2).to.equal(ZeroAddress);
     });
 
     it("Owner is still the owner of NFT", async function () {
@@ -64,7 +64,7 @@ export function shouldUserOf(factory: () => Promise<any>, options: IERC721Option
 
       const ownerOfToken = await contractInstance.ownerOf(tokenId);
 
-      expect(ownerOfToken).to.be.equal(owner.address);
+      expect(ownerOfToken).to.equal(owner.address);
     });
   });
 }

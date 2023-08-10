@@ -32,4 +32,5 @@ export enum InterfaceId {
   IERC4906 = "0x49064906", // OpenSea metadata
   IERC4907 = "0xad092b5c", // rent
   IERC5267 = "0x84b0196e", // EIP 712 domain
+  IERC6372 = "0xda287a1d", // governance
 }

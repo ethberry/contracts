@@ -21,7 +21,7 @@ export function shouldUserExprires(factory: () => Promise<any>, options: IERC721
 
       await contractInstance.setUser(defaultTokenId, receiver.address, deadline.toString());
       const userExpires = await contractInstance.userExpires(defaultTokenId);
-      expect(userExpires).to.be.equal(deadline.toString());
+      expect(userExpires).to.equal(deadline.toString());
     });
   });
 }

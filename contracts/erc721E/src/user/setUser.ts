@@ -22,7 +22,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721EnumO
 
       const userOf = await contractInstance.userOf(defaultTokenId);
 
-      expect(userOf).to.be.equal(receiver.address);
+      expect(userOf).to.equal(receiver.address);
     });
 
     it("should fail: don't have permission to set a user", async function () {
@@ -52,7 +52,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721EnumO
 
       const userOf = await contractInstance.userOf(defaultTokenId);
 
-      expect(userOf).to.be.equal(receiver.address);
+      expect(userOf).to.equal(receiver.address);
     });
 
     it("should set a user from approvedAll address", async function () {
@@ -69,7 +69,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721EnumO
 
       const userOf = await contractInstance.userOf(defaultTokenId);
 
-      expect(userOf).to.be.equal(receiver.address);
+      expect(userOf).to.equal(receiver.address);
     });
 
     it("emits a UpdateUser event", async function () {

@@ -7,14 +7,14 @@
   "dependencies": {
     "@lerna/legacy-package-management": "7.1.5",
     "lerna": "7.1.5",
-    "nx": "16.7.2"
+    "nx": "16.7.4"
   },
   "devDependencies": {
     "@gemunion/eslint-config": "4.0.5",
-    "@types/node": "18.17.7",
+    "@types/node": "18.17.11",
     "@typescript-eslint/eslint-plugin": "6.4.1",
     "@typescript-eslint/parser": "6.4.1",
-    "eslint": "8.47.0",
+    "eslint": "8.48.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-config-standard": "17.1.0",
     "eslint-import-resolver-typescript": "3.6.0",
@@ -28,7 +28,7 @@
     "lint-staged": "13.3.0",
     "prettier": "3.0.2",
     "prettier-plugin-solidity": "1.1.3",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   },
   "engines": {
     "node": ">=18"

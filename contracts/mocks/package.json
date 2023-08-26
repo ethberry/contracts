@@ -54,7 +54,7 @@
     "preversion": "npm run build && npm run test",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test",
-    "test:coverage": "hardhat coverage"
+    "coverage": "hardhat coverage"
   },
   "sideEffects": false,
   "title": "-=Gemun Ion Studio=-",

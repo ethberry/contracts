@@ -66,7 +66,7 @@
     "preversion": "npm run build && npm run test",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
     "test": "hardhat test",
-    "test:coverage": "hardhat coverage"
+    "coverage": "hardhat coverage"
   },
   "types": "./typechain-types/index.ts",
   "version": "4.0.14"

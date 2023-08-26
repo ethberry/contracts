@@ -8,7 +8,7 @@ pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 
-import "@gemunion/contracts-misc/contracts/constants.sol";
+import "@gemunion/contracts-misc/contracts/roles.sol";
 
 import "./ERC1155ABS.sol";
 

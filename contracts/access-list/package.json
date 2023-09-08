@@ -22,7 +22,7 @@
   "description": "Collection of contracts and presets",
   "devDependencies": {
     "@openzeppelin/contracts": "4.9.2",
-    "@types/chai": "4.3.5",
+    "@types/chai": "4.3.6",
     "@types/mocha": "10.0.1",
     "@types/node": "18.17.14",
     "dotenv": "16.3.1",

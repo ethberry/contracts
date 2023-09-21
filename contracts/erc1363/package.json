@@ -23,7 +23,7 @@
     "@openzeppelin/test-helpers": "0.5.16",
     "@types/chai": "4.3.6",
     "@types/mocha": "10.0.1",
-    "@types/node": "18.17.16",
+    "@types/node": "18.17.18",
     "chai": "4.3.8",
     "dotenv": "16.3.1",
     "ethers": "6.7.1",

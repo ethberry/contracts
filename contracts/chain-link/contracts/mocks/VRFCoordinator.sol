@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.13;
 
-import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
-import "@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol";
+import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBase.sol";
+import "@chainlink/contracts/src/v0.8/vrf/VRFRequestIDBase.sol";
 
 contract VRFCoordinatorMock is VRFRequestIDBase {
   LinkTokenInterface public LINK;

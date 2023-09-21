@@ -6,10 +6,10 @@
 
 pragma solidity ^0.8.13;
 
-import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 
-abstract contract ChainLinkBase is VRFConsumerBaseV2 {
+abstract contract ChainLinkBaseV2 is VRFConsumerBaseV2 {
   bytes32 internal _keyHash;
   uint64 internal _subId;
   uint16 internal _minReqConfs;

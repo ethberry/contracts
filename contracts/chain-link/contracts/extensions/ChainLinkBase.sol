@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.13;
 
-import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
+import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBase.sol";
 
 abstract contract ChainLinkBase is VRFConsumerBase {
   bytes32 internal _keyHash;

@@ -1,22 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
+import "@chainlink/contracts/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/BlockhashStoreInterface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
-//import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
+// import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/TypeAndVersionInterface.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/ERC677ReceiverInterface.sol";
-import "@chainlink/contracts/src/v0.8/VRF.sol";
-import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
-import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+import "@chainlink/contracts/src/v0.8/shared/interfaces/IERC677Receiver.sol";
+import "@chainlink/contracts/src/v0.8/vrf/VRF.sol";
+import "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
+import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
 
-contract VRFCoordinatorMock is
+contract VRFCoordinatorV2Mock is
 VRF,
 ConfirmedOwner,
 TypeAndVersionInterface,
-    //VRFCoordinatorV2Interface,
-ERC677ReceiverInterface
+// VRFCoordinatorV2Interface,
+IERC677Receiver
 {
     LinkTokenInterface public immutable LINK;
     //    AggregatorV3Interface public immutable LINK_ETH_FEED;

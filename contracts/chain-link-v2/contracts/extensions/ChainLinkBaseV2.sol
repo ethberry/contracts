@@ -34,7 +34,6 @@ abstract contract ChainLinkBaseV2 is VRFConsumerBaseV2 {
   }
 
   function getRandomNumber() internal virtual returns (uint256 requestId) {
-    if (_subId == 0) revert InvalidSubscription();
     requestId = COORDINATOR.requestRandomWords(_keyHash, _subId, _minReqConfs, _callbackGasLimit, _numWords);
     return requestId;
   }

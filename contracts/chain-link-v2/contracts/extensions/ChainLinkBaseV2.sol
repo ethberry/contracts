@@ -9,8 +9,6 @@ pragma solidity ^0.8.13;
 import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 
-error InvalidSubscription();
-
 abstract contract ChainLinkBaseV2 is VRFConsumerBaseV2 {
   bytes32 internal _keyHash;
   uint64 internal _subId;
@@ -33,9 +31,6 @@ abstract contract ChainLinkBaseV2 is VRFConsumerBaseV2 {
     _minReqConfs = minReqConfs;
     _callbackGasLimit = callbackGasLimit;
     _numWords = numWords;
-  }
-
-  function setSubscriptionId(uint64) external virtual {
   }
 
   function getRandomNumber() internal virtual returns (uint256 requestId) {

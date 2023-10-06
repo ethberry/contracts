@@ -4,7 +4,7 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 bytes32 constant TEMPLATE_ID = 0x00000000000000000000000000000000000000000054454d504c4154455f4944;
 bytes32 constant RARITY = 0x0000000000000000000000000000000000000000000000000000524152495459;

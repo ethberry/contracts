@@ -46,47 +46,37 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC20O
       expect(balanceOfOwner).to.equal(0);
     });
 
-    it("should fail: double transfer, amount exceeds allowance", async function () {
-      const [owner, receiver] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      await mint(contractInstance, owner, owner.address);
-      await contractInstance.approve(receiver.address, amount);
-
-      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, amount);
-
-      const tx1 = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
-      await expect(tx1).to.be.revertedWith(`ERC20: insufficient allowance`);
-    });
-
-    it("should fail: transfer to the zero address", async function () {
+    it("should fail: ERC20InvalidReceiver", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address);
       await contractInstance.approve(receiver.address, amount);
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, ZeroAddress, amount);
-      await expect(tx).to.be.revertedWith(`ERC20: transfer to the zero address`);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC20InvalidReceiver").withArgs(ZeroAddress);
     });
 
-    it("should fail: transfer amount exceeds balance", async function () {
+    it("should fail: ERC20InsufficientBalance", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address, 0n);
       await contractInstance.approve(receiver.address, amount);
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
-      await expect(tx).to.be.revertedWith(`ERC20: transfer amount exceeds balance`);
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientBalance")
+        .withArgs(owner.address, 0, amount);
     });
 
-    it("should fail: transfer amount exceeds allowance", async function () {
+    it("should fail: ERC20InsufficientAllowance", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address);
       const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, amount);
-      await expect(tx).to.be.revertedWith(`ERC20: insufficient allowance`);
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientAllowance")
+        .withArgs(receiver.address, 0, amount);
     });
   });
 }

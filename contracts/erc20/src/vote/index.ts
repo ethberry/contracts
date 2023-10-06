@@ -1,4 +1,4 @@
-import { IERC20Options } from "../shared/defaultMint";
+import type { IERC20Options } from "../shared/defaultMint";
 import { shouldCheckClockMode } from "./clockMode";
 import { shouldGetNumCheckpoints } from "./numCheckpoints";
 

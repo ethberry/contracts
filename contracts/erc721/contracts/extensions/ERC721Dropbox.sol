@@ -4,19 +4,18 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 
-abstract contract ERC721Dropbox is EIP712 {
+abstract contract ERC721Dropbox is ERC721, EIP712 {
   mapping(bytes32 => bool) private _expired;
 
   event Redeem(address account, uint256 tokenId);
 
   constructor(string memory name) EIP712(name, "1.0.0") {}
-
-  function _safeMint(address account, uint256 tokenId) internal virtual;
 
   function _redeem(bytes32 nonce, address account, uint256 tokenId, address signer, bytes calldata signature) internal {
     require(_verify(signer, _hash(nonce, account, tokenId), signature), "ERC721Dropbox: Invalid signature");

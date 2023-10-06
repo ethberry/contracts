@@ -31,7 +31,9 @@ export function shouldGetOwnerOf(factory: () => Promise<any>, options: IERC721Op
       expect(balanceOfOwner).to.equal(batchSize);
 
       const tx2 = contractInstance.ownerOf(batchSize + tokenId);
-      await expect(tx2).to.be.revertedWith(`ERC721: invalid token ID`);
+      await expect(tx2)
+        .to.be.revertedWithCustomError(contractInstance, "ERC721NonexistentToken")
+        .withArgs(batchSize + tokenId);
     });
   });
 }

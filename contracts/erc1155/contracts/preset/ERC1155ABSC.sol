@@ -4,7 +4,7 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "./ERC1155ABS.sol";
 import "../extensions/ERC1155Capped.sol";
@@ -16,14 +16,12 @@ contract ERC1155ABSC is ERC1155ABS, ERC1155Capped {
     return super.supportsInterface(interfaceId);
   }
 
-  function _beforeTokenTransfer(
-    address operator,
+  function _update(
     address from,
     address to,
     uint256[] memory ids,
-    uint256[] memory amounts,
-    bytes memory data
+    uint256[] memory amounts
   ) internal virtual override(ERC1155ABS, ERC1155Capped) {
-    super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    super._update(from, to, ids, amounts);
   }
 }

@@ -1,7 +1,7 @@
 import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@gemunion/contracts-constants";
-import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+import { shouldSupportsInterface } from "@gemunion/contracts-utils";
 
-import { shouldBehaveLikeWhiteList, shouldBehaveLikeWhiteListMe } from "../../src";
+import { shouldBehaveLikeAccessControl, shouldBehaveLikeWhiteList, shouldBehaveLikeWhiteListMe } from "../../src";
 import { deployAccessList } from "../fixtures";
 
 describe("WhiteListTest", function () {

@@ -4,9 +4,10 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20FlashMint.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
 import "@gemunion/contracts-misc/contracts/roles.sol";
@@ -24,8 +25,10 @@ contract ERC20AF is AccessControl, ERC20FlashMint {
     _mint(to, amount);
   }
 
-  function flashFee(address token, uint256) public view virtual override returns (uint256) {
-    require(token == address(this), "ERC20FlashMint: wrong token");
+  function _flashFee(address token, uint256 value) internal view virtual override returns (uint256) {
+    // silence warning about unused variable without the addition of bytecode.
+    token;
+    value;
     return _flashFeeAmount;
   }
 

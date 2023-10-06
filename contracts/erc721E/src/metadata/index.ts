@@ -7,7 +7,7 @@ import { shouldIsRecord } from "./isRecord";
 import { shouldGetRecordFieldValue } from "./getRecordFieldValue";
 import { shouldIsRecordFieldKey } from "./isRecordFieldKey";
 import { shouldDeleteRecord } from "./deleteRecord";
-import { IERC721EnumOptions } from "../shared/defaultMint";
+import type { IERC721EnumOptions } from "../shared/defaultMint";
 
 export function shouldBehaveLikeERC721Metadata(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
   shouldSetTokenMetadata(factory, options);

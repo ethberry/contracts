@@ -5,13 +5,14 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
+    "@gemunion/contracts-access": "^4.0.16",
     "@gemunion/contracts-chain-link": "^4.0.16",
     "@gemunion/contracts-constants": "^4.0.16",
     "@gemunion/contracts-erc1363": "^4.0.16",
     "@gemunion/contracts-erc721": "^4.0.16",
     "@gemunion/contracts-erc721e": "^4.0.16",
     "@gemunion/contracts-misc": "^4.0.16",
-    "@gemunion/contracts-mocha": "^4.0.16",
+    "@gemunion/contracts-utils": "^4.0.16",
     "@gemunion/contracts-mocks": "^4.0.16",
     "@nomicfoundation/hardhat-chai-matchers": "2.0.2",
     "@nomicfoundation/hardhat-ethers": "3.0.4",
@@ -29,7 +30,7 @@
   "devDependencies": {
     "@chainlink/contracts": "0.7.1",
     "@nomiclabs/hardhat-web3": "2.0.0",
-    "@openzeppelin/contracts": "4.9.2",
+    "@openzeppelin/contracts": "5.0.0",
     "@openzeppelin/test-helpers": "0.5.16",
     "@types/chai": "4.3.6",
     "@types/mocha": "10.0.1",
@@ -50,7 +51,7 @@
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-open-sea",
   "peerDependencies": {
-    "@openzeppelin/contracts": "4.9.2",
+    "@openzeppelin/contracts": "5.0.0",
     "ethers": "^6.0.0"
   },
   "publishConfig": {

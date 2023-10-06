@@ -10,6 +10,7 @@ import { deployErc20Borrower } from "./fixtures";
 
 export function shouldFlashLoan(factory: () => Promise<any>, options: IERC20Options = {}) {
   const { mint = defaultMintERC20 } = options;
+  const loan = 10n;
 
   describe("flashLoan", function () {
     it("success", async function () {
@@ -42,7 +43,7 @@ export function shouldFlashLoan(factory: () => Promise<any>, options: IERC20Opti
       expect(allowance).to.equal(0);
     });
 
-    it("missing return value", async function () {
+    it("should fail: ERC3156InvalidReceiver", async function () {
       const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
@@ -55,10 +56,10 @@ export function shouldFlashLoan(factory: () => Promise<any>, options: IERC20Opti
       const address2 = await erc20FlashBorrowerInstance.getAddress();
 
       const tx = contractInstance.flashLoan(address2, address1, amount, "0x");
-      await expect(tx).to.be.revertedWith("ERC20FlashMint: invalid return value");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC3156InvalidReceiver").withArgs(address2);
     });
 
-    it("missing approval", async function () {
+    it("should: fail ERC20InsufficientAllowance", async function () {
       const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
@@ -71,10 +72,12 @@ export function shouldFlashLoan(factory: () => Promise<any>, options: IERC20Opti
       const address2 = await erc20FlashBorrowerInstance.getAddress();
 
       const tx = contractInstance.flashLoan(address2, address1, amount, "0x");
-      await expect(tx).to.be.revertedWith("ERC20: insufficient allowance");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientAllowance")
+        .withArgs(address1, 0, amount);
     });
 
-    it("unavailable funds", async function () {
+    it("should fail: ERC20InsufficientBalance", async function () {
       const [owner, receiver] = await ethers.getSigners();
 
       const contractInstance = await factory();
@@ -86,13 +89,15 @@ export function shouldFlashLoan(factory: () => Promise<any>, options: IERC20Opti
       const erc20FlashBorrowerInstance = await erc20FlashBorrower.deploy(true, true);
       const address2 = await erc20FlashBorrowerInstance.getAddress();
 
-      const data = contractInstance.interface.encodeFunctionData("transfer", [receiver.address, 10]);
+      const data = contractInstance.interface.encodeFunctionData("transfer", [receiver.address, loan]);
 
       const tx = contractInstance.flashLoan(address2, address1, amount, data);
-      await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds balance");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientBalance")
+        .withArgs(address2, amount - loan, amount);
     });
 
-    it("more than maxFlashLoan", async function () {
+    it("should fail: ERC3156ExceededMaxLoan", async function () {
       const [owner, receiver] = await ethers.getSigners();
 
       const contractInstance = await factory();
@@ -104,11 +109,13 @@ export function shouldFlashLoan(factory: () => Promise<any>, options: IERC20Opti
       const erc20FlashBorrowerInstance = await erc20FlashBorrower.deploy(true, true);
       const address2 = await erc20FlashBorrowerInstance.getAddress();
 
-      const data = contractInstance.interface.encodeFunctionData("transfer", [receiver.address, 10]);
+      const data = contractInstance.interface.encodeFunctionData("transfer", [receiver.address, loan]);
 
       // _mint overflow reverts using a panic code. No reason string.
       const tx = contractInstance.flashLoan(address2, address1, MaxUint256, data);
-      await expect(tx).to.be.revertedWith("ERC20FlashMint: amount exceeds maxFlashLoan");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC3156ExceededMaxLoan")
+        .withArgs(MaxUint256 - amount);
     });
   });
 }

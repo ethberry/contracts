@@ -12,14 +12,18 @@ export function shouldMintBatch(factory: () => Promise<any>, options: IERC1155Op
   const { mintBatch = defaultMintBatchERC1155, minterRole = MINTER_ROLE } = options;
 
   describe("mintBatch", function () {
-    it("should mint to wallet", async function () {
+    it("should mint to EOA", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx1 = mintBatch(contractInstance, owner, receiver.address, [tokenId], [amount], "0x");
-      await expect(tx1)
-        .to.emit(contractInstance, "TransferBatch")
-        .withArgs(owner.address, ZeroAddress, receiver.address, [tokenId], [amount]);
+      const tx = mintBatch(contractInstance, owner, receiver.address, [tokenId], [amount], "0x");
+
+      // https://github.com/OpenZeppelin/openzeppelin-contracts/issues/4656
+      // await expect(tx)
+      //   .to.emit(contractInstance, "TransferBatch")
+      //   .withArgs(owner.address, ZeroAddress, receiver.address, [tokenId], [amount]);
+
+      await expect(tx).to.not.be.reverted;
 
       const balance = await contractInstance.balanceOf(receiver.address, tokenId);
       expect(balance).to.equal(amount);
@@ -32,38 +36,54 @@ export function shouldMintBatch(factory: () => Promise<any>, options: IERC1155Op
       const erc1155ReceiverInstance = await deployWallet();
       const address = await erc1155ReceiverInstance.getAddress();
 
-      const tx1 = mintBatch(contractInstance, owner, address, [tokenId], [amount], "0x");
-      await expect(tx1)
-        .to.emit(contractInstance, "TransferBatch")
-        .withArgs(owner.address, ZeroAddress, address, [tokenId], [amount]);
+      const tx = mintBatch(contractInstance, owner, address, [tokenId], [amount], "0x");
+      // https://github.com/OpenZeppelin/openzeppelin-contracts/issues/4656
+      // await expect(tx)
+      //   .to.emit(contractInstance, "TransferBatch")
+      //   .withArgs(owner.address, ZeroAddress, address, [tokenId], [amount]);
+
+      await expect(tx).to.not.be.reverted;
 
       const balance = await contractInstance.balanceOf(address, tokenId);
       expect(balance).to.equal(amount);
     });
 
-    it("should fail: non receiver", async function () {
+    it("should fail: ERC1155InvalidReceiver (NonReceiver)", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
       const erc1155NonReceiverInstance = await deployJerk();
       const address = await erc1155NonReceiverInstance.getAddress();
 
-      const tx1 = mintBatch(contractInstance, owner, address, [tokenId], [amount], "0x");
-      await expect(tx1).to.be.revertedWith(`ERC1155: transfer to non-ERC1155Receiver implementer`);
+      const tx = mintBatch(contractInstance, owner, address, [tokenId], [amount], "0x");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver").withArgs(address);
     });
 
-    it("should fail: account is missing role", async function () {
+    it("should fail: ERC1155InvalidReceiver (ZeroAddress)", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const tx = mintBatch(contractInstance, owner, ZeroAddress, [tokenId], [amount], "0x");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver").withArgs(ZeroAddress);
+    });
+
+    it("should fail: AccessControlUnauthorizedAccount/OwnableUnauthorizedAccount", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
-      const tx1 = mintBatch(contractInstance, receiver, owner.address, [tokenId], [amount], "0x");
-      await expect(tx1).to.be.revertedWith(
-        supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${minterRole}`
-          : "Ownable: caller is not the owner",
-      );
+      const tx = mintBatch(contractInstance, receiver, owner.address, [tokenId], [amount], "0x");
+      if (supportsAccessControl) {
+        await expect(tx)
+          .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
+          .withArgs(receiver.address, minterRole);
+      } else {
+        // Ownable
+        await expect(tx)
+          .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
+          .withArgs(receiver.address);
+      }
     });
   });
 }

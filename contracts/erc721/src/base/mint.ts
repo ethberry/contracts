@@ -12,21 +12,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC721Options 
   const { mint = defaultMintERC721, minterRole = MINTER_ROLE, batchSize = 0n } = options;
 
   describe("mint", function () {
-    it("should fail: account is missing role", async function () {
-      const [_owner, receiver] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
-
-      const tx = mint(contractInstance, receiver, receiver.address, batchSize + tokenId);
-      await expect(tx).to.be.revertedWith(
-        supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${minterRole}`
-          : "Ownable: caller is not the owner",
-      );
-    });
-
-    it("should mint to wallet", async function () {
+    it("should mint to EOA", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -64,6 +50,25 @@ export function shouldMint(factory: () => Promise<any>, options: IERC721Options 
 
       const balance = await contractInstance.balanceOf(address);
       expect(balance).to.equal(1);
+    });
+
+    it("should fail: AccessControlUnauthorizedAccount/OwnableUnauthorizedAccount", async function () {
+      const [_owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
+
+      const tx = mint(contractInstance, receiver, receiver.address, batchSize + tokenId);
+      if (supportsAccessControl) {
+        await expect(tx)
+          .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
+          .withArgs(receiver.address, minterRole);
+      } else {
+        // Ownable
+        await expect(tx)
+          .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
+          .withArgs(receiver.address);
+      }
     });
   });
 }

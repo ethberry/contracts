@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@gemunion/contracts-constants": "^4.0.16",
-    "@gemunion/contracts-mocha": "^4.0.16",
+    "@gemunion/contracts-utils": "^4.0.16",
     "@nomicfoundation/hardhat-chai-matchers": "2.0.2",
     "@nomicfoundation/hardhat-ethers": "3.0.4",
     "@nomicfoundation/hardhat-network-helpers": "1.0.9",
@@ -21,7 +21,7 @@
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
-    "@openzeppelin/contracts": "4.9.2",
+    "@openzeppelin/contracts": "5.0.0",
     "@types/chai": "4.3.6",
     "@types/mocha": "10.0.1",
     "@types/node": "18.17.18",
@@ -40,9 +40,9 @@
   },
   "license": "UNLICENSED",
   "main": "./dist/index.js",
-  "name": "@gemunion/contracts-access-list",
+  "name": "@gemunion/contracts-access",
   "peerDependencies": {
-    "@openzeppelin/contracts": "4.9.2",
+    "@openzeppelin/contracts": "5.0.0",
     "ethers": "^6.0.0"
   },
   "publishConfig": {

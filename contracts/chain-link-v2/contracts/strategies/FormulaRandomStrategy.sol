@@ -4,7 +4,7 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 contract FormulaRandomStrategy {
   function _getDispersion(uint256 randomness) internal pure virtual returns (uint8) {

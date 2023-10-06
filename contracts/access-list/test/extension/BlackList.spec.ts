@@ -1,7 +1,7 @@
 import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@gemunion/contracts-constants";
-import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+import { shouldSupportsInterface } from "@gemunion/contracts-utils";
 
-import { shouldBehaveLikeBlackList, shouldBehaveLikeBlackListMe } from "../../src";
+import { shouldBehaveLikeAccessControl, shouldBehaveLikeBlackList, shouldBehaveLikeBlackListMe } from "../../src";
 import { deployAccessList } from "../fixtures";
 
 describe("BlackListTest", function () {

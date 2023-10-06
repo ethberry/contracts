@@ -11,13 +11,6 @@ export function shouldBalanceOfBatch(factory: () => Promise<any>, options: IERC1
   const { mint = defaultMintERC1155 } = options;
 
   describe("balanceOfBatch", function () {
-    it("should fail for zero addr", async function () {
-      const contractInstance = await factory();
-
-      const tx = contractInstance.balanceOfBatch([ZeroAddress], [tokenId]);
-      await expect(tx).to.be.revertedWith(`ERC1155: address zero is not a valid owner`);
-    });
-
     it("should get balance of owner", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
@@ -25,6 +18,27 @@ export function shouldBalanceOfBatch(factory: () => Promise<any>, options: IERC1
       await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
       const balances = await contractInstance.balanceOfBatch([owner.address, owner.address], [tokenId, 0]);
       expect(balances).to.deep.equal([amount, 0]);
+    });
+
+    it("should get balance of zero", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const balances1 = await contractInstance.balanceOfBatch([ZeroAddress], [tokenId]);
+      expect(balances1).to.deep.equal([0]);
+
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+      await contractInstance.burn(owner.address, tokenId, amount);
+
+      const balances2 = await contractInstance.balanceOfBatch([ZeroAddress], [tokenId]);
+      expect(balances2).to.deep.equal([0]);
+    });
+
+    it("should fail: ERC1155InvalidArrayLength", async function () {
+      const contractInstance = await factory();
+
+      const tx = contractInstance.balanceOfBatch([ZeroAddress, ZeroAddress], [tokenId]);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidArrayLength").withArgs(1, 2);
     });
   });
 }

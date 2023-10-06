@@ -22,6 +22,8 @@ export interface IERC1155Options {
   mint?: TMintERC1155Fn;
   mintBatch?: TMintBatchERC1155Fn;
   minterRole?: string;
+  adminRole?: string;
+  tokenId?: bigint;
 }
 
 export const defaultMintERC1155 = (

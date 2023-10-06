@@ -4,13 +4,13 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
 
 import "./ERC721ABEC.sol";
 
-contract ERC721ABECP is ERC721ABEC, Pausable {
+contract ERC721ABECP is ERC721ABEC, ERC721Pausable {
   constructor(string memory name, string memory symbol, uint256 cap) ERC721ABEC(name, symbol, cap) {
     _grantRole(PAUSER_ROLE, _msgSender());
   }
@@ -23,12 +23,21 @@ contract ERC721ABECP is ERC721ABEC, Pausable {
     _unpause();
   }
 
-  function _beforeTokenTransfer(
-    address from,
+  function supportsInterface(
+    bytes4 interfaceId
+  ) public view virtual override(ERC721, ERC721ABEC) returns (bool) {
+    return super.supportsInterface(interfaceId);
+  }
+
+  function _update(
     address to,
-    uint256 firstTokenId,
-    uint256 batchSize
-  ) internal virtual override whenNotPaused {
-    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
+    uint256 tokenId,
+    address auth
+  ) internal virtual override(ERC721ABEC, ERC721Pausable) returns (address) {
+    return super._update(to, tokenId, auth);
+  }
+
+  function _increaseBalance(address account, uint128 amount) internal virtual override(ERC721, ERC721ABEC) {
+    super._increaseBalance(account, amount);
   }
 }

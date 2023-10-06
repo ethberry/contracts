@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { ZeroAddress } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 
@@ -29,14 +30,24 @@ export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IE
       expect(isApproved2).to.equal(false);
     });
 
-    it("should fail setting approval status for self", async function () {
+    it("should fail setting approval for self", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
 
       const tx = contractInstance.setApprovalForAll(owner.address, true);
-      await expect(tx).to.be.revertedWith(`ERC1155: setting approval status for self`);
+      await expect(tx).to.not.be.reverted;
+    });
+
+    it("should fail setting approval for zero", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+
+      const tx = contractInstance.setApprovalForAll(ZeroAddress, true);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidOperator").withArgs(ZeroAddress);
     });
   });
 }

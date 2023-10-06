@@ -4,7 +4,7 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "@gemunion/contracts-erc721/contracts/extensions/ERC721ABaseUrl.sol";
 
@@ -20,6 +20,10 @@ contract ERC721BaseUrlTest is ERC721ABERS, ERC721ABaseUrl {
 
   function _baseURI() internal view virtual override(ERC721, ERC721ABaseUrl) returns (string memory) {
     return _baseURI(_baseTokenURI);
+  }
+
+  function _increaseBalance(address account, uint128 amount) internal virtual override {
+    super._increaseBalance(account, amount);
   }
 
   function supportsInterface(

@@ -4,7 +4,7 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "../preset/ERC721ABCRS.sol";
 import "../extensions/ERC721Dropbox.sol";
@@ -17,10 +17,6 @@ contract ERC721DropboxTest is ERC721ABCRS, ERC721Dropbox {
     uint96 royaltyNumerator
   ) ERC721ABCRS(name, symbol, cap, royaltyNumerator) ERC721Dropbox(name) {}
 
-  function _safeMint(address account, uint256 tokenId) internal virtual override(ERC721, ERC721Dropbox) {
-    return super._safeMint(account, tokenId);
-  }
-
   function redeem(
     bytes32 nonce,
     address account,
@@ -30,5 +26,25 @@ contract ERC721DropboxTest is ERC721ABCRS, ERC721Dropbox {
   ) public virtual {
     _checkRole(MINTER_ROLE, signer);
     _redeem(nonce, account, tokenId, signer, signature);
+  }
+
+  function tokenURI(uint256 tokenId) public view virtual override(ERC721, ERC721ABCRS) returns (string memory) {
+    return super.tokenURI(tokenId);
+  }
+
+  function _update(
+    address to,
+    uint256 tokenId,
+    address auth
+  ) internal virtual override(ERC721, ERC721ABCRS)  returns (address) {
+    return super._update(to, tokenId, auth);
+  }
+
+  function _increaseBalance(address account, uint128 amount) internal virtual override(ERC721, ERC721ABCRS) {
+    super._increaseBalance(account, amount);
+  }
+
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721ABCRS) returns (bool) {
+    return super.supportsInterface(interfaceId);
   }
 }

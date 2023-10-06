@@ -6,7 +6,10 @@ export interface IERC721Options {
   mint?: TMintERC721Fn;
   safeMint?: TMintERC721Fn;
   minterRole?: string;
+  pauserRole?: string;
+  adminRole?: string;
   batchSize?: bigint;
+  tokenId?: bigint;
 }
 
 export const defaultMintERC721 = (contractInstance: any, signer: Signer, receiver: string, tokenId: bigint) => {

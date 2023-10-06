@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { ZeroAddress } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
@@ -43,7 +44,7 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
       expect(balanceOfReceiver2).to.equal(amount);
     });
 
-    it("should fail: transfer to non ERC1155Receiver implementer", async function () {
+    it("should fail: ERC1155InvalidReceiver (not receiver)", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -60,10 +61,19 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
         [amount, amount],
         "0x",
       );
-      await expect(tx).to.be.revertedWith("ERC1155: transfer to non-ERC1155Receiver implementer");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver").withArgs(address);
     });
 
-    it("should fail: not an owner", async function () {
+    it("should fail: ERC1155InvalidReceiver (ZeroAddress)", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+      const tx = contractInstance.safeBatchTransferFrom(owner.address, ZeroAddress, [tokenId], [amount], "0x");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver").withArgs(ZeroAddress);
+    });
+
+    it("should fail: ERC1155MissingApprovalForAll", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -76,7 +86,9 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
       const tx = contractInstance
         .connect(receiver)
         .safeBatchTransferFrom(owner.address, address, [tokenId, tokenId_1], [amount, amount], "0x");
-      await expect(tx).to.be.revertedWith("ERC1155: caller is not token owner or approved");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC1155MissingApprovalForAll")
+        .withArgs(receiver.address, owner.address);
     });
 
     it("should transfer approved tokens to receiver contract", async function () {

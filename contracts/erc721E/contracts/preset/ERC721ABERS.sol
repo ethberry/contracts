@@ -4,7 +4,7 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
@@ -31,16 +31,15 @@ contract ERC721ABERS is ERC721ABER, ERC721URIStorage {
     return super.supportsInterface(interfaceId);
   }
 
-  function _burn(uint256 tokenId) internal virtual override(ERC721ABER, ERC721URIStorage) {
-    super._burn(tokenId);
+  function _update(
+    address to,
+    uint256 tokenId,
+    address auth
+  ) internal virtual override(ERC721, ERC721ABER) returns (address) {
+    return super._update(to, tokenId, auth);
   }
 
-  function _beforeTokenTransfer(
-    address from,
-    address to,
-    uint256 firstTokenId,
-    uint256 batchSize
-  ) internal virtual override(ERC721, ERC721ABER) {
-    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
+  function _increaseBalance(address account, uint128 amount) internal virtual override(ERC721, ERC721ABER) {
+    super._increaseBalance(account, amount);
   }
 }

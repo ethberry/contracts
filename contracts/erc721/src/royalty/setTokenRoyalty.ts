@@ -4,7 +4,11 @@ import { ZeroAddress } from "ethers";
 
 import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@gemunion/contracts-constants";
 
-export function shouldSetTokenRoyalty(factory: () => Promise<any>) {
+import type { IERC721Options } from "../shared/defaultMint";
+
+export function shouldSetTokenRoyalty(factory: () => Promise<any>, options: IERC721Options = {}) {
+  const { adminRole = DEFAULT_ADMIN_ROLE, tokenId: defaultTokenId = 0n } = options;
+
   describe("setTokenRoyalty", function () {
     it("should set token royalty", async function () {
       const [_owner, receiver] = await ethers.getSigners();
@@ -12,8 +16,10 @@ export function shouldSetTokenRoyalty(factory: () => Promise<any>) {
 
       const royalty = 5000;
 
-      const tx = contractInstance.setTokenRoyalty(0, receiver.address, royalty);
-      await expect(tx).to.emit(contractInstance, "TokenRoyaltyInfo").withArgs(0, receiver.address, royalty);
+      const tx = contractInstance.setTokenRoyalty(defaultTokenId, receiver.address, royalty);
+      await expect(tx)
+        .to.emit(contractInstance, "TokenRoyaltyInfo")
+        .withArgs(defaultTokenId, receiver.address, royalty);
     });
 
     it("should fail: royalty fee will exceed salePrice", async function () {
@@ -22,20 +28,24 @@ export function shouldSetTokenRoyalty(factory: () => Promise<any>) {
 
       const royalty = 11000;
 
-      const tx = contractInstance.setTokenRoyalty(0, receiver.address, royalty);
-      await expect(tx).to.be.revertedWith("ERC2981: royalty fee will exceed salePrice");
+      const tx = contractInstance.setTokenRoyalty(defaultTokenId, receiver.address, royalty);
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC2981InvalidTokenRoyalty")
+        .withArgs(defaultTokenId, 11000, 10000);
     });
 
-    it("should fail: invalid parameters", async function () {
+    it("should fail: ERC2981InvalidTokenRoyaltyReceiver", async function () {
       const contractInstance = await factory();
 
       const royalty = 5000;
 
-      const tx = contractInstance.setTokenRoyalty(0, ZeroAddress, royalty);
-      await expect(tx).to.be.revertedWith("ERC2981: Invalid parameters");
+      const tx = contractInstance.setTokenRoyalty(defaultTokenId, ZeroAddress, royalty);
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC2981InvalidTokenRoyaltyReceiver")
+        .withArgs(defaultTokenId, ZeroAddress);
     });
 
-    it("should fail: account is missing role", async function () {
+    it("should fail: AccessControlUnauthorizedAccount/OwnableUnauthorizedAccount", async function () {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -43,12 +53,17 @@ export function shouldSetTokenRoyalty(factory: () => Promise<any>) {
 
       const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
-      const tx = contractInstance.connect(receiver).setTokenRoyalty(0, receiver.address, royalty);
-      await expect(tx).to.be.revertedWith(
-        supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${DEFAULT_ADMIN_ROLE}`
-          : "Ownable: caller is not the owner",
-      );
+      const tx = contractInstance.connect(receiver).setTokenRoyalty(defaultTokenId, receiver.address, royalty);
+      if (supportsAccessControl) {
+        await expect(tx)
+          .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
+          .withArgs(receiver.address, adminRole);
+      } else {
+        // Ownable
+        await expect(tx)
+          .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
+          .withArgs(receiver.address);
+      }
     });
   });
 }

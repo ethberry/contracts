@@ -4,10 +4,9 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/utils/Counters.sol";
-
+import "@gemunion/contracts-misc/contracts/Counters.sol";
 import "@gemunion/contracts-erc721/contracts/extensions/ERC721ABaseUrl.sol";
 
 import "../extensions/ERC721AMetaDataGetter.sol";
@@ -21,6 +20,10 @@ contract ERC721MetaDataTest is ERC721ABER, ERC721AMetaDataGetter {
   function mint(address to) public override onlyRole(MINTER_ROLE) {
     _upsertRecordField(_tokenIdTracker.current(), TEMPLATE_ID, 42);
     super.mint(to);
+  }
+
+  function _increaseBalance(address account, uint128 amount) internal virtual override {
+    super._increaseBalance(account, amount);
   }
 
   function supportsInterface(

@@ -4,7 +4,7 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "./ERC721AB.sol";
 import "../extensions/ERC721Capped.sol";
@@ -16,12 +16,15 @@ contract ERC721ABC is ERC721AB, ERC721Capped {
     return super.supportsInterface(interfaceId);
   }
 
-  function _beforeTokenTransfer(
-    address from,
+  function _increaseBalance(address account, uint128 amount) internal virtual override(ERC721, ERC721Capped) {
+    super._increaseBalance(account, amount);
+  }
+
+  function _update(
     address to,
-    uint256 firstTokenId,
-    uint256 batchSize
-  ) internal virtual override(ERC721, ERC721Capped) {
-    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
+    uint256 tokenId,
+    address auth
+  ) internal virtual override(ERC721, ERC721Capped) returns (address) {
+    return super._update(to, tokenId, auth);
   }
 }

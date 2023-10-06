@@ -11,13 +11,6 @@ export function shouldGetBalanceOf(factory: () => Promise<any>, options: IERC721
   const { mint = defaultMintERC721, batchSize = 0n } = options;
 
   describe("balanceOf", function () {
-    it("should fail for zero addr", async function () {
-      const contractInstance = await factory();
-
-      const tx = contractInstance.balanceOf(ZeroAddress);
-      await expect(tx).to.be.revertedWith(`ERC721: address zero is not a valid owner`);
-    });
-
     it("should get balance of owner", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
@@ -34,6 +27,13 @@ export function shouldGetBalanceOf(factory: () => Promise<any>, options: IERC721
       await mint(contractInstance, owner, owner.address, batchSize + tokenId);
       const balance = await contractInstance.balanceOf(receiver.address);
       expect(balance).to.equal(0);
+    });
+
+    it("should fail: ERC721InvalidOwner", async function () {
+      const contractInstance = await factory();
+
+      const tx = contractInstance.balanceOf(ZeroAddress);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC721InvalidOwner").withArgs(ZeroAddress);
     });
   });
 }

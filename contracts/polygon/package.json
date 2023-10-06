@@ -5,11 +5,12 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
+    "@gemunion/contracts-access": "^4.0.16",
     "@gemunion/contracts-constants": "^4.0.16",
     "@gemunion/contracts-erc20": "^4.0.16",
     "@gemunion/contracts-misc": "^4.0.16",
-    "@gemunion/contracts-mocha": "^4.0.16",
     "@gemunion/contracts-mocks": "^4.0.16",
+    "@gemunion/contracts-utils": "^4.0.16",
     "@nomicfoundation/hardhat-chai-matchers": "2.0.2",
     "@nomicfoundation/hardhat-ethers": "3.0.4",
     "@nomicfoundation/hardhat-network-helpers": "1.0.9",
@@ -24,7 +25,7 @@
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
-    "@openzeppelin/contracts": "4.9.2",
+    "@openzeppelin/contracts": "5.0.0",
     "@types/chai": "4.3.6",
     "@types/mocha": "10.0.1",
     "@types/node": "18.17.18",
@@ -44,7 +45,7 @@
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-polygon",
   "peerDependencies": {
-    "@openzeppelin/contracts": "4.9.2",
+    "@openzeppelin/contracts": "5.0.0",
     "ethers": "^6.0.0"
   },
   "publishConfig": {
@@ -58,13 +59,13 @@
   "scripts": {
     "build": "hardhat compile && tsc",
     "clean": "hardhat clean",
+    "coverage": "hardhat coverage",
     "lint": "eslint . --fix",
     "prebuild": "rimraf dist && hardhat clean",
     "prepare": "npm run build",
     "preversion": "npm run build && npm run test",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
-    "test": "hardhat test",
-    "coverage": "hardhat coverage"
+    "test": "hardhat test"
   },
   "types": "./typechain-types/index.ts",
   "version": "4.0.16"

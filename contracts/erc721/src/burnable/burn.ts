@@ -11,16 +11,6 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<any>, opti
   const { mint = defaultMintERC721, batchSize = 0n } = options;
 
   describe("burn", function () {
-    it("should fail: not an owner", async function () {
-      const [owner, receiver] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
-      const tx = contractInstance.connect(receiver).burn(batchSize + tokenId);
-
-      await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
-    });
-
     it("should burn own token", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
@@ -51,6 +41,18 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<any>, opti
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(batchSize);
+    });
+
+    it("should fail: not an owner", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
+      const tx = contractInstance.connect(receiver).burn(batchSize + tokenId);
+
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC721InsufficientApproval")
+        .withArgs(receiver.address, batchSize + tokenId);
     });
   });
 }

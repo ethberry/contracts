@@ -1,9 +1,18 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { encodeBytes32String } from "ethers";
+import { encodeBytes32String, ZeroAddress } from "ethers";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, nonce, tokenId, tokenName } from "@gemunion/contracts-constants";
-import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+import {
+  DEFAULT_ADMIN_ROLE,
+  InterfaceId,
+  MINTER_ROLE,
+  nonce,
+  tokenId,
+  tokenMaxAmount,
+  tokenName,
+} from "@gemunion/contracts-constants";
+import { shouldBehaveLikeAccessControl } from "@gemunion/contracts-access";
+import { shouldSupportsInterface } from "@gemunion/contracts-utils";
 
 import { shouldBehaveLikeERC721, shouldBehaveLikeERC721Burnable, shouldBehaveLikeERC721Royalty } from "../../src";
 import { deployERC721 } from "../../src/fixtures";
@@ -55,7 +64,7 @@ describe("ERC721DropboxTest", function () {
       expect(ownerOf).to.equal(receiver.address);
     });
 
-    it("should fail: account is missing role", async function () {
+    it("should fail: AccessControlUnauthorizedAccount", async function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
@@ -85,12 +94,12 @@ describe("ERC721DropboxTest", function () {
         },
       );
 
-      const tx1 = contractInstance
+      const tx = contractInstance
         .connect(receiver)
         .redeem(nonce, receiver.address, tokenId, receiver.address, signature);
-      await expect(tx1).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${MINTER_ROLE}`,
-      );
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
+        .withArgs(receiver.address, MINTER_ROLE);
     });
 
     it("should fail: invalid signature", async function () {
@@ -202,7 +211,7 @@ describe("ERC721DropboxTest", function () {
       const tx2 = contractInstance
         .connect(receiver)
         .redeem(newNonce, receiver.address, tokenId, owner.address, signature2);
-      await expect(tx2).to.be.revertedWith("ERC721: token already minted");
+      await expect(tx2).to.be.revertedWithCustomError(contractInstance, "ERC721InvalidSender").withArgs(ZeroAddress);
     });
 
     it("should fail: cap exceeded", async function () {
@@ -300,7 +309,7 @@ describe("ERC721DropboxTest", function () {
       const tx3 = contractInstance
         .connect(receiver)
         .redeem(nonce3, receiver.address, tokenId3, owner.address, signature3);
-      await expect(tx3).to.be.revertedWith("ERC721Capped: cap exceeded");
+      await expect(tx3).to.be.revertedWithCustomError(contractInstance, "ERC721ExceededCap").withArgs(tokenMaxAmount);
     });
   });
 

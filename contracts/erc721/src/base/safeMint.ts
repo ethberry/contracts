@@ -12,21 +12,7 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
   describe("safeMint", function () {
     const { safeMint = defaultSafeMintERC721, minterRole = MINTER_ROLE, batchSize = 0n } = options;
 
-    it("should fail: account is missing role", async function () {
-      const [_owner, receiver] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
-
-      const tx = safeMint(contractInstance, receiver, receiver.address, batchSize + tokenId);
-      await expect(tx).to.be.revertedWith(
-        supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${minterRole}`
-          : "Ownable: caller is not the owner",
-      );
-    });
-
-    it("should mint to wallet", async function () {
+    it("should mint to EOA", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -37,16 +23,6 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
 
       const balance = await contractInstance.balanceOf(owner.address);
       expect(balance).to.equal(batchSize + 1n);
-    });
-
-    it("should fail to mint to non receiver", async function () {
-      const [owner] = await ethers.getSigners();
-      const contractInstance = await factory();
-      const erc721NonReceiverInstance = await deployJerk();
-
-      const address = await erc721NonReceiverInstance.getAddress();
-      const tx = safeMint(contractInstance, owner, address, batchSize + tokenId);
-      await expect(tx).to.be.revertedWith(`ERC721: transfer to non ERC721Receiver implementer`);
     });
 
     it("should mint to receiver", async function () {
@@ -62,6 +38,35 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
 
       const balance = await contractInstance.balanceOf(address);
       expect(balance).to.equal(1);
+    });
+
+    it("should fail: AccessControlUnauthorizedAccount/OwnableUnauthorizedAccount", async function () {
+      const [_owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
+
+      const tx = safeMint(contractInstance, receiver, receiver.address, batchSize + tokenId);
+      if (supportsAccessControl) {
+        await expect(tx)
+          .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
+          .withArgs(receiver.address, minterRole);
+      } else {
+        // Ownable
+        await expect(tx)
+          .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
+          .withArgs(receiver.address);
+      }
+    });
+
+    it("should fail: ERC721InvalidReceiver (NonReceiver)", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+      const erc721NonReceiverInstance = await deployJerk();
+
+      const address = await erc721NonReceiverInstance.getAddress();
+      const tx = safeMint(contractInstance, owner, address, batchSize + tokenId);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC721InvalidReceiver").withArgs(address);
     });
   });
 }

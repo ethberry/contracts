@@ -49,9 +49,9 @@ export function shouldSetTokenMetadata(factory: () => Promise<any>, options: IER
         .connect(receiver)
         .setTokenMetadata(defaultTokenId, [{ key: TEMPLATE_ID, value: 1337 }]);
 
-      await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${METADATA_ROLE}`,
-      );
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
+        .withArgs(receiver.address, METADATA_ROLE);
     });
   });
 }

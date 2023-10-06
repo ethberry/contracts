@@ -33,7 +33,7 @@ export function shouldBurnFrom(factory: () => Promise<any>, options: IERC20Optio
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, 0);
     });
 
-    it("should fail: burn amount exceeds balance", async function () {
+    it("should fail: ERC20InsufficientBalance", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -41,15 +41,19 @@ export function shouldBurnFrom(factory: () => Promise<any>, options: IERC20Optio
 
       await contractInstance.approve(receiver.address, amount);
       const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);
-      await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds balance");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientBalance")
+        .withArgs(owner.address, 0, amount);
     });
 
-    it("should fail: not allowed", async function () {
+    it("should fail: ERC20InsufficientAllowance", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);
-      await expect(tx).to.be.revertedWith("ERC20: insufficient allowance");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientAllowance")
+        .withArgs(receiver.address, 0, amount);
     });
   });
 }

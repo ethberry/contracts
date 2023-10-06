@@ -4,7 +4,7 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 // NOTE: project related InterfaceIds like SIMPLE and RANDOM should be stored in the project
 

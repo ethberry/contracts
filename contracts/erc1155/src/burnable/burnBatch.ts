@@ -51,7 +51,7 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       expect(balanceOfOwner1).to.equal(0);
     });
 
-    it("should fail: not an owner", async function () {
+    it("should fail: ERC1155MissingApprovalForAll", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -59,10 +59,12 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
       const tx = contractInstance.connect(receiver).burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
 
-      await expect(tx).to.be.revertedWith(`ERC1155: caller is not token owner or approved`);
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC1155MissingApprovalForAll")
+        .withArgs(receiver.address, owner.address);
     });
 
-    it("should fail: ids and amounts length mismatch", async function () {
+    it("should fail: ERC1155InvalidArrayLength", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -70,27 +72,31 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
       const tx = contractInstance.burnBatch(owner.address, [tokenId, tokenId1], [amount]);
 
-      await expect(tx).to.be.revertedWith(`ERC1155: ids and amounts length mismatch`);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidArrayLength").withArgs(2, 1);
     });
 
-    it("should fail: burn amount exceeds totalSupply", async function () {
+    it("should fail: ERC1155InsufficientBalance (totalSupply)", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       await mintBatch(contractInstance, owner, receiver.address, [tokenId], [amount], "0x");
 
       const tx = contractInstance.burnBatch(owner.address, [tokenId], [amount]);
-      await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds balance");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC1155InsufficientBalance")
+        .withArgs(owner.address, 0, amount, tokenId);
     });
 
-    it("should fail: burn amount exceeds balance", async function () {
+    it("should fail: ERC1155InsufficientBalance (balance)", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       await mintBatch(contractInstance, owner, receiver.address, [tokenId], [amount], "0x");
 
       const tx = contractInstance.burnBatch(owner.address, [tokenId], [amount]);
-      await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds balance");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC1155InsufficientBalance")
+        .withArgs(owner.address, 0, amount, tokenId);
     });
   });
 }

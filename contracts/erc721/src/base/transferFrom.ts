@@ -11,27 +11,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
   const { mint = defaultMintERC721, batchSize = 0n } = options;
 
   describe("transferFrom", function () {
-    it("should fail: not an owner", async function () {
-      const [owner, receiver] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
-      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, batchSize + tokenId);
-
-      await expect(tx).to.be.revertedWith(`ERC721: caller is not token owner or approved`);
-    });
-
-    it("should fail: zero addr", async function () {
-      const [owner] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
-      const tx = contractInstance.transferFrom(owner.address, ZeroAddress, batchSize + tokenId);
-
-      await expect(tx).to.be.revertedWith(`ERC721: transfer to the zero address`);
-    });
-
-    it("should transfer own tokens to wallet", async function () {
+    it("should transfer own tokens to EOA", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -49,7 +29,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
       expect(balanceOfReceiver).to.equal(1);
     });
 
-    it("should transfer approved tokens to wallet", async function () {
+    it("should transfer approved tokens to EOA", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -67,6 +47,28 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
 
       const balanceOfReceiver = await contractInstance.balanceOf(receiver.address);
       expect(balanceOfReceiver).to.equal(1);
+    });
+
+    it("should fail: ERC721InsufficientApproval (NonReceiver)", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
+      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, batchSize + tokenId);
+
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC721InsufficientApproval")
+        .withArgs(receiver.address, batchSize + tokenId);
+    });
+
+    it("should fail: ERC721InvalidReceiver (ZeroAddress)", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
+      const tx = contractInstance.transferFrom(owner.address, ZeroAddress, batchSize + tokenId);
+
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC721InvalidReceiver").withArgs(ZeroAddress);
     });
   });
 }

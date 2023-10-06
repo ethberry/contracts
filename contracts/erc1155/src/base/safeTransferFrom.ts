@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { ZeroAddress } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
@@ -11,16 +12,6 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
   const { mint = defaultMintERC1155 } = options;
 
   describe("safeTransferFrom", function () {
-    it("should fail: not an owner", async function () {
-      const [owner, receiver] = await ethers.getSigners();
-      const contractInstance = await factory();
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      const tx = contractInstance
-        .connect(receiver)
-        .safeTransferFrom(owner.address, receiver.address, tokenId, amount, "0x");
-      await expect(tx).to.be.revertedWith("ERC1155: caller is not token owner or approved");
-    });
-
     it("should transfer own tokens to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
@@ -39,18 +30,6 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
 
       const balanceOfReceiver = await contractInstance.balanceOf(address, tokenId);
       expect(balanceOfReceiver).to.equal(amount);
-    });
-
-    it("should fail: transfer to non ERC1155Receiver implementer", async function () {
-      const [owner] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      const erc1155NonReceiverInstance = await deployJerk();
-      const address = await erc1155NonReceiverInstance.getAddress();
-
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      const tx = contractInstance.safeTransferFrom(owner.address, address, tokenId, amount, "0x");
-      await expect(tx).to.be.revertedWith("ERC1155: transfer to non-ERC1155Receiver implementer");
     });
 
     it("should transfer approved tokens to receiver contract", async function () {
@@ -76,6 +55,40 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
 
       const balanceOfReceiver = await contractInstance.balanceOf(address, tokenId);
       expect(balanceOfReceiver).to.equal(amount);
+    });
+
+    it("should fail: ERC1155MissingApprovalForAll", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+      const tx = contractInstance
+        .connect(receiver)
+        .safeTransferFrom(owner.address, receiver.address, tokenId, amount, "0x");
+
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC1155MissingApprovalForAll")
+        .withArgs(receiver.address, owner.address);
+    });
+
+    it("should fail: ERC1155InvalidReceiver (NonReceiver)", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const erc1155NonReceiverInstance = await deployJerk();
+      const address = await erc1155NonReceiverInstance.getAddress();
+
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+      const tx = contractInstance.safeTransferFrom(owner.address, address, tokenId, amount, "0x");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver").withArgs(address);
+    });
+
+    it("should fail: ERC1155InvalidReceiver (ZeroAddress)", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+      const tx = contractInstance.safeTransferFrom(owner.address, ZeroAddress, tokenId, amount, "0x");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver").withArgs(ZeroAddress);
     });
   });
 }

@@ -6,7 +6,7 @@
  * Copyright (c) 2017, Rob Hitchens. All rights reserved.
  */
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 contract GeneralizedCollection {
   // Each field includes a value and a pointer to the fieldKeyIndex

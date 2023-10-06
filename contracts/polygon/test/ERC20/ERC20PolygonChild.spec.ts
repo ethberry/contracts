@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { amount, DEFAULT_ADMIN_ROLE, DEPOSITOR_ROLE } from "@gemunion/contracts-constants";
-import { shouldBehaveLikeAccessControl } from "@gemunion/contracts-mocha";
+import { shouldBehaveLikeAccessControl } from "@gemunion/contracts-access";
 import { shouldBehaveLikeERC20 } from "@gemunion/contracts-erc20";
 
 import { deployErc20 } from "../../src/fixtures";
@@ -22,9 +22,9 @@ describe("ERC20PolygonChildTest", function () {
       const tx = contractInstance
         .connect(receiver)
         .deposit(receiver.address, "0x0000000000000000000000000000000000000000000000000000000000000064");
-      await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${DEPOSITOR_ROLE}`,
-      );
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
+        .withArgs(receiver.address, DEPOSITOR_ROLE);
     });
 
     it("should mint tokens", async function () {

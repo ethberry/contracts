@@ -16,12 +16,11 @@ export function shouldMintBatch(factory: () => Promise<any>, options: IERC1155Op
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = mintBatch(contractInstance, owner, receiver.address, [tokenId], [amount], "0x");
+      const tx = mintBatch(contractInstance, owner, receiver.address, [tokenId, 0n], [amount, amount], "0x");
 
-      // https://github.com/OpenZeppelin/openzeppelin-contracts/issues/4656
-      // await expect(tx)
-      //   .to.emit(contractInstance, "TransferBatch")
-      //   .withArgs(owner.address, ZeroAddress, receiver.address, [tokenId], [amount]);
+      await expect(tx)
+        .to.emit(contractInstance, "TransferBatch")
+        .withArgs(owner.address, ZeroAddress, receiver.address, [tokenId, 0n], [amount, amount]);
 
       await expect(tx).to.not.be.reverted;
 
@@ -36,11 +35,10 @@ export function shouldMintBatch(factory: () => Promise<any>, options: IERC1155Op
       const erc1155ReceiverInstance = await deployWallet();
       const address = await erc1155ReceiverInstance.getAddress();
 
-      const tx = mintBatch(contractInstance, owner, address, [tokenId], [amount], "0x");
-      // https://github.com/OpenZeppelin/openzeppelin-contracts/issues/4656
-      // await expect(tx)
-      //   .to.emit(contractInstance, "TransferBatch")
-      //   .withArgs(owner.address, ZeroAddress, address, [tokenId], [amount]);
+      const tx = mintBatch(contractInstance, owner, address, [tokenId, 0n], [amount, amount], "0x");
+      await expect(tx)
+        .to.emit(contractInstance, "TransferBatch")
+        .withArgs(owner.address, ZeroAddress, address, [tokenId, 0n], [amount, amount]);
 
       await expect(tx).to.not.be.reverted;
 

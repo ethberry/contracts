@@ -15,7 +15,7 @@
     "noUnusedParameters": false,
     "outDir": "./dist",
     "resolveJsonModule": true,
-    "rootDir": "./src",
+    "rootDirs": ["./src", "./scripts"],
     "skipLibCheck": true,
     "sourceMap": true,
     "strictBindCallApply": true,
@@ -24,5 +24,5 @@
     "strictPropertyInitialization": false,
     "target": "es2020"
   },
-  "exclude": ["node_modules", "dist", "test", "hardhat.config.ts", "typechain-types"]
+  "exclude": ["node_modules", "dist", "test", "scripts", "hardhat.config.ts", "typechain-types"]
 }

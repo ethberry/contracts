@@ -10,13 +10,10 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "@gemunion/contracts-misc/contracts/Counters.sol";
-import "@gemunion/contracts-misc/contracts/roles.sol";
+import "@gemunion/contracts-utils/contracts/roles.sol";
 
 contract ERC721ABE is AccessControl, ERC721Burnable, ERC721Enumerable {
-  using Counters for Counters.Counter;
-
-  Counters.Counter internal _tokenIdTracker;
+  uint256 private _nextTokenId;
 
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {
     _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
@@ -24,17 +21,15 @@ contract ERC721ABE is AccessControl, ERC721Burnable, ERC721Enumerable {
   }
 
   function mint(address to) public virtual onlyRole(MINTER_ROLE) {
-    _mint(to, _tokenIdTracker.current());
-    _tokenIdTracker.increment();
+    _mint(to, _nextTokenId++);
   }
 
   function safeMint(address to) public virtual onlyRole(MINTER_ROLE) {
-    _safeMint(to, _tokenIdTracker.current());
-    _tokenIdTracker.increment();
+    _safeMint(to, _nextTokenId++);
   }
 
   function getCurrentTokenIndex() public view returns (uint256) {
-    return _tokenIdTracker.current();
+    return _nextTokenId;
   }
 
   function supportsInterface(

@@ -6,9 +6,9 @@
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "@gemunion/contracts-misc/contracts/GeneralizedCollection.sol";
-import "@gemunion/contracts-misc/contracts/roles.sol";
-import "@gemunion/contracts-misc/contracts/attributes.sol";
+import "@gemunion/contracts-utils/contracts/GeneralizedCollection.sol";
+import "@gemunion/contracts-utils/contracts/roles.sol";
+import "@gemunion/contracts-utils/contracts/attributes.sol";
 
 pragma solidity ^0.8.20;
 

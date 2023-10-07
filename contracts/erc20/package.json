@@ -8,7 +8,6 @@
     "@gemunion/contracts-access": "^4.0.16",
     "@gemunion/contracts-constants": "^4.0.16",
     "@gemunion/contracts-erc1363": "^4.0.16",
-    "@gemunion/contracts-misc": "^4.0.16",
     "@gemunion/contracts-mocks": "^4.0.16",
     "@gemunion/contracts-utils": "^4.0.16",
     "@nomicfoundation/hardhat-chai-matchers": "2.0.2",

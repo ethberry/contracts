@@ -1,0 +1,54 @@
+{
+  "author": {
+    "email": "trejgun@gemunion.io",
+    "name": "TrejGun",
+    "url": "https://gemunion.io/"
+  },
+  "dependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "2.0.2",
+    "@nomicfoundation/hardhat-ethers": "3.0.4",
+    "@nomicfoundation/hardhat-network-helpers": "1.0.9",
+    "@nomicfoundation/hardhat-toolbox": "3.0.0",
+    "@nomicfoundation/hardhat-verify": "1.1.1",
+    "@typechain/ethers-v6": "0.5.0",
+    "@typechain/hardhat": "9.0.0",
+    "chai": "4.3.10",
+    "hardhat": "2.17.4",
+    "hardhat-gas-reporter": "1.0.9",
+    "solidity-coverage": "0.8.5",
+    "typechain": "8.3.1"
+  },
+  "devDependencies": {
+    "ethers": "6.7.1",
+    "rimraf": "5.0.5"
+  },
+  "files": [
+    "dist/*"
+  ],
+  "license": "UNLICENSED",
+  "main": "./dist/index.js",
+  "name": "@gemunion/contracts-helpers",
+  "peerDependencies": {
+    "ethers": "^6.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gemunion/contracts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint . --fix",
+    "prebuild": "rimraf dist",
+    "prepare": "npm run build",
+    "preversion": "npm run build && npm run test",
+    "test": "exit 0"
+  },
+  "sideEffects": false,
+  "title": "-=Gemun Ion Studio=-",
+  "types": "./dist/index.d.ts",
+  "version": "4.0.20"
+}

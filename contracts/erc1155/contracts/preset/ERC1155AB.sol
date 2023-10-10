@@ -4,13 +4,13 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "@gemunion/contracts-misc/contracts/roles.sol";
+import "@gemunion/contracts-utils/contracts/roles.sol";
 
 contract ERC1155AB is AccessControl, ERC1155Burnable {
   constructor(string memory uri) ERC1155(uri) {

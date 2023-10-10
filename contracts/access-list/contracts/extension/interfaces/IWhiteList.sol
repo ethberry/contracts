@@ -4,12 +4,13 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 interface IWhiteList {
   error WhiteListError(address account);
 
   event Whitelisted(address indexed account);
+
   event UnWhitelisted(address indexed account);
 
   function whitelist(address account) external;

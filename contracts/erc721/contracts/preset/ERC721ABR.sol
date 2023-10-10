@@ -4,7 +4,7 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "./ERC721AB.sol";
 import "../extensions/ERC721ARoyalty.sol";
@@ -20,16 +20,11 @@ contract ERC721ABR is ERC721AB, ERC721ARoyalty {
     return super.supportsInterface(interfaceId);
   }
 
-  function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721Royalty) {
-    super._burn(tokenId);
-  }
-
-  function _beforeTokenTransfer(
-    address from,
+  function _update(
     address to,
-    uint256 firstTokenId,
-    uint256 batchSize
-  ) internal virtual override(ERC721) {
-    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
+    uint256 tokenId,
+    address auth
+  ) internal virtual override(ERC721) returns (address) {
+    return super._update(to, tokenId, auth);
   }
 }

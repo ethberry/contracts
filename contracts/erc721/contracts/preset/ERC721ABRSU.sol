@@ -4,7 +4,7 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "./ERC721ABRS.sol";
 import "../extensions/ERC4907.sol";
@@ -16,11 +16,19 @@ contract ERC721ABRSU is ERC721ABRS, ERC4907 {
     uint96 royaltyNumerator
   ) ERC721ABRS(name, symbol, royaltyNumerator) {}
 
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC4907, ERC721ABRS) returns (bool) {
-    return ERC4907.supportsInterface(interfaceId) || ERC721ABRS.supportsInterface(interfaceId);
+  function tokenURI(uint256 tokenId) public view virtual override(ERC721, ERC721ABRS) returns (string memory) {
+    return super.tokenURI(tokenId);
   }
 
-  function _isApprovedOrOwner(address owner, uint256 tokenId) internal view override(ERC721, ERC4907) returns (bool) {
-    return super._isApprovedOrOwner(owner, tokenId);
+  function _update(
+    address to,
+    uint256 tokenId,
+    address auth
+  ) internal virtual override(ERC4907, ERC721ABRS) returns (address) {
+    return super._update(to, tokenId, auth);
+  }
+
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC4907, ERC721ABRS) returns (bool) {
+    return ERC4907.supportsInterface(interfaceId) || ERC721ABRS.supportsInterface(interfaceId);
   }
 }

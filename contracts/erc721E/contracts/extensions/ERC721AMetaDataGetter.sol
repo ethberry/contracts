@@ -6,11 +6,11 @@
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "@gemunion/contracts-misc/contracts/GeneralizedCollection.sol";
-import "@gemunion/contracts-misc/contracts/roles.sol";
-import "@gemunion/contracts-misc/contracts/attributes.sol";
+import "@gemunion/contracts-utils/contracts/GeneralizedCollection.sol";
+import "@gemunion/contracts-utils/contracts/roles.sol";
+import "@gemunion/contracts-utils/contracts/attributes.sol";
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 abstract contract ERC721AMetaDataGetter is AccessControl, GeneralizedCollection {
   constructor() {

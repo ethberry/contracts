@@ -32,9 +32,9 @@ export function shouldDeleteRecord(factory: () => Promise<any>, options: IERC721
       const contractInstance = await factory();
 
       const tx = contractInstance.connect(receiver).deleteRecord(0);
-      await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${METADATA_ROLE}`,
-      );
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
+        .withArgs(receiver.address, METADATA_ROLE);
     });
   });
 }

@@ -1,5 +1,6 @@
 import { batchSize, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
-import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+import { shouldBehaveLikeAccessControl } from "@gemunion/contracts-access";
+import { shouldSupportsInterface } from "@gemunion/contracts-utils";
 import {
   shouldBehaveLikeERC721,
   shouldBehaveLikeERC721Burnable,

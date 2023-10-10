@@ -42,24 +42,28 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC1155Options
       expect(balanceOfOwner).to.equal(0);
     });
 
-    it("should fail: not an owner", async function () {
+    it("should fail: ERC1155MissingApprovalForAll", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
       const tx = contractInstance.connect(receiver).burn(owner.address, tokenId, amount);
 
-      await expect(tx).to.be.revertedWith("ERC1155: caller is not token owner or approved");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC1155MissingApprovalForAll")
+        .withArgs(receiver.address, owner.address);
     });
 
-    it("should fail: burn amount exceeds balance", async function () {
+    it("should fail: ERC1155InsufficientBalance", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, receiver.address, tokenId, amount, "0x");
 
       const tx = contractInstance.burn(owner.address, tokenId, amount);
-      await expect(tx).to.be.revertedWith("ERC1155: burn amount exceeds balance");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC1155InsufficientBalance")
+        .withArgs(owner.address, 0, amount, tokenId);
     });
   });
 }

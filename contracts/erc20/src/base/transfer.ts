@@ -11,17 +11,7 @@ export function shouldTransfer(factory: () => Promise<any>, options: IERC20Optio
   const { mint = defaultMintERC20 } = options;
 
   describe("transfer", function () {
-    it("should fail: transfer amount exceeds balance", async function () {
-      const [owner, receiver] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      await mint(contractInstance, owner, owner.address, 0n);
-
-      const tx = contractInstance.transfer(receiver.address, amount);
-      await expect(tx).to.be.revertedWith("ERC20: transfer amount exceeds balance");
-    });
-
-    it("should transfer", async function () {
+    it("should transfer to EOA", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -53,6 +43,18 @@ export function shouldTransfer(factory: () => Promise<any>, options: IERC20Optio
 
       const balanceOfOwner = await contractInstance.balanceOf(owner.address);
       expect(balanceOfOwner).to.equal(0);
+    });
+
+    it("should fail: ERC20InsufficientBalance", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner.address, 0n);
+
+      const tx = contractInstance.transfer(receiver.address, amount);
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientBalance")
+        .withArgs(owner.address, 0, amount);
     });
   });
 }

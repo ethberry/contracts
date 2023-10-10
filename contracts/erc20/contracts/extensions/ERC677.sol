@@ -4,7 +4,7 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -33,7 +33,7 @@ abstract contract ERC677Token is IERC677 {
 
     emit Transfer(msg.sender, _to, _value, _data);
 
-    if (_to.isContract()) {
+    if (_to.code.length != 0) {
       contractFallback(_to, _value, _data);
     }
 

@@ -81,7 +81,50 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<any>) {
       expect(await contractInstance.allowance(owner.address, receiver.address)).to.equal(amount);
     });
 
-    it("rejects reused signature", async function () {
+    it("should fail: ERC2612InvalidSigner", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+      const address = await contractInstance.getAddress();
+
+      const nonce = 0;
+
+      const signature = await receiver.signTypedData(
+        // Domain
+        {
+          name: tokenName,
+          version: "1",
+          chainId: network.chainId,
+          verifyingContract: address,
+        },
+        // Types
+        {
+          Permit: [
+            { name: "owner", type: "address" },
+            { name: "spender", type: "address" },
+            { name: "value", type: "uint256" },
+            { name: "nonce", type: "uint256" },
+            { name: "deadline", type: "uint256" },
+          ],
+        },
+        // Value
+        {
+          owner: owner.address,
+          spender: receiver.address,
+          value: amount,
+          nonce,
+          deadline: MaxUint256,
+        },
+      );
+      const { v, r, s } = Signature.from(signature);
+
+      const tx = contractInstance.permit(owner.address, receiver.address, amount, MaxUint256, v, r, s);
+
+      await expect(tx)
+        .revertedWithCustomError(contractInstance, "ERC2612InvalidSigner")
+        .withArgs(receiver.address, owner.address);
+    });
+
+    it("should fail: ERC2612InvalidSigner (2)", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
       const address = await contractInstance.getAddress();
@@ -121,51 +164,12 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<any>) {
 
       const tx = contractInstance.permit(owner.address, receiver.address, amount, MaxUint256, v, r, s);
 
-      await expect(tx).to.be.revertedWith("ERC20Permit: invalid signature");
+      await expect(tx).revertedWithCustomError(contractInstance, "ERC2612InvalidSigner");
+      // spender address is just a piece of crap
+      // .withArgs("0x476d091d87D416691B75cd03F28709AD2Da420de", owner.address);
     });
 
-    it("rejects other signature", async function () {
-      const [owner, receiver] = await ethers.getSigners();
-      const contractInstance = await factory();
-      const address = await contractInstance.getAddress();
-
-      const nonce = 0;
-
-      const signature = await receiver.signTypedData(
-        // Domain
-        {
-          name: tokenName,
-          version: "1",
-          chainId: network.chainId,
-          verifyingContract: address,
-        },
-        // Types
-        {
-          Permit: [
-            { name: "owner", type: "address" },
-            { name: "spender", type: "address" },
-            { name: "value", type: "uint256" },
-            { name: "nonce", type: "uint256" },
-            { name: "deadline", type: "uint256" },
-          ],
-        },
-        // Value
-        {
-          owner: owner.address,
-          spender: receiver.address,
-          value: amount,
-          nonce,
-          deadline: MaxUint256,
-        },
-      );
-      const { v, r, s } = Signature.from(signature);
-
-      const tx = contractInstance.permit(owner.address, receiver.address, amount, MaxUint256, v, r, s);
-
-      await expect(tx).to.be.revertedWith("ERC20Permit: invalid signature");
-    });
-
-    it("rejects expired permit", async function () {
+    it("should fail: ERC2612ExpiredSignature", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
       const address = await contractInstance.getAddress();
@@ -205,7 +209,7 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<any>) {
 
       const tx = contractInstance.permit(owner.address, receiver.address, amount, deadline, v, r, s);
 
-      await expect(tx).to.be.revertedWith("ERC20Permit: expired deadline");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC2612ExpiredSignature").withArgs(deadline);
     });
   });
 }

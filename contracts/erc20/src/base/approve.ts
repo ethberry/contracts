@@ -40,11 +40,11 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC20Option
       await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner.address, owner.address, amount);
     });
 
-    it("should fail: approve to zero address", async function () {
+    it("should fail: ERC20InvalidSpender", async function () {
       const contractInstance = await factory();
 
       const tx = contractInstance.approve(ZeroAddress, amount);
-      await expect(tx).to.be.revertedWith("ERC20: approve to the zero address");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC20InvalidSpender").withArgs(ZeroAddress);
     });
   });
 }

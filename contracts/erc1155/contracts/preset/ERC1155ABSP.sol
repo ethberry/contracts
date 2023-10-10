@@ -4,11 +4,11 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 
-import "@gemunion/contracts-misc/contracts/roles.sol";
+import "@gemunion/contracts-utils/contracts/roles.sol";
 
 import "./ERC1155ABS.sol";
 
@@ -25,15 +25,13 @@ contract ERC1155ABSP is ERC1155ABS, ERC1155Pausable {
     _unpause();
   }
 
-  function _beforeTokenTransfer(
-    address operator,
+  function _update(
     address from,
     address to,
     uint256[] memory ids,
-    uint256[] memory amounts,
-    bytes memory data
+    uint256[] memory amounts
   ) internal virtual override(ERC1155ABS, ERC1155Pausable) {
-    super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    super._update(from, to, ids, amounts);
   }
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(ERC1155, ERC1155ABS) returns (bool) {

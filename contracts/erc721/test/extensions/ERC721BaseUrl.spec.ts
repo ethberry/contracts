@@ -2,7 +2,8 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { baseTokenURI, DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
-import { shouldBehaveLikeAccessControl, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+import { shouldBehaveLikeAccessControl } from "@gemunion/contracts-access";
+import { shouldSupportsInterface } from "@gemunion/contracts-utils";
 
 import { shouldBehaveLikeERC721, shouldBehaveLikeERC721Burnable, shouldBehaveLikeERC721Royalty } from "../../src";
 import { deployERC721 } from "../../src/fixtures";
@@ -34,7 +35,7 @@ describe("ERC721BaseUrlTest", function () {
       const contractInstance = await factory();
 
       const uri = contractInstance.tokenURI(tokenId);
-      await expect(uri).to.be.revertedWith("ERC721: invalid token ID");
+      await expect(uri).to.be.revertedWithCustomError(contractInstance, "ERC721NonexistentToken").withArgs(tokenId);
     });
   });
 

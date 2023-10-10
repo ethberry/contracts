@@ -30,11 +30,11 @@ export function shouldBehaveLikeERC721UriStorage(factory: () => Promise<any>, op
       expect(uri).to.equal(newURI);
     });
 
-    it("should fail: URI query for nonexistent token", async function () {
+    it("should fail: ERC721NonexistentToken", async function () {
       const contractInstance = await factory();
 
       const uri = contractInstance.tokenURI(tokenId);
-      await expect(uri).to.be.revertedWith("ERC721: invalid token ID");
+      await expect(uri).to.be.revertedWithCustomError(contractInstance, "ERC721NonexistentToken").withArgs(tokenId);
     });
   });
 }

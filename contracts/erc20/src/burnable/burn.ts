@@ -37,14 +37,16 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC20Options =
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, 0);
     });
 
-    it("should fail: burn amount exceeds balance", async function () {
+    it("should fail: ERC20InsufficientBalance", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address, 0n);
 
       const tx = contractInstance.burn(amount);
-      await expect(tx).to.be.revertedWith("ERC20: burn amount exceeds balance");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientBalance")
+        .withArgs(owner.address, 0, amount);
     });
   });
 }

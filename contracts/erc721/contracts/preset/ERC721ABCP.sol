@@ -4,9 +4,9 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
 
 import "../extensions/ERC721Capped.sol";
 import "./ERC721ABC.sol";
@@ -24,12 +24,11 @@ contract ERC721ABCP is ERC721ABC, Pausable {
     _unpause();
   }
 
-  function _beforeTokenTransfer(
-    address from,
+  function _update(
     address to,
-    uint256 firstTokenId,
-    uint256 batchSize
-  ) internal virtual override whenNotPaused {
-    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
+    uint256 tokenId,
+    address auth
+  ) internal virtual override whenNotPaused returns (address)  {
+    return super._update(to, tokenId, auth);
   }
 }

@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: CC0-1.0
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 import "../interfaces/IERC4907.sol";
 
-abstract contract ERC4907 is IERC4907, ERC165 {
+abstract contract ERC4907 is IERC4907, ERC721 {
   struct UserInfo {
     address user; // address of user role
     uint64 expires; // unix timestamp, user expires
@@ -20,7 +20,10 @@ abstract contract ERC4907 is IERC4907, ERC165 {
   /// @param user  The new user of the NFT
   /// @param expires  UNIX timestamp, The new user could use the NFT before expires
   function setUser(uint256 tokenId, address user, uint64 expires) public virtual {
-    require(_isApprovedOrOwner(msg.sender, tokenId), "ERC721: transfer caller is not owner nor approved");
+    address from = _ownerOf(tokenId);
+    if(!_isAuthorized(from, msg.sender, tokenId)) {
+      revert ERC721InsufficientApproval(msg.sender, tokenId);
+    }
     UserInfo storage info = _users[tokenId];
     info.user = user;
     info.expires = expires;
@@ -52,5 +55,18 @@ abstract contract ERC4907 is IERC4907, ERC165 {
     return interfaceId == type(IERC4907).interfaceId || super.supportsInterface(interfaceId);
   }
 
-  function _isApprovedOrOwner(address owner, uint256 tokenId) internal view virtual returns (bool);
+  function _update(
+    address to,
+    uint256 tokenId,
+    address auth
+  ) internal virtual override returns (address) {
+    address previousOwner = super._update(to, tokenId, auth);
+
+    if (previousOwner != to && _users[tokenId].user != address(0)) {
+      delete _users[tokenId];
+      emit UpdateUser(tokenId, address(0), 0);
+    }
+
+    return previousOwner;
+  }
 }

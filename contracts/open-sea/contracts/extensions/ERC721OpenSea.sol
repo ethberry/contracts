@@ -4,10 +4,12 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
+import "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+
 
 import "@gemunion/contracts-erc721e/contracts/preset/ERC721ABERS.sol";
 
@@ -19,8 +21,12 @@ abstract contract ERC721OpenSea is ERC721ABERS, AccessControlEnumerable {
   using Address for address;
   ProxyRegistry private _proxyRegistry;
 
+  error ProxyRegistryAbsent();
+
   function setProxyRegistry(address proxyRegistry) external onlyRole(DEFAULT_ADMIN_ROLE) {
-    require(proxyRegistry.isContract(), "ERC721OpenSea: The ProxyRegistry must be a deployed contract");
+    if(address(this).code.length == 0) {
+      revert ProxyRegistryAbsent();
+    }
     _proxyRegistry = ProxyRegistry(proxyRegistry);
   }
 
@@ -54,8 +60,8 @@ abstract contract ERC721OpenSea is ERC721ABERS, AccessControlEnumerable {
   /**
    * @dev Overload {_grantRole} to track enumerable memberships
    */
-  function _grantRole(bytes32 role, address account) internal virtual override(AccessControl, AccessControlEnumerable) {
-    super._grantRole(role, account);
+  function _grantRole(bytes32 role, address account) internal virtual override(AccessControl, AccessControlEnumerable) returns (bool) {
+    return super._grantRole(role, account);
   }
 
   /**
@@ -64,8 +70,8 @@ abstract contract ERC721OpenSea is ERC721ABERS, AccessControlEnumerable {
   function _revokeRole(
     bytes32 role,
     address account
-  ) internal virtual override(AccessControl, AccessControlEnumerable) {
-    super._revokeRole(role, account);
+  ) internal virtual override(AccessControl, AccessControlEnumerable) returns (bool) {
+    return super._revokeRole(role, account);
   }
 
   function supportsInterface(

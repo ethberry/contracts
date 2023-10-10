@@ -4,12 +4,13 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 interface IBlackList {
   error BlackListError(address account);
 
   event Blacklisted(address indexed account);
+
   event UnBlacklisted(address indexed account);
 
   function blacklist(address account) external;

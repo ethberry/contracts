@@ -1,5 +1,6 @@
 import { InterfaceId } from "@gemunion/contracts-constants";
-import { shouldBehaveLikeOwnable, shouldSupportsInterface } from "@gemunion/contracts-mocha";
+import { shouldBehaveLikeOwnable } from "@gemunion/contracts-access";
+import { shouldSupportsInterface } from "@gemunion/contracts-utils";
 
 import { shouldBehaveLikeERC1155, shouldBehaveLikeERC1155Royalty } from "../../src";
 import { deployErc1155Base } from "../../src/fixtures";

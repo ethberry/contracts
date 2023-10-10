@@ -4,13 +4,15 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 abstract contract ERC721Capped is ERC721 {
   uint256 internal _cap;
   uint256 private _allTokens;
+
+  error ERC721ExceededCap(uint256 cap);
 
   constructor(uint256 cap_) {
     require(cap_ > 0, "ERC721Capped: cap is 0");
@@ -28,16 +30,33 @@ abstract contract ERC721Capped is ERC721 {
     return _allTokens;
   }
 
-  function _beforeTokenTransfer(
-    address from,
+  function _update(
     address to,
-    uint256 firstTokenId,
-    uint256 batchSize
-  ) internal virtual override {
+    uint256 tokenId,
+    address auth
+  ) internal virtual override returns (address)  {
+    address from = _ownerOf(tokenId);
+
+    // mint
     if (from == address(0)) {
-      require(totalSupply() < cap(), "ERC721Capped: cap exceeded");
+      if (++_allTokens > cap()) {
+        revert ERC721ExceededCap(cap());
+      }
     }
-    _allTokens += batchSize;
-    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
+
+    // burn
+    if (to == address(0)) {
+      --_allTokens;
+    }
+
+    return super._update(to, tokenId, auth);
+  }
+
+  function _increaseBalance(address account, uint128 value) internal virtual override {
+    if(totalSupply() + value > cap()){
+      revert ERC721ExceededCap(cap());
+    }
+    _allTokens += value;
+    super._increaseBalance(account, value);
   }
 }

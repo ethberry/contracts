@@ -40,14 +40,14 @@ export function shouldDeleteRecordField(factory: () => Promise<any>, options: IE
       await expect(tx).to.be.revertedWith("GC: field not found");
     });
 
-    it("should fail: account is missing role", async function () {
+    it("should fail: AccessControlUnauthorizedAccount", async function () {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       const tx = contractInstance.connect(receiver).deleteRecordField(defaultTokenId, TEMPLATE_ID);
-      await expect(tx).to.be.revertedWith(
-        `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${METADATA_ROLE}`,
-      );
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
+        .withArgs(receiver.address, METADATA_ROLE);
     });
   });
 }

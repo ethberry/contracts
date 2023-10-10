@@ -12,7 +12,9 @@ export function shouldBehaveLikeERC20Capped(factory: () => Promise<any>, options
       const contractInstance = await factory();
 
       const tx = mint(contractInstance, owner, owner.address, amount + 1n);
-      await expect(tx).to.be.revertedWith("ERC20Capped: cap exceeded");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC20ExceededCap")
+        .withArgs(amount + 1n, amount);
     });
   });
 }

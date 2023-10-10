@@ -5,12 +5,12 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
-    "@gemunion/contracts-constants": "^4.0.20",
-    "@gemunion/contracts-erc1363": "^4.0.20",
-    "@gemunion/contracts-erc721": "^4.0.20",
-    "@gemunion/contracts-misc": "^4.0.20",
-    "@gemunion/contracts-mocha": "^4.0.20",
-    "@gemunion/contracts-mocks": "^4.0.20",
+    "@gemunion/contracts-access": "^4.0.16",
+    "@gemunion/contracts-constants": "^4.0.16",
+    "@gemunion/contracts-erc1363": "^4.0.16",
+    "@gemunion/contracts-erc721": "^4.0.16",
+    "@gemunion/contracts-mocks": "^4.0.16",
+    "@gemunion/contracts-utils": "^4.0.16",
     "@nomicfoundation/hardhat-chai-matchers": "2.0.2",
     "@nomicfoundation/hardhat-ethers": "3.0.4",
     "@nomicfoundation/hardhat-network-helpers": "1.0.9",
@@ -18,23 +18,23 @@
     "@nomicfoundation/hardhat-verify": "1.1.1",
     "@typechain/ethers-v6": "0.5.0",
     "@typechain/hardhat": "9.0.0",
-    "chai": "4.3.10",
+    "chai": "4.3.8",
     "hardhat-gas-reporter": "1.0.9",
-    "solidity-coverage": "0.8.5",
+    "solidity-coverage": "0.8.4",
     "typechain": "8.3.1"
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
     "@chainlink/contracts": "0.7.1",
     "@nomiclabs/hardhat-web3": "2.0.0",
-    "@openzeppelin/contracts": "4.9.2",
+    "@openzeppelin/contracts": "5.0.0",
     "@openzeppelin/test-helpers": "0.5.16",
     "@types/chai": "4.3.6",
-    "@types/mocha": "10.0.2",
-    "@types/node": "18.18.3",
+    "@types/mocha": "10.0.1",
+    "@types/node": "18.17.18",
     "dotenv": "16.3.1",
     "ethers": "6.7.1",
-    "hardhat": "2.17.4",
+    "hardhat": "2.17.3",
     "hardhat-deploy": "0.11.37",
     "hardhat-storage-layout": "0.1.7",
     "solhint": "3.6.2",
@@ -49,7 +49,7 @@
   "main": "./dist/index.js",
   "name": "@gemunion/contracts-erc721e",
   "peerDependencies": {
-    "@openzeppelin/contracts": "4.9.2",
+    "@openzeppelin/contracts": "5.0.0",
     "ethers": "^6.0.0"
   },
   "publishConfig": {
@@ -64,14 +64,14 @@
     "build": "hardhat compile && tsc",
     "check": "hardhat check",
     "clean": "hardhat clean",
+    "coverage": "hardhat coverage",
     "lint": "eslint . --fix",
     "prebuild": "rimraf dist && hardhat clean",
     "prepare": "npm run build",
     "preversion": "npm run build && npm run test",
     "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
-    "test": "hardhat test",
-    "coverage": "hardhat coverage"
+    "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",
-  "version": "4.0.20"
+  "version": "4.0.16"
 }

@@ -11,7 +11,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IE
   const { mint = defaultMintERC721, batchSize = 0n } = options;
 
   describe("setApprovalForAll", function () {
-    it("should approve for all", async function () {
+    it("should approve to EOA", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -37,6 +37,26 @@ export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IE
 
       const isApproved2 = await contractInstance.isApprovedForAll(owner.address, receiver.address);
       expect(isApproved2).to.equal(false);
+    });
+
+    it("should approve to self", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
+
+      const tx = contractInstance.setApprovalForAll(owner.address, true);
+      await expect(tx).to.not.be.reverted;
+    });
+
+    it("should fail: ERC721InvalidOperator", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
+
+      const tx = contractInstance.setApprovalForAll(ZeroAddress, true);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC721InvalidOperator").withArgs(ZeroAddress);
     });
   });
 }

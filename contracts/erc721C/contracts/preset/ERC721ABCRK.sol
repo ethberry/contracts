@@ -4,7 +4,7 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Consecutive.sol";
 
@@ -24,30 +24,16 @@ contract ERC721ABCRK is ERC721ABCR, ERC721Consecutive {
     return super._mintConsecutive(_msgSender(), _maxBatchSize());
   }
 
-  function _afterTokenTransfer(
-    address from,
+  function _update(
     address to,
-    uint256 firstTokenId,
-    uint256 batchSize
-  ) internal virtual override(ERC721, ERC721Consecutive) {
-    super._afterTokenTransfer(from, to, firstTokenId, batchSize);
+    uint256 tokenId,
+    address auth
+  ) internal virtual override(ERC721ABCR, ERC721Consecutive) returns (address) {
+    return super._update(to, tokenId, auth);
   }
 
-  function _beforeTokenTransfer(
-    address from,
-    address to,
-    uint256 firstTokenId,
-    uint256 batchSize
-  ) internal virtual override(ERC721, ERC721ABCR) {
-    super._beforeTokenTransfer(from, to, firstTokenId, batchSize);
-  }
-
-  function _mint(address to, uint256 tokenId) internal virtual override(ERC721, ERC721Consecutive) {
-    super._mint(to, tokenId);
-  }
-
-  function _burn(uint256 tokenId) internal virtual override(ERC721, ERC721ABCR) {
-    super._burn(tokenId);
+  function _increaseBalance(address account, uint128 amount) internal virtual override(ERC721, ERC721ABCR) {
+    super._increaseBalance(account, amount);
   }
 
   function _ownerOf(uint256 tokenId) internal view virtual override(ERC721, ERC721Consecutive) returns (address) {

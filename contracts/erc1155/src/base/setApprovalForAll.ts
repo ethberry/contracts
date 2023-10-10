@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { ZeroAddress } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
 
@@ -10,11 +11,14 @@ export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IE
   const { mint = defaultMintERC1155 } = options;
 
   describe("setApprovalForAll", function () {
-    it("should approve for all", async function () {
+    it("should approve to EOA", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+
+      const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
+      expect(balanceOfOwner).to.equal(amount);
 
       const tx1 = contractInstance.setApprovalForAll(receiver.address, true);
       await expect(tx1).to.not.be.reverted;
@@ -29,14 +33,24 @@ export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IE
       expect(isApproved2).to.equal(false);
     });
 
-    it("should fail setting approval status for self", async function () {
+    it("should approve to self", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
 
       const tx = contractInstance.setApprovalForAll(owner.address, true);
-      await expect(tx).to.be.revertedWith(`ERC1155: setting approval status for self`);
+      await expect(tx).to.not.be.reverted;
+    });
+
+    it("should fail: ERC1155InvalidOperator", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+
+      const tx = contractInstance.setApprovalForAll(ZeroAddress, true);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidOperator").withArgs(ZeroAddress);
     });
   });
 }

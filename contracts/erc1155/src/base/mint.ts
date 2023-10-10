@@ -12,7 +12,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
   const { mint = defaultMintERC1155, minterRole = MINTER_ROLE } = options;
 
   describe("mint", function () {
-    it("should mint to wallet", async function () {
+    it("should mint to EOA", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -41,29 +41,42 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
       expect(balance).to.equal(amount);
     });
 
-    it("should fail: non receiver", async function () {
+    it("should fail: ERC1155InvalidReceiver (NonReceiver)", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
       const erc1155NonReceiverInstance = await deployJerk();
       const address = await erc1155NonReceiverInstance.getAddress();
 
-      const tx1 = mint(contractInstance, owner, address, tokenId, amount, "0x");
-      await expect(tx1).to.be.revertedWith(`ERC1155: transfer to non-ERC1155Receiver implementer`);
+      const tx = mint(contractInstance, owner, address, tokenId, amount, "0x");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver").withArgs(address);
     });
 
-    it("should fail: account is missing role", async function () {
+    it("should fail: ERC1155InvalidReceiver (ZeroAddress)", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const tx = mint(contractInstance, owner, ZeroAddress, tokenId, amount, "0x");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver").withArgs(ZeroAddress);
+    });
+
+    it("should fail: AccessControlUnauthorizedAccount/OwnableUnauthorizedAccount", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
-      const tx1 = mint(contractInstance, receiver, owner.address, tokenId, amount, "0x");
-      await expect(tx1).to.be.revertedWith(
-        supportsAccessControl
-          ? `AccessControl: account ${receiver.address.toLowerCase()} is missing role ${minterRole}`
-          : "Ownable: caller is not the owner",
-      );
+      const tx = mint(contractInstance, receiver, owner.address, tokenId, amount, "0x");
+      if (supportsAccessControl) {
+        await expect(tx)
+          .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
+          .withArgs(receiver.address, minterRole);
+      } else {
+        // Ownable
+        await expect(tx)
+          .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
+          .withArgs(receiver.address);
+      }
     });
   });
 }

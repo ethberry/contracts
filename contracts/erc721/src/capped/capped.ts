@@ -3,6 +3,7 @@ import { ethers } from "hardhat";
 
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
+import { tokenMaxAmount } from "@gemunion/contracts-constants";
 
 export function shouldBehaveLikeERC721Capped(factory: () => Promise<any>, options: IERC721Options = {}) {
   const { mint = defaultMintERC721, batchSize = 0n } = options;
@@ -22,7 +23,9 @@ export function shouldBehaveLikeERC721Capped(factory: () => Promise<any>, option
       expect(totalSupply).to.equal(batchSize + 2n);
 
       const tx = mint(contractInstance, owner, owner.address, batchSize + 2n);
-      await expect(tx).to.be.revertedWith(`ERC721Capped: cap exceeded`);
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC721ExceededCap")
+        .withArgs(batchSize + tokenMaxAmount);
     });
   });
 }

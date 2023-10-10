@@ -73,5 +73,5 @@
     "coverage": "hardhat coverage"
   },
   "types": "./dist/index.d.ts",
-  "version": "5.0.0"
+  "version": null
 }

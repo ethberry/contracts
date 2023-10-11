@@ -16,7 +16,7 @@ import {DEFAULT_ADMIN_ROLE, MINTER_ROLE} from "@gemunion/contracts-utils/contrac
 import {ERC721CappedEnumerable} from "../extensions/ERC721CappedEnumerable.sol";
 
 contract ERC721ABEC is AccessControl, ERC721Burnable, ERC721CappedEnumerable {
-  uint256 private _nextTokenId;
+  uint256 internal _nextTokenId;
 
   constructor(string memory name, string memory symbol, uint256 cap) ERC721(name, symbol) ERC721CappedEnumerable(cap) {
     _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());

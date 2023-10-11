@@ -14,7 +14,7 @@ import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {DEFAULT_ADMIN_ROLE, MINTER_ROLE} from "@gemunion/contracts-utils/contracts/roles.sol";
 
 contract ERC721ABE is AccessControl, ERC721Burnable, ERC721Enumerable {
-  uint256 private _nextTokenId;
+  uint256 internal _nextTokenId;
 
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {
     _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());

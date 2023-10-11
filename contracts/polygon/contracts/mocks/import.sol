@@ -6,4 +6,4 @@
 
 pragma solidity ^0.8.20;
 
-import "@gemunion/contracts-mocks/contracts/Jerk.sol";
+import {Jerk} from  "@gemunion/contracts-mocks/contracts/Jerk.sol";

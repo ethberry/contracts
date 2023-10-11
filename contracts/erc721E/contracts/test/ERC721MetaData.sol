@@ -6,10 +6,14 @@
 
 pragma solidity ^0.8.20;
 
-import "@gemunion/contracts-erc721/contracts/extensions/ERC721ABaseUrl.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "../extensions/ERC721AMetaDataGetter.sol";
-import "../preset/ERC721ABER.sol";
+import {ERC721ABaseUrl} from "@gemunion/contracts-erc721/contracts/extensions/ERC721ABaseUrl.sol";
+import {MINTER_ROLE} from "@gemunion/contracts-utils/contracts/roles.sol";
+import {TEMPLATE_ID} from "@gemunion/contracts-utils/contracts/attributes.sol";
+
+import {ERC721AMetaDataGetter} from "../extensions/ERC721AMetaDataGetter.sol";
+import {ERC721ABER} from "../preset/ERC721ABER.sol";
 
 contract ERC721MetaDataTest is ERC721ABER, ERC721AMetaDataGetter {
   uint256 private _nextTokenId;

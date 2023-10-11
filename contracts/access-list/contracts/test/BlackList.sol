@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.20;
 
-import "../extension/BlackList.sol";
+import {BlackList} from "../extension/BlackList.sol";
 
 contract BlackListTest is BlackList {
   constructor() {

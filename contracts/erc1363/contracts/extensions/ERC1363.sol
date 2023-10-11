@@ -3,13 +3,13 @@
 
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
-import "@openzeppelin/contracts/utils/Address.sol";
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {ERC165, IERC165} from "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
-import "../interfaces/IERC1363.sol";
-import "../interfaces/IERC1363Receiver.sol";
-import "../interfaces/IERC1363Spender.sol";
+import {IERC1363} from "../interfaces/IERC1363.sol";
+import {IERC1363Receiver} from "../interfaces/IERC1363Receiver.sol";
+import {IERC1363Spender} from "../interfaces/IERC1363Spender.sol";
 
 abstract contract ERC1363 is IERC1363, ERC20, ERC165 {
   using Address for address;

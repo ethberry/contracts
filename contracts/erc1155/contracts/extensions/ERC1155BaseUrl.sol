@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/utils/Strings.sol";
+import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 
 abstract contract ERC1155BaseUrl {
   function url(string memory uri) internal view virtual returns (string memory) {

@@ -6,8 +6,10 @@
 
 pragma solidity ^0.8.20;
 
-import "./ERC1155AB.sol";
-import "../extensions/ERC1155Capped.sol";
+import {ERC1155} from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+
+import {ERC1155AB} from "./ERC1155AB.sol";
+import {ERC1155Capped} from "../extensions/ERC1155Capped.sol";
 
 contract ERC1155ABC is ERC1155AB, ERC1155Capped {
   constructor(string memory uri) ERC1155AB(uri) {}

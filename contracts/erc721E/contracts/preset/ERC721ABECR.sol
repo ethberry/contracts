@@ -6,9 +6,10 @@
 
 pragma solidity ^0.8.20;
 
-import "@gemunion/contracts-erc721/contracts/extensions/ERC721ARoyalty.sol";
+import {ERC721} from  "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {ERC721ARoyalty} from "@gemunion/contracts-erc721/contracts/extensions/ERC721ARoyalty.sol";
 
-import "./ERC721ABEC.sol";
+import {ERC721ABEC} from "./ERC721ABEC.sol";
 
 contract ERC721ABECR is ERC721ABEC, ERC721ARoyalty {
   constructor(

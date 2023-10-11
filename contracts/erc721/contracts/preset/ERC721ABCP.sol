@@ -6,12 +6,15 @@
 
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/utils/Pausable.sol";
+import {ERC721} from  "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {ERC721Pausable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
 
-import "../extensions/ERC721Capped.sol";
-import "./ERC721ABC.sol";
+import {PAUSER_ROLE} from "@gemunion/contracts-utils/contracts/roles.sol";
 
-contract ERC721ABCP is ERC721ABC, Pausable {
+import {ERC721Capped} from "../extensions/ERC721Capped.sol";
+import {ERC721ABC} from "./ERC721ABC.sol";
+
+contract ERC721ABCP is ERC721ABC, ERC721Pausable {
   constructor(string memory name, string memory symbol, uint256 cap) ERC721ABC(name, symbol, cap) {
     _grantRole(PAUSER_ROLE, _msgSender());
   }
@@ -24,11 +27,25 @@ contract ERC721ABCP is ERC721ABC, Pausable {
     _unpause();
   }
 
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721ABC) returns (bool) {
+    return super.supportsInterface(interfaceId);
+  }
+
+  /**
+   * @dev See {ERC721-_update}.
+   */
   function _update(
     address to,
     uint256 tokenId,
     address auth
-  ) internal virtual override whenNotPaused returns (address)  {
+  ) internal virtual override(ERC721ABC, ERC721Pausable) returns (address) {
     return super._update(to, tokenId, auth);
+  }
+
+  /**
+   * @dev See {ERC721-_increaseBalance}.
+   */
+  function _increaseBalance(address account, uint128 amount) internal virtual override(ERC721, ERC721ABC) {
+    super._increaseBalance(account, amount);
   }
 }

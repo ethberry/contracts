@@ -6,11 +6,12 @@
 
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import {ERC20, IERC20, IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {ERC20Burnable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "@gemunion/contracts-utils/contracts/roles.sol";
-import "@gemunion/contracts-erc1363/contracts/extensions/ERC1363.sol";
+import {MINTER_ROLE} from "@gemunion/contracts-utils/contracts/roles.sol";
+import {ERC1363} from "@gemunion/contracts-erc1363/contracts/extensions/ERC1363.sol";
 
 contract ERC20AB is AccessControl, ERC20Burnable, ERC1363 {
   constructor(string memory name, string memory symbol) ERC20(name, symbol) {

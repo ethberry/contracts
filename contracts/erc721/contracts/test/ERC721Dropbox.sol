@@ -6,8 +6,12 @@
 
 pragma solidity ^0.8.20;
 
-import "../preset/ERC721ABCRS.sol";
-import "../extensions/ERC721Dropbox.sol";
+import {ERC721} from  "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+
+import {MINTER_ROLE} from "@gemunion/contracts-utils/contracts/roles.sol";
+
+import {ERC721ABCRS} from "../preset/ERC721ABCRS.sol";
+import {ERC721Dropbox} from "../extensions/ERC721Dropbox.sol";
 
 contract ERC721DropboxTest is ERC721ABCRS, ERC721Dropbox {
   constructor(

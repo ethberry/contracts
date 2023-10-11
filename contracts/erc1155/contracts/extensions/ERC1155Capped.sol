@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
+import {ERC1155Supply} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 
 abstract contract ERC1155Capped is ERC1155Supply {
   function _update(

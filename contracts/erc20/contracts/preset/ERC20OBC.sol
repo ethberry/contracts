@@ -6,9 +6,10 @@
 
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {ERC20Capped} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 
-import "./ERC20OB.sol";
+import {ERC20OB} from "./ERC20OB.sol";
 
 contract ERC20OBC is ERC20OB, ERC20Capped {
   constructor(string memory name, string memory symbol, uint256 cap) ERC20OB(name, symbol) ERC20Capped(cap) {}

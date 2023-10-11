@@ -6,9 +6,10 @@
 
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import {ERC721} from  "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-import "./ERC721ABER.sol";
+import {ERC721ABER} from "./ERC721ABER.sol";
 
 contract ERC721ABERS is ERC721ABER, ERC721URIStorage {
   constructor(

@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.20;
 
-import "./OwnableDelegateProxy.sol";
+import {OwnableDelegateProxy} from "./OwnableDelegateProxy.sol";
 
 contract ProxyRegistry {
   mapping(address => OwnableDelegateProxy) public proxies;

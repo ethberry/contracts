@@ -6,9 +6,9 @@
 
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "./interfaces/IBlackList.sol";
+import {IBlackList} from "./interfaces/IBlackList.sol";
 
 abstract contract BlackList is IBlackList, AccessControl {
   mapping(address => bool) blackList;

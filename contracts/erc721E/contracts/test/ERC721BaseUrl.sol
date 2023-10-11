@@ -6,9 +6,11 @@
 
 pragma solidity ^0.8.20;
 
-import "@gemunion/contracts-erc721/contracts/extensions/ERC721ABaseUrl.sol";
+import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {ERC721ABaseUrl} from "@gemunion/contracts-erc721/contracts/extensions/ERC721ABaseUrl.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "../preset/ERC721ABERS.sol";
+import {ERC721ABERS} from "../preset/ERC721ABERS.sol";
 
 contract ERC721BaseUrlTest is ERC721ABERS, ERC721ABaseUrl {
   constructor(

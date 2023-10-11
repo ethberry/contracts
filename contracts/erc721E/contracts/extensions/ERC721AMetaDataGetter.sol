@@ -4,11 +4,11 @@
 // Email: trejgun@gemunion.io
 // Website: https://gemunion.io/
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "@gemunion/contracts-utils/contracts/GeneralizedCollection.sol";
-import "@gemunion/contracts-utils/contracts/roles.sol";
-import "@gemunion/contracts-utils/contracts/attributes.sol";
+import {GeneralizedCollection} from "@gemunion/contracts-utils/contracts/GeneralizedCollection.sol";
+import {METADATA_ROLE} from "@gemunion/contracts-utils/contracts/roles.sol";
+import {TEMPLATE_ID} from "@gemunion/contracts-utils/contracts/attributes.sol";
 
 pragma solidity ^0.8.20;
 

@@ -6,9 +6,9 @@
 
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
-import "../strategies/FormulaRandomStrategy.sol";
+import {FormulaRandomStrategy} from "../strategies/FormulaRandomStrategy.sol";
 
 contract ERC721FormulaRandomStrategy is AccessControl, FormulaRandomStrategy {
   constructor() {

@@ -6,10 +6,10 @@
 
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
+import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
+import {ERC721Royalty} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
 
-import "../interfaces/IERC721Royalty.sol";
+import {IERC721Royalty} from "../interfaces/IERC721Royalty.sol";
 
 abstract contract ERC721ARoyalty is AccessControl, IERC721Royalty, ERC721Royalty {
   constructor(uint96 royaltyNumerator) {

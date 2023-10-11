@@ -6,9 +6,9 @@
 
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
+import {ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
-import "./ERC20AB.sol";
+import {ERC20AB} from "./ERC20AB.sol";
 
 contract ERC20ABT is ERC20AB, ERC20Permit {
   constructor(string memory name, string memory symbol) ERC20AB(name, symbol) ERC20Permit(name) {}

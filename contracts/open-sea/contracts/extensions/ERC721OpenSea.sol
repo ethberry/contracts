@@ -6,14 +6,14 @@
 
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
-import "@openzeppelin/contracts/utils/Address.sol";
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import {ERC721, IERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {AccessControl, AccessControlEnumerable} from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
+import {Address} from "@openzeppelin/contracts/utils/Address.sol";
 
 
-import "@gemunion/contracts-erc721e/contracts/preset/ERC721ABERS.sol";
+import {ERC721ABERS} from "@gemunion/contracts-erc721e/contracts/preset/ERC721ABERS.sol";
 
-import "./utils/ProxyRegistry.sol";
+import {ProxyRegistry} from "./utils/ProxyRegistry.sol";
 
 abstract contract ERC721OpenSea is ERC721ABERS, AccessControlEnumerable {
   event PermanentURI(string _value, uint256 indexed _id);

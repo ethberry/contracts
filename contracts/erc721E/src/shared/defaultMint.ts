@@ -7,6 +7,7 @@ export interface IERC721EnumOptions {
   safeMint?: TMintERC721EnumFn;
   minterRole?: string;
   pauserRole?: string;
+  adminRole?: string;
   tokenId?: bigint;
 }
 

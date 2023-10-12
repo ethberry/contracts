@@ -1,18 +1,14 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
 
-import { ERC721FixedValueRandomStrategy } from "../../typechain-types";
+import { deployERC721 } from "../../src/fixture";
 
-describe("FixedValueRandomStrategy", function () {
-  let contractInstance: ERC721FixedValueRandomStrategy;
-
-  beforeEach(async function () {
-    const nft = await ethers.getContractFactory("ERC721FixedValueRandomStrategy");
-    contractInstance = await nft.deploy();
-  });
+describe("ERC721FixedValueRandomStrategy", function () {
+  const factory = () => deployERC721(this.title);
 
   describe("_setDispersion", function () {
     it("should set new sequence", async function () {
+      const contractInstance = await factory();
+
       const tx = contractInstance.setDispersion(
         ([] as Array<number>).concat(
           new Array(1).fill(5),
@@ -25,7 +21,8 @@ describe("FixedValueRandomStrategy", function () {
       await expect(tx).to.not.be.reverted;
     });
 
-    it("should fail: dispersion must have 100 elements", async function () {
+    it("should fail: SequenceLength", async function () {
+      const contractInstance = await factory();
       const tx = contractInstance.setDispersion(new Array(111).fill(1));
       await expect(tx).to.be.revertedWithCustomError(contractInstance, "SequenceLength").withArgs(111);
     });
@@ -33,18 +30,21 @@ describe("FixedValueRandomStrategy", function () {
 
   describe("_getDispersion", function () {
     it("should get dispersion (<100)", async function () {
+      const contractInstance = await factory();
       await contractInstance.setDispersion(new Array(100).fill(1));
       const value = await contractInstance.getDispersion(60);
       expect(value).to.equal(1);
     });
 
     it("should get dispersion (>100)", async function () {
+      const contractInstance = await factory();
       await contractInstance.setDispersion(new Array(100).fill(1));
       const value = await contractInstance.getDispersion(12345);
       expect(value).to.equal(1);
     });
 
-    it("should fail: dispersion is not set", async function () {
+    it("should fail: SequenceNotSet", async function () {
+      const contractInstance = await factory();
       const tx = contractInstance.getDispersion(12345);
       await expect(tx).to.be.revertedWithCustomError(contractInstance, "SequenceNotSet");
     });

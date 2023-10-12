@@ -32,3 +32,8 @@ export async function deployLinkVrfFixtureV2() {
   // console.info(`VRF_ADDR=${vrfInstance.address}`);
   return { linkInstance, vrfInstance };
 }
+
+export async function deployERC721(name: string): Promise<any> {
+  const erc721Factory = await ethers.getContractFactory(name);
+  return erc721Factory.deploy();
+}

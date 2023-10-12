@@ -11,10 +11,15 @@ import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/
 abstract contract ERC721CappedEnumerable is ERC721Enumerable {
   uint256 internal _cap;
 
-  error ERC721ExceededCap(uint256 cap);
+  error ERC721ExceededCap(uint256 increasedSupply, uint256 cap);
+
+  error ERC721InvalidCap(uint256 cap);
 
   constructor(uint256 cap_) {
-    require(cap_ > 0, "ERC721CappedEnumerable: cap is 0");
+    if (cap == 0) {
+      revert ERC721InvalidCap(0);
+    }
+
     _cap = cap_;
   }
 

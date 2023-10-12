@@ -17,7 +17,7 @@ export function shouldGetRoleMember(factory: () => Promise<any>, options: IAcces
       expect(count).to.equal(1);
 
       const member = await contractInstance.getRoleMember(adminRole, 0);
-      expect(member).to.equal(owner);
+      expect(member).to.equal(owner.address);
     });
 
     it("should fail: account is missing role", async function () {

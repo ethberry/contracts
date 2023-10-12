@@ -27,7 +27,7 @@ export function shouldBehaveLikeERC721Capped(factory: () => Promise<any>, option
       const tx = mint(contractInstance, owner, owner, batchSize + 2n);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721ExceededCap")
-        .withArgs(batchSize + 3n, tokenMaxAmount);
+        .withArgs(batchSize + 3n, batchSize + tokenMaxAmount);
     });
   });
 }

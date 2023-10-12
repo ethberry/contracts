@@ -15,12 +15,12 @@ abstract contract ERC721CappedEnumerable is ERC721Enumerable {
 
   error ERC721InvalidCap(uint256 cap);
 
-  constructor(uint256 cap) {
-    if (cap == 0) {
+  constructor(uint256 cap_) {
+    if (cap_ == 0) {
       revert ERC721InvalidCap(0);
     }
 
-    _cap = cap;
+    _cap = cap_;
   }
 
   /**

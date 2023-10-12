@@ -9,7 +9,7 @@ export function shouldGetRoleMember(factory: () => Promise<any>, options: IAcces
   const { adminRole = DEFAULT_ADMIN_ROLE } = options;
 
   describe("getRoleMember", function () {
-    it("Should grant role", async function () {
+    it("should grant role", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
@@ -20,7 +20,7 @@ export function shouldGetRoleMember(factory: () => Promise<any>, options: IAcces
       expect(member).to.equal(owner.address);
     });
 
-    it("should fail: account is missing role", async function () {
+    it("should fail: PANIC", async function () {
       const contractInstance = await factory();
 
       const count = await contractInstance.getRoleMemberCount(adminRole);

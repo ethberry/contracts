@@ -8,7 +8,9 @@
 
 pragma solidity ^0.8.20;
 
-contract GeneralizedCollection {
+import "./interfaces/IGeneralizedCollectionErrors.sol";
+
+contract GeneralizedCollection is IGeneralizedCollectionErrors {
   // Each field includes a value and a pointer to the fieldKeyIndex
 
   struct FieldStruct {
@@ -38,7 +40,10 @@ contract GeneralizedCollection {
   // Count fields in a record
 
   function getRecordFieldKeyCount(uint256 pk) public view returns (uint256 keyCount) {
-    require(isRecord(pk), "GC: record not found");
+    if (!isRecord(pk)) {
+      revert RecordNotFound(pk);
+    }
+
     return (recordStructs[pk].fieldKeyList.length);
   }
 
@@ -48,6 +53,7 @@ contract GeneralizedCollection {
     if (recordList.length == 0) {
       return false;
     }
+
     return recordList[recordStructs[pk].recordListPointer] == pk;
   }
 
@@ -57,16 +63,21 @@ contract GeneralizedCollection {
     if (!isRecord(pk)) {
       return false;
     }
+
     if (getRecordFieldKeyCount(pk) == 0) {
       return false;
     }
+
     return recordStructs[pk].fieldKeyList[recordStructs[pk].fieldStructs[fieldKey].fieldKeyListPointer] == fieldKey;
   }
 
   // Insert a primary key. Field count defaults to 0.
 
   function _insertRecord(uint256 pk) internal returns (bool) {
-    require(!isRecord(pk), "GC: record already exists");
+    if (isRecord(pk)) {
+      revert RecordAlreadyExist(pk);
+    }
+
     recordList.push(pk);
     recordStructs[pk].recordListPointer = recordList.length - 1;
     return true;
@@ -75,8 +86,14 @@ contract GeneralizedCollection {
   // Insert a field key in a specific record. Value default to 0x0
 
   function _insertRecordField(uint256 pk, bytes32 fieldKey) internal returns (bool) {
-    require(isRecord(pk), "GC: record not found");
-    require(!isRecordFieldKey(pk, fieldKey), "GC: field already set");
+    if (!isRecord(pk)) {
+      revert RecordNotFound(pk);
+    }
+
+    if (isRecordFieldKey(pk, fieldKey)){
+      revert FieldAlreadySet(pk, fieldKey);
+    }
+
     recordStructs[pk].fieldKeyList.push(fieldKey);
     recordStructs[pk].fieldStructs[fieldKey].fieldKeyListPointer = recordStructs[pk].fieldKeyList.length - 1;
     return true;
@@ -88,9 +105,11 @@ contract GeneralizedCollection {
     if (!isRecord(pk)) {
       _insertRecord(pk);
     }
+
     if (!isRecordFieldKey(pk, fieldKey)) {
       _insertRecordField(pk, fieldKey);
     }
+
     recordStructs[pk].fieldStructs[fieldKey].value = value;
     return true;
   }
@@ -98,14 +117,20 @@ contract GeneralizedCollection {
   // Get a field key value from a specific record
 
   function getRecordFieldValue(uint256 pk, bytes32 fieldKey) public view returns (uint256) {
-    require(isRecordFieldKey(pk, fieldKey), "GC: field not found");
+    if (!isRecordFieldKey(pk, fieldKey)) {
+      revert FieldNotFound(pk, fieldKey);
+    }
+
     return recordStructs[pk].fieldStructs[fieldKey].value;
   }
 
   // Delete a complete record. Useful for reducing list size.
 
   function _deleteRecord(uint256 pk) internal returns (bool) {
-    require(isRecord(pk), "GC: record not found");
+    if (!isRecord(pk)) {
+      revert RecordNotFound(pk);
+    }
+
     uint256 rowToDelete = recordStructs[pk].recordListPointer;
     uint256 keyToMove = recordList[recordList.length - 1];
 
@@ -120,7 +145,10 @@ contract GeneralizedCollection {
   // Delete a field key/value from a record. Useful for reducing list size.
 
   function _deleteRecordField(uint256 pk, bytes32 fieldKey) internal returns (bool) {
-    require(isRecordFieldKey(pk, fieldKey), "GC: field not found");
+    if (!isRecordFieldKey(pk, fieldKey)) {
+      revert FieldNotFound(pk, fieldKey);
+    }
+
     uint256 rowToDelete = recordStructs[pk].fieldStructs[fieldKey].fieldKeyListPointer;
     uint256 recordFieldCount = recordStructs[pk].fieldKeyList.length;
     bytes32 keyToMove = recordStructs[pk].fieldKeyList[recordFieldCount - 1];

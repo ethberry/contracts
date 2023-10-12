@@ -20,7 +20,14 @@ export function shouldGetRecordFieldKeyCount(factory: () => Promise<any>, option
       expect(count).to.equal(1);
     });
 
-    it("should get count (deleted)", async function () {
+    it("should fail: RecordNotFound (empty)", async function () {
+      const contractInstance = await factory();
+
+      const tx = contractInstance.getRecordFieldKeyCount(0);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "RecordNotFound").withArgs(defaultTokenId);
+    });
+
+    it("should fail: RecordNotFound (deleted)", async function () {
       const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
@@ -29,10 +36,10 @@ export function shouldGetRecordFieldKeyCount(factory: () => Promise<any>, option
       await contractInstance.deleteRecord(defaultTokenId);
 
       const tx = contractInstance.getRecordFieldKeyCount(defaultTokenId);
-      await expect(tx).to.be.revertedWith("GC: record not found");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "RecordNotFound").withArgs(defaultTokenId);
     });
 
-    it("should get count (deleted by key)", async function () {
+    it("should fail: RecordNotFound (deleted by key)", async function () {
       const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
@@ -42,13 +49,6 @@ export function shouldGetRecordFieldKeyCount(factory: () => Promise<any>, option
 
       const count = await contractInstance.getRecordFieldKeyCount(defaultTokenId);
       expect(count).to.equal(0);
-    });
-
-    it("should get count (never set)", async function () {
-      const contractInstance = await factory();
-
-      const tx = contractInstance.getRecordFieldKeyCount(0);
-      await expect(tx).to.be.revertedWith("GC: record not found");
     });
   });
 }

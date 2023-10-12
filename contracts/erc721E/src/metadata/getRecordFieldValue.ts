@@ -20,14 +20,16 @@ export function shouldGetRecordFieldValue(factory: () => Promise<any>, options: 
       expect(value).to.equal(42);
     });
 
-    it("should get value (empty)", async function () {
+    it("should fail: FieldNotFound (empty)", async function () {
       const contractInstance = await factory();
 
       const tx = contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
-      await expect(tx).to.be.revertedWith("GC: field not found");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "FieldNotFound")
+        .withArgs(defaultTokenId, TEMPLATE_ID);
     });
 
-    it("should get value (deleted)", async function () {
+    it("should fail: FieldNotFound (deleted)", async function () {
       const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
@@ -36,10 +38,12 @@ export function shouldGetRecordFieldValue(factory: () => Promise<any>, options: 
       await contractInstance.deleteRecord(defaultTokenId);
       const tx = contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
 
-      await expect(tx).to.be.revertedWith("GC: field not found");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "FieldNotFound")
+        .withArgs(defaultTokenId, TEMPLATE_ID);
     });
 
-    it("should get value (deleted by key)", async function () {
+    it("should fail: FieldNotFound (deleted by key)", async function () {
       const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
@@ -48,7 +52,9 @@ export function shouldGetRecordFieldValue(factory: () => Promise<any>, options: 
       await contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
       const tx = contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
 
-      await expect(tx).to.be.revertedWith("GC: field not found");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "FieldNotFound")
+        .withArgs(defaultTokenId, TEMPLATE_ID);
     });
   });
 }

@@ -41,7 +41,7 @@ export function shouldSetTokenMetadata(factory: () => Promise<any>, options: IER
       expect(value2).to.equal(1337);
     });
 
-    it("should fail: account is missing role", async function () {
+    it("should fail: AccessControlUnauthorizedAccount", async function () {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 

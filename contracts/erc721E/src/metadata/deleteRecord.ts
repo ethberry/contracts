@@ -20,14 +20,14 @@ export function shouldDeleteRecord(factory: () => Promise<any>, options: IERC721
       await expect(tx).to.not.be.reverted;
     });
 
-    it("should delete record (empty)", async function () {
+    it("should fail: RecordNotFound (empty)", async function () {
       const contractInstance = await factory();
 
       const tx = contractInstance.deleteRecord(0);
-      await expect(tx).to.be.revertedWith("GC: record not found");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "RecordNotFound").withArgs(0);
     });
 
-    it("should fail: account is missing role", async function () {
+    it("should fail: AccessControlUnauthorizedAccount", async function () {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 

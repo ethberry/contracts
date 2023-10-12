@@ -38,7 +38,7 @@ export function shouldBehaveLikeBlackList(factory: () => Promise<any>, options: 
       expect(isBlackListed).to.equal(false);
     });
 
-    it("should fail: account is missing role", async function () {
+    it("should fail: AccessControlUnauthorizedAccount", async function () {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 

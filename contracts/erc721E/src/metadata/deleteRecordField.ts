@@ -20,14 +20,16 @@ export function shouldDeleteRecordField(factory: () => Promise<any>, options: IE
       await expect(tx).to.not.be.reverted;
     });
 
-    it("should delete field (empty)", async function () {
+    it("should fail: FieldNotFound (empty)", async function () {
       const contractInstance = await factory();
 
       const tx = contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
-      await expect(tx).to.be.revertedWith("GC: field not found");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "FieldNotFound")
+        .withArgs(defaultTokenId, TEMPLATE_ID);
     });
 
-    it("should delete field (deleted)", async function () {
+    it("should fail: FieldNotFound (deleted)", async function () {
       const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
@@ -37,7 +39,9 @@ export function shouldDeleteRecordField(factory: () => Promise<any>, options: IE
       await contractInstance.deleteRecord(defaultTokenId);
 
       const tx = contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
-      await expect(tx).to.be.revertedWith("GC: field not found");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "FieldNotFound")
+        .withArgs(defaultTokenId, TEMPLATE_ID);
     });
 
     it("should fail: AccessControlUnauthorizedAccount", async function () {

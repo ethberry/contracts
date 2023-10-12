@@ -17,7 +17,6 @@ export function shouldGetTokenMetadata(factory: () => Promise<any>, options: IER
       await mint(contractInstance, owner, owner);
 
       const metadata = await contractInstance.getTokenMetadata(defaultTokenId);
-
       expect(metadata.length).to.equal(1);
       expect(metadata[0].key).to.equal(TEMPLATE_ID);
       expect(metadata[0].value).to.equal(42);
@@ -27,11 +26,10 @@ export function shouldGetTokenMetadata(factory: () => Promise<any>, options: IER
       const contractInstance = await factory();
 
       const metadata = await contractInstance.getTokenMetadata(defaultTokenId);
-
       expect(metadata.length).to.equal(0);
     });
 
-    it("should not get (deleted) metadata", async function () {
+    it("should not get metadata (deleted)", async function () {
       const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
@@ -54,7 +52,6 @@ export function shouldGetTokenMetadata(factory: () => Promise<any>, options: IER
       await contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
 
       const metadata = await contractInstance.getTokenMetadata(defaultTokenId);
-
       expect(metadata.length).to.equal(0);
     });
   });

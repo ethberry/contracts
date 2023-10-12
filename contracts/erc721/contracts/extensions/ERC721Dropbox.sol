@@ -13,18 +13,29 @@ import {SignatureChecker} from "@openzeppelin/contracts/utils/cryptography/Signa
 abstract contract ERC721Dropbox is ERC721, EIP712 {
   mapping(bytes32 => bool) private _expired;
 
-  event Redeem(address account, uint256 tokenId);
+  event DropboxRedeem(address account, uint256 tokenId);
+
+  error DropboxInvalidSignature(address signer);
+
+  error DropboxExpiredSignature();
 
   constructor(string memory name) EIP712(name, "1.0.0") {}
 
   function _redeem(bytes32 nonce, address account, uint256 tokenId, address signer, bytes calldata signature) internal {
-    require(_verify(signer, _hash(nonce, account, tokenId), signature), "ERC721Dropbox: Invalid signature");
+    bool valid =  _verify(signer, _hash(nonce, account, tokenId), signature);
 
-    require(!_expired[nonce], "ERC721Dropbox: Expired signature");
+    if (!valid) {
+      revert DropboxInvalidSignature(signer);
+    }
+
+    if (_expired[nonce]) {
+      revert DropboxExpiredSignature();
+    }
+
     _expired[nonce] = true;
 
     _safeMint(account, tokenId);
-    emit Redeem(account, tokenId);
+    emit DropboxRedeem(account, tokenId);
   }
 
   function _hash(bytes32 nonce, address account, uint256 tokenId) internal view returns (bytes32) {

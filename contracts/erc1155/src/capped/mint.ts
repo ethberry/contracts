@@ -17,7 +17,9 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
       await mint(contractInstance, owner, receiver, tokenId, amount, "0x");
 
       const tx1 = mint(contractInstance, owner, receiver, tokenId, amount, "0x");
-      await expect(tx1).to.be.revertedWith("ERC1155Capped: subsequent mint not allowed");
+      await expect(tx1)
+        .to.be.revertedWithCustomError(contractInstance, "ERC1155ExceededCap")
+        .withArgs(amount * 2n, amount, tokenId);
     });
   });
 }

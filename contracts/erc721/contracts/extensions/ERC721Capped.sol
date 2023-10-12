@@ -12,11 +12,16 @@ abstract contract ERC721Capped is ERC721 {
   uint256 internal _cap;
   uint256 private _allTokens;
 
-  error ERC721ExceededCap(uint256 cap);
+  error ERC721ExceededCap(uint256 increasedSupply, uint256 cap);
 
-  constructor(uint256 cap_) {
-    require(cap_ > 0, "ERC721Capped: cap is 0");
-    _cap = cap_;
+  error ERC721InvalidCap(uint256 cap);
+
+  constructor(uint256 cap) {
+    if (cap == 0) {
+      revert ERC721InvalidCap(0);
+    }
+
+    _cap = cap;
   }
 
   /**
@@ -40,7 +45,7 @@ abstract contract ERC721Capped is ERC721 {
     // mint
     if (from == address(0)) {
       if (++_allTokens > cap()) {
-        revert ERC721ExceededCap(cap());
+        revert ERC721ExceededCap(_allTokens, cap());
       }
     }
 
@@ -54,9 +59,10 @@ abstract contract ERC721Capped is ERC721 {
 
   function _increaseBalance(address account, uint128 value) internal virtual override {
     if(totalSupply() + value > cap()){
-      revert ERC721ExceededCap(cap());
+      revert ERC721ExceededCap(totalSupply() + value, cap());
     }
     _allTokens += value;
+
     super._increaseBalance(account, value);
   }
 }

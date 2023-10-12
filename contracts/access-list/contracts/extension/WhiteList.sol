@@ -41,4 +41,8 @@ abstract contract WhiteList is IWhiteList, AccessControl {
     _whitelist(_msgSender());
     _;
   }
+
+  function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+    return interfaceId == type(IWhiteList).interfaceId || super.supportsInterface(interfaceId);
+  }
 }

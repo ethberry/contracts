@@ -1,4 +1,5 @@
 export enum InterfaceId {
+  // OZ
   IERC165 = "0x01ffc9a7",
   IERC20 = "0x36372b07",
   IERC20Metadata = "0xa219a025",
@@ -33,4 +34,8 @@ export enum InterfaceId {
   IERC4907 = "0xad092b5c", // rent
   IERC5267 = "0x84b0196e", // EIP 712 domain
   IERC6372 = "0xda287a1d", // governance
+
+  // GEMUNION
+  IBlackList = "0x1d272305",
+  IWhiteList = "0x53f0ffa2",
 }

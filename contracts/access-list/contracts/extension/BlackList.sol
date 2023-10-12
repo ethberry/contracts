@@ -41,4 +41,8 @@ abstract contract BlackList is IBlackList, AccessControl {
     _blacklist(_msgSender());
     _;
   }
+
+  function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+    return interfaceId == type(IBlackList).interfaceId || super.supportsInterface(interfaceId);
+  }
 }

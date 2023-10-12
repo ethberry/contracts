@@ -21,5 +21,8 @@ describe("ERC20OBV", function () {
     InterfaceId.IERC20Metadata,
     InterfaceId.IERC1363,
     InterfaceId.IERC5267,
+    // InterfaceId.IERC5805,
+    InterfaceId.IERC6372,
+    InterfaceId.IVotes,
   ]);
 });

@@ -12,7 +12,7 @@ export function shouldGetOwnerOf(factory: () => Promise<any>, options: IERC721En
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       const ownerOfToken = await contractInstance.ownerOf(defaultTokenId);
       expect(ownerOfToken).to.equal(owner.address);
     });
@@ -21,11 +21,11 @@ export function shouldGetOwnerOf(factory: () => Promise<any>, options: IERC721En
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       const tx = contractInstance.burn(defaultTokenId);
       await expect(tx).to.not.be.reverted;
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(0);
 
       const tx2 = contractInstance.ownerOf(defaultTokenId);

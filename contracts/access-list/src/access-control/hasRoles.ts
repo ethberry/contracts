@@ -9,7 +9,7 @@ export function shouldHaveRole(factory: () => Promise<any>) {
           const [owner] = await ethers.getSigners();
           const contractInstance = await factory();
 
-          const hasRole = await contractInstance.hasRole(role, owner.address);
+          const hasRole = await contractInstance.hasRole(role, owner);
           expect(hasRole).to.equal(true);
         });
       });

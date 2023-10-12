@@ -8,7 +8,7 @@ export function shouldTransferOwnership(factory: () => Promise<any>) {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance.transferOwnership(receiver.address);
+      const tx = contractInstance.transferOwnership(receiver);
       await expect(tx).to.emit(contractInstance, "OwnershipTransferred").withArgs(owner.address, receiver.address);
     });
 
@@ -16,7 +16,7 @@ export function shouldTransferOwnership(factory: () => Promise<any>) {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance.connect(receiver).transferOwnership(receiver.address);
+      const tx = contractInstance.connect(receiver).transferOwnership(receiver);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
         .withArgs(receiver.address);

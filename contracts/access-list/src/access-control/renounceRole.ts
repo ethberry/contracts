@@ -17,7 +17,7 @@ export function shouldRenounceRole(factory: () => Promise<any>, options: IAccess
 
       const NON_EXISTING_ROLE = id("NON_EXISTING_ROLE");
 
-      const tx = await contractInstance.renounceRole(NON_EXISTING_ROLE, owner.address);
+      const tx = await contractInstance.renounceRole(NON_EXISTING_ROLE, owner);
       await expect(tx).to.not.emit(contractInstance, "RoleRevoked");
     });
 
@@ -25,10 +25,10 @@ export function shouldRenounceRole(factory: () => Promise<any>, options: IAccess
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx1 = await contractInstance.grantRole(testRole, owner.address);
+      const tx1 = await contractInstance.grantRole(testRole, owner);
       await expect(tx1).to.emit(contractInstance, "RoleGranted").withArgs(testRole, owner.address, owner.address);
 
-      const tx2 = await contractInstance.renounceRole(testRole, owner.address);
+      const tx2 = await contractInstance.renounceRole(testRole, owner);
       await expect(tx2).to.emit(contractInstance, "RoleRevoked").withArgs(testRole, owner.address, owner.address);
     });
 
@@ -36,8 +36,8 @@ export function shouldRenounceRole(factory: () => Promise<any>, options: IAccess
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.grantRole(testRole, receiver.address);
-      const tx = contractInstance.renounceRole(testRole, receiver.address);
+      await contractInstance.grantRole(testRole, receiver);
+      const tx = contractInstance.renounceRole(testRole, receiver);
 
       await expect(tx).to.be.revertedWithCustomError(contractInstance, "AccessControlBadConfirmation");
     });

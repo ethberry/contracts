@@ -12,7 +12,7 @@ export function shouldBehaveLikeERC721UriStorage(factory: () => Promise<any>, op
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       const uri = await contractInstance.tokenURI(0);
       expect(uri).to.equal("");
     });
@@ -22,7 +22,7 @@ export function shouldBehaveLikeERC721UriStorage(factory: () => Promise<any>, op
       const contractInstance = await factory();
 
       const newURI = "newURI";
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       await contractInstance.setTokenURI(0, newURI);
       const uri = await contractInstance.tokenURI(0);
       expect(uri).to.equal(newURI);

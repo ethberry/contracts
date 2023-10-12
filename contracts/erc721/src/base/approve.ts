@@ -15,9 +15,9 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC721Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
 
-      const tx = contractInstance.approve(receiver.address, batchSize + tokenId);
+      const tx = contractInstance.approve(receiver, batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Approval")
         .withArgs(owner.address, receiver.address, batchSize + tokenId);
@@ -30,7 +30,7 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC721Optio
         .to.emit(contractInstance, "Transfer")
         .withArgs(owner.address, ZeroAddress, batchSize + tokenId);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
     });
 
@@ -38,8 +38,8 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC721Optio
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
-      const tx = contractInstance.approve(owner.address, batchSize + tokenId);
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
+      const tx = contractInstance.approve(owner, batchSize + tokenId);
       await expect(tx).to.not.be.reverted;
     });
 
@@ -47,8 +47,8 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC721Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
-      const tx = contractInstance.connect(receiver).approve(owner.address, batchSize + tokenId);
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
+      const tx = contractInstance.connect(receiver).approve(owner, batchSize + tokenId);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721InvalidApprover")
         .withArgs(receiver.address);

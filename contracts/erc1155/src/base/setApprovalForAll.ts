@@ -15,21 +15,21 @@ export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IE
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
+      const balanceOfOwner = await contractInstance.balanceOf(owner, tokenId);
       expect(balanceOfOwner).to.equal(amount);
 
-      const tx1 = contractInstance.setApprovalForAll(receiver.address, true);
+      const tx1 = contractInstance.setApprovalForAll(receiver, true);
       await expect(tx1).to.not.be.reverted;
 
-      const isApproved1 = await contractInstance.isApprovedForAll(owner.address, receiver.address);
+      const isApproved1 = await contractInstance.isApprovedForAll(owner, receiver);
       expect(isApproved1).to.equal(true);
 
-      const tx2 = contractInstance.setApprovalForAll(receiver.address, false);
+      const tx2 = contractInstance.setApprovalForAll(receiver, false);
       await expect(tx2).to.not.be.reverted;
 
-      const isApproved2 = await contractInstance.isApprovedForAll(owner.address, receiver.address);
+      const isApproved2 = await contractInstance.isApprovedForAll(owner, receiver);
       expect(isApproved2).to.equal(false);
     });
 
@@ -37,9 +37,9 @@ export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IE
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
 
-      const tx = contractInstance.setApprovalForAll(owner.address, true);
+      const tx = contractInstance.setApprovalForAll(owner, true);
       await expect(tx).to.not.be.reverted;
     });
 
@@ -47,7 +47,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IE
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
 
       const tx = contractInstance.setApprovalForAll(ZeroAddress, true);
       await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidOperator").withArgs(ZeroAddress);

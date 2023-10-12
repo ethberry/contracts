@@ -16,8 +16,6 @@ import {ERC721AMetaDataGetter} from "../extensions/ERC721AMetaDataGetter.sol";
 import {ERC721ABER} from "../preset/ERC721ABER.sol";
 
 contract ERC721MetaDataTest is ERC721ABER, ERC721AMetaDataGetter {
-  uint256 internal _nextTokenId;
-
   constructor(string memory name, string memory symbol, uint96 royalty) ERC721ABER(name, symbol, royalty) {}
 
   function mint(address to) public override onlyRole(MINTER_ROLE) {

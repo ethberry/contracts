@@ -12,24 +12,61 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
   const { mint = defaultMintERC721, batchSize = 0n } = options;
 
   describe("safeTransferFrom", function () {
+    it("should transfer own tokens to EOA", async function () {
+      const [owner, _receiver, stranger] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
+      const tx = contractInstance.safeTransferFrom(owner, stranger, batchSize + tokenId);
+
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(owner.address, stranger.address, batchSize + tokenId);
+
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
+      expect(balanceOfOwner).to.equal(batchSize);
+
+      const balanceOfReceiver = await contractInstance.balanceOf(stranger);
+      expect(balanceOfReceiver).to.equal(1);
+    });
+
+    it("should transfer approved tokens to EOA", async function () {
+      const [owner, receiver, stranger] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
+      await contractInstance.approve(receiver, batchSize + tokenId);
+
+      const tx = contractInstance.connect(receiver).safeTransferFrom(owner, stranger, batchSize + tokenId);
+
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(owner.address, stranger.address, batchSize + tokenId);
+
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
+      expect(balanceOfOwner).to.equal(batchSize);
+
+      const balanceOfReceiver = await contractInstance.balanceOf(stranger);
+      expect(balanceOfReceiver).to.equal(1);
+    });
+
     it("should transfer own tokens to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
       const erc721ReceiverInstance = await deployWallet();
-      const address = await erc721ReceiverInstance.getAddress();
 
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
-      const tx = contractInstance.safeTransferFrom(owner.address, address, batchSize + tokenId);
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
+      const tx = contractInstance.safeTransferFrom(owner, erc721ReceiverInstance, batchSize + tokenId);
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, address, batchSize + tokenId);
+        .withArgs(owner.address, await erc721ReceiverInstance.getAddress(), batchSize + tokenId);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
 
-      const balanceOfReceiver = await contractInstance.balanceOf(address);
+      const balanceOfReceiver = await contractInstance.balanceOf(erc721ReceiverInstance);
       expect(balanceOfReceiver).to.equal(1);
     });
 
@@ -38,21 +75,22 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
       const contractInstance = await factory();
 
       const erc721ReceiverInstance = await deployWallet();
-      const address = await erc721ReceiverInstance.getAddress();
 
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
-      await contractInstance.approve(receiver.address, batchSize + tokenId);
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
+      await contractInstance.approve(receiver, batchSize + tokenId);
 
-      const tx = contractInstance.connect(receiver).safeTransferFrom(owner.address, address, batchSize + tokenId);
+      const tx = contractInstance
+        .connect(receiver)
+        .safeTransferFrom(owner, erc721ReceiverInstance, batchSize + tokenId);
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, address, batchSize + tokenId);
+        .withArgs(owner.address, await erc721ReceiverInstance.getAddress(), batchSize + tokenId);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
 
-      const balanceOfReceiver = await contractInstance.balanceOf(address);
+      const balanceOfReceiver = await contractInstance.balanceOf(erc721ReceiverInstance);
       expect(balanceOfReceiver).to.equal(1);
     });
 
@@ -60,10 +98,8 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
-      const tx = contractInstance
-        .connect(receiver)
-        .safeTransferFrom(owner.address, receiver.address, batchSize + tokenId);
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
+      const tx = contractInstance.connect(receiver).safeTransferFrom(owner, receiver, batchSize + tokenId);
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721InsufficientApproval")
@@ -75,19 +111,20 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
       const contractInstance = await factory();
 
       const erc721NonReceiverInstance = await deployJerk();
-      const address = await erc721NonReceiverInstance.getAddress();
 
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
-      const tx = contractInstance.safeTransferFrom(owner.address, address, batchSize + tokenId);
-      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC721InvalidReceiver").withArgs(address);
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
+      const tx = contractInstance.safeTransferFrom(owner, erc721NonReceiverInstance, batchSize + tokenId);
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC721InvalidReceiver")
+        .withArgs(await erc721NonReceiverInstance.getAddress());
     });
 
     it("should fail: ERC721InvalidReceiver (ZeroAddress)", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
-      const tx = contractInstance.safeTransferFrom(owner.address, ZeroAddress, batchSize + tokenId);
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
+      const tx = contractInstance.safeTransferFrom(owner, ZeroAddress, batchSize + tokenId);
       await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC721InvalidReceiver").withArgs(ZeroAddress);
     });
   });

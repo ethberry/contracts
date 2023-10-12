@@ -23,7 +23,7 @@ export function shouldBehaveLikeERC721Consecutive(factory: () => Promise<any>, o
 
       const contractInstance = await factory();
 
-      const balance = await contractInstance.balanceOf(owner.address);
+      const balance = await contractInstance.balanceOf(owner);
       expect(balance).to.equal(batchSize);
     });
   });

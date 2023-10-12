@@ -14,7 +14,7 @@ export function shouldBehaveLikeWhiteList(factory: () => Promise<any>, options: 
       const contractInstance = await factory();
 
       // stranger is used to test erc20/erc721 tokens
-      const isWhitelisted = await contractInstance.isWhitelisted(stranger.address);
+      const isWhitelisted = await contractInstance.isWhitelisted(stranger);
       expect(isWhitelisted).to.equal(false);
     });
 
@@ -22,9 +22,9 @@ export function shouldBehaveLikeWhiteList(factory: () => Promise<any>, options: 
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance.whitelist(receiver.address);
+      const tx = contractInstance.whitelist(receiver);
       await expect(tx).to.emit(contractInstance, "Whitelisted").withArgs(receiver.address);
-      const isWhitelisted = await contractInstance.isWhitelisted(receiver.address);
+      const isWhitelisted = await contractInstance.isWhitelisted(receiver);
       expect(isWhitelisted).to.equal(true);
     });
 
@@ -32,10 +32,10 @@ export function shouldBehaveLikeWhiteList(factory: () => Promise<any>, options: 
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.whitelist(receiver.address);
-      const tx = contractInstance.unWhitelist(receiver.address);
+      await contractInstance.whitelist(receiver);
+      const tx = contractInstance.unWhitelist(receiver);
       await expect(tx).to.emit(contractInstance, "UnWhitelisted").withArgs(receiver.address);
-      const isWhiteListed = await contractInstance.isWhitelisted(receiver.address);
+      const isWhiteListed = await contractInstance.isWhitelisted(receiver);
       expect(isWhiteListed).to.equal(false);
     });
 
@@ -43,7 +43,7 @@ export function shouldBehaveLikeWhiteList(factory: () => Promise<any>, options: 
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance.connect(receiver).whitelist(receiver.address);
+      const tx = contractInstance.connect(receiver).whitelist(receiver);
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")

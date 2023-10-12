@@ -15,28 +15,28 @@ describe("ERC20PolygonChildTest", function () {
   shouldBehaveLikeERC20(factory, { minterRole: DEFAULT_ADMIN_ROLE });
 
   describe("deposit", function () {
-    it("should fail: account is missing role", async function () {
+    it("should mint tokens", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await contractInstance.mint(owner, amount);
+      const tx = contractInstance.deposit(
+        receiver,
+        "0x0000000000000000000000000000000000000000000000000000000000000064",
+      );
+      await expect(tx).to.not.be.reverted;
+    });
+
+    it("should fail: AccessControlUnauthorizedAccount", async function () {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       const tx = contractInstance
         .connect(receiver)
-        .deposit(receiver.address, "0x0000000000000000000000000000000000000000000000000000000000000064");
+        .deposit(receiver, "0x0000000000000000000000000000000000000000000000000000000000000064");
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
         .withArgs(receiver.address, DEPOSITOR_ROLE);
-    });
-
-    it("should mint tokens", async function () {
-      const [owner, receiver] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      await contractInstance.mint(owner.address, amount);
-      const tx = contractInstance.deposit(
-        receiver.address,
-        "0x0000000000000000000000000000000000000000000000000000000000000064",
-      );
-      await expect(tx).to.not.be.reverted;
     });
   });
 });

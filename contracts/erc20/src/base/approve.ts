@@ -15,12 +15,12 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC20Option
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
-      const tx = contractInstance.approve(receiver.address, amount);
+      const tx = contractInstance.approve(receiver, amount);
       await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner.address, receiver.address, amount);
 
-      const approved = await contractInstance.allowance(owner.address, receiver.address);
+      const approved = await contractInstance.allowance(owner, receiver);
       expect(approved).to.equal(amount);
     });
 
@@ -28,7 +28,7 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC20Option
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance.connect(receiver).approve(owner.address, amount);
+      const tx = contractInstance.connect(receiver).approve(owner, amount);
       await expect(tx).to.emit(contractInstance, "Approval").withArgs(receiver.address, owner.address, amount);
     });
 
@@ -36,7 +36,7 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC20Option
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance.approve(owner.address, amount);
+      const tx = contractInstance.approve(owner, amount);
       await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner.address, owner.address, amount);
     });
 

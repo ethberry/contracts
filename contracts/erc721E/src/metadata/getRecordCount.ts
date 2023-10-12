@@ -14,7 +14,7 @@ export function shouldGetRecordCount(factory: () => Promise<any>, options: IERC7
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const count = await contractInstance.getRecordCount();
       expect(count).to.equal(1);
@@ -25,7 +25,7 @@ export function shouldGetRecordCount(factory: () => Promise<any>, options: IERC7
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       await contractInstance.deleteRecord(defaultTokenId);
 
       const count = await contractInstance.getRecordCount();
@@ -37,7 +37,7 @@ export function shouldGetRecordCount(factory: () => Promise<any>, options: IERC7
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       await contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
 
       const count = await contractInstance.getRecordCount();

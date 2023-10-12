@@ -13,8 +13,8 @@ export function shouldBehaveLikeERC721Capped(factory: () => Promise<any>, option
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, batchSize + 0n);
-      await mint(contractInstance, owner, owner.address, batchSize + 1n);
+      await mint(contractInstance, owner, owner, batchSize + 0n);
+      await mint(contractInstance, owner, owner, batchSize + 1n);
 
       const cap = await contractInstance.cap();
       expect(cap).to.equal(batchSize + 2n);
@@ -22,7 +22,7 @@ export function shouldBehaveLikeERC721Capped(factory: () => Promise<any>, option
       const totalSupply = await contractInstance.totalSupply();
       expect(totalSupply).to.equal(batchSize + 2n);
 
-      const tx = mint(contractInstance, owner, owner.address, batchSize + 2n);
+      const tx = mint(contractInstance, owner, owner, batchSize + 2n);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721ExceededCap")
         .withArgs(batchSize + tokenMaxAmount);

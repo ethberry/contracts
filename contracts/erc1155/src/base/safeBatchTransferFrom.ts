@@ -12,83 +12,80 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
   const { mint = defaultMintERC1155 } = options;
 
   describe("safeBatchTransferFrom", function () {
+    it("should transfer own tokens to EOA", async function () {
+      const [owner, _receiver, stranger] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const tokenId_1 = 2n;
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner, tokenId_1, amount, "0x");
+      const tx = contractInstance.safeBatchTransferFrom(owner, stranger, [tokenId, tokenId_1], [amount, amount], "0x");
+      await expect(tx)
+        .to.emit(contractInstance, "TransferBatch")
+        .withArgs(owner.address, owner.address, stranger.address, [tokenId, tokenId_1], [amount, amount]);
+
+      const balanceOfOwner = await contractInstance.balanceOf(owner, tokenId);
+      expect(balanceOfOwner).to.equal(0);
+
+      const balanceOfReceiver = await contractInstance.balanceOf(stranger, tokenId);
+      expect(balanceOfReceiver).to.equal(amount);
+    });
+
+    it("should transfer approved tokens to EOA", async function () {
+      const [owner, receiver, stranger] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const tokenId_1 = 2n;
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner, tokenId_1, amount, "0x");
+      await contractInstance.setApprovalForAll(receiver, true);
+      const tx = contractInstance.safeBatchTransferFrom(owner, stranger, [tokenId, tokenId_1], [amount, amount], "0x");
+      await expect(tx)
+        .to.emit(contractInstance, "TransferBatch")
+        .withArgs(owner.address, owner.address, stranger.address, [tokenId, tokenId_1], [amount, amount]);
+
+      const balanceOfOwner = await contractInstance.balanceOf(owner, tokenId);
+      expect(balanceOfOwner).to.equal(0);
+
+      const balanceOfReceiver = await contractInstance.balanceOf(stranger, tokenId);
+      expect(balanceOfReceiver).to.equal(amount);
+    });
+
     it("should transfer own tokens to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
       const erc1155ReceiverInstance = await deployWallet();
-      const address = await erc1155ReceiverInstance.getAddress();
 
       const tokenId_1 = 2n;
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      await mint(contractInstance, owner, owner.address, tokenId_1, amount, "0x");
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner, tokenId_1, amount, "0x");
       const tx = contractInstance.safeBatchTransferFrom(
-        owner.address,
-        address,
+        owner,
+        erc1155ReceiverInstance,
         [tokenId, tokenId_1],
         [amount, amount],
         "0x",
       );
       await expect(tx)
         .to.emit(contractInstance, "TransferBatch")
-        .withArgs(owner.address, owner.address, address, [tokenId, tokenId_1], [amount, amount]);
+        .withArgs(
+          owner.address,
+          owner.address,
+          await erc1155ReceiverInstance.getAddress(),
+          [tokenId, tokenId_1],
+          [amount, amount],
+        );
 
-      const balanceOfOwner1 = await contractInstance.balanceOf(owner.address, tokenId);
+      const balanceOfOwner1 = await contractInstance.balanceOf(owner, tokenId);
       expect(balanceOfOwner1).to.equal(0);
-      const balanceOfOwner2 = await contractInstance.balanceOf(owner.address, tokenId_1);
+      const balanceOfOwner2 = await contractInstance.balanceOf(owner, tokenId_1);
       expect(balanceOfOwner2).to.equal(0);
 
-      const balanceOfReceiver1 = await contractInstance.balanceOf(address, tokenId);
+      const balanceOfReceiver1 = await contractInstance.balanceOf(erc1155ReceiverInstance, tokenId);
       expect(balanceOfReceiver1).to.equal(amount);
-      const balanceOfReceiver2 = await contractInstance.balanceOf(address, tokenId);
+      const balanceOfReceiver2 = await contractInstance.balanceOf(erc1155ReceiverInstance, tokenId);
       expect(balanceOfReceiver2).to.equal(amount);
-    });
-
-    it("should fail: ERC1155InvalidReceiver (not receiver)", async function () {
-      const [owner] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      const erc1155NonReceiverInstance = await deployJerk();
-      const address = await erc1155NonReceiverInstance.getAddress();
-
-      const tokenId_1 = 2n;
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      await mint(contractInstance, owner, owner.address, tokenId_1, amount, "0x");
-      const tx = contractInstance.safeBatchTransferFrom(
-        owner.address,
-        address,
-        [tokenId, tokenId_1],
-        [amount, amount],
-        "0x",
-      );
-      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver").withArgs(address);
-    });
-
-    it("should fail: ERC1155InvalidReceiver (ZeroAddress)", async function () {
-      const [owner] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      const tx = contractInstance.safeBatchTransferFrom(owner.address, ZeroAddress, [tokenId], [amount], "0x");
-      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver").withArgs(ZeroAddress);
-    });
-
-    it("should fail: ERC1155MissingApprovalForAll", async function () {
-      const [owner, receiver] = await ethers.getSigners();
-      const contractInstance = await factory();
-
-      const erc1155ReceiverInstance = await deployWallet();
-      const address = await erc1155ReceiverInstance.getAddress();
-
-      const tokenId_1 = 2n;
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      await mint(contractInstance, owner, owner.address, tokenId_1, amount, "0x");
-      const tx = contractInstance
-        .connect(receiver)
-        .safeBatchTransferFrom(owner.address, address, [tokenId, tokenId_1], [amount, amount], "0x");
-      await expect(tx)
-        .to.be.revertedWithCustomError(contractInstance, "ERC1155MissingApprovalForAll")
-        .withArgs(receiver.address, owner.address);
     });
 
     it("should transfer approved tokens to receiver contract", async function () {
@@ -96,29 +93,81 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
       const contractInstance = await factory();
 
       const erc1155ReceiverInstance = await deployWallet();
-      const address = await erc1155ReceiverInstance.getAddress();
 
       const tokenId_1 = 2n;
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      await mint(contractInstance, owner, owner.address, tokenId_1, amount, "0x");
-      await contractInstance.setApprovalForAll(receiver.address, true);
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner, tokenId_1, amount, "0x");
+      await contractInstance.setApprovalForAll(receiver, true);
 
       const tx = contractInstance
         .connect(receiver)
-        .safeBatchTransferFrom(owner.address, address, [tokenId, tokenId_1], [amount, amount], "0x");
+        .safeBatchTransferFrom(owner, erc1155ReceiverInstance, [tokenId, tokenId_1], [amount, amount], "0x");
       await expect(tx)
         .to.emit(contractInstance, "TransferBatch")
-        .withArgs(receiver.address, owner.address, address, [tokenId, tokenId_1], [amount, amount]);
+        .withArgs(
+          receiver.address,
+          owner.address,
+          await erc1155ReceiverInstance.getAddress(),
+          [tokenId, tokenId_1],
+          [amount, amount],
+        );
 
-      const balanceOfOwner1 = await contractInstance.balanceOf(owner.address, tokenId);
+      const balanceOfOwner1 = await contractInstance.balanceOf(owner, tokenId);
       expect(balanceOfOwner1).to.equal(0);
-      const balanceOfOwner2 = await contractInstance.balanceOf(owner.address, tokenId_1);
+      const balanceOfOwner2 = await contractInstance.balanceOf(owner, tokenId_1);
       expect(balanceOfOwner2).to.equal(0);
 
-      const balanceOfReceiver1 = await contractInstance.balanceOf(address, tokenId);
+      const balanceOfReceiver1 = await contractInstance.balanceOf(erc1155ReceiverInstance, tokenId);
       expect(balanceOfReceiver1).to.equal(amount);
-      const balanceOfReceiver2 = await contractInstance.balanceOf(address, tokenId);
+      const balanceOfReceiver2 = await contractInstance.balanceOf(erc1155ReceiverInstance, tokenId);
       expect(balanceOfReceiver2).to.equal(amount);
+    });
+
+    it("should fail: ERC1155MissingApprovalForAll", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const erc1155ReceiverInstance = await deployWallet();
+
+      const tokenId_1 = 2n;
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner, tokenId_1, amount, "0x");
+      const tx = contractInstance
+        .connect(receiver)
+        .safeBatchTransferFrom(owner, erc1155ReceiverInstance, [tokenId, tokenId_1], [amount, amount], "0x");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC1155MissingApprovalForAll")
+        .withArgs(receiver.address, owner.address);
+    });
+
+    it("should fail: ERC1155InvalidReceiver (NonReceiver)", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const erc1155NonReceiverInstance = await deployJerk();
+
+      const tokenId_1 = 2n;
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      await mint(contractInstance, owner, owner, tokenId_1, amount, "0x");
+      const tx = contractInstance.safeBatchTransferFrom(
+        owner,
+        erc1155NonReceiverInstance,
+        [tokenId, tokenId_1],
+        [amount, amount],
+        "0x",
+      );
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver")
+        .withArgs(await erc1155NonReceiverInstance.getAddress());
+    });
+
+    it("should fail: ERC1155InvalidReceiver (ZeroAddress)", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      const tx = contractInstance.safeBatchTransferFrom(owner, ZeroAddress, [tokenId], [amount], "0x");
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver").withArgs(ZeroAddress);
     });
   });
 }

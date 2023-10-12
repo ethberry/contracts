@@ -13,7 +13,7 @@ export function shouldSetTokenMetadata(factory: () => Promise<any>, options: IER
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       const value1 = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
       expect(value1).to.equal(42);
 
@@ -30,7 +30,7 @@ export function shouldSetTokenMetadata(factory: () => Promise<any>, options: IER
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       const value1 = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
       expect(value1).to.equal(42);
 

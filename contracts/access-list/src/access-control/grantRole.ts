@@ -13,7 +13,7 @@ export function shouldGrantRole(factory: () => Promise<any>, options: IAccessCon
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = await contractInstance.grantRole(testRole, receiver.address);
+      const tx = await contractInstance.grantRole(testRole, receiver);
       await expect(tx).to.emit(contractInstance, "RoleGranted").withArgs(testRole, receiver.address, owner.address);
     });
 
@@ -21,7 +21,7 @@ export function shouldGrantRole(factory: () => Promise<any>, options: IAccessCon
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance.connect(receiver).grantRole(testRole, receiver.address);
+      const tx = contractInstance.connect(receiver).grantRole(testRole, receiver);
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")

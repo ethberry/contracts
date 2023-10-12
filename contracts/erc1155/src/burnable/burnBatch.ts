@@ -16,17 +16,17 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       const contractInstance = await factory();
 
       const tokenId1 = tokenId + 1n;
-      await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
-      const tx = contractInstance.burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
+      await mintBatch(contractInstance, owner, owner, [tokenId, tokenId1], [amount, amount], "0x");
+      const tx = contractInstance.burnBatch(owner, [tokenId, tokenId1], [amount, amount]);
 
       await expect(tx)
         .to.emit(contractInstance, "TransferBatch")
         .withArgs(owner.address, owner.address, ZeroAddress, [tokenId, tokenId1], [amount, amount]);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
+      const balanceOfOwner = await contractInstance.balanceOf(owner, tokenId);
       expect(balanceOfOwner).to.equal(0);
 
-      const balanceOfOwner1 = await contractInstance.balanceOf(owner.address, tokenId1);
+      const balanceOfOwner1 = await contractInstance.balanceOf(owner, tokenId1);
       expect(balanceOfOwner1).to.equal(0);
     });
 
@@ -35,19 +35,19 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       const contractInstance = await factory();
 
       const tokenId1 = tokenId + 1n;
-      await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
-      await contractInstance.setApprovalForAll(receiver.address, true);
+      await mintBatch(contractInstance, owner, owner, [tokenId, tokenId1], [amount, amount], "0x");
+      await contractInstance.setApprovalForAll(receiver, true);
 
-      const tx = contractInstance.connect(receiver).burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
+      const tx = contractInstance.connect(receiver).burnBatch(owner, [tokenId, tokenId1], [amount, amount]);
 
       await expect(tx)
         .to.emit(contractInstance, "TransferBatch")
         .withArgs(receiver.address, owner.address, ZeroAddress, [tokenId, tokenId1], [amount, amount]);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
+      const balanceOfOwner = await contractInstance.balanceOf(owner, tokenId);
       expect(balanceOfOwner).to.equal(0);
 
-      const balanceOfOwner1 = await contractInstance.balanceOf(owner.address, tokenId1);
+      const balanceOfOwner1 = await contractInstance.balanceOf(owner, tokenId1);
       expect(balanceOfOwner1).to.equal(0);
     });
 
@@ -56,8 +56,8 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       const contractInstance = await factory();
 
       const tokenId1 = tokenId + 1n;
-      await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
-      const tx = contractInstance.connect(receiver).burnBatch(owner.address, [tokenId, tokenId1], [amount, amount]);
+      await mintBatch(contractInstance, owner, owner, [tokenId, tokenId1], [amount, amount], "0x");
+      const tx = contractInstance.connect(receiver).burnBatch(owner, [tokenId, tokenId1], [amount, amount]);
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC1155MissingApprovalForAll")
@@ -69,8 +69,8 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       const contractInstance = await factory();
 
       const tokenId1 = tokenId + 1n;
-      await mintBatch(contractInstance, owner, owner.address, [tokenId, tokenId1], [amount, amount], "0x");
-      const tx = contractInstance.burnBatch(owner.address, [tokenId, tokenId1], [amount]);
+      await mintBatch(contractInstance, owner, owner, [tokenId, tokenId1], [amount, amount], "0x");
+      const tx = contractInstance.burnBatch(owner, [tokenId, tokenId1], [amount]);
 
       await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidArrayLength").withArgs(2, 1);
     });
@@ -79,9 +79,9 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mintBatch(contractInstance, owner, receiver.address, [tokenId], [amount], "0x");
+      await mintBatch(contractInstance, owner, receiver, [tokenId], [amount], "0x");
 
-      const tx = contractInstance.burnBatch(owner.address, [tokenId], [amount]);
+      const tx = contractInstance.burnBatch(owner, [tokenId], [amount]);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC1155InsufficientBalance")
         .withArgs(owner.address, 0, amount, tokenId);
@@ -91,9 +91,9 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mintBatch(contractInstance, owner, receiver.address, [tokenId], [amount], "0x");
+      await mintBatch(contractInstance, owner, receiver, [tokenId], [amount], "0x");
 
-      const tx = contractInstance.burnBatch(owner.address, [tokenId], [amount]);
+      const tx = contractInstance.burnBatch(owner, [tokenId], [amount]);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC1155InsufficientBalance")
         .withArgs(owner.address, 0, amount, tokenId);

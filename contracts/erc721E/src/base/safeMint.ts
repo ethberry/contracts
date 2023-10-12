@@ -16,10 +16,10 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Enum
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = safeMint(contractInstance, owner, receiver.address);
+      const tx = safeMint(contractInstance, owner, receiver);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, receiver.address, defaultTokenId);
 
-      const balance = await contractInstance.balanceOf(receiver.address);
+      const balance = await contractInstance.balanceOf(receiver);
       expect(balance).to.equal(1n);
     });
 
@@ -28,12 +28,13 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Enum
       const contractInstance = await factory();
 
       const erc721ReceiverInstance = await deployWallet();
-      const address = await erc721ReceiverInstance.getAddress();
 
-      const tx = safeMint(contractInstance, owner, address);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, address, defaultTokenId);
+      const tx = safeMint(contractInstance, owner, erc721ReceiverInstance);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(ZeroAddress, await erc721ReceiverInstance.getAddress(), defaultTokenId);
 
-      const balance = await contractInstance.balanceOf(address);
+      const balance = await contractInstance.balanceOf(erc721ReceiverInstance);
       expect(balance).to.equal(1n);
     });
 
@@ -43,7 +44,7 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Enum
 
       const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
-      const tx = safeMint(contractInstance, receiver, receiver.address);
+      const tx = safeMint(contractInstance, receiver, receiver);
       if (supportsAccessControl) {
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
@@ -61,10 +62,11 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Enum
       const contractInstance = await factory();
 
       const erc721NonReceiverInstance = await deployJerk();
-      const address = await erc721NonReceiverInstance.getAddress();
 
-      const tx = safeMint(contractInstance, owner, address);
-      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC721InvalidReceiver").withArgs(address);
+      const tx = safeMint(contractInstance, owner, erc721NonReceiverInstance);
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC721InvalidReceiver")
+        .withArgs(await erc721NonReceiverInstance.getAddress());
     });
   });
 }

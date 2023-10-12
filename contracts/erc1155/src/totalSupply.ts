@@ -14,7 +14,7 @@ export function shouldBehaveLikeERC1155Supply(factory: () => Promise<any>, optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, receiver.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, receiver, tokenId, amount, "0x");
 
       const totalSupply = await contractInstance["totalSupply(uint256)"](tokenId);
       expect(totalSupply).to.equal(amount);
@@ -24,7 +24,7 @@ export function shouldBehaveLikeERC1155Supply(factory: () => Promise<any>, optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mintBatch(contractInstance, owner, receiver.address, [tokenId], [amount], "0x");
+      await mintBatch(contractInstance, owner, receiver, [tokenId], [amount], "0x");
 
       const totalSupply = await contractInstance["totalSupply(uint256)"](tokenId);
       expect(totalSupply).to.equal(amount);

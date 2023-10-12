@@ -14,7 +14,7 @@ export function shouldDeleteRecordField(factory: () => Promise<any>, options: IE
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const tx = contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
       await expect(tx).to.not.be.reverted;
@@ -32,7 +32,7 @@ export function shouldDeleteRecordField(factory: () => Promise<any>, options: IE
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       await contractInstance.deleteRecord(defaultTokenId);
 

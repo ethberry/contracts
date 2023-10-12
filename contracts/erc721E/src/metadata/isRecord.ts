@@ -13,7 +13,7 @@ export function shouldIsRecord(factory: () => Promise<any>, options: IERC721Enum
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const isIndeed = await contractInstance.isRecord(defaultTokenId);
       expect(isIndeed).to.equal(true);
@@ -31,7 +31,7 @@ export function shouldIsRecord(factory: () => Promise<any>, options: IERC721Enum
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       await contractInstance.deleteRecord(0);
 
       const isIndeed = await contractInstance.isRecord(defaultTokenId);
@@ -43,7 +43,7 @@ export function shouldIsRecord(factory: () => Promise<any>, options: IERC721Enum
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       await contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
 
       const isIndeed = await contractInstance.isRecord(defaultTokenId);

@@ -15,12 +15,12 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC20Options =
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const tx = contractInstance.burn(amount);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, amount);
 
-      const balance = await contractInstance.balanceOf(owner.address);
+      const balance = await contractInstance.balanceOf(owner);
       expect(balance).to.equal(0);
 
       const totalSupply = await contractInstance.totalSupply();
@@ -31,7 +31,7 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC20Options =
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, 0n);
+      await mint(contractInstance, owner, owner, 0n);
 
       const tx = contractInstance.burn(0);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, 0);
@@ -41,7 +41,7 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC20Options =
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, 0n);
+      await mint(contractInstance, owner, owner, 0n);
 
       const tx = contractInstance.burn(amount);
       await expect(tx)

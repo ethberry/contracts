@@ -7,7 +7,7 @@ export function shouldBehaveLikeBlackListMe(factory: () => Promise<any>) {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.blacklist(receiver.address);
+      await contractInstance.blacklist(receiver);
       const tx = contractInstance.connect(receiver).testMe();
       await expect(tx).to.be.revertedWithCustomError(contractInstance, `BlackListError`).withArgs(receiver.address);
     });

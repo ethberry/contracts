@@ -16,7 +16,7 @@ export function shouldSetDefaultRoyalty(factory: () => Promise<any>, options: IE
 
       const royalty = 5000;
 
-      const tx = contractInstance.setDefaultRoyalty(receiver.address, royalty);
+      const tx = contractInstance.setDefaultRoyalty(receiver, royalty);
       await expect(tx).to.emit(contractInstance, "DefaultRoyaltyInfo").withArgs(receiver.address, royalty);
     });
 
@@ -26,7 +26,7 @@ export function shouldSetDefaultRoyalty(factory: () => Promise<any>, options: IE
 
       const royalty = 11000;
 
-      const tx = contractInstance.setDefaultRoyalty(receiver.address, royalty * royalty);
+      const tx = contractInstance.setDefaultRoyalty(receiver, royalty * royalty);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC2981InvalidDefaultRoyalty")
         .withArgs(121000000, 10000);
@@ -51,7 +51,7 @@ export function shouldSetDefaultRoyalty(factory: () => Promise<any>, options: IE
 
       const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
-      const tx = contractInstance.connect(receiver).setDefaultRoyalty(receiver.address, royalty);
+      const tx = contractInstance.connect(receiver).setDefaultRoyalty(receiver, royalty);
       if (supportsAccessControl) {
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")

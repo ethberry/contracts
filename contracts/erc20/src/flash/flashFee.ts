@@ -7,9 +7,8 @@ export function shouldFlashFee(factory: () => Promise<any>) {
   describe("flashFee", function () {
     it("should get fee", async function () {
       const contractInstance = await factory();
-      const address = await contractInstance.getAddress();
 
-      const flashFee = await contractInstance.flashFee(address, amount);
+      const flashFee = await contractInstance.flashFee(contractInstance, amount);
       expect(flashFee).to.equal(0);
     });
 

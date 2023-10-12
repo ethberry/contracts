@@ -14,7 +14,7 @@ export function shouldDeleteRecord(factory: () => Promise<any>, options: IERC721
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const tx = contractInstance.deleteRecord(defaultTokenId);
       await expect(tx).to.not.be.reverted;

@@ -15,14 +15,14 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<any>, opti
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
       const tx = await contractInstance.burn(batchSize + tokenId);
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
         .withArgs(owner.address, ZeroAddress, batchSize + tokenId);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
     });
 
@@ -30,8 +30,8 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<any>, opti
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
-      await contractInstance.approve(receiver.address, batchSize + tokenId);
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
+      await contractInstance.approve(receiver, batchSize + tokenId);
 
       const tx = await contractInstance.burn(batchSize + tokenId);
 
@@ -39,7 +39,7 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<any>, opti
         .to.emit(contractInstance, "Transfer")
         .withArgs(owner.address, ZeroAddress, batchSize + tokenId);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
     });
 
@@ -47,7 +47,7 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<any>, opti
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, batchSize + tokenId);
+      await mint(contractInstance, owner, owner, batchSize + tokenId);
       const tx = contractInstance.connect(receiver).burn(batchSize + tokenId);
 
       await expect(tx)

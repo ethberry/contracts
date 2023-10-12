@@ -15,10 +15,10 @@ export function shouldMint(factory: () => Promise<any>, options: IERC20Options =
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = mint(contractInstance, owner, owner.address);
+      const tx = mint(contractInstance, owner, owner);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
 
-      const balance = await contractInstance.balanceOf(owner.address);
+      const balance = await contractInstance.balanceOf(owner);
       expect(balance).to.equal(amount);
 
       const totalSupply = await contractInstance.totalSupply();
@@ -31,7 +31,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC20Options =
 
       const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
-      const tx = mint(contractInstance, receiver, receiver.address);
+      const tx = mint(contractInstance, receiver, receiver);
 
       if (supportsAccessControl) {
         await expect(tx)

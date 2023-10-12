@@ -12,11 +12,11 @@ export function getGetCurrentTokenIndex(factory: () => Promise<any>, options: IE
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const index = await contractInstance.getCurrentTokenIndex();
       expect(index).to.equal(1);
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const index2 = await contractInstance.getCurrentTokenIndex();
       expect(index2).to.equal(2);

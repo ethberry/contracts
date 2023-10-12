@@ -7,7 +7,7 @@ export function shouldGetNumCheckpoints(factory: () => Promise<any>) {
       const [owner] = await ethers.getSigners();
       const contractInstance: any = await factory();
 
-      const mode = await contractInstance.numCheckpoints(owner.address);
+      const mode = await contractInstance.numCheckpoints(owner);
       expect(mode).to.equal(0);
     });
   });

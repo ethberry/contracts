@@ -15,15 +15,15 @@ export function shouldTransfer(factory: () => Promise<any>, options: IERC20Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
-      const tx = contractInstance.transfer(receiver.address, amount);
+      const tx = contractInstance.transfer(receiver, amount);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, amount);
 
-      const receiverBalance = await contractInstance.balanceOf(receiver.address);
+      const receiverBalance = await contractInstance.balanceOf(receiver);
       expect(receiverBalance).to.equal(amount);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(0);
     });
 
@@ -31,17 +31,18 @@ export function shouldTransfer(factory: () => Promise<any>, options: IERC20Optio
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
       const erc20NonReceiverInstance = await deployJerk();
-      const address = await erc20NonReceiverInstance.getAddress();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
-      const tx = contractInstance.transfer(address, amount);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, address, amount);
+      const tx = contractInstance.transfer(erc20NonReceiverInstance, amount);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(owner.address, await erc20NonReceiverInstance.getAddress(), amount);
 
-      const nonReceiverBalance = await contractInstance.balanceOf(address);
+      const nonReceiverBalance = await contractInstance.balanceOf(erc20NonReceiverInstance);
       expect(nonReceiverBalance).to.equal(amount);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(0);
     });
 
@@ -49,9 +50,9 @@ export function shouldTransfer(factory: () => Promise<any>, options: IERC20Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, 0n);
+      await mint(contractInstance, owner, owner, 0n);
 
-      const tx = contractInstance.transfer(receiver.address, amount);
+      const tx = contractInstance.transfer(receiver, amount);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientBalance")
         .withArgs(owner.address, 0, amount);

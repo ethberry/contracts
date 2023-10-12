@@ -13,9 +13,8 @@ export function shouldMaxFlashLoan(factory: () => Promise<any>, options: IERC20O
   describe("maxFlashLoan", function () {
     it("token match (zero)", async function () {
       const contractInstance = await factory();
-      const address = await contractInstance.getAddress();
 
-      const maxFlashLoan = await contractInstance.maxFlashLoan(address);
+      const maxFlashLoan = await contractInstance.maxFlashLoan(contractInstance);
       expect(maxFlashLoan).to.equal(MaxUint256);
     });
 
@@ -23,10 +22,9 @@ export function shouldMaxFlashLoan(factory: () => Promise<any>, options: IERC20O
       const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
-      const address = await contractInstance.getAddress();
 
-      await mint(contractInstance, owner, owner.address, amount);
-      const maxFlashLoan = await contractInstance.maxFlashLoan(address);
+      await mint(contractInstance, owner, owner, amount);
+      const maxFlashLoan = await contractInstance.maxFlashLoan(contractInstance);
       expect(maxFlashLoan).to.equal(MaxUint256 - amount);
     });
 
@@ -35,7 +33,7 @@ export function shouldMaxFlashLoan(factory: () => Promise<any>, options: IERC20O
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, amount);
+      await mint(contractInstance, owner, owner, amount);
       const maxFlashLoan = await contractInstance.maxFlashLoan(ZeroAddress);
       expect(maxFlashLoan).to.equal(0);
     });

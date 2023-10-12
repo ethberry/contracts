@@ -15,9 +15,9 @@ export function shouldBalanceOf(factory: () => Promise<any>, options: IERC20Opti
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
-      const balance = await contractInstance.balanceOf(owner.address);
+      const balance = await contractInstance.balanceOf(owner);
       expect(balance).to.equal(amount);
     });
 
@@ -25,7 +25,7 @@ export function shouldBalanceOf(factory: () => Promise<any>, options: IERC20Opti
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const balance = await contractInstance.balanceOf(receiver.address);
+      const balance = await contractInstance.balanceOf(receiver);
       expect(balance).to.equal(0);
     });
 
@@ -33,7 +33,7 @@ export function shouldBalanceOf(factory: () => Promise<any>, options: IERC20Opti
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const balance = await contractInstance.balanceOf(ZeroAddress);
       expect(balance).to.equal(0);

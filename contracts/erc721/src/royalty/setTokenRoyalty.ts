@@ -16,7 +16,7 @@ export function shouldSetTokenRoyalty(factory: () => Promise<any>, options: IERC
 
       const royalty = 5000;
 
-      const tx = contractInstance.setTokenRoyalty(defaultTokenId, receiver.address, royalty);
+      const tx = contractInstance.setTokenRoyalty(defaultTokenId, receiver, royalty);
       await expect(tx)
         .to.emit(contractInstance, "TokenRoyaltyInfo")
         .withArgs(defaultTokenId, receiver.address, royalty);
@@ -28,7 +28,7 @@ export function shouldSetTokenRoyalty(factory: () => Promise<any>, options: IERC
 
       const royalty = 11000;
 
-      const tx = contractInstance.setTokenRoyalty(defaultTokenId, receiver.address, royalty);
+      const tx = contractInstance.setTokenRoyalty(defaultTokenId, receiver, royalty);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC2981InvalidTokenRoyalty")
         .withArgs(defaultTokenId, 11000, 10000);
@@ -53,7 +53,7 @@ export function shouldSetTokenRoyalty(factory: () => Promise<any>, options: IERC
 
       const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
-      const tx = contractInstance.connect(receiver).setTokenRoyalty(defaultTokenId, receiver.address, royalty);
+      const tx = contractInstance.connect(receiver).setTokenRoyalty(defaultTokenId, receiver, royalty);
       if (supportsAccessControl) {
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")

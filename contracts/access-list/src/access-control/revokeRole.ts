@@ -13,7 +13,7 @@ export function shouldRevokeRole(factory: () => Promise<any>, options: IAccessCo
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = await contractInstance.revokeRole(testRole, receiver.address);
+      const tx = await contractInstance.revokeRole(testRole, receiver);
       await expect(tx).to.not.emit(contractInstance, "RoleRevoked");
     });
 
@@ -21,10 +21,10 @@ export function shouldRevokeRole(factory: () => Promise<any>, options: IAccessCo
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx1 = await contractInstance.grantRole(testRole, receiver.address);
+      const tx1 = await contractInstance.grantRole(testRole, receiver);
       await expect(tx1).to.emit(contractInstance, "RoleGranted").withArgs(testRole, receiver.address, owner.address);
 
-      const tx2 = await contractInstance.revokeRole(testRole, receiver.address);
+      const tx2 = await contractInstance.revokeRole(testRole, receiver);
       await expect(tx2).to.emit(contractInstance, "RoleRevoked").withArgs(testRole, receiver.address, owner.address);
     });
 
@@ -32,7 +32,7 @@ export function shouldRevokeRole(factory: () => Promise<any>, options: IAccessCo
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance.connect(receiver).revokeRole(testRole, receiver.address);
+      const tx = contractInstance.connect(receiver).revokeRole(testRole, receiver);
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")

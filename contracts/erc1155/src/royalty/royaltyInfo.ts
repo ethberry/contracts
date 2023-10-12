@@ -27,7 +27,7 @@ export function shouldGetRoyaltyInfo(factory: () => Promise<any>, options: IERC1
       const amount = parseUnits("1.00", "ether");
       const royaltyAmount = parseUnits("0.02", "ether");
 
-      await contractInstance.setTokenRoyalty(defaultTokenId, receiver.address, royalty * 2);
+      await contractInstance.setTokenRoyalty(defaultTokenId, receiver, royalty * 2);
 
       const tx = await contractInstance.royaltyInfo(defaultTokenId, amount);
       expect(tx).deep.equal([receiver.address, royaltyAmount]);

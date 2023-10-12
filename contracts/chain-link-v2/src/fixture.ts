@@ -9,7 +9,7 @@ export async function deployLinkVrfFixtureV2() {
   await linkInstance.deployed();
   // console.info(`LINK_ADDR=${linkInstance.address}`);
   const vrfFactory = await ethers.getContractFactory("VRFCoordinatorV2Mock");
-  const vrfInstance = await vrfFactory.deploy(linkInstance.address);
+  const vrfInstance = await vrfFactory.deploy(linkInstance);
   await vrfInstance.deployed();
   // GET CHAIN_LINK V2 TO WORK
   await vrfInstance.setConfig(3, 1000000, 1, 1, 1);
@@ -21,7 +21,7 @@ export async function deployLinkVrfFixtureV2() {
     expect(subsriptionId).to.equal(1);
 
     const tx01 = linkInstance.transferAndCall(
-      vrfInstance.address,
+      vrfInstance,
       WeiPerEther * 18n,
       zeroPadValue(hexlify(subsriptionId.toString()), 32),
     );

@@ -15,7 +15,7 @@ export function shouldBehaveLikeWhiteListMe(factory: () => Promise<any>) {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await contractInstance.whitelist(receiver.address);
+      await contractInstance.whitelist(receiver);
       const result = await contractInstance.connect(receiver).testMe();
       expect(result).to.equal(true);
     });

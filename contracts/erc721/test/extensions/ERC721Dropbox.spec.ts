@@ -31,7 +31,6 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
-      const address = await contractInstance.getAddress();
 
       const signature = await owner.signTypedData(
         // Domain
@@ -39,7 +38,7 @@ describe("ERC721DropboxTest", function () {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: address,
+          verifyingContract: await contractInstance.getAddress(),
         },
         // Types
         {
@@ -57,7 +56,7 @@ describe("ERC721DropboxTest", function () {
         },
       );
 
-      const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver.address, tokenId, owner.address, signature);
+      const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver, tokenId, owner, signature);
       await expect(tx1).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId);
 
       const ownerOf = await contractInstance.ownerOf(tokenId);
@@ -68,7 +67,6 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
-      const address = await contractInstance.getAddress();
 
       const signature = await owner.signTypedData(
         // Domain
@@ -76,7 +74,7 @@ describe("ERC721DropboxTest", function () {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: address,
+          verifyingContract: await contractInstance.getAddress(),
         },
         // Types
         {
@@ -94,9 +92,7 @@ describe("ERC721DropboxTest", function () {
         },
       );
 
-      const tx = contractInstance
-        .connect(receiver)
-        .redeem(nonce, receiver.address, tokenId, receiver.address, signature);
+      const tx = contractInstance.connect(receiver).redeem(nonce, receiver, tokenId, receiver, signature);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
         .withArgs(receiver.address, MINTER_ROLE);
@@ -108,7 +104,7 @@ describe("ERC721DropboxTest", function () {
 
       const tx1 = contractInstance
         .connect(receiver)
-        .redeem(nonce, receiver.address, tokenId, owner.address, encodeBytes32String("signature"));
+        .redeem(nonce, receiver, tokenId, owner, encodeBytes32String("signature"));
       await expect(tx1).to.be.revertedWith("ERC721Dropbox: Invalid signature");
     });
 
@@ -116,7 +112,6 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
-      const address = await contractInstance.getAddress();
 
       const signature = await owner.signTypedData(
         // Domain
@@ -124,7 +119,7 @@ describe("ERC721DropboxTest", function () {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: address,
+          verifyingContract: await contractInstance.getAddress(),
         },
         // Types
         {
@@ -142,10 +137,10 @@ describe("ERC721DropboxTest", function () {
         },
       );
 
-      const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver.address, tokenId, owner.address, signature);
+      const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver, tokenId, owner, signature);
       await expect(tx1).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId);
 
-      const tx2 = contractInstance.connect(receiver).redeem(nonce, receiver.address, tokenId, owner.address, signature);
+      const tx2 = contractInstance.connect(receiver).redeem(nonce, receiver, tokenId, owner, signature);
       await expect(tx2).to.be.revertedWith("ERC721Dropbox: Expired signature");
     });
 
@@ -153,7 +148,6 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
-      const address = await contractInstance.getAddress();
 
       const signature = await owner.signTypedData(
         // Domain
@@ -161,7 +155,7 @@ describe("ERC721DropboxTest", function () {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: address,
+          verifyingContract: await contractInstance.getAddress(),
         },
         // Types
         {
@@ -179,7 +173,7 @@ describe("ERC721DropboxTest", function () {
         },
       );
 
-      const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver.address, tokenId, owner.address, signature);
+      const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver, tokenId, owner, signature);
       await expect(tx1).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId);
 
       const newNonce = encodeBytes32String("nonce1");
@@ -190,7 +184,7 @@ describe("ERC721DropboxTest", function () {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: address,
+          verifyingContract: await contractInstance.getAddress(),
         },
         // Types
         {
@@ -208,9 +202,7 @@ describe("ERC721DropboxTest", function () {
         },
       );
 
-      const tx2 = contractInstance
-        .connect(receiver)
-        .redeem(newNonce, receiver.address, tokenId, owner.address, signature2);
+      const tx2 = contractInstance.connect(receiver).redeem(newNonce, receiver, tokenId, owner, signature2);
       await expect(tx2).to.be.revertedWithCustomError(contractInstance, "ERC721InvalidSender").withArgs(ZeroAddress);
     });
 
@@ -218,7 +210,6 @@ describe("ERC721DropboxTest", function () {
       const network = await ethers.provider.getNetwork();
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
-      const address = await contractInstance.getAddress();
 
       const signature = await owner.signTypedData(
         // Domain
@@ -226,7 +217,7 @@ describe("ERC721DropboxTest", function () {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: address,
+          verifyingContract: await contractInstance.getAddress(),
         },
         // Types
         {
@@ -244,7 +235,7 @@ describe("ERC721DropboxTest", function () {
         },
       );
 
-      const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver.address, tokenId, owner.address, signature);
+      const tx1 = contractInstance.connect(receiver).redeem(nonce, receiver, tokenId, owner, signature);
       await expect(tx1).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId);
 
       const tokenId2 = 2;
@@ -256,7 +247,7 @@ describe("ERC721DropboxTest", function () {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: address,
+          verifyingContract: await contractInstance.getAddress(),
         },
         // Types
         {
@@ -274,9 +265,7 @@ describe("ERC721DropboxTest", function () {
         },
       );
 
-      const tx2 = contractInstance
-        .connect(receiver)
-        .redeem(nonce2, receiver.address, tokenId2, owner.address, signature2);
+      const tx2 = contractInstance.connect(receiver).redeem(nonce2, receiver, tokenId2, owner, signature2);
       await expect(tx2).to.emit(contractInstance, "Redeem").withArgs(receiver.address, tokenId2);
 
       const tokenId3 = 3;
@@ -288,7 +277,7 @@ describe("ERC721DropboxTest", function () {
           name: tokenName,
           version: "1.0.0",
           chainId: network.chainId,
-          verifyingContract: address,
+          verifyingContract: await contractInstance.getAddress(),
         },
         // Types
         {
@@ -306,9 +295,7 @@ describe("ERC721DropboxTest", function () {
         },
       );
 
-      const tx3 = contractInstance
-        .connect(receiver)
-        .redeem(nonce3, receiver.address, tokenId3, owner.address, signature3);
+      const tx3 = contractInstance.connect(receiver).redeem(nonce3, receiver, tokenId3, owner, signature3);
       await expect(tx3).to.be.revertedWithCustomError(contractInstance, "ERC721ExceededCap").withArgs(tokenMaxAmount);
     });
   });

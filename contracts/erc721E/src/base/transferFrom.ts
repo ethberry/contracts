@@ -4,6 +4,7 @@ import { ZeroAddress } from "ethers";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
+import { deployWallet } from "@gemunion/contracts-mocks";
 
 export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
   const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n } = options;
@@ -13,15 +14,15 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
-      const tx = contractInstance.transferFrom(owner.address, receiver.address, defaultTokenId);
+      await mint(contractInstance, owner, owner);
+      const tx = contractInstance.transferFrom(owner, receiver, defaultTokenId);
 
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, defaultTokenId);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(0);
 
-      const balanceOfReceiver = await contractInstance.balanceOf(receiver.address);
+      const balanceOfReceiver = await contractInstance.balanceOf(receiver);
       expect(balanceOfReceiver).to.equal(1);
     });
 
@@ -29,17 +30,59 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
-      await contractInstance.approve(receiver.address, defaultTokenId);
+      await mint(contractInstance, owner, owner);
+      await contractInstance.approve(receiver, defaultTokenId);
 
-      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, defaultTokenId);
+      const tx = contractInstance.connect(receiver).transferFrom(owner, receiver, defaultTokenId);
 
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, defaultTokenId);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(0);
 
-      const balanceOfReceiver = await contractInstance.balanceOf(receiver.address);
+      const balanceOfReceiver = await contractInstance.balanceOf(receiver);
+      expect(balanceOfReceiver).to.equal(1);
+    });
+
+    it("should transfer own tokens to receiver contract", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const erc721ReceiverInstance = await deployWallet();
+
+      await mint(contractInstance, owner, owner);
+      const tx = contractInstance.transferFrom(owner, erc721ReceiverInstance, defaultTokenId);
+
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(owner.address, await erc721ReceiverInstance.getAddress(), defaultTokenId);
+
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
+      expect(balanceOfOwner).to.equal(0);
+
+      const balanceOfReceiver = await contractInstance.balanceOf(erc721ReceiverInstance);
+      expect(balanceOfReceiver).to.equal(1);
+    });
+
+    it("should transfer approved tokens to receiver contract", async function () {
+      const [owner, receiver] = await ethers.getSigners();
+      const contractInstance = await factory();
+
+      const erc721ReceiverInstance = await deployWallet();
+
+      await mint(contractInstance, owner, owner);
+      await contractInstance.approve(receiver, defaultTokenId);
+
+      const tx = contractInstance.connect(receiver).transferFrom(owner, erc721ReceiverInstance, defaultTokenId);
+
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(owner.address, await erc721ReceiverInstance.getAddress(), defaultTokenId);
+
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
+      expect(balanceOfOwner).to.equal(0);
+
+      const balanceOfReceiver = await contractInstance.balanceOf(erc721ReceiverInstance);
       expect(balanceOfReceiver).to.equal(1);
     });
 
@@ -47,8 +90,8 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
-      const tx = contractInstance.connect(receiver).transferFrom(owner.address, receiver.address, defaultTokenId);
+      await mint(contractInstance, owner, owner);
+      const tx = contractInstance.connect(receiver).transferFrom(owner, receiver, defaultTokenId);
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721InsufficientApproval")
@@ -59,8 +102,8 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
-      const tx = contractInstance.transferFrom(owner.address, ZeroAddress, defaultTokenId);
+      await mint(contractInstance, owner, owner);
+      const tx = contractInstance.transferFrom(owner, ZeroAddress, defaultTokenId);
 
       await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC721InvalidReceiver").withArgs(ZeroAddress);
     });

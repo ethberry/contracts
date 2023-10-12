@@ -23,7 +23,7 @@ describe("ERC721BaseUrlTest", function () {
       const contractInstance = await factory();
       const address = await contractInstance.getAddress();
 
-      await contractInstance.mint(owner.address);
+      await contractInstance.mint(owner);
       const uri = await contractInstance.tokenURI(0);
       expect(uri).to.equal(`${baseTokenURI}/${address.toLowerCase()}/${0}`);
     });
@@ -45,7 +45,7 @@ describe("ERC721BaseUrlTest", function () {
       const address = await contractInstance.getAddress();
 
       const newURI = "http://example.com/";
-      await contractInstance.mint(owner.address);
+      await contractInstance.mint(owner);
       await contractInstance.setBaseURI(newURI);
       const uri = await contractInstance.tokenURI(0);
       expect(uri).to.equal(`${newURI}/${address.toLowerCase()}/${0}`);

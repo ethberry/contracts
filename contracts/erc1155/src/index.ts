@@ -5,5 +5,5 @@ export * from "./burnable";
 export * from "./capped";
 export * from "./royalty";
 export * from "./totalSupply";
-export * from "./pause";
+export * from "./pausable/pausable";
 export * from "./uri";

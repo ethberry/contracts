@@ -15,12 +15,12 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId);
+      await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
 
-      await contractInstance.setUser(tokenId, receiver.address, deadline.toString());
+      await contractInstance.setUser(tokenId, receiver, deadline.toString());
 
       const userOf = await contractInstance.userOf(tokenId);
 
@@ -31,13 +31,13 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId);
+      await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
 
-      await contractInstance.approve(receiver.address, tokenId);
-      await contractInstance.setUser(tokenId, receiver.address, deadline.toString());
+      await contractInstance.approve(receiver, tokenId);
+      await contractInstance.setUser(tokenId, receiver, deadline.toString());
 
       const userOf = await contractInstance.userOf(tokenId);
 
@@ -48,13 +48,13 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId);
+      await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
 
-      await contractInstance.setApprovalForAll(receiver.address, true);
-      await contractInstance.setUser(tokenId, receiver.address, deadline.toString());
+      await contractInstance.setApprovalForAll(receiver, true);
+      await contractInstance.setUser(tokenId, receiver, deadline.toString());
 
       const userOf = await contractInstance.userOf(tokenId);
 
@@ -65,12 +65,12 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId);
+      await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
 
-      const tx = contractInstance.setUser(tokenId, receiver.address, deadline.toString());
+      const tx = contractInstance.setUser(tokenId, receiver, deadline.toString());
 
       await expect(tx).to.emit(contractInstance, "UpdateUser").withArgs(tokenId, receiver.address, deadline.toString());
     });
@@ -79,12 +79,12 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId);
+      await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
 
-      const tx = contractInstance.connect(receiver).setUser(tokenId, receiver.address, deadline.toString());
+      const tx = contractInstance.connect(receiver).setUser(tokenId, receiver, deadline.toString());
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721InsufficientApproval")
         .withArgs(receiver.address, tokenId);

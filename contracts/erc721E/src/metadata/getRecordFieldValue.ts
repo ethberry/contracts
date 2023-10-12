@@ -14,7 +14,7 @@ export function shouldGetRecordFieldValue(factory: () => Promise<any>, options: 
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const value = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
       expect(value).to.equal(42);
@@ -32,7 +32,7 @@ export function shouldGetRecordFieldValue(factory: () => Promise<any>, options: 
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       await contractInstance.deleteRecord(defaultTokenId);
       const tx = contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
 
@@ -44,7 +44,7 @@ export function shouldGetRecordFieldValue(factory: () => Promise<any>, options: 
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       await contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
       const tx = contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
 

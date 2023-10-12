@@ -15,20 +15,21 @@ export function shouldBehaveLikeERC721Enumerable(factory: () => Promise<any>, op
       const contractInstance = await factory();
 
       const erc721ReceiverInstance = await deployWallet();
-      const address = await erc721ReceiverInstance.getAddress();
 
-      await mint(contractInstance, owner, owner.address);
-      const tx = contractInstance.safeTransferFrom(owner.address, address, 0);
+      await mint(contractInstance, owner, owner);
+      const tx = contractInstance.safeTransferFrom(owner, erc721ReceiverInstance, 0);
 
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, address, 0);
+      await expect(tx)
+        .to.emit(contractInstance, "Transfer")
+        .withArgs(owner.address, await erc721ReceiverInstance.getAddress(), 0);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address);
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(0);
 
-      const balanceOfReceiver = await contractInstance.balanceOf(address);
+      const balanceOfReceiver = await contractInstance.balanceOf(erc721ReceiverInstance);
       expect(balanceOfReceiver).to.equal(1);
 
-      const item = await contractInstance.tokenOfOwnerByIndex(address, 0);
+      const item = await contractInstance.tokenOfOwnerByIndex(erc721ReceiverInstance, 0);
       expect(item).to.equal(0); // 0 is nft index
     });
   });

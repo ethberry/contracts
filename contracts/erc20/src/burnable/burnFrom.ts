@@ -15,10 +15,10 @@ export function shouldBurnFrom(factory: () => Promise<any>, options: IERC20Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
-      await contractInstance.approve(receiver.address, amount);
-      const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);
+      await contractInstance.approve(receiver, amount);
+      const tx = contractInstance.connect(receiver).burnFrom(owner, amount);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, amount);
     });
 
@@ -26,10 +26,10 @@ export function shouldBurnFrom(factory: () => Promise<any>, options: IERC20Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, 0n);
+      await mint(contractInstance, owner, owner, 0n);
 
-      await contractInstance.approve(receiver.address, amount);
-      const tx = contractInstance.connect(receiver).burnFrom(owner.address, 0);
+      await contractInstance.approve(receiver, amount);
+      const tx = contractInstance.connect(receiver).burnFrom(owner, 0);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, 0);
     });
 
@@ -37,10 +37,10 @@ export function shouldBurnFrom(factory: () => Promise<any>, options: IERC20Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, 0n);
+      await mint(contractInstance, owner, owner, 0n);
 
-      await contractInstance.approve(receiver.address, amount);
-      const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);
+      await contractInstance.approve(receiver, amount);
+      const tx = contractInstance.connect(receiver).burnFrom(owner, amount);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientBalance")
         .withArgs(owner.address, 0, amount);
@@ -50,7 +50,7 @@ export function shouldBurnFrom(factory: () => Promise<any>, options: IERC20Optio
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance.connect(receiver).burnFrom(owner.address, amount);
+      const tx = contractInstance.connect(receiver).burnFrom(owner, amount);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientAllowance")
         .withArgs(receiver.address, 0, amount);

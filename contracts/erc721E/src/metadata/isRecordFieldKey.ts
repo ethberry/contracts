@@ -14,7 +14,7 @@ export function shouldIsRecordFieldKey(factory: () => Promise<any>, options: IER
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const isIndeed = await contractInstance.isRecordFieldKey(defaultTokenId, TEMPLATE_ID);
       expect(isIndeed).to.equal(true);
@@ -32,7 +32,7 @@ export function shouldIsRecordFieldKey(factory: () => Promise<any>, options: IER
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       await contractInstance.deleteRecord(0);
 
       const isIndeed = await contractInstance.isRecordFieldKey(defaultTokenId, TEMPLATE_ID);
@@ -44,7 +44,7 @@ export function shouldIsRecordFieldKey(factory: () => Promise<any>, options: IER
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       await contractInstance.deleteRecordField(0, TEMPLATE_ID);
 
       const isIndeed = await contractInstance.isRecordFieldKey(defaultTokenId, TEMPLATE_ID);

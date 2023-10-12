@@ -1,6 +1,11 @@
-import { Signer } from "ethers";
+import { BaseContract, Signer } from "ethers";
+import type { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 
-export type TMintERC721EnumFn = (contractInstance: any, signer: Signer, receiver: string) => Promise<any>;
+export type TMintERC721EnumFn = (
+  contractInstance: any,
+  signer: Signer,
+  receiver: SignerWithAddress | BaseContract | string,
+) => Promise<any>;
 
 export interface IERC721EnumOptions {
   mint?: TMintERC721EnumFn;
@@ -11,10 +16,18 @@ export interface IERC721EnumOptions {
   tokenId?: bigint;
 }
 
-export const defaultMintERC721 = (contractInstance: any, signer: Signer, receiver: string) => {
+export const defaultMintERC721 = (
+  contractInstance: any,
+  signer: Signer,
+  receiver: SignerWithAddress | BaseContract | string,
+) => {
   return contractInstance.connect(signer).mint(receiver) as Promise<any>;
 };
 
-export const defaultSafeMintERC721 = (contractInstance: any, signer: Signer, receiver: string) => {
+export const defaultSafeMintERC721 = (
+  contractInstance: any,
+  signer: Signer,
+  receiver: SignerWithAddress | BaseContract | string,
+) => {
   return contractInstance.connect(signer).safeMint(receiver) as Promise<any>;
 };

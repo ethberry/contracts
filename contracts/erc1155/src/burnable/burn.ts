@@ -15,14 +15,14 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC1155Options
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      const tx = contractInstance.burn(owner.address, tokenId, amount);
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      const tx = contractInstance.burn(owner, tokenId, amount);
 
       await expect(tx)
         .to.emit(contractInstance, "TransferSingle")
         .withArgs(owner.address, owner.address, ZeroAddress, tokenId, amount);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
+      const balanceOfOwner = await contractInstance.balanceOf(owner, tokenId);
       expect(balanceOfOwner).to.equal(0);
     });
 
@@ -30,15 +30,15 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC1155Options
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      await contractInstance.setApprovalForAll(receiver.address, true);
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      await contractInstance.setApprovalForAll(receiver, true);
 
-      const tx = contractInstance.connect(receiver).burn(owner.address, tokenId, amount);
+      const tx = contractInstance.connect(receiver).burn(owner, tokenId, amount);
       await expect(tx)
         .to.emit(contractInstance, "TransferSingle")
         .withArgs(receiver.address, owner.address, ZeroAddress, tokenId, amount);
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
+      const balanceOfOwner = await contractInstance.balanceOf(owner, tokenId);
       expect(balanceOfOwner).to.equal(0);
     });
 
@@ -46,8 +46,8 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC1155Options
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      const tx = contractInstance.connect(receiver).burn(owner.address, tokenId, amount);
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      const tx = contractInstance.connect(receiver).burn(owner, tokenId, amount);
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC1155MissingApprovalForAll")
@@ -58,9 +58,9 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC1155Options
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, receiver.address, tokenId, amount, "0x");
+      await mint(contractInstance, owner, receiver, tokenId, amount, "0x");
 
-      const tx = contractInstance.burn(owner.address, tokenId, amount);
+      const tx = contractInstance.burn(owner, tokenId, amount);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC1155InsufficientBalance")
         .withArgs(owner.address, 0, amount, tokenId);

@@ -14,7 +14,7 @@ export function shouldGetRecordFieldKeyCount(factory: () => Promise<any>, option
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const count = await contractInstance.getRecordFieldKeyCount(defaultTokenId);
       expect(count).to.equal(1);
@@ -25,7 +25,7 @@ export function shouldGetRecordFieldKeyCount(factory: () => Promise<any>, option
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       await contractInstance.deleteRecord(defaultTokenId);
 
       const tx = contractInstance.getRecordFieldKeyCount(defaultTokenId);
@@ -37,7 +37,7 @@ export function shouldGetRecordFieldKeyCount(factory: () => Promise<any>, option
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
       await contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
 
       const count = await contractInstance.getRecordFieldKeyCount(defaultTokenId);

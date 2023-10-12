@@ -13,13 +13,13 @@ export function shouldUserExprires(factory: () => Promise<any>, options: IERC721
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(1000));
       // await time.increaseTo(current.add(web3.utils.toBN(2000)));
 
-      await contractInstance.setUser(defaultTokenId, receiver.address, deadline.toString());
+      await contractInstance.setUser(defaultTokenId, receiver, deadline.toString());
       const userExpires = await contractInstance.userExpires(defaultTokenId);
       expect(userExpires).to.equal(deadline.toString());
     });

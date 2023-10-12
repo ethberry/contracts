@@ -15,8 +15,8 @@ export function shouldBalanceOf(factory: () => Promise<any>, options: IERC1155Op
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      const balance = await contractInstance.balanceOf(owner.address, tokenId);
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      const balance = await contractInstance.balanceOf(owner, tokenId);
       expect(balance).to.equal(amount);
     });
 
@@ -27,8 +27,8 @@ export function shouldBalanceOf(factory: () => Promise<any>, options: IERC1155Op
       const balances1 = await contractInstance.balanceOfBatch([ZeroAddress], [tokenId]);
       expect(balances1).to.deep.equal([0]);
 
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      await contractInstance.burn(owner.address, tokenId, amount);
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      await contractInstance.burn(owner, tokenId, amount);
 
       const balances2 = await contractInstance.balanceOf(ZeroAddress, tokenId);
       expect(balances2).to.deep.equal(0);
@@ -38,8 +38,8 @@ export function shouldBalanceOf(factory: () => Promise<any>, options: IERC1155Op
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      const balance = await contractInstance.balanceOf(receiver.address, tokenId);
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      const balance = await contractInstance.balanceOf(receiver, tokenId);
       expect(balance).to.equal(0);
     });
   });

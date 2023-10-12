@@ -16,28 +16,38 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = safeMint(contractInstance, owner, owner.address, batchSize + tokenId);
+      const tx = safeMint(contractInstance, owner, owner, batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
         .withArgs(ZeroAddress, owner.address, batchSize + tokenId);
 
-      const balance = await contractInstance.balanceOf(owner.address);
+      const balance = await contractInstance.balanceOf(owner);
       expect(balance).to.equal(batchSize + 1n);
     });
 
-    it("should mint to receiver", async function () {
+    it("should mint to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
       const erc721ReceiverInstance = await deployWallet();
 
-      const address = await erc721ReceiverInstance.getAddress();
-      const tx = safeMint(contractInstance, owner, address, batchSize + tokenId);
+      const tx = safeMint(contractInstance, owner, erc721ReceiverInstance, batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ZeroAddress, address, batchSize + tokenId);
+        .withArgs(ZeroAddress, await erc721ReceiverInstance.getAddress(), batchSize + tokenId);
 
-      const balance = await contractInstance.balanceOf(address);
+      const balance = await contractInstance.balanceOf(erc721ReceiverInstance);
       expect(balance).to.equal(1);
+    });
+
+    it("should fail: ERC721InvalidReceiver (NonReceiver)", async function () {
+      const [owner] = await ethers.getSigners();
+      const contractInstance = await factory();
+      const erc721NonReceiverInstance = await deployJerk();
+
+      const tx = safeMint(contractInstance, owner, erc721NonReceiverInstance, batchSize + tokenId);
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC721InvalidReceiver")
+        .withArgs(await erc721NonReceiverInstance.getAddress());
     });
 
     it("should fail: AccessControlUnauthorizedAccount/OwnableUnauthorizedAccount", async function () {
@@ -46,7 +56,7 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
 
       const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
-      const tx = safeMint(contractInstance, receiver, receiver.address, batchSize + tokenId);
+      const tx = safeMint(contractInstance, receiver, receiver, batchSize + tokenId);
       if (supportsAccessControl) {
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
@@ -57,16 +67,6 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
           .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
           .withArgs(receiver.address);
       }
-    });
-
-    it("should fail: ERC721InvalidReceiver (NonReceiver)", async function () {
-      const [owner] = await ethers.getSigners();
-      const contractInstance = await factory();
-      const erc721NonReceiverInstance = await deployJerk();
-
-      const address = await erc721NonReceiverInstance.getAddress();
-      const tx = safeMint(contractInstance, owner, address, batchSize + tokenId);
-      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC721InvalidReceiver").withArgs(address);
     });
   });
 }

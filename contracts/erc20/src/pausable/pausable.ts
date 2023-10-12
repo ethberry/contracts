@@ -1,40 +1,39 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount, tokenId } from "@gemunion/contracts-constants";
+import { amount, PAUSER_ROLE } from "@gemunion/contracts-constants";
+import { defaultMintERC20, IERC20Options } from "../shared/defaultMint";
 import { shouldBehaveLikePausable } from "@gemunion/contracts-utils";
 
-export function shouldBehaveLikeERC1155Pausable(factory: () => Promise<any>) {
-  shouldBehaveLikePausable(factory);
-
+export function shouldBehaveLikeERC20Pausable(factory: () => Promise<any>, options: IERC20Options = {}) {
+  const { mint = defaultMintERC20, pauserRole = PAUSER_ROLE } = options;
   describe("pause", function () {
+    shouldBehaveLikePausable(factory, { pauserRole });
+
     it("should pause/unpause", async function () {
-      const [owner] = await ethers.getSigners();
+      const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx1 = contractInstance.mint(owner.address, tokenId, amount, "0x");
+      const tx1 = await mint(contractInstance, owner, owner);
       await expect(tx1).to.not.be.reverted;
-
-      const balanceOfOwner1 = await contractInstance.balanceOf(owner.address, tokenId);
-      expect(balanceOfOwner1).to.equal(amount);
 
       const tx2 = contractInstance.pause();
       await expect(tx2).to.emit(contractInstance, "Paused").withArgs(owner.address);
 
-      const tx3 = contractInstance.mint(owner.address, tokenId, amount, "0x");
+      const tx3 = contractInstance.transfer(receiver, amount);
       await expect(tx3).to.be.revertedWithCustomError(contractInstance, "EnforcedPause");
 
       const tx4 = contractInstance.unpause();
       await expect(tx4).to.emit(contractInstance, "Unpaused").withArgs(owner.address);
 
-      const tx5 = contractInstance.mint(owner.address, tokenId, amount, "0x");
+      const tx5 = contractInstance.transfer(receiver, amount);
       await expect(tx5).to.not.be.reverted;
 
       const tx6 = contractInstance.unpause();
       await expect(tx6).to.be.revertedWithCustomError(contractInstance, "ExpectedPause");
 
-      const balanceOfOwner = await contractInstance.balanceOf(owner.address, tokenId);
-      expect(balanceOfOwner).to.equal(amount * 2n);
+      const balanceOfOwner = await contractInstance.balanceOf(owner);
+      expect(balanceOfOwner).to.equal(0);
     });
   });
 }

@@ -14,8 +14,7 @@ describe("ERC721OpenSeaTest", function () {
   shouldBehaveLikeERC721(async () => {
     const instance = await factory();
     const proxyRegistryInstance = await deployContract("ProxyRegistry");
-    const address = await proxyRegistryInstance.getAddress();
-    await instance.setProxyRegistry(address);
+    await instance.setProxyRegistry(proxyRegistryInstance);
     return instance;
   });
 

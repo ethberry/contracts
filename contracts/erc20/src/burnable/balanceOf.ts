@@ -15,7 +15,7 @@ export function shouldBalanceOf2(factory: () => Promise<any>, options: IERC20Opt
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const tx = contractInstance.burn(amount);
       await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, amount);

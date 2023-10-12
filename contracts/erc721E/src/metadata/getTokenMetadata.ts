@@ -14,7 +14,7 @@ export function shouldGetTokenMetadata(factory: () => Promise<any>, options: IER
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const metadata = await contractInstance.getTokenMetadata(defaultTokenId);
 
@@ -36,7 +36,7 @@ export function shouldGetTokenMetadata(factory: () => Promise<any>, options: IER
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       await contractInstance.deleteRecord(defaultTokenId);
 
@@ -49,7 +49,7 @@ export function shouldGetTokenMetadata(factory: () => Promise<any>, options: IER
 
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       await contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
 

@@ -15,8 +15,8 @@ export function shouldBalanceOfBatch(factory: () => Promise<any>, options: IERC1
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      const balances = await contractInstance.balanceOfBatch([owner.address, owner.address], [tokenId, 0]);
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      const balances = await contractInstance.balanceOfBatch([owner, owner], [tokenId, 0]);
       expect(balances).to.deep.equal([amount, 0]);
     });
 
@@ -27,8 +27,8 @@ export function shouldBalanceOfBatch(factory: () => Promise<any>, options: IERC1
       const balances1 = await contractInstance.balanceOfBatch([ZeroAddress], [tokenId]);
       expect(balances1).to.deep.equal([0]);
 
-      await mint(contractInstance, owner, owner.address, tokenId, amount, "0x");
-      await contractInstance.burn(owner.address, tokenId, amount);
+      await mint(contractInstance, owner, owner, tokenId, amount, "0x");
+      await contractInstance.burn(owner, tokenId, amount);
 
       const balances2 = await contractInstance.balanceOfBatch([ZeroAddress], [tokenId]);
       expect(balances2).to.deep.equal([0]);

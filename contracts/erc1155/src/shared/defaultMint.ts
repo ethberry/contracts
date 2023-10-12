@@ -1,9 +1,10 @@
-import { Signer } from "ethers";
+import { BaseContract, Signer } from "ethers";
+import type { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 
 export type TMintERC1155Fn = (
   contractInstance: any,
   signer: Signer,
-  receiver: string,
+  receiver: SignerWithAddress | BaseContract | string,
   tokenId: bigint,
   amount: bigint,
   data: string,
@@ -12,7 +13,7 @@ export type TMintERC1155Fn = (
 export type TMintBatchERC1155Fn = (
   contractInstance: any,
   signer: Signer,
-  receiver: string,
+  receiver: SignerWithAddress | BaseContract | string,
   tokenId: Array<bigint>,
   amount: Array<bigint>,
   data: string,
@@ -29,7 +30,7 @@ export interface IERC1155Options {
 export const defaultMintERC1155 = (
   contractInstance: any,
   signer: Signer,
-  receiver: string,
+  receiver: SignerWithAddress | BaseContract | string,
   tokenId: bigint,
   amount: bigint,
   data: string,
@@ -40,7 +41,7 @@ export const defaultMintERC1155 = (
 export const defaultMintBatchERC1155 = (
   contractInstance: any,
   signer: Signer,
-  receiver: string,
+  receiver: SignerWithAddress | BaseContract | string,
   tokenIds: Array<bigint>,
   amounts: Array<bigint>,
   data: string,

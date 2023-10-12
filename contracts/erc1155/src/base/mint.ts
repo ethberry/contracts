@@ -16,12 +16,12 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx1 = mint(contractInstance, owner, receiver.address, tokenId, amount, "0x");
+      const tx1 = mint(contractInstance, owner, receiver, tokenId, amount, "0x");
       await expect(tx1)
         .to.emit(contractInstance, "TransferSingle")
         .withArgs(owner.address, ZeroAddress, receiver.address, tokenId, amount);
 
-      const balance = await contractInstance.balanceOf(receiver.address, tokenId);
+      const balance = await contractInstance.balanceOf(receiver, tokenId);
       expect(balance).to.equal(amount);
     });
 
@@ -30,14 +30,13 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
       const contractInstance = await factory();
 
       const erc1155ReceiverInstance = await deployWallet();
-      const address = await erc1155ReceiverInstance.getAddress();
 
-      const tx1 = mint(contractInstance, owner, address, tokenId, amount, "0x");
+      const tx1 = mint(contractInstance, owner, erc1155ReceiverInstance, tokenId, amount, "0x");
       await expect(tx1)
         .to.emit(contractInstance, "TransferSingle")
-        .withArgs(owner.address, ZeroAddress, address, tokenId, amount);
+        .withArgs(owner.address, ZeroAddress, await erc1155ReceiverInstance.getAddress(), tokenId, amount);
 
-      const balance = await contractInstance.balanceOf(address, tokenId);
+      const balance = await contractInstance.balanceOf(await erc1155ReceiverInstance.getAddress(), tokenId);
       expect(balance).to.equal(amount);
     });
 
@@ -46,10 +45,11 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
       const contractInstance = await factory();
 
       const erc1155NonReceiverInstance = await deployJerk();
-      const address = await erc1155NonReceiverInstance.getAddress();
 
-      const tx = mint(contractInstance, owner, address, tokenId, amount, "0x");
-      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver").withArgs(address);
+      const tx = mint(contractInstance, owner, erc1155NonReceiverInstance, tokenId, amount, "0x");
+      await expect(tx)
+        .to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver")
+        .withArgs(await erc1155NonReceiverInstance.getAddress());
     });
 
     it("should fail: ERC1155InvalidReceiver (ZeroAddress)", async function () {
@@ -66,7 +66,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
 
       const supportsAccessControl = await contractInstance.supportsInterface(InterfaceId.IAccessControl);
 
-      const tx = mint(contractInstance, receiver, owner.address, tokenId, amount, "0x");
+      const tx = mint(contractInstance, receiver, owner, tokenId, amount, "0x");
       if (supportsAccessControl) {
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")

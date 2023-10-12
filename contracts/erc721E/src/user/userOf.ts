@@ -14,12 +14,12 @@ export function shouldUserOf(factory: () => Promise<any>, options: IERC721EnumOp
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const current = await time.latest();
       const deadline = current.sub(web3.utils.toBN(1));
 
-      await contractInstance.setUser(defaultTokenId, receiver.address, deadline.toString());
+      await contractInstance.setUser(defaultTokenId, receiver, deadline.toString());
       const userOf = await contractInstance.userOf(defaultTokenId);
 
       expect(userOf).to.equal(ZeroAddress);
@@ -29,12 +29,12 @@ export function shouldUserOf(factory: () => Promise<any>, options: IERC721EnumOp
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
 
-      await contractInstance.setUser(defaultTokenId, receiver.address, deadline.toString());
+      await contractInstance.setUser(defaultTokenId, receiver, deadline.toString());
 
       const current1 = await time.latest();
       await time.increaseTo(current1.add(web3.utils.toBN(50)));
@@ -53,12 +53,12 @@ export function shouldUserOf(factory: () => Promise<any>, options: IERC721EnumOp
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      await mint(contractInstance, owner, owner.address);
+      await mint(contractInstance, owner, owner);
 
       const current = await time.latest();
       const deadline = current.add(web3.utils.toBN(100));
 
-      await contractInstance.setUser(defaultTokenId, receiver.address, deadline.toString());
+      await contractInstance.setUser(defaultTokenId, receiver, deadline.toString());
 
       const ownerOfToken = await contractInstance.ownerOf(defaultTokenId);
 

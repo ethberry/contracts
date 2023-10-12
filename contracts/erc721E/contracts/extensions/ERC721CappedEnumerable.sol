@@ -15,12 +15,12 @@ abstract contract ERC721CappedEnumerable is ERC721Enumerable {
 
   error ERC721InvalidCap(uint256 cap);
 
-  constructor(uint256 cap_) {
+  constructor(uint256 cap) {
     if (cap == 0) {
       revert ERC721InvalidCap(0);
     }
 
-    _cap = cap_;
+    _cap = cap;
   }
 
   /**
@@ -38,7 +38,7 @@ abstract contract ERC721CappedEnumerable is ERC721Enumerable {
     address previousOwner = super._update(to, tokenId, auth);
 
     if (previousOwner == address(0) && super.totalSupply() > cap()) {
-      revert ERC721ExceededCap(cap());
+      revert ERC721ExceededCap(super.totalSupply(), cap());
     }
 
     return previousOwner;

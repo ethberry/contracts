@@ -15,16 +15,16 @@
     "@nomicfoundation/hardhat-ethers": "3.0.4",
     "@nomicfoundation/hardhat-network-helpers": "1.0.9",
     "@nomicfoundation/hardhat-verify": "1.1.1",
-    "@typechain/ethers-v6": "0.5.0",
-    "@typechain/hardhat": "9.0.0",
+    "@typechain/ethers-v6": "0.5.1",
+    "@typechain/hardhat": "9.1.0",
     "chai": "4.3.10",
     "dotenv": "16.3.1",
-    "ethers": "6.7.1",
-    "hardhat": "2.18.0",
+    "ethers": "6.8.0",
+    "hardhat": "2.18.1",
     "hardhat-gas-reporter": "1.0.9",
     "rimraf": "5.0.5",
     "solidity-coverage": "0.8.5",
-    "typechain": "8.3.1"
+    "typechain": "8.3.2"
   },
   "engines": {
     "node": ">=18"

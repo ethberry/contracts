@@ -29,12 +29,6 @@ contract ERC1363Receiver is IERC1363Receiver, IERC1363Spender {
     uint256 value,
     bytes memory data
   ) external override returns (bytes4) {
-    if (data.length == 1) {
-      if (data[0] == 0x00) return bytes4(0);
-      if (data[0] == 0x01) revert("onTransferReceived revert");
-      if (data[0] == 0x02) revert();
-      if (data[0] == 0x03) assert(false);
-    }
     emit TransferReceived(operator, from, value, data);
     return this.onTransferReceived.selector;
   }
@@ -48,12 +42,6 @@ contract ERC1363Receiver is IERC1363Receiver, IERC1363Spender {
    *                unless throwing
    */
   function onApprovalReceived(address owner, uint256 value, bytes memory data) external override returns (bytes4) {
-    if (data.length == 1) {
-      if (data[0] == 0x00) return bytes4(0);
-      if (data[0] == 0x01) revert("onApprovalReceived revert");
-      if (data[0] == 0x02) revert();
-      if (data[0] == 0x03) assert(false);
-    }
     emit ApprovalReceived(owner, value, data);
     return this.onApprovalReceived.selector;
   }

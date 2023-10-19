@@ -24,7 +24,7 @@ export enum InterfaceId {
   IAccessControl = "0x7965db0b",
   IAccessControlEnumerable = "0x5a05180f",
   IAccessControlDefaultAdminRules = "0x31498786",
-  IGovernor = "0xf2e09f74",
+  IGovernor = "0x65455a86",
   IVotes = "0xe90fb3f6",
   Invalid = "0xffffffff",
   IERC1363 = "0xb0202a11",

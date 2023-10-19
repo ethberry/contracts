@@ -7,6 +7,7 @@
   "dependencies": {
     "@gemunion/contracts-constants": "^5.0.10",
     "@gemunion/contracts-erc1363": "^5.0.10",
+    "@gemunion/contracts-utils": "^5.0.10",
     "@nomicfoundation/hardhat-toolbox": "3.0.0"
   },
   "description": "Collection of contracts and presets",

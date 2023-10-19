@@ -18,3 +18,14 @@ export function shouldBehaveLikeERC721(factory: () => Promise<any>, options?: IE
   shouldTransferFrom(factory, options);
   shouldSafeTransferFrom(factory, options);
 }
+
+export {
+  shouldMint,
+  shouldSafeMint,
+  shouldGetOwnerOf,
+  shouldApprove,
+  shouldSetApprovalForAll,
+  shouldGetBalanceOf,
+  shouldTransferFrom,
+  shouldSafeTransferFrom,
+};

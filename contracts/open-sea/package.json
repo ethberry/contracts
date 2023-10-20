@@ -5,13 +5,13 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
-    "@gemunion/contracts-access": "^5.0.10",
-    "@gemunion/contracts-constants": "^5.0.10",
-    "@gemunion/contracts-erc1363": "^5.0.10",
-    "@gemunion/contracts-erc721": "^5.0.10",
-    "@gemunion/contracts-erc721e": "^5.0.10",
-    "@gemunion/contracts-mocks": "^5.0.10",
-    "@gemunion/contracts-utils": "^5.0.10",
+    "@gemunion/contracts-access": "^5.0.11",
+    "@gemunion/contracts-constants": "^5.0.11",
+    "@gemunion/contracts-erc1363": "^5.0.11",
+    "@gemunion/contracts-erc721": "^5.0.11",
+    "@gemunion/contracts-erc721e": "^5.0.11",
+    "@gemunion/contracts-mocks": "^5.0.11",
+    "@gemunion/contracts-utils": "^5.0.11",
     "@nomicfoundation/hardhat-toolbox": "3.0.0"
   },
   "description": "Collection of contracts and presets",
@@ -81,5 +81,5 @@
     "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",
-  "version": "5.0.10"
+  "version": "5.0.11"
 }

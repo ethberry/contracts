@@ -3,3 +3,5 @@
 /cache
 /artifacts
 /coverage
+/test
+/contracts/test

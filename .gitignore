@@ -6,7 +6,8 @@ artifacts
 coverage
 cache
 dist
-besu
+.nx
+.github
 
 # IDE
 .idea

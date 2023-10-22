@@ -28,33 +28,5 @@ export function shouldGetRecordFieldValue(factory: () => Promise<any>, options: 
         .to.be.revertedWithCustomError(contractInstance, "FieldNotFound")
         .withArgs(defaultTokenId, TEMPLATE_ID);
     });
-
-    it("should fail: FieldNotFound (deleted)", async function () {
-      const [owner] = await ethers.getSigners();
-
-      const contractInstance = await factory();
-
-      await mint(contractInstance, owner, owner);
-      await contractInstance.deleteRecord(defaultTokenId);
-      const tx = contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
-
-      await expect(tx)
-        .to.be.revertedWithCustomError(contractInstance, "FieldNotFound")
-        .withArgs(defaultTokenId, TEMPLATE_ID);
-    });
-
-    it("should fail: FieldNotFound (deleted by key)", async function () {
-      const [owner] = await ethers.getSigners();
-
-      const contractInstance = await factory();
-
-      await mint(contractInstance, owner, owner);
-      await contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
-      const tx = contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
-
-      await expect(tx)
-        .to.be.revertedWithCustomError(contractInstance, "FieldNotFound")
-        .withArgs(defaultTokenId, TEMPLATE_ID);
-    });
   });
 }

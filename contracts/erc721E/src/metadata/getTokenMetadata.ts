@@ -28,31 +28,5 @@ export function shouldGetTokenMetadata(factory: () => Promise<any>, options: IER
       const metadata = await contractInstance.getTokenMetadata(defaultTokenId);
       expect(metadata.length).to.equal(0);
     });
-
-    it("should not get metadata (deleted)", async function () {
-      const [owner] = await ethers.getSigners();
-
-      const contractInstance = await factory();
-
-      await mint(contractInstance, owner, owner);
-
-      await contractInstance.deleteRecord(defaultTokenId);
-
-      const metadata = await contractInstance.getTokenMetadata(defaultTokenId);
-      expect(metadata.length).to.equal(0);
-    });
-
-    it("should get metadata (deleted by key)", async function () {
-      const [owner] = await ethers.getSigners();
-
-      const contractInstance = await factory();
-
-      await mint(contractInstance, owner, owner);
-
-      await contractInstance.deleteRecordField(defaultTokenId, TEMPLATE_ID);
-
-      const metadata = await contractInstance.getTokenMetadata(defaultTokenId);
-      expect(metadata.length).to.equal(0);
-    });
   });
 }

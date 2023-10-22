@@ -6,6 +6,7 @@ typechain-types
 src
 test
 scripts
+contracts/test
 
 hardhat.config.ts
 tsconfig.json

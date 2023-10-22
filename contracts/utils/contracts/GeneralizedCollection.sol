@@ -33,14 +33,14 @@ contract GeneralizedCollection is IGeneralizedCollectionErrors {
 
   // Count records in the collection
 
-  function getRecordCount() public view returns (uint256 recordCount) {
+  function _getRecordCount() internal view virtual returns (uint256 recordCount) {
     return recordList.length;
   }
 
   // Count fields in a record
 
-  function getRecordFieldKeyCount(uint256 pk) public view returns (uint256 keyCount) {
-    if (!isRecord(pk)) {
+  function _getRecordFieldKeyCount(uint256 pk) internal view virtual returns (uint256 keyCount) {
+    if (!_isRecord(pk)) {
       revert RecordNotFound(pk);
     }
 
@@ -49,7 +49,7 @@ contract GeneralizedCollection is IGeneralizedCollectionErrors {
 
   // Check a primary key
 
-  function isRecord(uint256 pk) public view returns (bool) {
+  function _isRecord(uint256 pk) internal view virtual returns (bool) {
     if (recordList.length == 0) {
       return false;
     }
@@ -59,12 +59,12 @@ contract GeneralizedCollection is IGeneralizedCollectionErrors {
 
   // Check a field key in a specific record
 
-  function isRecordFieldKey(uint256 pk, bytes32 fieldKey) public view returns (bool isIndeed) {
-    if (!isRecord(pk)) {
+  function _isRecordFieldKey(uint256 pk, bytes32 fieldKey) internal view virtual returns (bool isIndeed) {
+    if (!_isRecord(pk)) {
       return false;
     }
 
-    if (getRecordFieldKeyCount(pk) == 0) {
+    if (_getRecordFieldKeyCount(pk) == 0) {
       return false;
     }
 
@@ -74,7 +74,7 @@ contract GeneralizedCollection is IGeneralizedCollectionErrors {
   // Insert a primary key. Field count defaults to 0.
 
   function _insertRecord(uint256 pk) internal returns (bool) {
-    if (isRecord(pk)) {
+    if (_isRecord(pk)) {
       revert RecordAlreadyExist(pk);
     }
 
@@ -86,11 +86,11 @@ contract GeneralizedCollection is IGeneralizedCollectionErrors {
   // Insert a field key in a specific record. Value default to 0x0
 
   function _insertRecordField(uint256 pk, bytes32 fieldKey) internal returns (bool) {
-    if (!isRecord(pk)) {
+    if (!_isRecord(pk)) {
       revert RecordNotFound(pk);
     }
 
-    if (isRecordFieldKey(pk, fieldKey)){
+    if (_isRecordFieldKey(pk, fieldKey)){
       revert FieldAlreadySet(pk, fieldKey);
     }
 
@@ -102,11 +102,11 @@ contract GeneralizedCollection is IGeneralizedCollectionErrors {
   // Set a field key value in a specific record. Insert the primary key and/or field key if needed.
 
   function _upsertRecordField(uint256 pk, bytes32 fieldKey, uint256 value) internal returns (bool) {
-    if (!isRecord(pk)) {
+    if (!_isRecord(pk)) {
       _insertRecord(pk);
     }
 
-    if (!isRecordFieldKey(pk, fieldKey)) {
+    if (!_isRecordFieldKey(pk, fieldKey)) {
       _insertRecordField(pk, fieldKey);
     }
 
@@ -116,8 +116,8 @@ contract GeneralizedCollection is IGeneralizedCollectionErrors {
 
   // Get a field key value from a specific record
 
-  function getRecordFieldValue(uint256 pk, bytes32 fieldKey) public view returns (uint256) {
-    if (!isRecordFieldKey(pk, fieldKey)) {
+  function _getRecordFieldValue(uint256 pk, bytes32 fieldKey) internal view virtual returns (uint256) {
+    if (!_isRecordFieldKey(pk, fieldKey)) {
       revert FieldNotFound(pk, fieldKey);
     }
 
@@ -127,7 +127,7 @@ contract GeneralizedCollection is IGeneralizedCollectionErrors {
   // Delete a complete record. Useful for reducing list size.
 
   function _deleteRecord(uint256 pk) internal returns (bool) {
-    if (!isRecord(pk)) {
+    if (!_isRecord(pk)) {
       revert RecordNotFound(pk);
     }
 
@@ -145,7 +145,7 @@ contract GeneralizedCollection is IGeneralizedCollectionErrors {
   // Delete a field key/value from a record. Useful for reducing list size.
 
   function _deleteRecordField(uint256 pk, bytes32 fieldKey) internal returns (bool) {
-    if (!isRecordFieldKey(pk, fieldKey)) {
+    if (!_isRecordFieldKey(pk, fieldKey)) {
       revert FieldNotFound(pk, fieldKey);
     }
 

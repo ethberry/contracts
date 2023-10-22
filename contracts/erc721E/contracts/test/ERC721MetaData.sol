@@ -15,7 +15,7 @@ import {TEMPLATE_ID} from "@gemunion/contracts-utils/contracts/attributes.sol";
 
 import {ERC721ABER} from "../preset/ERC721ABER.sol";
 
-contract ERC721MetaData is ERC721ABER, ERC721GeneralizedCollection {
+contract ERC721MetaDataTest is ERC721ABER, ERC721GeneralizedCollection {
   constructor(string memory name, string memory symbol, uint96 royalty) ERC721ABER(name, symbol, royalty) {}
 
   function mint(address to) public override onlyRole(MINTER_ROLE) {

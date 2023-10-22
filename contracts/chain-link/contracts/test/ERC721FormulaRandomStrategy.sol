@@ -10,7 +10,7 @@ import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
 import {FormulaRandomStrategy} from "../strategies/FormulaRandomStrategy.sol";
 
-contract ERC721FormulaRandomStrategy is AccessControl, FormulaRandomStrategy {
+contract FormulaRandomStrategyTest is AccessControl, FormulaRandomStrategy {
   constructor() {
     _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }

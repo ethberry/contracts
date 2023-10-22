@@ -2,7 +2,7 @@ import { expect } from "chai";
 
 import { deployERC721 } from "../../src/fixture";
 
-describe("ERC721FixedValueRandomStrategy", function () {
+describe("FixedValueRandomStrategyTest", function () {
   const factory = () => deployERC721(this.title);
 
   describe("_setDispersion", function () {

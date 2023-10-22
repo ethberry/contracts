@@ -10,7 +10,7 @@ import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 
 import {FixedValuesRandomStrategy} from "../strategies/FixedValuesRandomStrategy.sol";
 
-contract ERC721FixedValueRandomStrategy is AccessControl, FixedValuesRandomStrategy {
+contract FixedValueRandomStrategyTest is AccessControl, FixedValuesRandomStrategy {
   constructor() {
     _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }

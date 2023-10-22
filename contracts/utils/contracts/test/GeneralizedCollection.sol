@@ -10,7 +10,7 @@ pragma solidity ^0.8.20;
 
 import "../GeneralizedCollection.sol";
 
-contract GeneralizedCollectionMock is GeneralizedCollection {
+contract GeneralizedCollectionTest is GeneralizedCollection {
   function getRecordCount() public view virtual returns (uint256) {
     return super._getRecordCount();
   }

@@ -3,10 +3,16 @@ import { ethers } from "hardhat";
 
 import { TEMPLATE_ID } from "@gemunion/contracts-constants";
 
-import { defaultMintERC721, IERC721EnumOptions } from "../shared/defaultMint";
+import { defaultMintERC721, IERC721EnumOptions, IERC721MetadataOptions } from "../shared/defaultMint";
+import { templateId } from "../contants";
 
-export function shouldGetRecordFieldValue(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
+export function shouldGetRecordFieldValue(
+  factory: () => Promise<any>,
+  options: IERC721EnumOptions = {},
+  metadata: IERC721MetadataOptions = {},
+) {
   const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n } = options;
+  const { templateId: defaultTemplateId = templateId } = metadata;
 
   describe("getRecordFieldValue", function () {
     it("should get value", async function () {
@@ -17,7 +23,7 @@ export function shouldGetRecordFieldValue(factory: () => Promise<any>, options: 
       await mint(contractInstance, owner, owner);
 
       const value = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
-      expect(value).to.equal(42);
+      expect(value).to.equal(defaultTemplateId);
     });
 
     it("should fail: FieldNotFound (empty)", async function () {

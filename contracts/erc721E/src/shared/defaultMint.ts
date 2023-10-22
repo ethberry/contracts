@@ -15,6 +15,9 @@ export interface IERC721EnumOptions {
   adminRole?: string;
   tokenId?: bigint;
 }
+export interface IERC721MetadataOptions {
+  templateId?: bigint;
+}
 
 export const defaultMintERC721 = (
   contractInstance: any,

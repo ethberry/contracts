@@ -2,10 +2,16 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { METADATA_ROLE, RARITY, TEMPLATE_ID } from "@gemunion/contracts-constants";
-import { defaultMintERC721, IERC721EnumOptions } from "../shared/defaultMint";
+import { defaultMintERC721, IERC721EnumOptions, IERC721MetadataOptions } from "../shared/defaultMint";
+import { templateId } from "../contants";
 
-export function shouldSetTokenMetadata(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
+export function shouldSetTokenMetadata(
+  factory: () => Promise<any>,
+  options: IERC721EnumOptions = {},
+  metadata: IERC721MetadataOptions = {},
+) {
   const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n } = options;
+  const { templateId: defaultTemplateId = templateId } = metadata;
 
   describe("setTokenMetadata", function () {
     it("should set metadata", async function () {
@@ -15,7 +21,7 @@ export function shouldSetTokenMetadata(factory: () => Promise<any>, options: IER
 
       await mint(contractInstance, owner, owner);
       const value1 = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
-      expect(value1).to.equal(42);
+      expect(value1).to.equal(defaultTemplateId);
 
       const tx = contractInstance.setTokenMetadata(defaultTokenId, [{ key: TEMPLATE_ID, value: 1337 }]);
 
@@ -32,7 +38,7 @@ export function shouldSetTokenMetadata(factory: () => Promise<any>, options: IER
 
       await mint(contractInstance, owner, owner);
       const value1 = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
-      expect(value1).to.equal(42);
+      expect(value1).to.equal(defaultTemplateId);
 
       const tx = contractInstance.setTokenMetadata(defaultTokenId, [{ key: RARITY, value: 1337 }]);
       await expect(tx).to.not.be.reverted;

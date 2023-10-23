@@ -1,0 +1,67 @@
+{
+  "author": {
+    "email": "trejgun@gemunion.io",
+    "name": "TrejGun",
+    "url": "https://gemunion.io/"
+  },
+  "dependencies": {
+    "@gemunion/contracts-constants": "^5.0.15",
+    "@gemunion/contracts-erc1363": "^5.0.15",
+    "@gemunion/contracts-mocks": "^5.0.15",
+    "@gemunion/contracts-utils": "^5.0.15",
+    "@nomicfoundation/hardhat-toolbox": "3.0.0"
+  },
+  "description": "Collection of contracts and presets",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "2.0.2",
+    "@nomicfoundation/hardhat-ethers": "3.0.4",
+    "@nomicfoundation/hardhat-network-helpers": "1.0.9",
+    "@nomicfoundation/hardhat-verify": "1.1.1",
+    "@typechain/ethers-v6": "0.5.1",
+    "@typechain/hardhat": "9.1.0",
+    "@types/chai": "4.3.9",
+    "@types/mocha": "10.0.3",
+    "@types/node": "18.18.6",
+    "chai": "4.3.10",
+    "dotenv": "16.3.1",
+    "ethers": "6.8.0",
+    "hardhat": "2.18.2",
+    "hardhat-gas-reporter": "1.0.9",
+    "solhint": "3.6.2",
+    "solhint-plugin-prettier": "0.0.5",
+    "solidity-coverage": "0.8.5",
+    "ts-node": "10.9.1",
+    "typechain": "8.3.2",
+    "web3": "1.10.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED",
+  "main": "./dist/index.js",
+  "name": "@gemunion/contracts-finance",
+  "peerDependencies": {
+    "ethers": "^6.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gemunion/contracts"
+  },
+  "scripts": {
+    "build": "hardhat compile && tsc",
+    "clean": "hardhat clean",
+    "coverage": "hardhat coverage",
+    "lint": "eslint . --fix",
+    "prebuild": "rimraf dist && hardhat clean",
+    "prepare": "npm run build",
+    "preversion": "npm run build && npm run test",
+    "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
+    "test": "hardhat test"
+  },
+  "types": "./dist/index.d.ts",
+  "version": "5.0.15"
+}

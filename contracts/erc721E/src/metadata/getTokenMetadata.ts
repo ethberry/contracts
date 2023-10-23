@@ -1,18 +1,14 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { TEMPLATE_ID } from "@gemunion/contracts-constants";
-
-import { defaultMintERC721, IERC721EnumOptions, IERC721MetadataOptions } from "../shared/defaultMint";
-import { templateId } from "../contants";
+import { defaultMintERC721, IERC721EnumOptions, TERC721MetadataOptions } from "../shared/defaultMint";
 
 export function shouldGetTokenMetadata(
   factory: () => Promise<any>,
   options: IERC721EnumOptions = {},
-  metadata: IERC721MetadataOptions = {},
+  metadata: TERC721MetadataOptions = [],
 ) {
   const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n } = options;
-  const { templateId: defaultTemplateId = templateId } = metadata;
 
   describe("getTokenMetadata", function () {
     it("should get metadata", async function () {
@@ -22,10 +18,13 @@ export function shouldGetTokenMetadata(
 
       await mint(contractInstance, owner, owner);
 
-      const metadata = await contractInstance.getTokenMetadata(defaultTokenId);
-      expect(metadata.length).to.equal(1);
-      expect(metadata[0].key).to.equal(TEMPLATE_ID);
-      expect(metadata[0].value).to.equal(defaultTemplateId);
+      const tokenMetadata = await contractInstance.getTokenMetadata(defaultTokenId);
+
+      expect(tokenMetadata.length).to.equal(metadata.length);
+      for (const [i, { key, value }] of metadata.entries()) {
+        expect(tokenMetadata[i].key).to.equal(key);
+        expect(tokenMetadata[i].value).to.equal(value);
+      }
     });
 
     it("should get metadata (empty)", async function () {

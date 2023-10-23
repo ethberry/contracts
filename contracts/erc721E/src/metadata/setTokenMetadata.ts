@@ -2,16 +2,14 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { METADATA_ROLE, RARITY, TEMPLATE_ID } from "@gemunion/contracts-constants";
-import { defaultMintERC721, IERC721EnumOptions, IERC721MetadataOptions } from "../shared/defaultMint";
-import { templateId } from "../contants";
+import { defaultMintERC721, IERC721EnumOptions, TERC721MetadataOptions } from "../shared/defaultMint";
 
 export function shouldSetTokenMetadata(
   factory: () => Promise<any>,
   options: IERC721EnumOptions = {},
-  metadata: IERC721MetadataOptions = {},
+  metadata: TERC721MetadataOptions = [],
 ) {
   const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n } = options;
-  const { templateId: defaultTemplateId = templateId } = metadata;
 
   describe("setTokenMetadata", function () {
     it("should set metadata", async function () {
@@ -20,15 +18,22 @@ export function shouldSetTokenMetadata(
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner);
-      const value1 = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
-      expect(value1).to.equal(defaultTemplateId);
 
-      const tx = contractInstance.setTokenMetadata(defaultTokenId, [{ key: TEMPLATE_ID, value: 1337 }]);
+      for (const [_i, { key, value }] of metadata.entries()) {
+        const recordFieldValue = await contractInstance.getRecordFieldValue(defaultTokenId, key);
+        expect(recordFieldValue).to.equal(value);
+      }
+
+      const newMetadata = [{ key: TEMPLATE_ID, value: 1337 }];
+
+      const tx = contractInstance.setTokenMetadata(defaultTokenId, newMetadata);
 
       await expect(tx).to.not.be.reverted;
 
-      const value2 = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
-      expect(value2).to.equal(1337);
+      for (const [_i, { key, value }] of newMetadata.entries()) {
+        const recordFieldValue = await contractInstance.getRecordFieldValue(defaultTokenId, key);
+        expect(recordFieldValue).to.equal(value);
+      }
     });
 
     it("should set metadata (combine)", async function () {
@@ -37,23 +42,30 @@ export function shouldSetTokenMetadata(
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner);
-      const value1 = await contractInstance.getRecordFieldValue(defaultTokenId, TEMPLATE_ID);
-      expect(value1).to.equal(defaultTemplateId);
 
-      const tx = contractInstance.setTokenMetadata(defaultTokenId, [{ key: RARITY, value: 1337 }]);
+      for (const [_i, { key, value }] of metadata.entries()) {
+        const recordFieldValue = await contractInstance.getRecordFieldValue(defaultTokenId, key);
+        expect(recordFieldValue).to.equal(value);
+      }
+
+      const newMetadata = [{ key: RARITY, value: 1337 }];
+
+      const tx = contractInstance.setTokenMetadata(defaultTokenId, newMetadata);
       await expect(tx).to.not.be.reverted;
 
-      const value2 = await contractInstance.getRecordFieldValue(defaultTokenId, RARITY);
-      expect(value2).to.equal(1337);
+      for (const [_i, { key, value }] of [...metadata, ...newMetadata].entries()) {
+        const recordFieldValue = await contractInstance.getRecordFieldValue(defaultTokenId, key);
+        expect(recordFieldValue).to.equal(value);
+      }
     });
 
     it("should fail: AccessControlUnauthorizedAccount", async function () {
       const [_owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const tx = contractInstance
-        .connect(receiver)
-        .setTokenMetadata(defaultTokenId, [{ key: TEMPLATE_ID, value: 1337 }]);
+      const newMetadata = [{ key: TEMPLATE_ID, value: 1337 }];
+
+      const tx = contractInstance.connect(receiver).setTokenMetadata(defaultTokenId, newMetadata);
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")

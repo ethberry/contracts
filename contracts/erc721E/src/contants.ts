@@ -1,1 +1,1 @@
-export const templateId = 42;
+export const templateId = 42n;

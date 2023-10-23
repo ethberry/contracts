@@ -1,4 +1,10 @@
-import { DEFAULT_ADMIN_ROLE, InterfaceId, METADATA_ROLE, MINTER_ROLE } from "@gemunion/contracts-constants";
+import {
+  DEFAULT_ADMIN_ROLE,
+  InterfaceId,
+  METADATA_ROLE,
+  MINTER_ROLE,
+  TEMPLATE_ID,
+} from "@gemunion/contracts-constants";
 import { shouldBehaveLikeAccessControl } from "@gemunion/contracts-access";
 import { shouldSupportsInterface } from "@gemunion/contracts-utils";
 
@@ -9,6 +15,7 @@ import {
   shouldBehaveLikeERC721Royalty,
 } from "../../src";
 import { deployERC721 } from "../../src/fixtures";
+import { templateId } from "../../src/contants";
 
 describe("ERC721MetaDataTest", function () {
   const factory = () => deployERC721(this.title);
@@ -18,7 +25,7 @@ describe("ERC721MetaDataTest", function () {
   shouldBehaveLikeERC721(factory);
   shouldBehaveLikeERC721Burnable(factory);
   shouldBehaveLikeERC721Royalty(factory);
-  shouldBehaveLikeERC721Metadata(factory);
+  shouldBehaveLikeERC721Metadata(factory, {}, [{ key: TEMPLATE_ID, value: templateId }]);
 
   shouldSupportsInterface(factory)([
     InterfaceId.IERC165,

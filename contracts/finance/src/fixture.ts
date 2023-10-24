@@ -12,3 +12,8 @@ export async function deployERC1363(name: string): Promise<any> {
   const factory = await ethers.getContractFactory(name);
   return factory.deploy(tokenName, tokenSymbol, amount);
 }
+
+export async function deployERC20(name: string): Promise<any> {
+  const factory = await ethers.getContractFactory(name);
+  return factory.deploy(tokenName, tokenSymbol);
+}

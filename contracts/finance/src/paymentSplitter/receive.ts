@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { WeiPerEther } from "ethers";
+import { WeiPerEther, ZeroAddress } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
@@ -33,17 +33,21 @@ export function shouldReceive(factory: () => Promise<any>) {
     });
   });
 
-  describe("receive ERC20", function () {
+  describe("receive ERC1363", function () {
     it("should receive", async function () {
-      // const [owner] = await ethers.getSigners();
+      const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
 
       const erc20Instance = await deployERC1363("ERC1363Mock");
-      const tx1 = await erc20Instance.mint(contractInstance, amount);
+      const tx1 = await erc20Instance.mint(owner, amount);
+      await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
 
-      // await expect(tx1).to.emit(contractInstance, "TransferReceived").withArgs(owner.address, amount);
-      await expect(tx1).to.not.be.reverted;
+      const tx2 = erc20Instance.transfer(contractInstance, amount);
+      await expect(tx2)
+        .to.emit(erc20Instance, "Transfer")
+        .withArgs(owner.address, await contractInstance.getAddress(), amount)
+        .to.not.emit(contractInstance, "TransferReceived");
     });
   });
 }

@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.20;
 
-import {ERC721} from  "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-import {IERC4907} from "../interfaces/IERC4907.sol";
+import { IERC4907 } from "../interfaces/IERC4907.sol";
 
 abstract contract ERC4907 is IERC4907, ERC721 {
   struct UserInfo {
@@ -21,7 +21,7 @@ abstract contract ERC4907 is IERC4907, ERC721 {
   /// @param expires  UNIX timestamp, The new user could use the NFT before expires
   function setUser(uint256 tokenId, address user, uint64 expires) public virtual {
     address from = _ownerOf(tokenId);
-    if(!_isAuthorized(from, msg.sender, tokenId)) {
+    if (!_isAuthorized(from, msg.sender, tokenId)) {
       revert ERC721InsufficientApproval(msg.sender, tokenId);
     }
     UserInfo storage info = _users[tokenId];
@@ -55,11 +55,7 @@ abstract contract ERC4907 is IERC4907, ERC721 {
     return interfaceId == type(IERC4907).interfaceId || super.supportsInterface(interfaceId);
   }
 
-  function _update(
-    address to,
-    uint256 tokenId,
-    address auth
-  ) internal virtual override returns (address) {
+  function _update(address to, uint256 tokenId, address auth) internal virtual override returns (address) {
     address previousOwner = super._update(to, tokenId, auth);
 
     if (previousOwner != to && _users[tokenId].user != address(0)) {

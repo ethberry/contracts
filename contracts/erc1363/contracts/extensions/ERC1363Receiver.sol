@@ -3,8 +3,8 @@
 
 pragma solidity ^0.8.20;
 
-import {IERC1363Receiver} from "../interfaces/IERC1363Receiver.sol";
-import {IERC1363Spender} from "../interfaces/IERC1363Spender.sol";
+import { IERC1363Receiver } from "../interfaces/IERC1363Receiver.sol";
+import { IERC1363Spender } from "../interfaces/IERC1363Spender.sol";
 
 /**
  * @dev Implementation of the {IERC1363Receiver} and {IERC1363Spender} interfaces.

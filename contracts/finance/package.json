@@ -59,7 +59,7 @@
     "prebuild": "rimraf dist && hardhat clean",
     "prepare": "npm run build",
     "preversion": "npm run build && npm run test",
-    "solhint": "solhint -f table contracts/**/*.sol contracts/**/**/*.sol",
+    "solhint": "solhint -f table contracts/**/*.sol",
     "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",

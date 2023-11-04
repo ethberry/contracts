@@ -6,14 +6,16 @@
 
 pragma solidity ^0.8.20;
 
-import {ERC721, IERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {AccessControl, AccessControlEnumerable} from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
-import {Address} from "@openzeppelin/contracts/utils/Address.sol";
+import { ERC721, IERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {
+  AccessControl,
+  AccessControlEnumerable
+} from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
+import { Address } from "@openzeppelin/contracts/utils/Address.sol";
 
+import { ERC721ABERS } from "@gemunion/contracts-erc721e/contracts/preset/ERC721ABERS.sol";
 
-import {ERC721ABERS} from "@gemunion/contracts-erc721e/contracts/preset/ERC721ABERS.sol";
-
-import {ProxyRegistry} from "./utils/ProxyRegistry.sol";
+import { ProxyRegistry } from "./utils/ProxyRegistry.sol";
 
 abstract contract ERC721OpenSea is ERC721ABERS, AccessControlEnumerable {
   event PermanentURI(string _value, uint256 indexed _id);
@@ -24,7 +26,7 @@ abstract contract ERC721OpenSea is ERC721ABERS, AccessControlEnumerable {
   error ProxyRegistryAbsent();
 
   function setProxyRegistry(address proxyRegistry) external onlyRole(DEFAULT_ADMIN_ROLE) {
-    if(address(this).code.length == 0) {
+    if (address(this).code.length == 0) {
       revert ProxyRegistryAbsent();
     }
     _proxyRegistry = ProxyRegistry(proxyRegistry);
@@ -60,7 +62,10 @@ abstract contract ERC721OpenSea is ERC721ABERS, AccessControlEnumerable {
   /**
    * @dev Overload {_grantRole} to track enumerable memberships
    */
-  function _grantRole(bytes32 role, address account) internal virtual override(AccessControl, AccessControlEnumerable) returns (bool) {
+  function _grantRole(
+    bytes32 role,
+    address account
+  ) internal virtual override(AccessControl, AccessControlEnumerable) returns (bool) {
     return super._grantRole(role, account);
   }
 

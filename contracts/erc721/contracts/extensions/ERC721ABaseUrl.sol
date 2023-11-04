@@ -6,8 +6,8 @@
 
 pragma solidity ^0.8.20;
 
-import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
-import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
+import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
+import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 
 abstract contract ERC721ABaseUrl is AccessControl {
   string internal _baseTokenURI;

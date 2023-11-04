@@ -6,10 +6,10 @@
 
 pragma solidity ^0.8.20;
 
-import {ERC165} from "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import { ERC165 } from "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
-import {ERC1363Receiver, IERC1363Receiver, IERC1363Spender} from "@gemunion/contracts-erc1363/contracts/extensions/ERC1363Receiver.sol";
-import {PaymentSplitter} from "@gemunion/contracts-utils/contracts/PaymentSplitter.sol";
+import { ERC1363Receiver, IERC1363Receiver, IERC1363Spender } from "@gemunion/contracts-erc1363/contracts/extensions/ERC1363Receiver.sol";
+import { PaymentSplitter } from "@gemunion/contracts-utils/contracts/PaymentSplitter.sol";
 
 contract SplitterWallet is PaymentSplitter, ERC165, ERC1363Receiver {
     constructor(address[] memory payees, uint256[] memory shares) PaymentSplitter(payees, shares) {}

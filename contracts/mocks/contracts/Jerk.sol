@@ -7,10 +7,12 @@
 pragma solidity ^0.8.20;
 
 contract Jerk {
+  error Error();
+
   /**
    * @dev Rejects any incoming ETH transfers to this contract address
    */
   receive() external payable {
-    revert();
+    revert Error();
   }
 }

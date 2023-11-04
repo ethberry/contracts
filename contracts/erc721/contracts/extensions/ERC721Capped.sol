@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.20;
 
-import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 abstract contract ERC721Capped is ERC721 {
   uint256 internal _cap;
@@ -35,11 +35,7 @@ abstract contract ERC721Capped is ERC721 {
     return _allTokens;
   }
 
-  function _update(
-    address to,
-    uint256 tokenId,
-    address auth
-  ) internal virtual override returns (address)  {
+  function _update(address to, uint256 tokenId, address auth) internal virtual override returns (address) {
     address from = _ownerOf(tokenId);
 
     // mint
@@ -58,7 +54,7 @@ abstract contract ERC721Capped is ERC721 {
   }
 
   function _increaseBalance(address account, uint128 value) internal virtual override {
-    if(totalSupply() + value > cap()){
+    if (totalSupply() + value > cap()) {
       revert ERC721ExceededCap(totalSupply() + value, cap());
     }
     _allTokens += value;

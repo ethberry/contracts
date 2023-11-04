@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.20;
 
-import {VRFConsumerBase} from "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBase.sol";
-import {VRFRequestIDBase} from "@chainlink/contracts/src/v0.8/vrf/VRFRequestIDBase.sol";
-import {LinkTokenInterface} from "@chainlink/contracts/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
+import { VRFConsumerBase } from "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBase.sol";
+import { VRFRequestIDBase } from "@chainlink/contracts/src/v0.8/vrf/VRFRequestIDBase.sol";
+import { LinkTokenInterface } from "@chainlink/contracts/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
 
 contract VRFCoordinatorMock is VRFRequestIDBase {
   LinkTokenInterface public LINK;
@@ -32,6 +32,7 @@ contract VRFCoordinatorMock is VRFRequestIDBase {
     // it doesn't work in the same transaction
     // callBackWithRandomness(_requestId, uint256(keccak256(abi.encode(123))), sender);
   }
+
   function callBackWithRandomness(bytes32 requestId, uint256 randomness, address consumerContract) public {
     VRFConsumerBase v = VRFConsumerBase(consumerContract);
     bytes memory resp = abi.encodeWithSelector(v.rawFulfillRandomness.selector, requestId, randomness);

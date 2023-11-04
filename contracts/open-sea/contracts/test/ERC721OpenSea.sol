@@ -6,9 +6,9 @@
 
 pragma solidity ^0.8.20;
 
-import {ERC721ABERS} from "@gemunion/contracts-erc721e/contracts/preset/ERC721ABERS.sol";
+import { ERC721ABERS } from "@gemunion/contracts-erc721e/contracts/preset/ERC721ABERS.sol";
 
-import {ERC721OpenSea} from "../extensions/ERC721OpenSea.sol";
+import { ERC721OpenSea } from "../extensions/ERC721OpenSea.sol";
 
 contract ERC721OpenSeaTest is ERC721OpenSea {
   constructor(

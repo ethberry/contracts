@@ -6,13 +6,12 @@
 
 pragma solidity ^0.8.20;
 
-import {ERC721} from  "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {ERC721Pausable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
+import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import { ERC721Pausable } from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
 
-import {PAUSER_ROLE} from "@gemunion/contracts-utils/contracts/roles.sol";
+import { PAUSER_ROLE } from "@gemunion/contracts-utils/contracts/roles.sol";
 
-import {ERC721Capped} from "../extensions/ERC721Capped.sol";
-import {ERC721ABC} from "./ERC721ABC.sol";
+import { ERC721ABC } from "./ERC721ABC.sol";
 
 contract ERC721ABCP is ERC721ABC, ERC721Pausable {
   constructor(string memory name, string memory symbol, uint256 cap) ERC721ABC(name, symbol, cap) {

@@ -6,10 +6,10 @@
 
 pragma solidity ^0.8.20;
 
-import {ERC721} from  "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {ERC721Consecutive} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Consecutive.sol";
+import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import { ERC721Consecutive } from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Consecutive.sol";
 
-import {ERC721ABCR} from "@gemunion/contracts-erc721/contracts/preset/ERC721ABCR.sol";
+import { ERC721ABCR } from "@gemunion/contracts-erc721/contracts/preset/ERC721ABCR.sol";
 
 contract ERC721ABCRK is ERC721ABCR, ERC721Consecutive {
   constructor(

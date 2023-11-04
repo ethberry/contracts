@@ -6,9 +6,7 @@
 
 pragma solidity ^0.8.20;
 
-import {VRFConsumerBaseV2} from "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
-
-import {ChainLinkBaseV2} from"./ChainLinkBaseV2.sol";
+import { ChainLinkBaseV2 } from "./ChainLinkBaseV2.sol";
 
 abstract contract ChainLinkBinanceV2 is ChainLinkBaseV2 {
   constructor(

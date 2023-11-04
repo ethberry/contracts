@@ -6,10 +6,10 @@
 
 pragma solidity ^0.8.20;
 
-import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {ERC721ARoyalty} from "@gemunion/contracts-erc721/contracts/extensions/ERC721ARoyalty.sol";
+import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import { ERC721ARoyalty } from "@gemunion/contracts-erc721/contracts/extensions/ERC721ARoyalty.sol";
 
-import {ERC721ABE} from "./ERC721ABE.sol";
+import { ERC721ABE } from "./ERC721ABE.sol";
 
 contract ERC721ABER is ERC721ABE, ERC721ARoyalty {
   constructor(
@@ -28,7 +28,7 @@ contract ERC721ABER is ERC721ABE, ERC721ARoyalty {
     address to,
     uint256 tokenId,
     address auth
-  ) internal virtual override(ERC721, ERC721ABE) returns  (address) {
+  ) internal virtual override(ERC721, ERC721ABE) returns (address) {
     return super._update(to, tokenId, auth);
   }
 

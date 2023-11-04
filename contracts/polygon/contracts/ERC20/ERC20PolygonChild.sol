@@ -6,10 +6,10 @@
 
 pragma solidity ^0.8.2;
 
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
+import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 
-import {DEPOSITOR_ROLE} from "@gemunion/contracts-utils/contracts/roles.sol";
+import { DEPOSITOR_ROLE } from "@gemunion/contracts-utils/contracts/roles.sol";
 
 abstract contract ERC20PolygonChild is ERC20, AccessControl {
   constructor() {

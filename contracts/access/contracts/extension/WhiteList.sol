@@ -6,9 +6,9 @@
 
 pragma solidity ^0.8.20;
 
-import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
+import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 
-import {IWhiteList} from "./interfaces/IWhiteList.sol";
+import { IWhiteList } from "./interfaces/IWhiteList.sol";
 
 abstract contract WhiteList is IWhiteList, AccessControl {
   mapping(address => bool) whiteList;

@@ -12,7 +12,7 @@
     "@gemunion/contracts-erc721e": "^5.0.17",
     "@gemunion/contracts-mocks": "^5.0.17",
     "@gemunion/contracts-utils": "^5.0.17",
-    "@nomicfoundation/hardhat-toolbox": "3.0.0"
+    "@nomicfoundation/hardhat-toolbox": "4.0.0"
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {

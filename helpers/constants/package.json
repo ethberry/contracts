@@ -5,8 +5,8 @@
     "url": "https://gemunion.io/"
   },
   "devDependencies": {
-    "dotenv": "16.3.1",
-    "ethers": "6.9.1",
+    "dotenv": "16.4.1",
+    "ethers": "6.10.0",
     "rimraf": "5.0.5"
   },
   "peerDependencies": {

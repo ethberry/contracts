@@ -8,7 +8,8 @@
     "@gemunion/contracts-constants": "^5.0.17",
     "@gemunion/contracts-erc1363": "^5.0.17",
     "@gemunion/contracts-utils": "^5.0.17",
-    "@nomicfoundation/hardhat-toolbox": "4.0.0"
+    "@nomicfoundation/hardhat-toolbox": "4.0.0",
+    "hardhat": "2.20.1"
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
@@ -21,7 +22,6 @@
     "chai": "4.4.1",
     "dotenv": "16.4.5",
     "ethers": "6.11.1",
-    "hardhat": "2.20.1",
     "hardhat-gas-reporter": "1.0.10",
     "rimraf": "5.0.5",
     "solidity-coverage": "0.8.10",

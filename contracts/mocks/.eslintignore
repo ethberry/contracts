@@ -1,7 +1,6 @@
-/typechain-types
-/besu
-/cache
-/artifacts
-/coverage
-
 dist/*
+coverage/*
+
+typechain-types/*
+cache/*
+artifacts/*

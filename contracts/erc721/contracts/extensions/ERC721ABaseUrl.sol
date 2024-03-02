@@ -12,6 +12,9 @@ import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol"
 abstract contract ERC721ABaseUrl is AccessControl {
   string internal _baseTokenURI;
 
+  event BaseURIUpdate(string baseTokenURI);
+
+
   constructor(string memory baseTokenURI) {
     _setBaseURI(baseTokenURI);
   }
@@ -30,5 +33,6 @@ abstract contract ERC721ABaseUrl is AccessControl {
 
   function setBaseURI(string memory baseTokenURI) external onlyRole(DEFAULT_ADMIN_ROLE) {
     _setBaseURI(baseTokenURI);
+    emit BaseURIUpdate(baseTokenURI);
   }
 }

@@ -40,7 +40,7 @@ jobs:
 
     steps:
       - name: clean package
-        uses: actions/delete-package-versions@v4
+        uses: actions/delete-package-versions@v5
         with:
           package-name: ${{ matrix.package }}
           package-type: 'npm'

@@ -17,6 +17,9 @@
   "engines": {
     "node": ">=18"
   },
+  "files": [
+    "dist/*"
+  ],
   "keywords": [],
   "license": "UNLICENSED",
   "main": "./dist/index.js",
@@ -25,11 +28,12 @@
     "ethers": "^5.0.0"
   },
   "publishConfig": {
+    "access": "public",
     "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gemunion/framework"
+    "url": "https://github.com/gemunion/contracts"
   },
   "scripts": {
     "build": "tsc",
@@ -38,6 +42,7 @@
     "prepublish": "npm run build",
     "test": "jest --config=jest.config.json --detectOpenHandles --runInBand --forceExit"
   },
+  "sideEffects": false,
   "title": "-=Gemun Ion Studio=-",
   "types": "./dist/index.d.ts",
   "version": "1.0.1"

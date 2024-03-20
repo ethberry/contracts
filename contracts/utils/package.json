@@ -5,8 +5,8 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
-    "@gemunion/contracts-constants": "^5.0.20",
-    "@gemunion/contracts-mocks": "^5.0.20",
+    "@gemunion/contracts-constants": "^5.0.21",
+    "@gemunion/contracts-mocks": "^5.0.21",
     "@nomicfoundation/hardhat-toolbox": "4.0.0"
   },
   "description": "Collection of contracts and presets",
@@ -61,5 +61,5 @@
     "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",
-  "version": "5.0.20"
+  "version": "5.0.21"
 }

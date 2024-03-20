@@ -1,0 +1,11 @@
+{
+  "collectCoverage": true,
+  "collectCoverageFrom": ["src/**/*.{js,jsx,ts,tsx}"],
+  "coverageDirectory": "../coverage",
+  "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "json"],
+  "rootDir": "src",
+  "testEnvironment": "node",
+  "testMatch": ["**/*.spec.ts"],
+  "preset": "ts-jest",
+  "verbose": true
+}

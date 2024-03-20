@@ -1,0 +1,44 @@
+{
+  "author": {
+    "email": "TrejGun@gmail.com",
+    "name": "TrejGun",
+    "url": "https://gemunion.io/"
+  },
+  "bugs": {
+    "url": "https://github.com/gemunion/framework/issues"
+  },
+  "devDependencies": {
+    "@types/jest": "29.5.12",
+    "ethers": "6.11.1",
+    "jest": "29.7.0",
+    "jest-environment-node": "29.7.0",
+    "ts-jest": "29.1.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [],
+  "license": "UNLICENSED",
+  "main": "./dist/index.js",
+  "name": "@gemunion/traits-v6",
+  "peerDependencies": {
+    "ethers": "^6.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gemunion/framework"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint . --fix",
+    "prebuild": "rimraf dist",
+    "prepublish": "npm run build",
+    "test": "jest --config=jest.config.json --detectOpenHandles --runInBand --forceExit"
+  },
+  "title": "-=Gemun Ion Studio=-",
+  "types": "./dist/index.d.ts",
+  "version": "1.0.0"
+}

@@ -1,3 +1,5 @@
+// https://besu.hyperledger.org/private-networks/reference/accounts-for-testing
+
 export const wallets = [
   "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
   "0x627306090abaB3A6e1400e9345bC60c78a8BEf57",
@@ -11,5 +13,3 @@ export const privateKeys = [
   "ae6ae8e5ccbfb04590405997ee2d52d2b330726137b875053c36d94e974d162f",
 ];
 export const privateKey = privateKeys[0];
-
-export const testChainId = 13378;

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
-import { deployContract } from "@gemunion/contracts-mocks";
+import { deployContract } from "@gemunion/contracts-utils";
 import { amount } from "@gemunion/contracts-constants";
 
 import { deployERC1363, deployERC20 } from "../fixture";

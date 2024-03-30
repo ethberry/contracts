@@ -1,5 +1,4 @@
-import { deployContract } from "@gemunion/contracts-mocks";
-
+import { deployContract } from "../src";
 import { shouldBehaveLikeMetadata } from "../src/metadata";
 
 describe("GeneralizedCollectionTest", function () {

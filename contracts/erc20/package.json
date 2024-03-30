@@ -6,8 +6,8 @@
   },
   "dependencies": {
     "@gemunion/contracts-access": "^5.0.22",
-    "@gemunion/contracts-constants": "^5.0.22",
-    "@gemunion/contracts-erc1363": "^5.0.22",
+    "@gemunion/contracts-constants": "^5.0.23",
+    "@gemunion/contracts-erc1363": "^5.0.23",
     "@gemunion/contracts-mocks": "^5.0.22",
     "@gemunion/contracts-utils": "^5.0.22",
     "@nomicfoundation/hardhat-ignition": "0.15.0",
@@ -79,5 +79,5 @@
     "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",
-  "version": "5.0.21"
+  "version": "5.0.22"
 }

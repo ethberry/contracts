@@ -2,13 +2,13 @@
 pragma solidity ^0.8.4;
 
 import { LinkTokenInterface } from "@chainlink/contracts/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
-import { BlockhashStoreInterface } from"@chainlink/contracts/src/v0.8/interfaces/BlockhashStoreInterface.sol";
-import { AggregatorV3Interface } from"@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import { AggregatorV3Interface } from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
+import { BlockhashStoreInterface } from "@chainlink/contracts/src/v0.8/vrf/interfaces/BlockhashStoreInterface.sol";
 // import { VRFCoordinatorV2Interface } from "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
-import { TypeAndVersionInterface } from"@chainlink/contracts/src/v0.8/interfaces/TypeAndVersionInterface.sol";
-import { IERC677Receiver } from"@chainlink/contracts/src/v0.8/shared/interfaces/IERC677Receiver.sol";
-import { VRF } from"@chainlink/contracts/src/v0.8/vrf/VRF.sol";
-import { ConfirmedOwner } from"@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
+import { TypeAndVersionInterface } from "@chainlink/contracts/src/v0.8/interfaces/TypeAndVersionInterface.sol";
+import { IERC677Receiver } from "@chainlink/contracts/src/v0.8/shared/interfaces/IERC677Receiver.sol";
+import { VRF } from "@chainlink/contracts/src/v0.8/vrf/VRF.sol";
+import { ConfirmedOwner } from "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
 import { VRFConsumerBaseV2 } from "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
 
 contract VRFCoordinatorV2Mock is

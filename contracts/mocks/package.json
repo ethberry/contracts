@@ -24,7 +24,7 @@
     "chai": "4.4.1",
     "dotenv": "16.4.5",
     "ethers": "6.11.1",
-    "hardhat-gas-reporter": "1.0.10",
+    "hardhat-gas-reporter": "2.0.2",
     "rimraf": "5.0.5",
     "solidity-coverage": "0.8.11",
     "typechain": "8.3.2"
@@ -45,7 +45,7 @@
     "@typechain/hardhat": "^9.0.0",
     "chai": "^4.0.0",
     "ethers": "^6.0.0",
-    "hardhat-gas-reporter": "^1.0.0",
+    "hardhat-gas-reporter": "^2.0.0",
     "solidity-coverage": "^0.8.0",
     "typechain": "^8.0.0"
   },

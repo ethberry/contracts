@@ -1,7 +1,6 @@
 import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
 import { shouldBehaveLikeAccessControl } from "@gemunion/contracts-access";
-import { shouldSupportsInterface } from "@gemunion/contracts-utils";
-import { deployContract } from "@gemunion/contracts-mocks";
+import { deployContract, shouldSupportsInterface } from "@gemunion/contracts-utils";
 import { shouldBehaveLikeERC721 } from "@gemunion/contracts-erc721e";
 
 import { deployERC721 } from "../../src/fixtures";

@@ -17,7 +17,7 @@
   },
   "description": "Collection of contracts and presets",
   "devDependencies": {
-    "@chainlink/contracts": "1.1.0",
+    "@chainlink/contracts": "1.1.1",
     "@nomicfoundation/hardhat-chai-matchers": "2.0.6",
     "@nomicfoundation/hardhat-ethers": "3.0.6",
     "@nomicfoundation/hardhat-network-helpers": "1.0.10",
@@ -33,7 +33,7 @@
     "dotenv": "16.4.5",
     "ethers": "6.12.1",
     "hardhat": "2.22.4",
-    "hardhat-gas-reporter": "2.1.1",
+    "hardhat-gas-reporter": "2.2.0",
     "hardhat-storage-layout": "0.1.7",
     "solhint": "4.5.4",
     "solhint-plugin-prettier": "0.1.0",

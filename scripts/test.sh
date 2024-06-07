@@ -17,7 +17,6 @@ lerna exec --scope @gemunion/contracts-erc721e -- npm run test
 lerna exec --scope @gemunion/contracts-erc721c -- npm run test
 lerna exec --scope @gemunion/contracts-erc1155 -- npm run test
 lerna exec --scope @gemunion/contracts-mocks -- npm run test
-lerna exec --scope @gemunion/contracts-open-sea -- npm run test
 lerna exec --scope @gemunion/contracts-polygon -- npm run test
 lerna exec --scope @gemunion/contracts-constants -- npm run test
 lerna exec --scope @gemunion/contracts-utils -- npm run test

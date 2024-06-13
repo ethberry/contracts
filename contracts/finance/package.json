@@ -29,7 +29,7 @@
     "ethers": "6.13.0",
     "hardhat": "2.22.5",
     "hardhat-gas-reporter": "2.2.0",
-    "solhint": "4.5.4",
+    "solhint": "5.0.1",
     "solhint-plugin-prettier": "0.1.0",
     "solidity-coverage": "0.8.12",
     "ts-node": "10.9.2",

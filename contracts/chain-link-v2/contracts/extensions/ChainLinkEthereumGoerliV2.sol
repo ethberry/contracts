@@ -8,7 +8,7 @@ pragma solidity ^0.8.20;
 
 import { ChainLinkBaseV2 } from "./ChainLinkBaseV2.sol";
 
-abstract contract ChainLinkPolygonTestnetV2 is ChainLinkBaseV2 {
+abstract contract ChainLinkEthereumGoerliV2 is ChainLinkBaseV2 {
   constructor(
     uint64 subId,
     uint16 minReqConfs,
@@ -16,8 +16,8 @@ abstract contract ChainLinkPolygonTestnetV2 is ChainLinkBaseV2 {
     uint32 numWords
   )
     ChainLinkBaseV2(
-      address(0x7a1BaC17Ccc5b313516C5E16fb24f7659aA5ebed), // vrfCoordinator Polygon testnet
-        0x4b09e658ed251bcafeebbc69400383d49f344ace09b9576fe248bb02c003fe9f, // key hash 500 gwei
+      address(0x199316A5ab4103f8d3e79DFd5A83a9C397694cB4), // vrfCoordinatorV2 Ethereum Goerly
+      0x2ed0feb3e7fd2022120aa84fab1945545a9f2ffc9076fd6156fa96eaff4c1311, // keyHash
       subId,
       minReqConfs,
       callbackGasLimit,
@@ -25,4 +25,3 @@ abstract contract ChainLinkPolygonTestnetV2 is ChainLinkBaseV2 {
     )
   {}
 }
-//LINK_ADDR=0x326C977E6efc84E512bB9C30f76E30c160eD06FB

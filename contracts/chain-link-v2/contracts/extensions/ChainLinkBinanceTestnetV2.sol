@@ -25,4 +25,3 @@ abstract contract ChainLinkBinanceTestnetV2 is ChainLinkBaseV2 {
     )
   {}
 }
-//LINK_ADDR=0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06

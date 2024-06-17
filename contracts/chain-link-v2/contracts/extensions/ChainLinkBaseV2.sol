@@ -17,6 +17,9 @@ abstract contract ChainLinkBaseV2 is VRFConsumerBaseV2 {
   uint32 internal _numWords;
   VRFCoordinatorV2Interface COORDINATOR;
 
+  error InvalidSubscription();
+  event VrfSubscriptionSet(uint64 subId);
+
   constructor(
     address vrf,
     bytes32 keyHash,
@@ -34,7 +37,20 @@ abstract contract ChainLinkBaseV2 is VRFConsumerBaseV2 {
   }
 
   function getRandomNumber() internal virtual returns (uint256 requestId) {
+    if (_subId == 0) {
+      revert InvalidSubscription();
+    }
+
     requestId = COORDINATOR.requestRandomWords(_keyHash, _subId, _minReqConfs, _callbackGasLimit, _numWords);
     return requestId;
+  }
+
+  // OWNER MUST SET A VRF SUBSCRIPTION ID AFTER DEPLOY
+  function setSubscriptionId(uint64 subId) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    if (subId == 0) {
+      revert InvalidSubscription();
+    }
+    _subId = subId;
+    emit VrfSubscriptionSet(_subId);
   }
 }

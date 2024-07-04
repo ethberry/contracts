@@ -8,8 +8,6 @@ export async function deployERC721(name: string): Promise<any> {
 
   if (name === "ERC721BaseUrlTest") {
     return erc721Factory.deploy(tokenName, tokenSymbol, royalty, baseTokenURI);
-  } else if (name === "ERC721DropboxTest") {
-    return erc721Factory.deploy(tokenName, tokenSymbol, tokenMaxAmount, royalty);
   } else {
     const args: Array<BigNumberish> = [tokenName, tokenSymbol];
     const parts = name.substr(6);

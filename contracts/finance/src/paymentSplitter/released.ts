@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { WeiPerEther } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
 
@@ -15,18 +14,20 @@ export function shouldGetReleased(factory: () => Promise<any>) {
 
       const tx1 = owner.sendTransaction({
         to: await contractInstance.getAddress(),
-        value: WeiPerEther,
+        value: amount,
       });
-      await expect(tx1).to.emit(contractInstance, "PaymentReceived").withArgs(owner.address, WeiPerEther);
+      await expect(tx1).to.emit(contractInstance, "PaymentReceived").withArgs(owner.address, amount);
 
       const released1 = await contractInstance.released(owner);
       expect(released1).to.equal(0);
 
       const tx2 = contractInstance.release(owner);
-      await expect(tx2).to.emit(contractInstance, "PaymentReleased").withArgs(owner.address, WeiPerEther);
+      await expect(tx2)
+        .to.emit(contractInstance, "PaymentReleased")
+        .withArgs(owner.address, amount / 2n);
 
       const released2 = await contractInstance.released(owner);
-      expect(released2).to.equal(WeiPerEther);
+      expect(released2).to.equal(amount / 2n);
     });
 
     it("should get released (0)", async function () {
@@ -55,10 +56,10 @@ export function shouldGetReleased(factory: () => Promise<any>) {
       const tx2 = contractInstance["release(address,address)"](erc20Instance, owner);
       await expect(tx2)
         .to.emit(contractInstance, "ERC20PaymentReleased")
-        .withArgs(await erc20Instance.getAddress(), owner.address, amount);
+        .withArgs(await erc20Instance.getAddress(), owner.address, amount / 2n);
 
       const released2 = await contractInstance["released(address,address)"](erc20Instance, owner);
-      expect(released2).to.equal(amount);
+      expect(released2).to.equal(amount / 2n);
     });
 
     it("should get released (0)", async function () {

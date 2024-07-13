@@ -2,33 +2,43 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
-import { deployContract } from "@gemunion/contracts-utils";
 import { amount } from "@gemunion/contracts-constants";
 
 import { deployERC1363, deployERC20 } from "../fixture";
 
 export function shouldReceive(factory: () => Promise<any>) {
+  describe("receive NATIVE", function () {
+    it("should receive", async function () {
+      const [owner] = await ethers.getSigners();
+
+      const contractInstance = await factory();
+
+      const tx = owner.sendTransaction({
+        to: await contractInstance.getAddress(),
+        value: amount,
+      });
+
+      await expect(tx).to.emit(contractInstance, "PaymentReceived").withArgs(owner.address, amount);
+      await expect(tx).to.changeEtherBalances([owner, contractInstance], [-amount, amount]);
+    });
+  });
+
   describe("receive ERC20", function () {
     it("should receive", async function () {
       const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
-      const exchangeInstance = await deployContract("ExchangeMock");
 
       const erc20Instance = await deployERC20("ERC20Mock");
+
       const tx1 = await erc20Instance.mint(owner, amount);
       await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
 
-      const tx2 = erc20Instance.approve(exchangeInstance, amount);
-      await expect(tx2)
-        .to.emit(erc20Instance, "Approval")
-        .withArgs(owner.address, await exchangeInstance.getAddress(), amount);
-
-      const tx3 = exchangeInstance.spendFrom(contractInstance, erc20Instance, amount);
+      const tx3 = erc20Instance.transfer(contractInstance, amount);
       await expect(tx3)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(owner.address, await contractInstance.getAddress(), amount);
-      await expect(tx3).to.not.emit(contractInstance, "TransferReceived");
+        .withArgs(owner.address, await contractInstance.getAddress(), amount)
+        .to.not.emit(contractInstance, "TransferReceived");
     });
   });
 
@@ -37,24 +47,17 @@ export function shouldReceive(factory: () => Promise<any>) {
       const [owner] = await ethers.getSigners();
 
       const contractInstance = await factory();
-      const exchangeInstance = await deployContract("ExchangeMock");
 
       const erc20Instance = await deployERC1363("ERC1363Mock");
       const tx1 = await erc20Instance.mint(owner, amount);
       await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
 
-      const tx2 = erc20Instance.approve(exchangeInstance, amount);
-      await expect(tx2)
-        .to.emit(erc20Instance, "Approval")
-        .withArgs(owner.address, await exchangeInstance.getAddress(), amount);
-
-      const tx3 = exchangeInstance.spendFrom(contractInstance, erc20Instance, amount);
+      const tx3 = erc20Instance.transferAndCall(contractInstance, amount);
       await expect(tx3)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(owner.address, await contractInstance.getAddress(), amount);
-      await expect(tx3)
+        .withArgs(owner.address, await contractInstance.getAddress(), amount)
         .to.emit(contractInstance, "TransferReceived")
-        .withArgs(await exchangeInstance.getAddress(), owner.address, amount, "0x");
+        .withArgs(owner.address, owner.address, amount, "0x");
     });
   });
 }

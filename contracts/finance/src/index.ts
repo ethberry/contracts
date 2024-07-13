@@ -1,3 +1,3 @@
 import "@nomicfoundation/hardhat-toolbox";
 
-export * from "./paymentSplitter";
+export * from "./splitterWallet";

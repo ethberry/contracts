@@ -25,7 +25,7 @@
     "dotenv": "16.4.5",
     "ethers": "6.13.1",
     "hardhat-gas-reporter": "2.2.0",
-    "rimraf": "5.0.8",
+    "rimraf": "5.0.9",
     "solidity-coverage": "0.8.12",
     "typechain": "8.3.2"
   },

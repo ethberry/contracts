@@ -1,7 +1,7 @@
 import "@nomicfoundation/hardhat-toolbox";
 import { deployContract } from "@gemunion/contracts-utils";
 
-export async function deployWallet(name = "FullWallet") {
+export async function deployWallet(name = "AllTypesWallet") {
   return deployContract(name);
 }
 

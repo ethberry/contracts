@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.20;
 
-import { FullWallet } from "@gemunion/contracts-mocks/contracts/Wallet.sol";
+import { AllTypesWallet } from "@gemunion/contracts-mocks/contracts/Wallet.sol";
 import { Jerk } from "@gemunion/contracts-mocks/contracts/Jerk.sol";
 
 import { VRFCoordinatorMock } from "@gemunion/contracts-chain-link/contracts/mocks/VRFCoordinator.sol";

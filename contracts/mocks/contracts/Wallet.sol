@@ -17,11 +17,16 @@ import {
 } from "@gemunion/contracts-erc1363/contracts/extensions/ERC1363Receiver.sol";
 
 /**
+ * @dev NativeWallet contract can receive NATIVE tokens.
+ */
+contract NativeWallet {
+  receive() external payable virtual {}
+}
+
+/**
  * @dev CoinWallet contract can receive NATIVE and ERC20 tokens.
  */
-contract CoinWallet is ERC165, ERC1363Receiver {
-  receive() external payable virtual {}
-
+contract CoinWallet is ERC165, ERC1363Receiver, NativeWallet {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
@@ -34,7 +39,7 @@ contract CoinWallet is ERC165, ERC1363Receiver {
 }
 
 /**
- * @dev NftWallet contract can receive ERC721, ERC998 and ERC1155 tokens.
+ * @dev NftWallet contract can receive ERC721, ERC998 tokens.
  */
 contract NftWallet is ERC165, ERC721Holder {
   /**
@@ -46,9 +51,9 @@ contract NftWallet is ERC165, ERC721Holder {
 }
 
 /**
- * @dev SemiCoinWallet contract can receive ERC721, ERC998 and ERC1155 tokens.
+ * @dev SemiCoinWallet contract can receive NATIVE, ERC20 and ERC1155 tokens.
  */
-contract SemiCoinWallet is ERC165, CoinWallet, ERC1155Holder {
+contract SemiCoinWallet is ERC165, NativeWallet, CoinWallet, ERC1155Holder {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
@@ -72,19 +77,7 @@ contract SemiNftWallet is ERC165, NftWallet, ERC1155Holder {
 }
 
 /**
- * @dev AllTypesWallet contract can receive NATIVE, ERC20, ERC721, ERC998 and ERC1155 tokens.
- */
-contract AllTypesWallet is CoinWallet, SemiNftWallet {
-  /**
-   * @dev See {IERC165-supportsInterface}.
-   */
-  function supportsInterface(bytes4 interfaceId) public view virtual override(CoinWallet, SemiNftWallet) returns (bool) {
-    return super.supportsInterface(interfaceId);
-  }
-}
-
-/**
- * @dev NotNativeDto contract can receive ERC20, ERC721, ERC998 and ERC1155 tokens.
+ * @dev NotNativeWallet contract can receive ERC20, ERC721, ERC998 and ERC1155 tokens.
  */
 contract NotNativeDto is CoinWallet, SemiNftWallet {
   /**
@@ -95,6 +88,18 @@ contract NotNativeDto is CoinWallet, SemiNftWallet {
     revert();
   }
 
+  /**
+   * @dev See {IERC165-supportsInterface}.
+   */
+  function supportsInterface(bytes4 interfaceId) public view virtual override(CoinWallet, SemiNftWallet) returns (bool) {
+    return super.supportsInterface(interfaceId);
+  }
+}
+
+/**
+ * @dev AllTypesWallet contract can receive NATIVE, ERC20, ERC721, ERC998 and ERC1155 tokens.
+ */
+contract AllTypesWallet is CoinWallet, SemiNftWallet {
   /**
    * @dev See {IERC165-supportsInterface}.
    */

@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { deployWallet } from "@gemunion/contracts-mocks";
+import { deployHolder } from "@gemunion/contracts-finance";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
@@ -14,7 +14,7 @@ export function shouldBehaveLikeERC721Enumerable(factory: () => Promise<any>, op
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc721ReceiverInstance = await deployWallet();
+      const erc721ReceiverInstance = await deployHolder();
 
       await mint(contractInstance, owner, owner);
       const tx = contractInstance.safeTransferFrom(owner, erc721ReceiverInstance, 0);

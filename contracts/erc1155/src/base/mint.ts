@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
 import { amount, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
-import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
+import { deployRejector, deployHolder } from "@gemunion/contracts-finance";
 
 import type { IERC1155Options } from "../shared/defaultMint";
 import { defaultMintERC1155 } from "../shared/defaultMint";
@@ -29,7 +29,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc1155ReceiverInstance = await deployWallet();
+      const erc1155ReceiverInstance = await deployHolder();
 
       const tx1 = mint(contractInstance, owner, erc1155ReceiverInstance, tokenId, amount, "0x");
       await expect(tx1)
@@ -44,7 +44,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc1155NonReceiverInstance = await deployJerk();
+      const erc1155NonReceiverInstance = await deployRejector();
 
       const tx = mint(contractInstance, owner, erc1155NonReceiverInstance, tokenId, amount, "0x");
       await expect(tx)

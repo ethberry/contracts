@@ -6,5 +6,4 @@
 
 pragma solidity ^0.8.20;
 
-import { AllTypesWallet } from "@gemunion/contracts-mocks/contracts/Wallet.sol";
-import { Jerk } from "@gemunion/contracts-mocks/contracts/Jerk.sol";
+import { AllTypesHolder, NativeRejector } from "@gemunion/contracts-finance/contracts/Holder.sol";

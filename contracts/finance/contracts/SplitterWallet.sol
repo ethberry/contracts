@@ -8,13 +8,9 @@ pragma solidity ^0.8.20;
 
 import { ERC165 } from "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
-import { CoinWallet, NativeWallet } from "@gemunion/contracts-mocks/contracts/Wallet.sol";
-import { PaymentSplitter } from "@gemunion/contracts-utils/contracts/PaymentSplitter.sol";
+import { PaymentSplitter } from "./PaymentSplitter.sol";
+import { CoinHolder } from "./Holder.sol";
 
-contract SplitterWallet is PaymentSplitter, CoinWallet {
+contract SplitterWallet is PaymentSplitter, CoinHolder {
    constructor(address[] memory payees, uint256[] memory shares) PaymentSplitter (payees, shares) { }
-
-   receive() external payable override(PaymentSplitter, NativeWallet) {
-    emit PaymentReceived(_msgSender(), msg.value);
-   }
 }

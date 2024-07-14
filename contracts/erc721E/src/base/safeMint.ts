@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
 import { InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
-import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
+import { deployRejector, deployHolder } from "@gemunion/contracts-finance";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultSafeMintERC721 } from "../shared/defaultMint";
@@ -27,7 +27,7 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Enum
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc721ReceiverInstance = await deployWallet();
+      const erc721ReceiverInstance = await deployHolder();
 
       const tx = safeMint(contractInstance, owner, erc721ReceiverInstance);
       await expect(tx)
@@ -61,7 +61,7 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Enum
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc721NonReceiverInstance = await deployJerk();
+      const erc721NonReceiverInstance = await deployRejector();
 
       const tx = safeMint(contractInstance, owner, erc721NonReceiverInstance);
       await expect(tx)

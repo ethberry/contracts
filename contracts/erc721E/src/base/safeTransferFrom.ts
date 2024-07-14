@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
-import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
+import { deployRejector, deployHolder } from "@gemunion/contracts-finance";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
@@ -49,7 +49,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc721ReceiverInstance = await deployWallet();
+      const erc721ReceiverInstance = await deployHolder();
 
       await mint(contractInstance, owner, owner);
       const tx = contractInstance.safeTransferFrom(owner, erc721ReceiverInstance, defaultTokenId);
@@ -69,7 +69,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc721ReceiverInstance = await deployWallet();
+      const erc721ReceiverInstance = await deployHolder();
 
       await mint(contractInstance, owner, owner);
       await contractInstance.approve(receiver, defaultTokenId);
@@ -102,7 +102,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
     it("should fail: ERC721InvalidReceiver (NonReceiver)", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc721NonReceiverInstance = await deployJerk();
+      const erc721NonReceiverInstance = await deployRejector();
 
       await mint(contractInstance, owner, owner);
       const tx = contractInstance.safeTransferFrom(owner, erc721NonReceiverInstance, defaultTokenId);

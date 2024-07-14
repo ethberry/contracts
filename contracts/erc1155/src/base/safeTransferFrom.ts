@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
-import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
+import { deployRejector, deployHolder } from "@gemunion/contracts-finance";
 
 import type { IERC1155Options } from "../shared/defaultMint";
 import { defaultMintERC1155 } from "../shared/defaultMint";
@@ -53,7 +53,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc1155ReceiverInstance = await deployWallet();
+      const erc1155ReceiverInstance = await deployHolder();
 
       await mint(contractInstance, owner, owner, tokenId, amount, "0x");
       const tx = contractInstance.safeTransferFrom(owner, erc1155ReceiverInstance, tokenId, amount, "0x");
@@ -72,7 +72,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc1155ReceiverInstance = await deployWallet();
+      const erc1155ReceiverInstance = await deployHolder();
 
       await mint(contractInstance, owner, owner, tokenId, amount, "0x");
       await contractInstance.setApprovalForAll(receiver, true);
@@ -109,7 +109,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc1155NonReceiverInstance = await deployJerk();
+      const erc1155NonReceiverInstance = await deployRejector();
 
       await mint(contractInstance, owner, owner, tokenId, amount, "0x");
       const tx = contractInstance.safeTransferFrom(owner, erc1155NonReceiverInstance, tokenId, amount, "0x");

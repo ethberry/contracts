@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
 import { InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
-import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
+import { deployRejector, deployHolder } from "@gemunion/contracts-finance";
 
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultSafeMintERC721 } from "../shared/defaultMint";
@@ -28,7 +28,7 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
     it("should mint to receiver contract", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc721ReceiverInstance = await deployWallet();
+      const erc721ReceiverInstance = await deployHolder();
 
       const tx = safeMint(contractInstance, owner, erc721ReceiverInstance, batchSize + tokenId);
       await expect(tx)
@@ -42,7 +42,7 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
     it("should fail: ERC721InvalidReceiver (NonReceiver)", async function () {
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
-      const erc721NonReceiverInstance = await deployJerk();
+      const erc721NonReceiverInstance = await deployRejector();
 
       const tx = safeMint(contractInstance, owner, erc721NonReceiverInstance, batchSize + tokenId);
       await expect(tx)

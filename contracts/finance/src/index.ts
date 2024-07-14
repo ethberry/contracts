@@ -1,3 +1,4 @@
 import "@nomicfoundation/hardhat-toolbox";
 
-export * from "./splitterWallet";
+export * from "./SplitterWallet";
+export * from "./Holder";

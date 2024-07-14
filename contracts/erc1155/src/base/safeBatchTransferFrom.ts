@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
 import { amount, tokenId } from "@gemunion/contracts-constants";
-import { deployJerk, deployWallet } from "@gemunion/contracts-mocks";
+import { deployRejector, deployHolder } from "@gemunion/contracts-finance";
 
 import type { IERC1155Options } from "../shared/defaultMint";
 import { defaultMintERC1155 } from "../shared/defaultMint";
@@ -55,7 +55,7 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc1155ReceiverInstance = await deployWallet();
+      const erc1155ReceiverInstance = await deployHolder();
 
       const tokenId_1 = 2n;
       await mint(contractInstance, owner, owner, tokenId, amount, "0x");
@@ -92,7 +92,7 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc1155ReceiverInstance = await deployWallet();
+      const erc1155ReceiverInstance = await deployHolder();
 
       const tokenId_1 = 2n;
       await mint(contractInstance, owner, owner, tokenId, amount, "0x");
@@ -127,7 +127,7 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc1155ReceiverInstance = await deployWallet();
+      const erc1155ReceiverInstance = await deployHolder();
 
       const tokenId_1 = 2n;
       await mint(contractInstance, owner, owner, tokenId, amount, "0x");
@@ -144,7 +144,7 @@ export function shouldSafeBatchTransferFrom(factory: () => Promise<any>, options
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc1155NonReceiverInstance = await deployJerk();
+      const erc1155NonReceiverInstance = await deployRejector();
 
       const tokenId_1 = 2n;
       await mint(contractInstance, owner, owner, tokenId, amount, "0x");

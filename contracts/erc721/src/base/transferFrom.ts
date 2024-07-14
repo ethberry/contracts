@@ -6,7 +6,7 @@ import { tokenId } from "@gemunion/contracts-constants";
 
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
-import { deployWallet } from "@gemunion/contracts-mocks";
+import { deployHolder } from "@gemunion/contracts-finance";
 
 export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721Options = {}) {
   const { mint = defaultMintERC721, batchSize = 0n } = options;
@@ -54,7 +54,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
       const [owner] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc721ReceiverInstance = await deployWallet();
+      const erc721ReceiverInstance = await deployHolder();
 
       await mint(contractInstance, owner, owner, batchSize + tokenId);
       const tx = contractInstance.transferFrom(owner, erc721ReceiverInstance, batchSize + tokenId);
@@ -74,7 +74,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
-      const erc721ReceiverInstance = await deployWallet();
+      const erc721ReceiverInstance = await deployHolder();
 
       await mint(contractInstance, owner, owner, batchSize + tokenId);
       await contractInstance.approve(receiver, batchSize + tokenId);

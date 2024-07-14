@@ -3,8 +3,7 @@ import { ethers } from "hardhat";
 import { WeiPerEther, ZeroAddress } from "ethers";
 
 import { amount } from "@gemunion/contracts-constants";
-
-import { deployERC1363 } from "../fixture";
+import { deployERC1363 } from "@gemunion/contracts-mocks";
 
 export function shouldReceive(factory: () => Promise<any>) {
   describe("receive ETH", function () {
@@ -39,7 +38,7 @@ export function shouldReceive(factory: () => Promise<any>) {
 
       const contractInstance = await factory();
 
-      const erc20Instance = await deployERC1363("ERC1363Mock");
+      const erc20Instance = await deployERC1363();
       const tx1 = await erc20Instance.mint(owner, amount);
       await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
 

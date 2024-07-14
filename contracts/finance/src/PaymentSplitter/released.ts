@@ -2,8 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { amount } from "@gemunion/contracts-constants";
-
-import { deployERC1363 } from "../fixture";
+import { deployERC1363 } from "@gemunion/contracts-mocks";
 
 export function shouldGetReleased(factory: () => Promise<any>) {
   describe("released ETH ", function () {
@@ -46,7 +45,7 @@ export function shouldGetReleased(factory: () => Promise<any>) {
 
       const contractInstance = await factory();
 
-      const erc20Instance = await deployERC1363("ERC1363Mock");
+      const erc20Instance = await deployERC1363();
       const tx1 = await erc20Instance.mint(contractInstance, amount);
       await expect(tx1).to.not.be.reverted;
 
@@ -67,7 +66,7 @@ export function shouldGetReleased(factory: () => Promise<any>) {
 
       const contractInstance = await factory();
 
-      const erc20Instance = await deployERC1363("ERC1363Mock");
+      const erc20Instance = await deployERC1363();
 
       const released = await contractInstance["released(address,address)"](erc20Instance, receiver);
       expect(released).to.equal(0);

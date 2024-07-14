@@ -4,8 +4,7 @@ import { ZeroAddress } from "ethers";
 
 import { deployContract, shouldSupportsInterface } from "@gemunion/contracts-utils";
 import { amount, InterfaceId } from "@gemunion/contracts-constants";
-
-import { deployERC1363, deployERC20 } from "../../src/fixture";
+import { deployERC1363, deployERC20 } from "@gemunion/contracts-mocks";
 
 describe("CoinHolder", function () {
   const factory = () => deployContract(this.title);
@@ -14,7 +13,7 @@ describe("CoinHolder", function () {
     const [owner] = await ethers.getSigners();
     const contractInstance = await factory();
 
-    const erc20Instance = await deployERC20("ERC20Mock");
+    const erc20Instance = await deployERC20();
 
     const tx1 = await erc20Instance.mint(owner, amount);
     await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
@@ -30,7 +29,7 @@ describe("CoinHolder", function () {
     const [owner] = await ethers.getSigners();
     const contractInstance = await factory();
 
-    const erc20Instance = await deployERC1363("ERC1363Mock");
+    const erc20Instance = await deployERC1363();
 
     const tx1 = await erc20Instance.mint(owner, amount);
     await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, amount);

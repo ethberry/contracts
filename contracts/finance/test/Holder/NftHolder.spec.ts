@@ -4,8 +4,7 @@ import { ZeroAddress } from "ethers";
 
 import { deployContract, shouldSupportsInterface } from "@gemunion/contracts-utils";
 import { InterfaceId, tokenId } from "@gemunion/contracts-constants";
-
-import { deployERC20 } from "../../src/fixture";
+import { deployERC20 } from "@gemunion/contracts-mocks";
 
 describe("NftHolder", function () {
   const factory = () => deployContract(this.title);

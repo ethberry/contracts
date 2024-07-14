@@ -4,8 +4,7 @@ import { ZeroAddress } from "ethers";
 
 import { deployContract, shouldSupportsInterface } from "@gemunion/contracts-utils";
 import { amount, InterfaceId, tokenId } from "@gemunion/contracts-constants";
-
-import { deployERC1363, deployERC20, deployERC721, deployERC1155 } from "../../src/fixture";
+import { deployERC1363, deployERC20, deployERC721, deployERC1155 } from "@gemunion/contracts-mocks";
 
 describe("AllTypesHolder", function () {
   const factory = () => deployContract(this.title);
@@ -14,7 +13,7 @@ describe("AllTypesHolder", function () {
     const [owner] = await ethers.getSigners();
     const contractInstance = await factory();
 
-    const erc20Instance = await deployERC20("ERC20Mock");
+    const erc20Instance = await deployERC20();
 
     const tx1 = await erc20Instance.mint(owner, amount);
     await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
@@ -30,7 +29,7 @@ describe("AllTypesHolder", function () {
     const [owner] = await ethers.getSigners();
     const contractInstance = await factory();
 
-    const erc20Instance = await deployERC1363("ERC1363Mock");
+    const erc20Instance = await deployERC1363();
 
     const tx1 = await erc20Instance.mint(owner, amount);
     await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
@@ -47,7 +46,7 @@ describe("AllTypesHolder", function () {
     const [owner] = await ethers.getSigners();
     const contractInstance = await factory();
 
-    const erc20Instance = await deployERC721("ERC721Mock");
+    const erc20Instance = await deployERC721();
 
     const tx1 = await erc20Instance.mint(owner, tokenId);
     await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, tokenId);
@@ -62,7 +61,7 @@ describe("AllTypesHolder", function () {
     const [owner] = await ethers.getSigners();
     const contractInstance = await factory();
 
-    const erc20Instance = await deployERC1155("ERC1155Mock");
+    const erc20Instance = await deployERC1155();
 
     const tx1 = await erc20Instance.mint(owner, tokenId, amount, "0x");
     await expect(tx1)

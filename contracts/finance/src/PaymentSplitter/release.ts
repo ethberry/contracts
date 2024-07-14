@@ -2,8 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { amount } from "@gemunion/contracts-constants";
-
-import { deployERC1363 } from "../fixture";
+import { deployERC1363 } from "@gemunion/contracts-mocks";
 
 export function shouldRelease(factory: () => Promise<any>) {
   describe("release ETH ", function () {
@@ -49,7 +48,7 @@ export function shouldRelease(factory: () => Promise<any>) {
 
       const contractInstance = await factory();
 
-      const erc20Instance = await deployERC1363("ERC1363Mock");
+      const erc20Instance = await deployERC1363();
       const tx1 = await erc20Instance.mint(contractInstance, amount);
       await expect(tx1).to.not.be.reverted;
 
@@ -64,7 +63,7 @@ export function shouldRelease(factory: () => Promise<any>) {
 
       const contractInstance = await factory();
 
-      const erc20Instance = await deployERC1363("ERC1363Mock");
+      const erc20Instance = await deployERC1363();
 
       const tx1 = contractInstance["release(address,address)"](erc20Instance, owner);
       await expect(tx1).to.rejectedWith("PaymentSplitter: account is not due payment");
@@ -75,7 +74,7 @@ export function shouldRelease(factory: () => Promise<any>) {
 
       const contractInstance = await factory();
 
-      const erc20Instance = await deployERC1363("ERC1363Mock");
+      const erc20Instance = await deployERC1363();
       const tx1 = await erc20Instance.mint(contractInstance, amount);
       await expect(tx1).to.not.be.reverted;
 

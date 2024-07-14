@@ -6,10 +6,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    #    strategy:
-    #      matrix:
-    #        node-version: [14.18]
-    #        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    strategy:
+      matrix:
+        node-version: [22]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
       - name: checkout
         uses: actions/checkout@v4

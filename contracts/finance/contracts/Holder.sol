@@ -60,14 +60,7 @@ contract CoinHolder is ERC165, ERC1363Receiver {
 /**
  * @dev CoinHolder contract can receive NATIVE and ERC20 tokens.
  */
-contract NativeCoinHolder is NativeHolder, CoinHolder {
-  /**
-   * @dev See {IERC165-supportsInterface}.
-   */
-  function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
-    return  super.supportsInterface(interfaceId);
-  }
-}
+contract NativeCoinHolder is NativeHolder, CoinHolder {}
 
 /**
  * @dev NftHolder contract can receive ERC721, ERC998 tokens.
@@ -108,7 +101,7 @@ contract SemiNftHolder is ERC165, NftHolder, ERC1155Holder {
 /**
  * @dev NotNativeHolder contract can receive ERC20, ERC721, ERC998 and ERC1155 tokens.
  */
-contract NotNativeDto is NativeRejector, CoinHolder, SemiNftHolder {
+contract NotNativeHolder is NativeRejector, CoinHolder, SemiNftHolder {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
@@ -120,7 +113,7 @@ contract NotNativeDto is NativeRejector, CoinHolder, SemiNftHolder {
 /**
  * @dev AllTypesHolder contract can receive NATIVE, ERC20, ERC721, ERC998 and ERC1155 tokens.
  */
-contract AllTypesHolder is CoinHolder, SemiNftHolder {
+contract AllTypesHolder is NativeHolder, CoinHolder, SemiNftHolder {
   /**
    * @dev See {IERC165-supportsInterface}.
    */

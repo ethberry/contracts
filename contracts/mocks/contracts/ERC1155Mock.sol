@@ -6,13 +6,12 @@
 
 pragma solidity ^0.8.20;
 
-import { ERC1155 } from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-import { ERC1155Burnable } from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
+import { ERC1155, ERC1155Burnable } from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 
 import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "@gemunion/contracts-utils/contracts/roles.sol";
 
-contract ERC1155AB is AccessControl, ERC1155Burnable {
+contract ERC1155Mock is AccessControl, ERC1155Burnable {
   constructor(string memory uri) ERC1155(uri) {
     _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _grantRole(MINTER_ROLE, _msgSender());

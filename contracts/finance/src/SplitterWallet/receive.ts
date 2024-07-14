@@ -49,6 +49,7 @@ export function shouldReceive(factory: () => Promise<any>) {
       const contractInstance = await factory();
 
       const erc20Instance = await deployERC1363("ERC1363Mock");
+
       const tx1 = await erc20Instance.mint(owner, amount);
       await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
 

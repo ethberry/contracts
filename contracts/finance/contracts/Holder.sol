@@ -18,9 +18,9 @@ import {
 } from "@gemunion/contracts-erc1363/contracts/extensions/ERC1363Receiver.sol";
 
 /**
- * @dev NativeHolder contract can receive NATIVE tokens.
+ * @dev NativeReceiver contract can receive NATIVE tokens.
  */
-contract NativeHolder is Context {
+contract NativeReceiver is Context {
   event PaymentReceived(address from, uint256 amount);
 
   receive() external payable virtual {
@@ -58,11 +58,6 @@ contract CoinHolder is ERC165, ERC1363Receiver {
 }
 
 /**
- * @dev CoinHolder contract can receive NATIVE and ERC20 tokens.
- */
-contract NativeCoinHolder is NativeHolder, CoinHolder {}
-
-/**
  * @dev NftHolder contract can receive ERC721, ERC998 tokens.
  */
 contract NftHolder is ERC165, ERC721Holder {
@@ -77,43 +72,31 @@ contract NftHolder is ERC165, ERC721Holder {
 /**
  * @dev SemiCoinHolder contract can receive NATIVE, ERC20 and ERC1155 tokens.
  */
-contract SemiCoinHolder is ERC165, NativeHolder, CoinHolder, ERC1155Holder {
+contract SemiCoinHolder is CoinHolder, ERC1155Holder {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, ERC1155Holder, CoinHolder) returns (bool) {
-    return interfaceId == type(IERC1155Receiver).interfaceId || super.supportsInterface(interfaceId);
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC1155Holder, CoinHolder) returns (bool) {
+    return super.supportsInterface(interfaceId);
   }
 }
 
 /**
  * @dev SemiNftHolder contract can receive ERC721, ERC998 and ERC1155 tokens.
  */
-contract SemiNftHolder is ERC165, NftHolder, ERC1155Holder {
+contract SemiNftHolder is NftHolder, ERC1155Holder {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, ERC1155Holder, NftHolder) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC1155Holder, NftHolder) returns (bool) {
     return interfaceId == type(IERC1155Receiver).interfaceId || super.supportsInterface(interfaceId);
   }
 }
 
 /**
- * @dev NotNativeHolder contract can receive ERC20, ERC721, ERC998 and ERC1155 tokens.
+ * @dev AllTypesHolder contract can receive ERC20, ERC721, ERC998 and ERC1155 tokens.
  */
-contract NotNativeHolder is NativeRejector, CoinHolder, SemiNftHolder {
-  /**
-   * @dev See {IERC165-supportsInterface}.
-   */
-  function supportsInterface(bytes4 interfaceId) public view virtual override(CoinHolder, SemiNftHolder) returns (bool) {
-    return super.supportsInterface(interfaceId);
-  }
-}
-
-/**
- * @dev AllTypesHolder contract can receive NATIVE, ERC20, ERC721, ERC998 and ERC1155 tokens.
- */
-contract AllTypesHolder is NativeHolder, CoinHolder, SemiNftHolder {
+contract AllTypesHolder is CoinHolder, SemiNftHolder {
   /**
    * @dev See {IERC165-supportsInterface}.
    */

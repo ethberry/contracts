@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 
-import { tokenName, tokenSymbol, amount } from "@gemunion/contracts-constants";
+import { tokenName, tokenSymbol, baseTokenURI } from "@gemunion/contracts-constants";
 
 export async function deployPaymentSplitter(name: string): Promise<any> {
   const [owner, receiver] = await ethers.getSigners();
@@ -10,10 +10,20 @@ export async function deployPaymentSplitter(name: string): Promise<any> {
 
 export async function deployERC1363(name: string): Promise<any> {
   const factory = await ethers.getContractFactory(name);
-  return factory.deploy(tokenName, tokenSymbol, amount);
+  return factory.deploy(tokenName, tokenSymbol);
 }
 
 export async function deployERC20(name: string): Promise<any> {
   const factory = await ethers.getContractFactory(name);
   return factory.deploy(tokenName, tokenSymbol);
+}
+
+export async function deployERC721(name: string): Promise<any> {
+  const factory = await ethers.getContractFactory(name);
+  return factory.deploy(tokenName, tokenSymbol);
+}
+
+export async function deployERC1155(name: string): Promise<any> {
+  const factory = await ethers.getContractFactory(name);
+  return factory.deploy(baseTokenURI);
 }

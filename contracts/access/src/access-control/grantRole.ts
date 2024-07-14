@@ -14,7 +14,7 @@ export function shouldGrantRole(factory: () => Promise<any>, options: IAccessCon
       const contractInstance = await factory();
 
       const tx = await contractInstance.grantRole(testRole, receiver);
-      await expect(tx).to.emit(contractInstance, "RoleGranted").withArgs(testRole, receiver.address, owner.address);
+      await expect(tx).to.emit(contractInstance, "RoleGranted").withArgs(testRole, receiver, owner);
     });
 
     it("should fail: AccessControlUnauthorizedAccount", async function () {
@@ -25,7 +25,7 @@ export function shouldGrantRole(factory: () => Promise<any>, options: IAccessCon
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-        .withArgs(receiver.address, adminRole);
+        .withArgs(receiver, adminRole);
     });
   });
 }

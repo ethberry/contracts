@@ -24,18 +24,14 @@ export function shouldFlashLoan(factory: () => Promise<any>, options: IERC20Opti
 
       const tx = contractInstance.flashLoan(erc20FlashBorrowerInstance, contractInstance, amount, "0x");
 
-      await expect(tx)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(ZeroAddress, await erc20FlashBorrowerInstance.getAddress(), amount);
-      await expect(tx)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(await erc20FlashBorrowerInstance.getAddress(), ZeroAddress, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, erc20FlashBorrowerInstance, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(erc20FlashBorrowerInstance, ZeroAddress, amount);
       await expect(tx)
         .to.emit(erc20FlashBorrowerInstance, "BalanceOf")
-        .withArgs(await contractInstance.getAddress(), await erc20FlashBorrowerInstance.getAddress(), amount);
+        .withArgs(contractInstance, erc20FlashBorrowerInstance, amount);
       await expect(tx)
         .to.emit(erc20FlashBorrowerInstance, "TotalSupply")
-        .withArgs(await contractInstance.getAddress(), amount * 2n);
+        .withArgs(contractInstance, amount * 2n);
 
       const totalSupply = await contractInstance.totalSupply();
       expect(totalSupply).to.equal(amount);
@@ -60,7 +56,7 @@ export function shouldFlashLoan(factory: () => Promise<any>, options: IERC20Opti
       const tx = contractInstance.flashLoan(erc20FlashBorrowerInstance, contractInstance, amount, "0x");
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC3156InvalidReceiver")
-        .withArgs(await erc20FlashBorrowerInstance.getAddress());
+        .withArgs(erc20FlashBorrowerInstance);
     });
 
     it("should: fail ERC20InsufficientAllowance", async function () {
@@ -76,7 +72,7 @@ export function shouldFlashLoan(factory: () => Promise<any>, options: IERC20Opti
       const tx = contractInstance.flashLoan(erc20FlashBorrowerInstance, contractInstance, amount, "0x");
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientAllowance")
-        .withArgs(await contractInstance.getAddress(), 0, amount);
+        .withArgs(contractInstance, 0, amount);
     });
 
     it("should fail: ERC20InsufficientBalance", async function () {
@@ -94,7 +90,7 @@ export function shouldFlashLoan(factory: () => Promise<any>, options: IERC20Opti
       const tx = contractInstance.flashLoan(erc20FlashBorrowerInstance, contractInstance, amount, data);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientBalance")
-        .withArgs(await erc20FlashBorrowerInstance.getAddress(), amount - loan, amount);
+        .withArgs(erc20FlashBorrowerInstance, amount - loan, amount);
     });
 
     it("should fail: ERC3156ExceededMaxLoan", async function () {

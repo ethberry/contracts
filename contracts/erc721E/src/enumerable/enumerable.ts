@@ -19,9 +19,7 @@ export function shouldBehaveLikeERC721Enumerable(factory: () => Promise<any>, op
       await mint(contractInstance, owner, owner);
       const tx = contractInstance.safeTransferFrom(owner, erc721ReceiverInstance, 0);
 
-      await expect(tx)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, await erc721ReceiverInstance.getAddress(), 0);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, erc721ReceiverInstance, 0);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(0);

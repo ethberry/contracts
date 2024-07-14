@@ -20,7 +20,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC20O
       await contractInstance.approve(receiver, amount);
 
       const tx = contractInstance.connect(receiver).transferFrom(owner, receiver, amount);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, receiver, amount);
 
       const receiverBalance = await contractInstance.balanceOf(receiver);
       expect(receiverBalance).to.equal(amount);
@@ -37,9 +37,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC20O
       await contractInstance.approve(receiver, amount);
 
       const tx = contractInstance.connect(receiver).transferFrom(owner, erc20NonReceiverInstance, amount);
-      await expect(tx)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, await erc20NonReceiverInstance.getAddress(), amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, erc20NonReceiverInstance, amount);
 
       const nonReceiverBalance = await contractInstance.balanceOf(erc20NonReceiverInstance);
       expect(nonReceiverBalance).to.equal(amount);
@@ -66,7 +64,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC20O
       const tx = contractInstance.connect(receiver).transferFrom(owner, receiver, amount);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientBalance")
-        .withArgs(owner.address, 0, amount);
+        .withArgs(owner, 0, amount);
     });
 
     it("should fail: ERC20InsufficientAllowance", async function () {
@@ -77,7 +75,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC20O
       const tx = contractInstance.connect(receiver).transferFrom(owner, receiver, amount);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientAllowance")
-        .withArgs(receiver.address, 0, amount);
+        .withArgs(receiver, 0, amount);
     });
   });
 }

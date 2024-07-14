@@ -9,7 +9,7 @@ export function shouldBehaveLikeBlackListMe(factory: () => Promise<any>) {
 
       await contractInstance.blacklist(receiver);
       const tx = contractInstance.connect(receiver).testMe();
-      await expect(tx).to.be.revertedWithCustomError(contractInstance, "BlackListError").withArgs(receiver.address);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "BlackListError").withArgs(receiver);
     });
 
     it("should pass", async function () {

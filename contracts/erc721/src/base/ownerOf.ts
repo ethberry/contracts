@@ -16,7 +16,7 @@ export function shouldGetOwnerOf(factory: () => Promise<any>, options: IERC721Op
 
       await mint(contractInstance, owner, owner, batchSize + tokenId);
       const ownerOfToken = await contractInstance.ownerOf(batchSize + tokenId);
-      expect(ownerOfToken).to.equal(owner.address);
+      expect(ownerOfToken).to.equal(owner);
     });
 
     it("should get owner of burned token", async function () {

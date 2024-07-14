@@ -16,12 +16,12 @@ describe("CoinHolder", function () {
     const erc20Instance = await deployERC20Mock();
 
     const tx1 = await erc20Instance.mint(owner, amount);
-    await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
+    await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner, amount);
 
     const tx3 = erc20Instance.transfer(contractInstance, amount);
     await expect(tx3)
       .to.emit(erc20Instance, "Transfer")
-      .withArgs(owner.address, await contractInstance.getAddress(), amount)
+      .withArgs(owner, contractInstance, amount)
       .to.not.emit(contractInstance, "TransferReceived");
   });
 
@@ -32,14 +32,14 @@ describe("CoinHolder", function () {
     const erc20Instance = await deployERC1363Mock();
 
     const tx1 = await erc20Instance.mint(owner, amount);
-    await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
+    await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner, amount);
 
     const tx3 = erc20Instance.transferAndCall(contractInstance, amount);
     await expect(tx3)
       .to.emit(erc20Instance, "Transfer")
-      .withArgs(owner.address, await contractInstance.getAddress(), amount)
+      .withArgs(owner, contractInstance, amount)
       .to.emit(contractInstance, "TransferReceived")
-      .withArgs(owner.address, owner.address, amount, "0x");
+      .withArgs(owner, owner, amount, "0x");
   });
 
   shouldSupportsInterface(factory)([InterfaceId.IERC165, InterfaceId.IERC1363Spender, InterfaceId.IERC1363Receiver]);

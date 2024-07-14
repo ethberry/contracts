@@ -18,7 +18,7 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC20Option
       await mint(contractInstance, owner, owner);
 
       const tx = contractInstance.approve(receiver, amount);
-      await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner.address, receiver.address, amount);
+      await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner, receiver, amount);
 
       const approved = await contractInstance.allowance(owner, receiver);
       expect(approved).to.equal(amount);
@@ -29,7 +29,7 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC20Option
       const contractInstance = await factory();
 
       const tx = contractInstance.connect(receiver).approve(owner, amount);
-      await expect(tx).to.emit(contractInstance, "Approval").withArgs(receiver.address, owner.address, amount);
+      await expect(tx).to.emit(contractInstance, "Approval").withArgs(receiver, owner, amount);
     });
 
     it("should approve to self", async function () {
@@ -37,7 +37,7 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC20Option
       const contractInstance = await factory();
 
       const tx = contractInstance.approve(owner, amount);
-      await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner.address, owner.address, amount);
+      await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner, owner, amount);
     });
 
     it("should fail: ERC20InvalidSpender", async function () {

@@ -26,7 +26,7 @@ export function shouldFlashCustom(factory: () => Promise<any>, options: IERC20Op
       const tx1 = mint(contractInstance, owner, erc20FlashBorrowerInstance, borrowerInitialBalance);
       await expect(tx1)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ZeroAddress, await erc20FlashBorrowerInstance.getAddress(), borrowerInitialBalance);
+        .withArgs(ZeroAddress, erc20FlashBorrowerInstance, borrowerInitialBalance);
 
       const balanceOf = await contractInstance.balanceOf(erc20FlashBorrowerInstance);
       expect(balanceOf).to.equal(borrowerInitialBalance);
@@ -39,22 +39,16 @@ export function shouldFlashCustom(factory: () => Promise<any>, options: IERC20Op
       expect(feeReceiver).to.equal(ZeroAddress);
 
       const tx2 = await contractInstance.flashLoan(erc20FlashBorrowerInstance, contractInstance, amount, "0x");
+      await expect(tx2).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, erc20FlashBorrowerInstance, amount);
       await expect(tx2)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ZeroAddress, await erc20FlashBorrowerInstance.getAddress(), amount);
-      await expect(tx2)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(await erc20FlashBorrowerInstance.getAddress(), ZeroAddress, amount + customFlashFee);
+        .withArgs(erc20FlashBorrowerInstance, ZeroAddress, amount + customFlashFee);
       await expect(tx2)
         .to.emit(erc20FlashBorrowerInstance, "BalanceOf")
-        .withArgs(
-          await contractInstance.getAddress(),
-          await erc20FlashBorrowerInstance.getAddress(),
-          borrowerInitialBalance + amount,
-        );
+        .withArgs(contractInstance, erc20FlashBorrowerInstance, borrowerInitialBalance + amount);
       await expect(tx2)
         .to.emit(erc20FlashBorrowerInstance, "TotalSupply")
-        .withArgs(await contractInstance.getAddress(), borrowerInitialBalance + amount + amount);
+        .withArgs(contractInstance, borrowerInitialBalance + amount + amount);
 
       const totalSupply = await contractInstance.totalSupply();
       expect(totalSupply).to.equal(amount + borrowerInitialBalance - customFlashFee);
@@ -80,7 +74,7 @@ export function shouldFlashCustom(factory: () => Promise<any>, options: IERC20Op
       const tx1 = mint(contractInstance, owner, erc20FlashBorrowerInstance, borrowerInitialBalance);
       await expect(tx1)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ZeroAddress, await erc20FlashBorrowerInstance.getAddress(), borrowerInitialBalance);
+        .withArgs(ZeroAddress, erc20FlashBorrowerInstance, borrowerInitialBalance);
 
       const balanceOf1 = await contractInstance.balanceOf(erc20FlashBorrowerInstance);
       expect(balanceOf1).to.equal(borrowerInitialBalance);
@@ -91,32 +85,24 @@ export function shouldFlashCustom(factory: () => Promise<any>, options: IERC20Op
 
       await contractInstance.setFlashFeeReceiver(receiver);
       const feeReceiver = await contractInstance.flashFeeReceiver();
-      expect(feeReceiver).to.equal(receiver.address);
+      expect(feeReceiver).to.equal(receiver);
 
       const balanceOf2 = await contractInstance.balanceOf(receiver);
       expect(balanceOf2).to.equal(0);
 
       const tx2 = await contractInstance.flashLoan(erc20FlashBorrowerInstance, contractInstance, amount, "0x");
 
+      await expect(tx2).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, erc20FlashBorrowerInstance, amount);
+      await expect(tx2).to.emit(contractInstance, "Transfer").withArgs(erc20FlashBorrowerInstance, ZeroAddress, amount);
       await expect(tx2)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ZeroAddress, await erc20FlashBorrowerInstance.getAddress(), amount);
-      await expect(tx2)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(await erc20FlashBorrowerInstance.getAddress(), ZeroAddress, amount);
-      await expect(tx2)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(await erc20FlashBorrowerInstance.getAddress(), receiver.address, customFlashFee);
+        .withArgs(erc20FlashBorrowerInstance, receiver, customFlashFee);
       await expect(tx2)
         .to.emit(erc20FlashBorrowerInstance, "BalanceOf")
-        .withArgs(
-          await contractInstance.getAddress(),
-          await erc20FlashBorrowerInstance.getAddress(),
-          borrowerInitialBalance + amount,
-        );
+        .withArgs(contractInstance, erc20FlashBorrowerInstance, borrowerInitialBalance + amount);
       await expect(tx2)
         .to.emit(erc20FlashBorrowerInstance, "TotalSupply")
-        .withArgs(await contractInstance.getAddress(), borrowerInitialBalance + amount + amount);
+        .withArgs(contractInstance, borrowerInitialBalance + amount + amount);
 
       const totalSupply = await contractInstance.totalSupply();
       expect(totalSupply).to.equal(amount + borrowerInitialBalance);

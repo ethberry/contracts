@@ -16,12 +16,10 @@ describe("NftHolder", function () {
     const erc20Instance = await deployERC20Mock("ERC721Mock");
 
     const tx1 = await erc20Instance.mint(owner, tokenId);
-    await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, tokenId);
+    await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner, tokenId);
 
     const tx3 = erc20Instance.transferFrom(owner, contractInstance, tokenId);
-    await expect(tx3)
-      .to.emit(erc20Instance, "Transfer")
-      .withArgs(owner.address, await contractInstance.getAddress(), tokenId);
+    await expect(tx3).to.emit(erc20Instance, "Transfer").withArgs(owner, contractInstance, tokenId);
   });
 
   shouldSupportsInterface(factory)([InterfaceId.IERC165, InterfaceId.IERC721Receiver]);

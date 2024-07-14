@@ -10,7 +10,7 @@ export function shouldRenounceOwnership(factory: () => Promise<any>) {
       const contractInstance = await factory();
 
       const tx = contractInstance.renounceOwnership();
-      await expect(tx).to.emit(contractInstance, "OwnershipTransferred").withArgs(owner.address, ZeroAddress);
+      await expect(tx).to.emit(contractInstance, "OwnershipTransferred").withArgs(owner, ZeroAddress);
     });
 
     it("should fail: OwnableInvalidOwner", async function () {
@@ -19,9 +19,7 @@ export function shouldRenounceOwnership(factory: () => Promise<any>) {
 
       const tx = contractInstance.connect(receiver).renounceOwnership();
 
-      await expect(tx)
-        .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
-        .withArgs(receiver.address);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount").withArgs(receiver);
     });
   });
 }

@@ -17,7 +17,7 @@ export function shouldSetDefaultRoyalty(factory: () => Promise<any>, options: IE
       const royalty = 5000;
 
       const tx = contractInstance.setDefaultRoyalty(receiver, royalty);
-      await expect(tx).to.emit(contractInstance, "DefaultRoyaltyInfo").withArgs(receiver.address, royalty);
+      await expect(tx).to.emit(contractInstance, "DefaultRoyaltyInfo").withArgs(receiver, royalty);
     });
 
     it("should fail: ERC2981InvalidDefaultRoyalty", async function () {
@@ -55,12 +55,12 @@ export function shouldSetDefaultRoyalty(factory: () => Promise<any>, options: IE
       if (supportsAccessControl) {
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-          .withArgs(receiver.address, adminRole);
+          .withArgs(receiver, adminRole);
       } else {
         // Ownable
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
-          .withArgs(receiver.address);
+          .withArgs(receiver);
       }
     });
   });

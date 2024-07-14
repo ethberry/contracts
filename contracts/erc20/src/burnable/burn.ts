@@ -18,7 +18,7 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC20Options =
       await mint(contractInstance, owner, owner);
 
       const tx = contractInstance.burn(amount);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, ZeroAddress, amount);
 
       const balance = await contractInstance.balanceOf(owner);
       expect(balance).to.equal(0);
@@ -34,7 +34,7 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC20Options =
       await mint(contractInstance, owner, owner, 0n);
 
       const tx = contractInstance.burn(0);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, 0);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, ZeroAddress, 0);
     });
 
     it("should fail: ERC20InsufficientBalance", async function () {
@@ -46,7 +46,7 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC20Options =
       const tx = contractInstance.burn(amount);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientBalance")
-        .withArgs(owner.address, 0, amount);
+        .withArgs(owner, 0, amount);
     });
   });
 }

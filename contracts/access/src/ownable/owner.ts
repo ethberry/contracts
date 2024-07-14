@@ -8,7 +8,7 @@ export function shouldHaveOwner(factory: () => Promise<any>) {
       const contractInstance = await factory();
 
       const account = await contractInstance.owner();
-      expect(account).to.equal(owner.address);
+      expect(account).to.equal(owner);
     });
   });
 }

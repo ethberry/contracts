@@ -24,7 +24,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
 
       const userOf = await contractInstance.userOf(tokenId);
 
-      expect(userOf).to.equal(receiver.address);
+      expect(userOf).to.equal(receiver);
     });
 
     it("should set a user from approved address", async function () {
@@ -41,7 +41,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
 
       const userOf = await contractInstance.userOf(tokenId);
 
-      expect(userOf).to.equal(receiver.address);
+      expect(userOf).to.equal(receiver);
     });
 
     it("should set a user from approvedAll address", async function () {
@@ -58,7 +58,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
 
       const userOf = await contractInstance.userOf(tokenId);
 
-      expect(userOf).to.equal(receiver.address);
+      expect(userOf).to.equal(receiver);
     });
 
     it("emits a UpdateUser event", async function () {
@@ -72,7 +72,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
 
       const tx = contractInstance.setUser(tokenId, receiver, deadline.toString());
 
-      await expect(tx).to.emit(contractInstance, "UpdateUser").withArgs(tokenId, receiver.address, deadline.toString());
+      await expect(tx).to.emit(contractInstance, "UpdateUser").withArgs(tokenId, receiver, deadline.toString());
     });
 
     it("should fail: don't have permission to set a user", async function () {
@@ -87,7 +87,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
       const tx = contractInstance.connect(receiver).setUser(tokenId, receiver, deadline.toString());
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721InsufficientApproval")
-        .withArgs(receiver.address, tokenId);
+        .withArgs(receiver, tokenId);
     });
   });
 }

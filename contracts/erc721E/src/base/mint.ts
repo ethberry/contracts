@@ -17,7 +17,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC721EnumOpti
       const contractInstance = await factory();
 
       const tx = mint(contractInstance, owner, receiver);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, receiver.address, defaultTokenId);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, receiver, defaultTokenId);
 
       const balance = await contractInstance.balanceOf(receiver);
       expect(balance).to.equal(1);
@@ -32,7 +32,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC721EnumOpti
       const tx = mint(contractInstance, owner, erc721NonReceiverInstance);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ZeroAddress, await erc721NonReceiverInstance.getAddress(), defaultTokenId);
+        .withArgs(ZeroAddress, erc721NonReceiverInstance, defaultTokenId);
     });
 
     it("should mint to receiver", async function () {
@@ -44,7 +44,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC721EnumOpti
       const tx = mint(contractInstance, owner, erc721ReceiverInstance);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ZeroAddress, await erc721ReceiverInstance.getAddress(), defaultTokenId);
+        .withArgs(ZeroAddress, erc721ReceiverInstance, defaultTokenId);
 
       const balance = await contractInstance.balanceOf(erc721ReceiverInstance);
       expect(balance).to.equal(1);
@@ -60,12 +60,12 @@ export function shouldMint(factory: () => Promise<any>, options: IERC721EnumOpti
       if (supportsAccessControl) {
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-          .withArgs(receiver.address, minterRole);
+          .withArgs(receiver, minterRole);
       } else {
         // Ownable
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
-          .withArgs(receiver.address);
+          .withArgs(receiver);
       }
     });
   });

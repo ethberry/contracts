@@ -23,7 +23,7 @@ export function shouldBehaveLikeWhiteList(factory: () => Promise<any>, options: 
       const contractInstance = await factory();
 
       const tx = contractInstance.whitelist(receiver);
-      await expect(tx).to.emit(contractInstance, "Whitelisted").withArgs(receiver.address);
+      await expect(tx).to.emit(contractInstance, "Whitelisted").withArgs(receiver);
       const isWhitelisted = await contractInstance.isWhitelisted(receiver);
       expect(isWhitelisted).to.equal(true);
     });
@@ -34,7 +34,7 @@ export function shouldBehaveLikeWhiteList(factory: () => Promise<any>, options: 
 
       await contractInstance.whitelist(receiver);
       const tx = contractInstance.unWhitelist(receiver);
-      await expect(tx).to.emit(contractInstance, "UnWhitelisted").withArgs(receiver.address);
+      await expect(tx).to.emit(contractInstance, "UnWhitelisted").withArgs(receiver);
       const isWhiteListed = await contractInstance.isWhitelisted(receiver);
       expect(isWhiteListed).to.equal(false);
     });
@@ -47,7 +47,7 @@ export function shouldBehaveLikeWhiteList(factory: () => Promise<any>, options: 
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-        .withArgs(receiver.address, adminRole);
+        .withArgs(receiver, adminRole);
     });
   });
 }

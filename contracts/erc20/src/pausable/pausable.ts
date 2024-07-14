@@ -18,13 +18,13 @@ export function shouldBehaveLikeERC20Pausable(factory: () => Promise<any>, optio
       await expect(tx1).to.not.be.reverted;
 
       const tx2 = contractInstance.pause();
-      await expect(tx2).to.emit(contractInstance, "Paused").withArgs(owner.address);
+      await expect(tx2).to.emit(contractInstance, "Paused").withArgs(owner);
 
       const tx3 = contractInstance.transfer(receiver, amount);
       await expect(tx3).to.be.revertedWithCustomError(contractInstance, "EnforcedPause");
 
       const tx4 = contractInstance.unpause();
-      await expect(tx4).to.emit(contractInstance, "Unpaused").withArgs(owner.address);
+      await expect(tx4).to.emit(contractInstance, "Unpaused").withArgs(owner);
 
       const tx5 = contractInstance.transfer(receiver, amount);
       await expect(tx5).to.not.be.reverted;

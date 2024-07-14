@@ -19,7 +19,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
       const tx1 = mint(contractInstance, owner, receiver, tokenId, amount, "0x");
       await expect(tx1)
         .to.emit(contractInstance, "TransferSingle")
-        .withArgs(owner.address, ZeroAddress, receiver.address, tokenId, amount);
+        .withArgs(owner, ZeroAddress, receiver, tokenId, amount);
 
       const balance = await contractInstance.balanceOf(receiver, tokenId);
       expect(balance).to.equal(amount);
@@ -34,9 +34,9 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
       const tx1 = mint(contractInstance, owner, erc1155ReceiverInstance, tokenId, amount, "0x");
       await expect(tx1)
         .to.emit(contractInstance, "TransferSingle")
-        .withArgs(owner.address, ZeroAddress, await erc1155ReceiverInstance.getAddress(), tokenId, amount);
+        .withArgs(owner, ZeroAddress, erc1155ReceiverInstance, tokenId, amount);
 
-      const balance = await contractInstance.balanceOf(await erc1155ReceiverInstance.getAddress(), tokenId);
+      const balance = await contractInstance.balanceOf(erc1155ReceiverInstance, tokenId);
       expect(balance).to.equal(amount);
     });
 
@@ -49,7 +49,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
       const tx = mint(contractInstance, owner, erc1155NonReceiverInstance, tokenId, amount, "0x");
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver")
-        .withArgs(await erc1155NonReceiverInstance.getAddress());
+        .withArgs(erc1155NonReceiverInstance);
     });
 
     it("should fail: ERC1155InvalidReceiver (ZeroAddress)", async function () {
@@ -70,12 +70,12 @@ export function shouldMint(factory: () => Promise<any>, options: IERC1155Options
       if (supportsAccessControl) {
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-          .withArgs(receiver.address, minterRole);
+          .withArgs(receiver, minterRole);
       } else {
         // Ownable
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
-          .withArgs(receiver.address);
+          .withArgs(receiver);
       }
     });
   });

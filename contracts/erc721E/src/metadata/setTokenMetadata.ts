@@ -69,7 +69,7 @@ export function shouldSetTokenMetadata(
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-        .withArgs(receiver.address, METADATA_ROLE);
+        .withArgs(receiver, METADATA_ROLE);
     });
   });
 }

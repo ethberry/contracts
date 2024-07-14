@@ -19,15 +19,15 @@ export function shouldGetTotalReleased(factory: () => Promise<any>) {
       const contractInstance = await factory();
 
       const tx1 = owner.sendTransaction({
-        to: await contractInstance.getAddress(),
+        to: contractInstance,
         value: amount,
       });
-      await expect(tx1).to.emit(contractInstance, "PaymentReceived").withArgs(owner.address, amount);
+      await expect(tx1).to.emit(contractInstance, "PaymentReceived").withArgs(owner, amount);
 
       const tx2 = contractInstance.release(owner);
       await expect(tx2)
         .to.emit(contractInstance, "PaymentReleased")
-        .withArgs(owner.address, amount / 2n);
+        .withArgs(owner, amount / 2n);
 
       const totalShares = await contractInstance.totalReleased();
       expect(totalShares).to.equal(amount / 2n);
@@ -58,7 +58,7 @@ export function shouldGetTotalReleased(factory: () => Promise<any>) {
       const tx2 = contractInstance["release(address,address)"](erc20Instance, owner);
       await expect(tx2)
         .to.emit(contractInstance, "ERC20PaymentReleased")
-        .withArgs(await erc20Instance.getAddress(), owner.address, amount / 2n);
+        .withArgs(erc20Instance, owner, amount / 2n);
 
       const totalShares = await contractInstance["totalReleased(address)"](erc20Instance);
       expect(totalShares).to.equal(amount / 2n);

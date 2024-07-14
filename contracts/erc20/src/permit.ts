@@ -116,9 +116,7 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<any>) {
 
       const tx = contractInstance.permit(owner, receiver, amount, MaxUint256, v, r, s);
 
-      await expect(tx)
-        .revertedWithCustomError(contractInstance, "ERC2612InvalidSigner")
-        .withArgs(receiver.address, owner.address);
+      await expect(tx).revertedWithCustomError(contractInstance, "ERC2612InvalidSigner").withArgs(receiver, owner);
     });
 
     it("should fail: ERC2612InvalidSigner (2)", async function () {
@@ -162,7 +160,7 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<any>) {
 
       await expect(tx).revertedWithCustomError(contractInstance, "ERC2612InvalidSigner");
       // spender address is just a piece of crap
-      // .withArgs("0x476d091d87D416691B75cd03F28709AD2Da420de", owner.address);
+      // .withArgs("0x476d091d87D416691B75cd03F28709AD2Da420de", owner);
     });
 
     it("should fail: ERC2612ExpiredSignature", async function () {

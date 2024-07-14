@@ -18,7 +18,7 @@ export function shouldTransfer(factory: () => Promise<any>, options: IERC20Optio
       await mint(contractInstance, owner, owner);
 
       const tx = contractInstance.transfer(receiver, amount);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, receiver, amount);
 
       const receiverBalance = await contractInstance.balanceOf(receiver);
       expect(receiverBalance).to.equal(amount);
@@ -35,9 +35,7 @@ export function shouldTransfer(factory: () => Promise<any>, options: IERC20Optio
       await mint(contractInstance, owner, owner);
 
       const tx = contractInstance.transfer(erc20NonReceiverInstance, amount);
-      await expect(tx)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, await erc20NonReceiverInstance.getAddress(), amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, erc20NonReceiverInstance, amount);
 
       const nonReceiverBalance = await contractInstance.balanceOf(erc20NonReceiverInstance);
       expect(nonReceiverBalance).to.equal(amount);
@@ -55,7 +53,7 @@ export function shouldTransfer(factory: () => Promise<any>, options: IERC20Optio
       const tx = contractInstance.transfer(receiver, amount);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientBalance")
-        .withArgs(owner.address, 0, amount);
+        .withArgs(owner, 0, amount);
     });
   });
 }

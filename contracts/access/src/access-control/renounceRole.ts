@@ -26,10 +26,10 @@ export function shouldRenounceRole(factory: () => Promise<any>, options: IAccess
       const contractInstance = await factory();
 
       const tx1 = await contractInstance.grantRole(testRole, owner);
-      await expect(tx1).to.emit(contractInstance, "RoleGranted").withArgs(testRole, owner.address, owner.address);
+      await expect(tx1).to.emit(contractInstance, "RoleGranted").withArgs(testRole, owner, owner);
 
       const tx2 = await contractInstance.renounceRole(testRole, owner);
-      await expect(tx2).to.emit(contractInstance, "RoleRevoked").withArgs(testRole, owner.address, owner.address);
+      await expect(tx2).to.emit(contractInstance, "RoleRevoked").withArgs(testRole, owner, owner);
     });
 
     it("should fail: AccessControlBadConfirmation", async function () {

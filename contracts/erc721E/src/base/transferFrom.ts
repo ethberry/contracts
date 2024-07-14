@@ -17,7 +17,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
       await mint(contractInstance, owner, owner);
       const tx = contractInstance.transferFrom(owner, receiver, defaultTokenId);
 
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, defaultTokenId);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, receiver, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(0);
@@ -35,7 +35,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
 
       const tx = contractInstance.connect(receiver).transferFrom(owner, receiver, defaultTokenId);
 
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, receiver.address, defaultTokenId);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, receiver, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(0);
@@ -53,9 +53,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
       await mint(contractInstance, owner, owner);
       const tx = contractInstance.transferFrom(owner, erc721ReceiverInstance, defaultTokenId);
 
-      await expect(tx)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, await erc721ReceiverInstance.getAddress(), defaultTokenId);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, erc721ReceiverInstance, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(0);
@@ -75,9 +73,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
 
       const tx = contractInstance.connect(receiver).transferFrom(owner, erc721ReceiverInstance, defaultTokenId);
 
-      await expect(tx)
-        .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, await erc721ReceiverInstance.getAddress(), defaultTokenId);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, erc721ReceiverInstance, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(0);
@@ -95,7 +91,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721InsufficientApproval")
-        .withArgs(receiver.address, defaultTokenId);
+        .withArgs(receiver, defaultTokenId);
     });
 
     it("should fail: ERC721InvalidReceiver (ZeroAddress)", async function () {

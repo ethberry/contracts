@@ -19,10 +19,10 @@ export function shouldGetReleasable(factory: () => Promise<any>) {
       expect(releasable3).to.equal(0);
 
       const tx1 = owner.sendTransaction({
-        to: await contractInstance.getAddress(),
+        to: contractInstance,
         value: amount,
       });
-      await expect(tx1).to.emit(contractInstance, "PaymentReceived").withArgs(owner.address, amount);
+      await expect(tx1).to.emit(contractInstance, "PaymentReceived").withArgs(owner, amount);
 
       const releasable4 = await contractInstance.releasable(owner);
       expect(releasable4).to.equal(amount / 2n);

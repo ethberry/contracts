@@ -12,12 +12,12 @@ describe("NativeReceiver", function () {
     const contractInstance = await factory();
 
     const tx = owner.sendTransaction({
-      to: await contractInstance.getAddress(),
+      to: contractInstance,
       value: amount,
       // gasLimit: 21000 + 61, // + revert
     });
 
-    await expect(tx).to.emit(contractInstance, "PaymentReceived").withArgs(owner.address, amount);
+    await expect(tx).to.emit(contractInstance, "PaymentReceived").withArgs(owner, amount);
     await expect(tx).to.changeEtherBalances([owner, contractInstance], [-amount, amount]);
   });
 });

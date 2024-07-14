@@ -42,7 +42,7 @@ export function shouldUserOf(factory: () => Promise<any>, options: IERC721Option
       await time.increaseTo(current1.add(web3.utils.toBN(50)));
 
       const userOf1 = await contractInstance.userOf(tokenId);
-      expect(userOf1).to.equal(receiver.address);
+      expect(userOf1).to.equal(receiver);
 
       const current2 = await time.latest();
       await time.increaseTo(current2.add(web3.utils.toBN(50)));
@@ -64,7 +64,7 @@ export function shouldUserOf(factory: () => Promise<any>, options: IERC721Option
 
       const ownerOfToken = await contractInstance.ownerOf(tokenId);
 
-      expect(ownerOfToken).to.equal(owner.address);
+      expect(ownerOfToken).to.equal(owner);
     });
   });
 }

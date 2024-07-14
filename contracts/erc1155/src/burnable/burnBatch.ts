@@ -21,7 +21,7 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
 
       await expect(tx)
         .to.emit(contractInstance, "TransferBatch")
-        .withArgs(owner.address, owner.address, ZeroAddress, [tokenId, tokenId1], [amount, amount]);
+        .withArgs(owner, owner, ZeroAddress, [tokenId, tokenId1], [amount, amount]);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner, tokenId);
       expect(balanceOfOwner).to.equal(0);
@@ -42,7 +42,7 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
 
       await expect(tx)
         .to.emit(contractInstance, "TransferBatch")
-        .withArgs(receiver.address, owner.address, ZeroAddress, [tokenId, tokenId1], [amount, amount]);
+        .withArgs(receiver, owner, ZeroAddress, [tokenId, tokenId1], [amount, amount]);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner, tokenId);
       expect(balanceOfOwner).to.equal(0);
@@ -61,7 +61,7 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC1155MissingApprovalForAll")
-        .withArgs(receiver.address, owner.address);
+        .withArgs(receiver, owner);
     });
 
     it("should fail: ERC1155InvalidArrayLength", async function () {
@@ -84,7 +84,7 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       const tx = contractInstance.burnBatch(owner, [tokenId], [amount]);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC1155InsufficientBalance")
-        .withArgs(owner.address, 0, amount, tokenId);
+        .withArgs(owner, 0, amount, tokenId);
     });
 
     it("should fail: ERC1155InsufficientBalance (balance)", async function () {
@@ -96,7 +96,7 @@ export function shouldBurnBatch(factory: () => Promise<any>, options: IERC1155Op
       const tx = contractInstance.burnBatch(owner, [tokenId], [amount]);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC1155InsufficientBalance")
-        .withArgs(owner.address, 0, amount, tokenId);
+        .withArgs(owner, 0, amount, tokenId);
     });
   });
 }

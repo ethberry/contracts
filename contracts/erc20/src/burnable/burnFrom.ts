@@ -19,7 +19,7 @@ export function shouldBurnFrom(factory: () => Promise<any>, options: IERC20Optio
 
       await contractInstance.approve(receiver, amount);
       const tx = contractInstance.connect(receiver).burnFrom(owner, amount);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, ZeroAddress, amount);
     });
 
     it("should burn zero tokens from other account", async function () {
@@ -30,7 +30,7 @@ export function shouldBurnFrom(factory: () => Promise<any>, options: IERC20Optio
 
       await contractInstance.approve(receiver, amount);
       const tx = contractInstance.connect(receiver).burnFrom(owner, 0);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, 0);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, ZeroAddress, 0);
     });
 
     it("should fail: ERC20InsufficientBalance", async function () {
@@ -43,7 +43,7 @@ export function shouldBurnFrom(factory: () => Promise<any>, options: IERC20Optio
       const tx = contractInstance.connect(receiver).burnFrom(owner, amount);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientBalance")
-        .withArgs(owner.address, 0, amount);
+        .withArgs(owner, 0, amount);
     });
 
     it("should fail: ERC20InsufficientAllowance", async function () {
@@ -53,7 +53,7 @@ export function shouldBurnFrom(factory: () => Promise<any>, options: IERC20Optio
       const tx = contractInstance.connect(receiver).burnFrom(owner, amount);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC20InsufficientAllowance")
-        .withArgs(receiver.address, 0, amount);
+        .withArgs(receiver, 0, amount);
     });
   });
 }

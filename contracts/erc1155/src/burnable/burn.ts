@@ -18,9 +18,7 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC1155Options
       await mint(contractInstance, owner, owner, tokenId, amount, "0x");
       const tx = contractInstance.burn(owner, tokenId, amount);
 
-      await expect(tx)
-        .to.emit(contractInstance, "TransferSingle")
-        .withArgs(owner.address, owner.address, ZeroAddress, tokenId, amount);
+      await expect(tx).to.emit(contractInstance, "TransferSingle").withArgs(owner, owner, ZeroAddress, tokenId, amount);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner, tokenId);
       expect(balanceOfOwner).to.equal(0);
@@ -36,7 +34,7 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC1155Options
       const tx = contractInstance.connect(receiver).burn(owner, tokenId, amount);
       await expect(tx)
         .to.emit(contractInstance, "TransferSingle")
-        .withArgs(receiver.address, owner.address, ZeroAddress, tokenId, amount);
+        .withArgs(receiver, owner, ZeroAddress, tokenId, amount);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner, tokenId);
       expect(balanceOfOwner).to.equal(0);
@@ -51,7 +49,7 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC1155Options
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC1155MissingApprovalForAll")
-        .withArgs(receiver.address, owner.address);
+        .withArgs(receiver, owner);
     });
 
     it("should fail: ERC1155InsufficientBalance", async function () {
@@ -63,7 +61,7 @@ export function shouldBurn(factory: () => Promise<any>, options: IERC1155Options
       const tx = contractInstance.burn(owner, tokenId, amount);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC1155InsufficientBalance")
-        .withArgs(owner.address, 0, amount, tokenId);
+        .withArgs(owner, 0, amount, tokenId);
     });
   });
 }

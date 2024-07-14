@@ -20,7 +20,7 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<any>, opti
       const tx = await contractInstance.burn(batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, ZeroAddress, batchSize + tokenId);
+        .withArgs(owner, ZeroAddress, batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
@@ -41,7 +41,7 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<any>, opti
       const tx = await contractInstance.burn(batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, ZeroAddress, batchSize + tokenId);
+        .withArgs(owner, ZeroAddress, batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
@@ -61,7 +61,7 @@ export function shouldBehaveLikeERC721Burnable(factory: () => Promise<any>, opti
       const tx = contractInstance.connect(receiver).burn(batchSize + tokenId);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721InsufficientApproval")
-        .withArgs(receiver.address, batchSize + tokenId);
+        .withArgs(receiver, batchSize + tokenId);
     });
   });
 }

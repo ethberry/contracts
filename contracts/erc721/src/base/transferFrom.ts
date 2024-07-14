@@ -21,7 +21,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, receiver.address, batchSize + tokenId);
+        .withArgs(owner, receiver, batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
@@ -41,7 +41,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, receiver.address, batchSize + tokenId);
+        .withArgs(owner, receiver, batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
@@ -61,7 +61,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, await erc721ReceiverInstance.getAddress(), batchSize + tokenId);
+        .withArgs(owner, erc721ReceiverInstance, batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
@@ -83,7 +83,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, await erc721ReceiverInstance.getAddress(), batchSize + tokenId);
+        .withArgs(owner, erc721ReceiverInstance, batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
@@ -101,7 +101,7 @@ export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721InsufficientApproval")
-        .withArgs(receiver.address, batchSize + tokenId);
+        .withArgs(receiver, batchSize + tokenId);
     });
 
     it("should fail: ERC721InvalidReceiver (ZeroAddress)", async function () {

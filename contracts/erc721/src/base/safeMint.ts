@@ -19,7 +19,7 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
       const tx = safeMint(contractInstance, owner, owner, batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ZeroAddress, owner.address, batchSize + tokenId);
+        .withArgs(ZeroAddress, owner, batchSize + tokenId);
 
       const balance = await contractInstance.balanceOf(owner);
       expect(balance).to.equal(batchSize + 1n);
@@ -33,7 +33,7 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
       const tx = safeMint(contractInstance, owner, erc721ReceiverInstance, batchSize + tokenId);
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(ZeroAddress, await erc721ReceiverInstance.getAddress(), batchSize + tokenId);
+        .withArgs(ZeroAddress, erc721ReceiverInstance, batchSize + tokenId);
 
       const balance = await contractInstance.balanceOf(erc721ReceiverInstance);
       expect(balance).to.equal(1);
@@ -47,7 +47,7 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
       const tx = safeMint(contractInstance, owner, erc721NonReceiverInstance, batchSize + tokenId);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721InvalidReceiver")
-        .withArgs(await erc721NonReceiverInstance.getAddress());
+        .withArgs(erc721NonReceiverInstance);
     });
 
     it("should fail: AccessControlUnauthorizedAccount/OwnableUnauthorizedAccount", async function () {
@@ -60,12 +60,12 @@ export function shouldSafeMint(factory: () => Promise<any>, options: IERC721Opti
       if (supportsAccessControl) {
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-          .withArgs(receiver.address, minterRole);
+          .withArgs(receiver, minterRole);
       } else {
         // Ownable
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
-          .withArgs(receiver.address);
+          .withArgs(receiver);
       }
     });
   });

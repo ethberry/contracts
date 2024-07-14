@@ -13,10 +13,10 @@ export function shouldReceive(factory: () => Promise<any>) {
       const contractInstance = await factory();
 
       const tx1 = owner.sendTransaction({
-        to: await contractInstance.getAddress(),
+        to: contractInstance,
         value: 0,
       });
-      await expect(tx1).to.emit(contractInstance, "PaymentReceived").withArgs(owner.address, 0);
+      await expect(tx1).to.emit(contractInstance, "PaymentReceived").withArgs(owner, 0);
     });
 
     it("should receive (1 eth)", async function () {
@@ -25,10 +25,10 @@ export function shouldReceive(factory: () => Promise<any>) {
       const contractInstance = await factory();
 
       const tx1 = owner.sendTransaction({
-        to: await contractInstance.getAddress(),
+        to: contractInstance,
         value: WeiPerEther,
       });
-      await expect(tx1).to.emit(contractInstance, "PaymentReceived").withArgs(owner.address, WeiPerEther);
+      await expect(tx1).to.emit(contractInstance, "PaymentReceived").withArgs(owner, WeiPerEther);
     });
   });
 
@@ -40,12 +40,12 @@ export function shouldReceive(factory: () => Promise<any>) {
 
       const erc20Instance = await deployERC1363Mock();
       const tx1 = await erc20Instance.mint(owner, amount);
-      await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
+      await expect(tx1).to.emit(erc20Instance, "Transfer").withArgs(ZeroAddress, owner, amount);
 
       const tx2 = erc20Instance.transfer(contractInstance, amount);
       await expect(tx2)
         .to.emit(erc20Instance, "Transfer")
-        .withArgs(owner.address, await contractInstance.getAddress(), amount)
+        .withArgs(owner, contractInstance, amount)
         .to.not.emit(contractInstance, "TransferReceived");
     });
   });

@@ -26,7 +26,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IE
       const approved1 = await contractInstance.getApproved(batchSize + tokenId);
       expect(approved1).to.equal(ZeroAddress);
 
-      const isApproved1 = await contractInstance.isApprovedForAll(owner, receiver.address);
+      const isApproved1 = await contractInstance.isApprovedForAll(owner, receiver);
       expect(isApproved1).to.equal(true);
 
       const tx2 = contractInstance.setApprovalForAll(receiver, false);
@@ -35,7 +35,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IE
       const approved3 = await contractInstance.getApproved(batchSize + tokenId);
       expect(approved3).to.equal(ZeroAddress);
 
-      const isApproved2 = await contractInstance.isApprovedForAll(owner, receiver.address);
+      const isApproved2 = await contractInstance.isApprovedForAll(owner, receiver);
       expect(isApproved2).to.equal(false);
     });
 

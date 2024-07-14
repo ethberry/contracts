@@ -43,7 +43,7 @@ export function shouldSetApprovalForAll(factory: () => Promise<any>, options: IE
 
       await mint(contractInstance, owner, owner);
 
-      const tx = contractInstance.setApprovalForAll(owner.address, true);
+      const tx = contractInstance.setApprovalForAll(owner, true);
       await expect(tx).to.not.be.reverted;
     });
 

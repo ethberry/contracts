@@ -16,13 +16,13 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC721EnumO
       await mint(contractInstance, owner, owner);
 
       const tx = contractInstance.approve(receiver, defaultTokenId);
-      await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner.address, receiver.address, defaultTokenId);
+      await expect(tx).to.emit(contractInstance, "Approval").withArgs(owner, receiver, defaultTokenId);
 
       const approved = await contractInstance.getApproved(defaultTokenId);
-      expect(approved).to.equal(receiver.address);
+      expect(approved).to.equal(receiver);
 
       const tx1 = contractInstance.connect(receiver).burn(defaultTokenId);
-      await expect(tx1).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, defaultTokenId);
+      await expect(tx1).to.emit(contractInstance, "Transfer").withArgs(owner, ZeroAddress, defaultTokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(0);
@@ -43,9 +43,7 @@ export function shouldApprove(factory: () => Promise<any>, options: IERC721EnumO
 
       await mint(contractInstance, owner, owner);
       const tx = contractInstance.connect(receiver).approve(owner, defaultTokenId);
-      await expect(tx)
-        .to.be.revertedWithCustomError(contractInstance, "ERC721InvalidApprover")
-        .withArgs(receiver.address);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "ERC721InvalidApprover").withArgs(receiver);
     });
   });
 }

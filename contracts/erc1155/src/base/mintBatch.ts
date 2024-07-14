@@ -20,7 +20,7 @@ export function shouldMintBatch(factory: () => Promise<any>, options: IERC1155Op
 
       await expect(tx)
         .to.emit(contractInstance, "TransferBatch")
-        .withArgs(owner.address, ZeroAddress, receiver.address, [tokenId, 0n], [amount, amount]);
+        .withArgs(owner, ZeroAddress, receiver, [tokenId, 0n], [amount, amount]);
 
       await expect(tx).to.not.be.reverted;
 
@@ -37,13 +37,7 @@ export function shouldMintBatch(factory: () => Promise<any>, options: IERC1155Op
       const tx = mintBatch(contractInstance, owner, erc1155ReceiverInstance, [tokenId, 0n], [amount, amount], "0x");
       await expect(tx)
         .to.emit(contractInstance, "TransferBatch")
-        .withArgs(
-          owner.address,
-          ZeroAddress,
-          await erc1155ReceiverInstance.getAddress(),
-          [tokenId, 0n],
-          [amount, amount],
-        );
+        .withArgs(owner, ZeroAddress, erc1155ReceiverInstance, [tokenId, 0n], [amount, amount]);
 
       await expect(tx).to.not.be.reverted;
 
@@ -60,7 +54,7 @@ export function shouldMintBatch(factory: () => Promise<any>, options: IERC1155Op
       const tx = mintBatch(contractInstance, owner, erc1155NonReceiverInstance, [tokenId], [amount], "0x");
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC1155InvalidReceiver")
-        .withArgs(await erc1155NonReceiverInstance.getAddress());
+        .withArgs(erc1155NonReceiverInstance);
     });
 
     it("should fail: ERC1155InvalidReceiver (ZeroAddress)", async function () {
@@ -81,12 +75,12 @@ export function shouldMintBatch(factory: () => Promise<any>, options: IERC1155Op
       if (supportsAccessControl) {
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-          .withArgs(receiver.address, minterRole);
+          .withArgs(receiver, minterRole);
       } else {
         // Ownable
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
-          .withArgs(receiver.address);
+          .withArgs(receiver);
       }
     });
   });

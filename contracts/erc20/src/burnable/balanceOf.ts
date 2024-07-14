@@ -18,7 +18,7 @@ export function shouldBalanceOf2(factory: () => Promise<any>, options: IERC20Opt
       await mint(contractInstance, owner, owner);
 
       const tx = contractInstance.burn(amount);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner.address, ZeroAddress, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(owner, ZeroAddress, amount);
 
       const balance = await contractInstance.balanceOf(ZeroAddress);
       expect(balance).to.equal(0);

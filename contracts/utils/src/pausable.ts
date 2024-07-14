@@ -16,10 +16,10 @@ export function shouldBehaveLikePausable(factory: () => Promise<any>, options: I
       const contractInstance = await factory();
 
       const tx1 = contractInstance.pause();
-      await expect(tx1).to.emit(contractInstance, "Paused").withArgs(owner.address);
+      await expect(tx1).to.emit(contractInstance, "Paused").withArgs(owner);
 
       const tx2 = contractInstance.unpause();
-      await expect(tx2).to.emit(contractInstance, "Unpaused").withArgs(owner.address);
+      await expect(tx2).to.emit(contractInstance, "Unpaused").withArgs(owner);
     });
 
     it("should fail: AccessControlUnauthorizedAccount/OwnableUnauthorizedAccount", async function () {
@@ -32,24 +32,24 @@ export function shouldBehaveLikePausable(factory: () => Promise<any>, options: I
       if (supportsAccessControl) {
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-          .withArgs(receiver.address, pauserRole);
+          .withArgs(receiver, pauserRole);
       } else {
         // Ownable
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
-          .withArgs(receiver.address);
+          .withArgs(receiver);
       }
 
       const tx2 = contractInstance.connect(receiver).unpause();
       if (supportsAccessControl) {
         await expect(tx2)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-          .withArgs(receiver.address, pauserRole);
+          .withArgs(receiver, pauserRole);
       } else {
         // Ownable
         await expect(tx2)
           .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
-          .withArgs(receiver.address);
+          .withArgs(receiver);
       }
     });
   });

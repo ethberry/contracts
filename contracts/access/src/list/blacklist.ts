@@ -22,7 +22,7 @@ export function shouldBehaveLikeBlackList(factory: () => Promise<any>, options: 
       const contractInstance = await factory();
 
       const tx = contractInstance.blacklist(receiver);
-      await expect(tx).to.emit(contractInstance, "Blacklisted").withArgs(receiver.address);
+      await expect(tx).to.emit(contractInstance, "Blacklisted").withArgs(receiver);
       const isBlackListed = await contractInstance.isBlacklisted(receiver);
       expect(isBlackListed).to.equal(true);
     });
@@ -33,7 +33,7 @@ export function shouldBehaveLikeBlackList(factory: () => Promise<any>, options: 
 
       await contractInstance.blacklist(receiver);
       const tx = contractInstance.unBlacklist(receiver);
-      await expect(tx).to.emit(contractInstance, "UnBlacklisted").withArgs(receiver.address);
+      await expect(tx).to.emit(contractInstance, "UnBlacklisted").withArgs(receiver);
       const isBlackListed = await contractInstance.isBlacklisted(receiver);
       expect(isBlackListed).to.equal(false);
     });
@@ -45,7 +45,7 @@ export function shouldBehaveLikeBlackList(factory: () => Promise<any>, options: 
       const tx = contractInstance.connect(receiver).blacklist(receiver);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-        .withArgs(receiver.address, adminRole);
+        .withArgs(receiver, adminRole);
     });
   });
 }

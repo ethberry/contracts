@@ -22,10 +22,10 @@ export function shouldRevokeRole(factory: () => Promise<any>, options: IAccessCo
       const contractInstance = await factory();
 
       const tx1 = await contractInstance.grantRole(testRole, receiver);
-      await expect(tx1).to.emit(contractInstance, "RoleGranted").withArgs(testRole, receiver.address, owner.address);
+      await expect(tx1).to.emit(contractInstance, "RoleGranted").withArgs(testRole, receiver, owner);
 
       const tx2 = await contractInstance.revokeRole(testRole, receiver);
-      await expect(tx2).to.emit(contractInstance, "RoleRevoked").withArgs(testRole, receiver.address, owner.address);
+      await expect(tx2).to.emit(contractInstance, "RoleRevoked").withArgs(testRole, receiver, owner);
     });
 
     it("should fail: AccessControlUnauthorizedAccount", async function () {
@@ -36,7 +36,7 @@ export function shouldRevokeRole(factory: () => Promise<any>, options: IAccessCo
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-        .withArgs(receiver.address, adminRole);
+        .withArgs(receiver, adminRole);
     });
   });
 }

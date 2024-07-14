@@ -9,7 +9,7 @@ export function shouldTransferOwnership(factory: () => Promise<any>) {
       const contractInstance = await factory();
 
       const tx = contractInstance.transferOwnership(receiver);
-      await expect(tx).to.emit(contractInstance, "OwnershipTransferred").withArgs(owner.address, receiver.address);
+      await expect(tx).to.emit(contractInstance, "OwnershipTransferred").withArgs(owner, receiver);
     });
 
     it("should fail: OwnableUnauthorizedAccount", async function () {
@@ -17,9 +17,7 @@ export function shouldTransferOwnership(factory: () => Promise<any>) {
       const contractInstance = await factory();
 
       const tx = contractInstance.connect(receiver).transferOwnership(receiver);
-      await expect(tx)
-        .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
-        .withArgs(receiver.address);
+      await expect(tx).to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount").withArgs(receiver);
     });
 
     it("should fail: OwnableInvalidOwner", async function () {

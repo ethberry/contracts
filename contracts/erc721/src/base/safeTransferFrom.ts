@@ -21,7 +21,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, stranger.address, batchSize + tokenId);
+        .withArgs(owner, stranger.address, batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
@@ -41,7 +41,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, stranger.address, batchSize + tokenId);
+        .withArgs(owner, stranger.address, batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
@@ -61,7 +61,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, await erc721ReceiverInstance.getAddress(), batchSize + tokenId);
+        .withArgs(owner, erc721ReceiverInstance, batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
@@ -85,7 +85,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
 
       await expect(tx)
         .to.emit(contractInstance, "Transfer")
-        .withArgs(owner.address, await erc721ReceiverInstance.getAddress(), batchSize + tokenId);
+        .withArgs(owner, erc721ReceiverInstance, batchSize + tokenId);
 
       const balanceOfOwner = await contractInstance.balanceOf(owner);
       expect(balanceOfOwner).to.equal(batchSize);
@@ -103,7 +103,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
 
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721InsufficientApproval")
-        .withArgs(receiver.address, batchSize + tokenId);
+        .withArgs(receiver, batchSize + tokenId);
     });
 
     it("should fail: ERC721InvalidReceiver (NonReceiver)", async function () {
@@ -116,7 +116,7 @@ export function shouldSafeTransferFrom(factory: () => Promise<any>, options: IER
       const tx = contractInstance.safeTransferFrom(owner, erc721NonReceiverInstance, batchSize + tokenId);
       await expect(tx)
         .to.be.revertedWithCustomError(contractInstance, "ERC721InvalidReceiver")
-        .withArgs(await erc721NonReceiverInstance.getAddress());
+        .withArgs(erc721NonReceiverInstance);
     });
 
     it("should fail: ERC721InvalidReceiver (ZeroAddress)", async function () {

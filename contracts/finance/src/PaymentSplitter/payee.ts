@@ -8,7 +8,7 @@ export function shouldGetPayee(factory: () => Promise<any>) {
       const contractInstance = await factory();
 
       const totalShares = await contractInstance.payee(0);
-      expect(totalShares).to.equal(owner.address);
+      expect(totalShares).to.equal(owner);
     });
   });
 }

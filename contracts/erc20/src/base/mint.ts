@@ -16,7 +16,7 @@ export function shouldMint(factory: () => Promise<any>, options: IERC20Options =
       const contractInstance = await factory();
 
       const tx = mint(contractInstance, owner, owner);
-      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, owner.address, amount);
+      await expect(tx).to.emit(contractInstance, "Transfer").withArgs(ZeroAddress, owner, amount);
 
       const balance = await contractInstance.balanceOf(owner);
       expect(balance).to.equal(amount);
@@ -36,12 +36,12 @@ export function shouldMint(factory: () => Promise<any>, options: IERC20Options =
       if (supportsAccessControl) {
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "AccessControlUnauthorizedAccount")
-          .withArgs(receiver.address, minterRole);
+          .withArgs(receiver, minterRole);
       } else {
         // Ownable
         await expect(tx)
           .to.be.revertedWithCustomError(contractInstance, "OwnableUnauthorizedAccount")
-          .withArgs(receiver.address);
+          .withArgs(receiver);
       }
     });
   });

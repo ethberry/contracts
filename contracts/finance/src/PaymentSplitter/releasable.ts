@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { amount } from "@gemunion/contracts-constants";
-import { deployERC1363 } from "@gemunion/contracts-mocks";
+import { deployERC1363Mock } from "@gemunion/contracts-mocks";
 
 export function shouldGetReleasable(factory: () => Promise<any>) {
   describe("releasable ETH ", function () {
@@ -38,7 +38,7 @@ export function shouldGetReleasable(factory: () => Promise<any>) {
       const [owner, receiver, stranger] = await ethers.getSigners();
 
       const contractInstance = await factory();
-      const erc20Instance = await deployERC1363();
+      const erc20Instance = await deployERC1363Mock();
 
       const releasable1 = await contractInstance["releasable(address,address)"](erc20Instance, owner);
       expect(releasable1).to.equal(0);

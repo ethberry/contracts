@@ -5,8 +5,8 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
-    "@gemunion/contracts-constants": "^5.0.37",
-    "@gemunion/contracts-utils": "^5.0.37",
+    "@gemunion/contracts-constants": "^5.0.38",
+    "@gemunion/contracts-utils": "^5.0.38",
     "@nomicfoundation/hardhat-ignition": "0.15.5",
     "@nomicfoundation/hardhat-ignition-ethers": "0.15.5",
     "@nomicfoundation/hardhat-toolbox": "5.0.0"
@@ -76,5 +76,5 @@
     "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",
-  "version": "5.0.37"
+  "version": "5.0.38"
 }

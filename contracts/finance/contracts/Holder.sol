@@ -18,7 +18,7 @@ import {
 } from "@gemunion/contracts-erc1363/contracts/extensions/ERC1363Receiver.sol";
 
 /**
- * @dev NativeReceiver contract can receive NATIVE tokens.
+ * @dev NativeReceiver contract receives NATIVE tokens.
  */
 contract NativeReceiver is Context {
   event PaymentReceived(address from, uint256 amount);
@@ -29,7 +29,7 @@ contract NativeReceiver is Context {
 }
 
 /**
- * @dev NativeRejector contract can receive NATIVE tokens.
+ * @dev NativeRejector contract rejects NATIVE tokens.
  */
 contract NativeRejector is Context {
   error PaymentRejected(address from, uint256 amount);
@@ -43,7 +43,7 @@ contract NativeRejector is Context {
 }
 
 /**
- * @dev CoinHolder contract can receive NATIVE and ERC20 tokens.
+ * @dev CoinHolder contract can receive ERC20 and ERC1363 tokens.
  */
 contract CoinHolder is ERC165, ERC1363Receiver {
   /**
@@ -70,13 +70,13 @@ contract NftHolder is ERC165, ERC721Holder {
 }
 
 /**
- * @dev SemiCoinHolder contract can receive NATIVE, ERC20 and ERC1155 tokens.
+ * @dev SemiCoinHolder contract can receive ERC20 and ERC1155 tokens.
  */
 contract SemiCoinHolder is CoinHolder, ERC1155Holder {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC1155Holder, CoinHolder) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(CoinHolder, ERC1155Holder) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
 }
@@ -88,7 +88,7 @@ contract SemiNftHolder is NftHolder, ERC1155Holder {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC1155Holder, NftHolder) returns (bool) {
+  function supportsInterface(bytes4 interfaceId) public view virtual override(NftHolder, ERC1155Holder) returns (bool) {
     return interfaceId == type(IERC1155Receiver).interfaceId || super.supportsInterface(interfaceId);
   }
 }

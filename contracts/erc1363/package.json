@@ -74,5 +74,5 @@
     "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",
-  "version": "5.0.39"
+  "version": "5.0.40"
 }

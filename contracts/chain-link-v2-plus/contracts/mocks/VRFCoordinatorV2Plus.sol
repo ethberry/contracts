@@ -433,81 +433,98 @@ contract VRFCoordinatorV2PlusMock is VRF, SubscriptionAPI, IVRFCoordinatorV2Plus
    * @return payment amount billed to the subscription
    * @dev simulated offchain to determine if sufficient balance is present to fulfill the request
    */
+//  function fulfillRandomWords(
+//    Proof calldata proof,
+//    VRFTypes.RequestCommitmentV2Plus calldata rc,
+//    bool onlyPremium
+//  ) external nonReentrant returns (uint96 payment) {
+//    uint256 startGas = gasleft();
+//    // fulfillRandomWords msg.data has 772 bytes and with an additional
+//    // buffer of 32 bytes, we get 804 bytes.
+//    /* Data size split:
+//     * fulfillRandomWords function signature - 4 bytes
+//     * proof - 416 bytes
+//     *   pk - 64 bytes
+//     *   gamma - 64 bytes
+//     *   c - 32 bytes
+//     *   s - 32 bytes
+//     *   seed - 32 bytes
+//     *   uWitness - 32 bytes
+//     *   cGammaWitness - 64 bytes
+//     *   sHashWitness - 64 bytes
+//     *   zInv - 32 bytes
+//     * requestCommitment - 320 bytes
+//     *   blockNum - 32 bytes
+//     *   subId - 32 bytes
+//     *   callbackGasLimit - 32 bytes
+//     *   numWords - 32 bytes
+//     *   sender - 32 bytes
+//     *   extraArgs - 128 bytes
+//     * onlyPremium - 32 bytes
+//     */
+//    if (msg.data.length > 804) {
+//      revert MsgDataTooBig(msg.data.length, 804);
+//    }
+//    Output memory output = _getRandomnessFromProof(proof, rc);
+//    uint256 gasPrice = _getValidatedGasPrice(onlyPremium, output.provingKey.maxGas);
+//
+//    uint256[] memory randomWords;
+//    uint256 randomness = output.randomness;
+//    // stack too deep error
+//    {
+//      uint256 numWords = rc.numWords;
+//      randomWords = new uint256[](numWords);
+//      for (uint256 i = 0; i < numWords; ++i) {
+//        randomWords[i] = uint256(keccak256(abi.encode(randomness, i)));
+//      }
+//    }
+//
+//    delete s_requestCommitments[output.requestId];
+//    bool success = _deliverRandomness(output.requestId, rc, randomWords);
+//
+//    // Increment the req count for the subscription.
+//    ++s_subscriptions[rc.subId].reqCount;
+//    // Decrement the pending req count for the consumer.
+//    --s_consumers[rc.sender][rc.subId].pendingReqCount;
+//
+//    bool nativePayment = uint8(rc.extraArgs[rc.extraArgs.length - 1]) == 1;
+//
+//    // stack too deep error
+//    {
+//      // We want to charge users exactly for how much gas they use in their callback with
+//      // an additional premium. If onlyPremium is true, only premium is charged without
+//      // the gas cost. The gasAfterPaymentCalculation is meant to cover these additional
+//      // operations where we decrement the subscription balance and increment the
+//      // withdrawable balance.
+//      bool isFeedStale;
+//      (payment, isFeedStale) = _calculatePaymentAmount(startGas, gasPrice, nativePayment, onlyPremium);
+//      if (isFeedStale) {
+//        emit FallbackWeiPerUnitLinkUsed(output.requestId, s_fallbackWeiPerUnitLink);
+//      }
+//    }
+//
+//    _chargePayment(payment, nativePayment, rc.subId);
+//
+//    // Include payment in the event for tracking costs.
+//    emit RandomWordsFulfilled(output.requestId, randomness, rc.subId, payment, nativePayment, success, onlyPremium);
+//
+//    return payment;
+//  }
+
   function fulfillRandomWords(
     Proof calldata proof,
     VRFTypes.RequestCommitmentV2Plus calldata rc,
     bool onlyPremium
   ) external nonReentrant returns (uint96 payment) {
-    uint256 startGas = gasleft();
-    // fulfillRandomWords msg.data has 772 bytes and with an additional
-    // buffer of 32 bytes, we get 804 bytes.
-    /* Data size split:
-     * fulfillRandomWords function signature - 4 bytes
-     * proof - 416 bytes
-     *   pk - 64 bytes
-     *   gamma - 64 bytes
-     *   c - 32 bytes
-     *   s - 32 bytes
-     *   seed - 32 bytes
-     *   uWitness - 32 bytes
-     *   cGammaWitness - 64 bytes
-     *   sHashWitness - 64 bytes
-     *   zInv - 32 bytes
-     * requestCommitment - 320 bytes
-     *   blockNum - 32 bytes
-     *   subId - 32 bytes
-     *   callbackGasLimit - 32 bytes
-     *   numWords - 32 bytes
-     *   sender - 32 bytes
-     *   extraArgs - 128 bytes
-     * onlyPremium - 32 bytes
-     */
-    if (msg.data.length > 804) {
-      revert MsgDataTooBig(msg.data.length, 804);
-    }
-    Output memory output = _getRandomnessFromProof(proof, rc);
-    uint256 gasPrice = _getValidatedGasPrice(onlyPremium, output.provingKey.maxGas);
+    payment = 0;
 
-    uint256[] memory randomWords;
-    uint256 randomness = output.randomness;
-    // stack too deep error
-    {
-      uint256 numWords = rc.numWords;
-      randomWords = new uint256[](numWords);
-      for (uint256 i = 0; i < numWords; ++i) {
-        randomWords[i] = uint256(keccak256(abi.encode(randomness, i)));
-      }
+    uint256[] memory randomWords = new uint256[](rc.numWords);
+    for (uint256 i = 0; i < rc.numWords; ++i) {
+      randomWords[i] = uint256(keccak256(abi.encode(proof.seed, i)));
     }
 
-    delete s_requestCommitments[output.requestId];
-    bool success = _deliverRandomness(output.requestId, rc, randomWords);
-
-    // Increment the req count for the subscription.
-    ++s_subscriptions[rc.subId].reqCount;
-    // Decrement the pending req count for the consumer.
-    --s_consumers[rc.sender][rc.subId].pendingReqCount;
-
-    bool nativePayment = uint8(rc.extraArgs[rc.extraArgs.length - 1]) == 1;
-
-    // stack too deep error
-    {
-      // We want to charge users exactly for how much gas they use in their callback with
-      // an additional premium. If onlyPremium is true, only premium is charged without
-      // the gas cost. The gasAfterPaymentCalculation is meant to cover these additional
-      // operations where we decrement the subscription balance and increment the
-      // withdrawable balance.
-      bool isFeedStale;
-      (payment, isFeedStale) = _calculatePaymentAmount(startGas, gasPrice, nativePayment, onlyPremium);
-      if (isFeedStale) {
-        emit FallbackWeiPerUnitLinkUsed(output.requestId, s_fallbackWeiPerUnitLink);
-      }
-    }
-
-    _chargePayment(payment, nativePayment, rc.subId);
-
-    // Include payment in the event for tracking costs.
-    emit RandomWordsFulfilled(output.requestId, randomness, rc.subId, payment, nativePayment, success, onlyPremium);
-
+    bool success = _deliverRandomness(proof.zInv, rc, randomWords);
+    emit RandomWordsFulfilled(proof.zInv, proof.seed, rc.subId, payment, false, success, onlyPremium);
     return payment;
   }
 

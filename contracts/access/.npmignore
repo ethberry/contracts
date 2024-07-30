@@ -10,6 +10,7 @@ contracts/test
 
 hardhat.config.ts
 tsconfig.json
+tsconfig.test.json
 coverage.json
 
 .env

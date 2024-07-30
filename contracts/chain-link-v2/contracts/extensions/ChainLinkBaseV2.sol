@@ -25,14 +25,12 @@ abstract contract ChainLinkBaseV2 is AccessControl, VRFConsumerBaseV2 {
   constructor(
     address vrf,
     bytes32 keyHash,
-    uint64 subId,
     uint16 minReqConfs,
     uint32 callbackGasLimit,
     uint32 numWords
   ) VRFConsumerBaseV2(vrf) {
     COORDINATOR = VRFCoordinatorV2Interface(vrf);
     _keyHash = keyHash;
-    _subId = subId;
     _minReqConfs = minReqConfs;
     _callbackGasLimit = callbackGasLimit;
     _numWords = numWords;

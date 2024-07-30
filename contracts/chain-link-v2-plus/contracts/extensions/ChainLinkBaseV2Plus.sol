@@ -14,26 +14,24 @@ import { VRFV2PlusClient } from "@chainlink/contracts/src/v0.8/vrf/dev/libraries
 
 abstract contract ChainLinkBaseV2Plus is AccessControl, VRFConsumerBaseV2Plus {
   bytes32 internal _keyHash;
-  uint64 internal _subId;
+  uint256 internal _subId;
   uint16 internal _requestConfirmations;
   uint32 internal _callbackGasLimit;
   uint32 internal _numWords;
   IVRFCoordinatorV2Plus COORDINATOR;
 
   error InvalidSubscription();
-  event VrfSubscriptionSet(uint64 subId);
+  event VrfSubscriptionSet(uint256 subId);
 
   constructor(
     address vrf,
     bytes32 keyHash,
-    uint64 subId,
     uint16 requestConfirmations,
     uint32 callbackGasLimit,
     uint32 numWords
   ) VRFConsumerBaseV2Plus(vrf) {
     COORDINATOR = IVRFCoordinatorV2Plus(vrf);
     _keyHash = keyHash;
-    _subId = subId;
     _requestConfirmations = requestConfirmations;
     _callbackGasLimit = callbackGasLimit;
     _numWords = numWords;
@@ -60,7 +58,7 @@ abstract contract ChainLinkBaseV2Plus is AccessControl, VRFConsumerBaseV2Plus {
   }
 
   // OWNER MUST SET A VRF SUBSCRIPTION ID AFTER DEPLOY
-  function setSubscriptionId(uint64 subId) public onlyRole(DEFAULT_ADMIN_ROLE) {
+  function setSubscriptionId(uint256 subId) public onlyRole(DEFAULT_ADMIN_ROLE) {
     if (subId == 0) {
       revert InvalidSubscription();
     }

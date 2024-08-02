@@ -5,11 +5,11 @@
     "url": "https://gemunion.io/"
   },
   "dependencies": {
-    "@gemunion/contracts-access": "^5.0.42",
-    "@gemunion/contracts-constants": "^5.0.42",
-    "@gemunion/contracts-erc1363": "^5.0.42",
-    "@gemunion/contracts-finance": "^5.0.42",
-    "@gemunion/contracts-utils": "^5.0.42",
+    "@gemunion/contracts-access": "^5.0.43",
+    "@gemunion/contracts-constants": "^5.0.43",
+    "@gemunion/contracts-erc1363": "^5.0.43",
+    "@gemunion/contracts-finance": "^5.0.43",
+    "@gemunion/contracts-utils": "^5.0.43",
     "@nomicfoundation/hardhat-ignition": "0.15.5",
     "@nomicfoundation/hardhat-ignition-ethers": "0.15.5",
     "@nomicfoundation/hardhat-toolbox": "5.0.0"
@@ -79,5 +79,5 @@
     "test": "hardhat test"
   },
   "types": "./dist/index.d.ts",
-  "version": "5.0.42"
+  "version": "5.0.43"
 }

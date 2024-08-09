@@ -12,7 +12,7 @@
     "@typechain/ethers-v6": "0.5.1",
     "@typechain/hardhat": "9.1.0",
     "chai": "4.5.0",
-    "hardhat": "2.22.7",
+    "hardhat": "2.22.8",
     "hardhat-gas-reporter": "2.2.0",
     "solidity-coverage": "0.8.12",
     "typechain": "8.3.2"

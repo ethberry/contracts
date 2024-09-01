@@ -21,8 +21,8 @@ abstract contract ERC4907 is IERC4907, ERC721 {
   /// @param expires  UNIX timestamp, The new user could use the NFT before expires
   function setUser(uint256 tokenId, address user, uint64 expires) public virtual {
     address from = _ownerOf(tokenId);
-    if (!_isAuthorized(from, msg.sender, tokenId)) {
-      revert ERC721InsufficientApproval(msg.sender, tokenId);
+    if (!_isAuthorized(from, _msgSender(), tokenId)) {
+      revert ERC721InsufficientApproval(_msgSender(), tokenId);
     }
     UserInfo storage info = _users[tokenId];
     info.user = user;

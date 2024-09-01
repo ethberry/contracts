@@ -12,12 +12,12 @@ import { VRFConsumerBaseV2 } from "@chainlink/contracts/src/v0.8/vrf/VRFConsumer
 import { VRFCoordinatorV2Interface } from "@chainlink/contracts/src/v0.8/vrf/interfaces/VRFCoordinatorV2Interface.sol";
 
 abstract contract ChainLinkBaseV2 is AccessControl, VRFConsumerBaseV2 {
-  bytes32 internal _keyHash;
+  bytes32 internal immutable _keyHash;
+  uint16 internal immutable _minReqConfs;
+  uint32 internal immutable _callbackGasLimit;
+  uint32 internal immutable _numWords;
+  VRFCoordinatorV2Interface immutable COORDINATOR;
   uint64 internal _subId;
-  uint16 internal _minReqConfs;
-  uint32 internal _callbackGasLimit;
-  uint32 internal _numWords;
-  VRFCoordinatorV2Interface COORDINATOR;
 
   error InvalidSubscription();
   event VrfSubscriptionSet(uint64 subId);

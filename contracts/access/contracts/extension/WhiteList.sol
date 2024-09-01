@@ -31,14 +31,10 @@ abstract contract WhiteList is IWhiteList, AccessControl {
     return whiteList[account];
   }
 
-  function _whitelist(address account) internal view {
-    if (!this.isWhitelisted(account)) {
-      revert WhiteListError(account);
-    }
-  }
-
   modifier onlyWhiteListed() {
-    _whitelist(_msgSender());
+    if (!_isWhitelisted(_msgSender())) {
+      revert WhiteListError(_msgSender());
+    }
     _;
   }
 

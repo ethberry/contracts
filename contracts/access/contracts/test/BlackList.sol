@@ -13,7 +13,7 @@ contract BlackListTest is BlackList {
     _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
   }
 
-  function testMe() external view onlyNotBlackListed returns (bool success) {
+  function testMe() external view onlyNotBlackListed returns (bool) {
     return true;
   }
 }

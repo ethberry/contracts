@@ -9,8 +9,8 @@ pragma solidity ^0.8.20;
 import { VRFConsumerBase } from "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBase.sol";
 
 abstract contract ChainLinkBase is VRFConsumerBase {
-  bytes32 internal _keyHash;
-  uint256 internal _fee;
+  bytes32 internal immutable _keyHash;
+  uint256 internal immutable _fee;
 
   constructor(address vrf, address link, bytes32 keyHash, uint256 fee) VRFConsumerBase(vrf, link) {
     _fee = fee;

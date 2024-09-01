@@ -33,13 +33,13 @@ contract GeneralizedCollection is IGeneralizedCollectionErrors {
 
   // Count records in the collection
 
-  function _getRecordCount() internal view virtual returns (uint256 recordCount) {
+  function _getRecordCount() internal view virtual returns (uint256) {
     return recordList.length;
   }
 
   // Count fields in a record
 
-  function _getRecordFieldKeyCount(uint256 pk) internal view virtual returns (uint256 keyCount) {
+  function _getRecordFieldKeyCount(uint256 pk) internal view virtual returns (uint256) {
     if (!_isRecord(pk)) {
       revert RecordNotFound(pk);
     }
@@ -59,7 +59,7 @@ contract GeneralizedCollection is IGeneralizedCollectionErrors {
 
   // Check a field key in a specific record
 
-  function _isRecordFieldKey(uint256 pk, bytes32 fieldKey) internal view virtual returns (bool isIndeed) {
+  function _isRecordFieldKey(uint256 pk, bytes32 fieldKey) internal view virtual returns (bool) {
     if (!_isRecord(pk)) {
       return false;
     }

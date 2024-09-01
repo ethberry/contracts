@@ -31,14 +31,10 @@ abstract contract BlackList is IBlackList, AccessControl {
     return blackList[account];
   }
 
-  function _blacklist(address account) internal view {
-    if (this.isBlacklisted(account)) {
-      revert BlackListError(account);
-    }
-  }
-
   modifier onlyNotBlackListed() {
-    _blacklist(_msgSender());
+    if (_isBlacklisted(_msgSender())) {
+      revert BlackListError(_msgSender());
+    }
     _;
   }
 

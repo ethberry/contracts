@@ -9,7 +9,7 @@ pragma solidity ^0.8.20;
 import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 abstract contract ERC721Capped is ERC721 {
-  uint256 internal _cap;
+  uint256 internal immutable _cap;
   uint256 private _allTokens;
 
   error ERC721ExceededCap(uint256 increasedSupply, uint256 cap);

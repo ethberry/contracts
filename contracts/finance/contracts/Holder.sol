@@ -20,7 +20,7 @@ import {
 /**
  * @dev NativeReceiver contract receives NATIVE tokens.
  */
-contract NativeReceiver is Context {
+abstract contract NativeReceiver is Context {
   event PaymentReceived(address from, uint256 amount);
 
   receive() external payable virtual {
@@ -31,7 +31,7 @@ contract NativeReceiver is Context {
 /**
  * @dev NativeRejector contract rejects NATIVE tokens.
  */
-contract NativeRejector is Context {
+abstract contract NativeRejector is Context {
   error PaymentRejected(address from, uint256 amount);
   /**
    * @notice No tipping!
@@ -45,7 +45,7 @@ contract NativeRejector is Context {
 /**
  * @dev CoinHolder contract can receive ERC20 and ERC1363 tokens.
  */
-contract CoinHolder is ERC165, ERC1363Receiver {
+abstract contract CoinHolder is ERC165, ERC1363Receiver {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
@@ -60,7 +60,7 @@ contract CoinHolder is ERC165, ERC1363Receiver {
 /**
  * @dev NftHolder contract can receive ERC721, ERC998 tokens.
  */
-contract NftHolder is ERC165, ERC721Holder {
+abstract contract NftHolder is ERC165, ERC721Holder {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
@@ -72,7 +72,7 @@ contract NftHolder is ERC165, ERC721Holder {
 /**
  * @dev SemiCoinHolder contract can receive ERC20 and ERC1155 tokens.
  */
-contract SemiCoinHolder is CoinHolder, ERC1155Holder {
+abstract contract SemiCoinHolder is CoinHolder, ERC1155Holder {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
@@ -84,7 +84,7 @@ contract SemiCoinHolder is CoinHolder, ERC1155Holder {
 /**
  * @dev SemiNftHolder contract can receive ERC721, ERC998 and ERC1155 tokens.
  */
-contract SemiNftHolder is NftHolder, ERC1155Holder {
+abstract contract SemiNftHolder is NftHolder, ERC1155Holder {
   /**
    * @dev See {IERC165-supportsInterface}.
    */
@@ -96,7 +96,7 @@ contract SemiNftHolder is NftHolder, ERC1155Holder {
 /**
  * @dev AllTypesHolder contract can receive ERC20, ERC721, ERC998 and ERC1155 tokens.
  */
-contract AllTypesHolder is CoinHolder, SemiNftHolder {
+abstract contract AllTypesHolder is CoinHolder, SemiNftHolder {
   /**
    * @dev See {IERC165-supportsInterface}.
    */

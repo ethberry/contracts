@@ -6,4 +6,4 @@
 
 pragma solidity ^0.8.20;
 
-import { NativeRejectorMock } from "@gemunion/contracts-finance/contracts/test/MOCKS.sol";
+import { NativeRejectorMock } from "@gemunion/contracts-finance/contracts/HolderMocks.sol";

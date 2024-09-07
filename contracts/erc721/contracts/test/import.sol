@@ -6,6 +6,6 @@
 
 pragma solidity ^0.8.20;
 
-import { AllTypesHolderMock, NativeRejectorMock } from "@gemunion/contracts-finance/contracts/test/MOCKS.sol";
+import { AllTypesHolderMock, NativeRejectorMock } from "@gemunion/contracts-finance/contracts/HolderMocks.sol";
 
 import { VRFCoordinatorMock } from "@gemunion/contracts-chain-link/contracts/mocks/VRFCoordinator.sol";

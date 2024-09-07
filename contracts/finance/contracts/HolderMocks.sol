@@ -6,7 +6,7 @@
 
 pragma solidity ^0.8.20;
 
-import {NativeReceiver, NativeRejector, CoinHolder, NftHolder, SemiCoinHolder, SemiNftHolder, AllTypesHolder} from "../Holder.sol";
+import {NativeReceiver, NativeRejector, CoinHolder, NftHolder, SemiCoinHolder, SemiNftHolder, AllTypesHolder} from "./Holder.sol";
 
 contract NativeReceiverMock is NativeReceiver {}
 

@@ -8,7 +8,7 @@
     "url": "https://github.com/gemunion/framework/issues"
   },
   "devDependencies": {
-    "@types/jest": "29.5.12",
+    "@types/jest": "29.5.13",
     "ethers": "6.13.2",
     "jest": "29.7.0",
     "jest-environment-node": "29.7.0",

@@ -7,7 +7,7 @@
   "dependencies": {
     "@gemunion/utils": "1.5.0",
     "@nomicfoundation/hardhat-toolbox": "5.0.0",
-    "hardhat": "2.22.10"
+    "hardhat": "2.22.11"
   },
   "devDependencies": {
     "ethers": "6.13.2",

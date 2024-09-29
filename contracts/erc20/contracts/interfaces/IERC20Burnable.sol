@@ -3,7 +3,7 @@
 pragma solidity ^0.8.20;
 
 // Author: TrejGun
-// Email: trejgun@gmail.com
+// Email: trejgun+opensource@gmail.com
 // Website: https://ethberry.io/
 
 interface ERC20Burnable {

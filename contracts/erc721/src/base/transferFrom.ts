@@ -2,11 +2,11 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
-import { tokenId } from "@gemunion/contracts-constants";
+import { tokenId } from "@ethberry/contracts-constants";
 
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
-import { deployHolder } from "@gemunion/contracts-finance";
+import { deployHolder } from "@ethberry/contracts-finance";
 
 export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721Options = {}) {
   const { mint = defaultMintERC721, batchSize = 0n } = options;

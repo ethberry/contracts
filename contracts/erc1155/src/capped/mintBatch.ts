@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount, tokenId } from "@gemunion/contracts-constants";
+import { amount, tokenId } from "@ethberry/contracts-constants";
 
 import type { IERC1155Options } from "../shared/defaultMint";
 import { defaultMintBatchERC1155 } from "../shared/defaultMint";

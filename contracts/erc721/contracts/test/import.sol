@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 
 // Author: TrejGun
-// Email: trejgun@gemunion.io
-// Website: https://gemunion.io/
+// Email: trejgun@gmail.com
+// Website: https://ethberry.io/
 
 pragma solidity ^0.8.20;
 
-import { AllTypesHolderMock, NativeRejectorMock } from "@gemunion/contracts-finance/contracts/HolderMocks.sol";
+import { AllTypesHolderMock, NativeRejectorMock } from "@ethberry/contracts-finance/contracts/HolderMocks.sol";
 
-import { VRFCoordinatorMock } from "@gemunion/contracts-chain-link/contracts/mocks/VRFCoordinator.sol";
+import { VRFCoordinatorMock } from "@ethberry/contracts-chain-link/contracts/mocks/VRFCoordinator.sol";

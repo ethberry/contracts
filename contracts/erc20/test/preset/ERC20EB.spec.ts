@@ -1,6 +1,6 @@
-import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@gemunion/contracts-constants";
-import { shouldBehaveLikeAccessControlEnumerable } from "@gemunion/contracts-access";
-import { shouldSupportsInterface } from "@gemunion/contracts-utils";
+import { DEFAULT_ADMIN_ROLE, InterfaceId, MINTER_ROLE } from "@ethberry/contracts-constants";
+import { shouldBehaveLikeAccessControlEnumerable } from "@ethberry/contracts-access";
+import { shouldSupportsInterface } from "@ethberry/contracts-utils";
 
 import { shouldBehaveLikeERC20, shouldBehaveLikeERC20Burnable } from "../../src";
 import { deployERC20 } from "../../src/fixtures";

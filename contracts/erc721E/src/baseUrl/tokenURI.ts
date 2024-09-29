@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { baseTokenURI } from "@gemunion/contracts-constants";
+import { baseTokenURI } from "@ethberry/contracts-constants";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";

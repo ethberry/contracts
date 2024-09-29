@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 import { BigNumberish } from "ethers";
 
-import { baseTokenURI, royalty, tokenMaxAmount, tokenName, tokenSymbol } from "@gemunion/contracts-constants";
+import { baseTokenURI, royalty, tokenMaxAmount, tokenName, tokenSymbol } from "@ethberry/contracts-constants";
 
 export async function deployERC721(name: string): Promise<any> {
   const erc721Factory = await ethers.getContractFactory(name);

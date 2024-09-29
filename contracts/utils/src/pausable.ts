@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { InterfaceId, PAUSER_ROLE } from "@gemunion/contracts-constants";
+import { InterfaceId, PAUSER_ROLE } from "@ethberry/contracts-constants";
 
 export interface IPauseOptions {
   pauserRole?: string;

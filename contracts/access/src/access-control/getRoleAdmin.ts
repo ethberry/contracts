@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { DEFAULT_ADMIN_ROLE } from "@gemunion/contracts-constants";
+import { DEFAULT_ADMIN_ROLE } from "@ethberry/contracts-constants";
 
 import type { IAccessControlOptions } from "../shared/interfaces";
 

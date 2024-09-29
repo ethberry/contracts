@@ -3,7 +3,7 @@ import { ethers, web3 } from "hardhat";
 import { ZeroAddress } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
-import { tokenId } from "@gemunion/contracts-constants";
+import { tokenId } from "@ethberry/contracts-constants";
 
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";

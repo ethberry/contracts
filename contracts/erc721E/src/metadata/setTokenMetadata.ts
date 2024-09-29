@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { METADATA_ROLE, RARITY, TEMPLATE_ID } from "@gemunion/contracts-constants";
+import { METADATA_ROLE, RARITY, TEMPLATE_ID } from "@ethberry/contracts-constants";
 import { defaultMintERC721, IERC721EnumOptions, TERC721MetadataOptions } from "../shared/defaultMint";
 
 export function shouldSetTokenMetadata(

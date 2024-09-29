@@ -2,8 +2,8 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
-import { amount } from "@gemunion/contracts-constants";
-import { deployRejector } from "@gemunion/contracts-finance";
+import { amount } from "@ethberry/contracts-constants";
+import { deployRejector } from "@ethberry/contracts-finance";
 
 import type { IERC20Options } from "../shared/defaultMint";
 import { defaultMintERC20 } from "../shared/defaultMint";

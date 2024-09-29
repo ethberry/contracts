@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { DEFAULT_ADMIN_ROLE, DEFAULT_TEST_ROLE } from "@gemunion/contracts-constants";
+import { DEFAULT_ADMIN_ROLE, DEFAULT_TEST_ROLE } from "@ethberry/contracts-constants";
 
 import type { IAccessControlOptions } from "../shared/interfaces";
 

@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount } from "@gemunion/contracts-constants";
+import { amount } from "@ethberry/contracts-constants";
 import { defaultMintERC20, IERC20Options } from "./shared/defaultMint";
 
 export function shouldBehaveLikeERC20Capped(factory: () => Promise<any>, options: IERC20Options = {}) {

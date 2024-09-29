@@ -1,6 +1,6 @@
-import { InterfaceId } from "@gemunion/contracts-constants";
-import { shouldBehaveLikeOwnable } from "@gemunion/contracts-access";
-import { shouldSupportsInterface } from "@gemunion/contracts-utils";
+import { InterfaceId } from "@ethberry/contracts-constants";
+import { shouldBehaveLikeOwnable } from "@ethberry/contracts-access";
+import { shouldSupportsInterface } from "@ethberry/contracts-utils";
 
 import { shouldBehaveLikeERC721, shouldBehaveLikeERC721Burnable } from "../../src";
 import { deployERC721 } from "../../src/fixtures";

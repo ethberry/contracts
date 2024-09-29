@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 
 // Author: TrejGun
-// Email: trejgun@gemunion.io
-// Website: https://gemunion.io/
+// Email: trejgun@gmail.com
+// Website: https://ethberry.io/
 
 pragma solidity ^0.8.20;
 
@@ -10,7 +10,7 @@ import { ERC20, IERC20, IERC20Metadata } from "@openzeppelin/contracts/token/ERC
 import { ERC20FlashMint } from "@openzeppelin/contracts/token/ERC20/extensions/ERC20FlashMint.sol";
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 
-import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "@gemunion/contracts-utils/contracts/roles.sol";
+import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "@ethberry/contracts-utils/contracts/roles.sol";
 
 contract ERC20AF is AccessControl, ERC20FlashMint {
   uint256 _flashFeeAmount;

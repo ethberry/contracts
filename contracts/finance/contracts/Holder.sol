@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 
 // Author: TrejGun
-// Email: trejgun@gemunion.io
-// Website: https://gemunion.io/
+// Email: trejgun@gmail.com
+// Website: https://ethberry.io/
 
 pragma solidity ^0.8.20;
 
@@ -15,7 +15,7 @@ import {
   ERC1363Receiver,
   IERC1363Receiver,
   IERC1363Spender
-} from "@gemunion/contracts-erc1363/contracts/extensions/ERC1363Receiver.sol";
+} from "@ethberry/contracts-erc1363/contracts/extensions/ERC1363Receiver.sol";
 
 /**
  * @dev NativeReceiver contract receives NATIVE tokens.

@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { deployContract } from "@gemunion/contracts-utils";
-import { amount } from "@gemunion/contracts-constants";
+import { deployContract } from "@ethberry/contracts-utils";
+import { amount } from "@ethberry/contracts-constants";
 
 describe("NativeRejectorMock", function () {
   const factory = () => deployContract(this.title);

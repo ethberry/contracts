@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { baseTokenURI, tokenId } from "@gemunion/contracts-constants";
+import { baseTokenURI, tokenId } from "@ethberry/contracts-constants";
 
 export function shouldCustomURI(factory: () => Promise<any>) {
   describe("uri", function () {

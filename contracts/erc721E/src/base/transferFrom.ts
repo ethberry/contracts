@@ -4,7 +4,7 @@ import { ZeroAddress } from "ethers";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
-import { deployHolder } from "@gemunion/contracts-finance";
+import { deployHolder } from "@ethberry/contracts-finance";
 
 export function shouldTransferFrom(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
   const { mint = defaultMintERC721, tokenId: defaultTokenId = 0n } = options;

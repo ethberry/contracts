@@ -5,12 +5,7 @@ async function main() {
   const instanse = await factory.deploy();
 
   const fib = await instanse.fibonacci(10); // 55
-  console.info(fib.toString());
+  return fib.toString();
 }
 
-main()
-  .then(() => process.exit(0))
-  .catch(error => {
-    console.error(error);
-    process.exit(1);
-  });
+main().then(console.info).catch(console.error);

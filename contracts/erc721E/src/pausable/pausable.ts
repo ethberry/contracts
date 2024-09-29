@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { shouldBehaveLikePausable } from "@gemunion/contracts-utils";
+import { shouldBehaveLikePausable } from "@ethberry/contracts-utils";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { baseTokenURI } from "@gemunion/contracts-constants";
+import { baseTokenURI } from "@ethberry/contracts-constants";
 
 export function shouldURI(factory: () => Promise<any>) {
   describe("uri", function () {

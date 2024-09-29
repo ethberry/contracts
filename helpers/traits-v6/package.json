@@ -2,10 +2,10 @@
   "author": {
     "email": "TrejGun@gmail.com",
     "name": "TrejGun",
-    "url": "https://gemunion.io/"
+    "url": "https://ethberry.io/"
   },
   "bugs": {
-    "url": "https://github.com/gemunion/framework/issues"
+    "url": "https://github.com/ethberry/framework/issues"
   },
   "devDependencies": {
     "@types/jest": "29.5.13",
@@ -23,7 +23,7 @@
   "keywords": [],
   "license": "UNLICENSED",
   "main": "./dist/index.js",
-  "name": "@gemunion/traits-v6",
+  "name": "@ethberry/traits-v6",
   "peerDependencies": {
     "ethers": "^6.0.0"
   },
@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gemunion/contracts"
+    "url": "https://github.com/ethberry/contracts"
   },
   "scripts": {
     "build": "tsc",
@@ -43,7 +43,7 @@
     "test": "jest --config=jest.config.json --detectOpenHandles --runInBand --forceExit"
   },
   "sideEffects": false,
-  "title": "-=Gemun Ion Studio=-",
+  "title": "-=EthBerry Studio=-",
   "types": "./dist/index.d.ts",
   "version": "1.0.26"
 }

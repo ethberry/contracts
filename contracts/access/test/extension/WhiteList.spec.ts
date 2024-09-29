@@ -1,5 +1,5 @@
-import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@gemunion/contracts-constants";
-import { shouldSupportsInterface } from "@gemunion/contracts-utils";
+import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@ethberry/contracts-constants";
+import { shouldSupportsInterface } from "@ethberry/contracts-utils";
 
 import { shouldBehaveLikeAccessControl, shouldBehaveLikeWhiteList, shouldBehaveLikeWhiteListMe } from "../../src";
 import { deployAccessList } from "../fixtures";

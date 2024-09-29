@@ -1,4 +1,4 @@
-import { shouldGetRoyaltyInfo, shouldSetDefaultRoyalty, shouldSetTokenRoyalty } from "@gemunion/contracts-erc721";
+import { shouldGetRoyaltyInfo, shouldSetDefaultRoyalty, shouldSetTokenRoyalty } from "@ethberry/contracts-erc721";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
-import { deployRejector, deployHolder } from "@gemunion/contracts-finance";
+import { deployRejector, deployHolder } from "@ethberry/contracts-finance";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";

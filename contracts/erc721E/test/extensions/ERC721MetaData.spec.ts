@@ -4,9 +4,9 @@ import {
   METADATA_ROLE,
   MINTER_ROLE,
   TEMPLATE_ID,
-} from "@gemunion/contracts-constants";
-import { shouldBehaveLikeAccessControl } from "@gemunion/contracts-access";
-import { shouldSupportsInterface } from "@gemunion/contracts-utils";
+} from "@ethberry/contracts-constants";
+import { shouldBehaveLikeAccessControl } from "@ethberry/contracts-access";
+import { shouldSupportsInterface } from "@ethberry/contracts-utils";
 
 import {
   shouldBehaveLikeERC721,

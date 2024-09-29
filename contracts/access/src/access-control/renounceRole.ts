@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 // import { Contract } from "ethers";
 import { id } from "ethers";
 
-import { DEFAULT_TEST_ROLE } from "@gemunion/contracts-constants";
+import { DEFAULT_TEST_ROLE } from "@ethberry/contracts-constants";
 
 import type { IAccessControlOptions } from "../shared/interfaces";
 

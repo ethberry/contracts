@@ -2,8 +2,8 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
-import { amount, InterfaceId, MINTER_ROLE, tokenId } from "@gemunion/contracts-constants";
-import { deployRejector, deployHolder } from "@gemunion/contracts-finance";
+import { amount, InterfaceId, MINTER_ROLE, tokenId } from "@ethberry/contracts-constants";
+import { deployRejector, deployHolder } from "@ethberry/contracts-finance";
 
 import type { IERC1155Options } from "../shared/defaultMint";
 import { defaultMintBatchERC1155 } from "../shared/defaultMint";

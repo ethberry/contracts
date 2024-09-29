@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { parseUnits } from "ethers";
 
-import { royalty } from "@gemunion/contracts-constants";
+import { royalty } from "@ethberry/contracts-constants";
 import type { IERC721Options } from "../shared/defaultMint";
 
 export function shouldGetRoyaltyInfo(factory: () => Promise<any>, options: IERC721Options = {}) {

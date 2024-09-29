@@ -2,8 +2,8 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
-import { amount } from "@gemunion/contracts-constants";
-import { deployERC1363Mock } from "@gemunion/contracts-mocks";
+import { amount } from "@ethberry/contracts-constants";
+import { deployERC1363Mock } from "@ethberry/contracts-mocks";
 
 export function shouldReceiveErc1363(factory: () => Promise<any>) {
   describe("ERC1363", function () {

@@ -1,7 +1,7 @@
 import { BaseContract, BigNumberish, Signer } from "ethers";
 import type { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 
-import { amount as defaultAmount } from "@gemunion/contracts-constants";
+import { amount as defaultAmount } from "@ethberry/contracts-constants";
 
 export type TMintERC20Fn = (
   contractInstance: any,

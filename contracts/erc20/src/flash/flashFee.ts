@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ZeroAddress } from "ethers";
 
-import { amount } from "@gemunion/contracts-constants";
+import { amount } from "@ethberry/contracts-constants";
 
 export function shouldFlashFee(factory: () => Promise<any>) {
   describe("flashFee", function () {

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { InterfaceId } from "@gemunion/contracts-constants";
+import { InterfaceId } from "@ethberry/contracts-constants";
 
 export function shouldSupportsInterface(factory: () => Promise<any>) {
   return (supportedInterfaces: Array<string> = [], unsupportedInterfaces: Array<string> = []) => {

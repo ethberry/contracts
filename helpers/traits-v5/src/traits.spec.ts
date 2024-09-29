@@ -12,30 +12,30 @@ const data = {
 // 0x010000000200000012000000800000010000000400
 const dna = 1461501638011467653471668687260973553737594307584n;
 
-describe("Traits", () => {
-  describe("encodeNumbers", () => {
-    it("should encode numbers", () => {
+describe("Traits", function () {
+  describe("encodeNumbers", function () {
+    it("should encode numbers", function () {
       const result = encodeNumbers(Object.values(data));
       expect(result).toEqual(dna);
     });
   });
 
-  describe("decodeNumber", () => {
-    it("should decode numbers", () => {
+  describe("decodeNumber", function () {
+    it("should decode numbers", function () {
       const result = decodeNumber(dna);
       expect(result).toEqual([0, 0, 1, 2, 18, 128, 256, 1024]);
     });
   });
 
-  describe("encodeTraits", () => {
-    it("should encode traits", () => {
+  describe("encodeTraits", function () {
+    it("should encode traits", function () {
       const result = encodeTraits(data);
       expect(result).toEqual(dna);
     });
   });
 
-  describe("decodeTraits", () => {
-    it("should decode traits", () => {
+  describe("decodeTraits", function () {
+    it("should decode traits", function () {
       const result = decodeTraits(dna);
       expect(result).toMatchObject(data);
     });

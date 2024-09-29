@@ -2,8 +2,8 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
-import { amount } from "@gemunion/contracts-constants";
-import { deployERC1363Mock, deployERC20Mock } from "@gemunion/contracts-mocks";
+import { amount } from "@ethberry/contracts-constants";
+import { deployERC1363Mock, deployERC20Mock } from "@ethberry/contracts-mocks";
 
 export function shouldReceive(factory: () => Promise<any>) {
   describe("receive NATIVE", function () {

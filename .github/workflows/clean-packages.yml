@@ -1,10 +1,10 @@
 name: Clean Packages
 # short list packages names
-# gh api --jq '.[].name' -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "page: 2" -H "Per_page: 100" "/orgs/GemunIon/packages?package_type=npm" > pkglist.txt
+# gh api --jq '.[].name' -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "page: 2" -H "Per_page: 100" "/orgs/ethberry/packages?package_type=npm" > pkglist.txt
 
 
-# gh api --method DELETE -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "/orgs/GemunIon/packages/npm/nest-js-module-firebase/versions/102391991"
-# gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "/orgs/GemunIon/packages/npm/nest-js-module-firebase/versions"
+# gh api --method DELETE -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "/orgs/ethberry/packages/npm/nest-js-module-firebase/versions/102391991"
+# gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "/orgs/ethberry/packages/npm/nest-js-module-firebase/versions"
 
 on:
   workflow_dispatch:

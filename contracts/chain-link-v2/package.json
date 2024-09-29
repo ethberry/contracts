@@ -1,12 +1,12 @@
 {
   "author": {
-    "email": "trejgun@gemunion.io",
+    "email": "trejgun@gmail.com",
     "name": "TrejGun",
-    "url": "https://gemunion.io/"
+    "url": "https://ethberry.io/"
   },
   "dependencies": {
-    "@gemunion/contracts-constants": "^5.0.47",
-    "@gemunion/contracts-utils": "^5.0.47",
+    "@ethberry/contracts-constants": "^5.0.47",
+    "@ethberry/contracts-utils": "^5.0.47",
     "@nomicfoundation/hardhat-ignition": "0.15.5",
     "@nomicfoundation/hardhat-ignition-ethers": "0.15.5",
     "@nomicfoundation/hardhat-toolbox": "5.0.0"
@@ -42,7 +42,7 @@
   },
   "license": "UNLICENSED",
   "main": "./dist/index.js",
-  "name": "@gemunion/contracts-chain-link-v2",
+  "name": "@ethberry/contracts-chain-link-v2",
   "peerDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
     "@nomicfoundation/hardhat-ethers": "^3.0.0",
@@ -63,7 +63,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gemunion/contracts"
+    "url": "https://github.com/ethberry/contracts"
   },
   "scripts": {
     "build": "hardhat compile && tsc",

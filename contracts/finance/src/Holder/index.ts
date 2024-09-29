@@ -1,5 +1,5 @@
 import "@nomicfoundation/hardhat-toolbox";
-import { deployContract } from "@gemunion/contracts-utils";
+import { deployContract } from "@ethberry/contracts-utils";
 
 export async function deployHolder(name = "AllTypesHolderMock") {
   return deployContract(name);

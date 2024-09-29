@@ -1,7 +1,7 @@
 import "@nomicfoundation/hardhat-toolbox";
 import { ethers } from "hardhat";
 
-import { baseTokenURI, tokenName, tokenSymbol } from "@gemunion/contracts-constants";
+import { baseTokenURI, tokenName, tokenSymbol } from "@ethberry/contracts-constants";
 
 export async function deployERC20Mock(name = "ERC20Mock"): Promise<any> {
   const factory = await ethers.getContractFactory(name);

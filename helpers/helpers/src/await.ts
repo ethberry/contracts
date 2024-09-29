@@ -2,7 +2,7 @@ import "@nomicfoundation/hardhat-toolbox";
 
 import { ethers, network } from "hardhat";
 
-import { delay } from "@gemunion/utils";
+import { delay } from "@ethberry/utils";
 
 export const blockAwait = async function (blockDelay = 2, ms = 1000): Promise<void> {
   if (network.name !== "hardhat") {

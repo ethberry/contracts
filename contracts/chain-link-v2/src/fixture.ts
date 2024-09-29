@@ -16,7 +16,7 @@ export async function deployLinkVrfFixtureV2() {
   await vrfInstance.createSubscription();
   const vrfEventFilter = vrfInstance.filters.SubscriptionCreated();
   const vrfEvents = (await vrfInstance.queryFilter(vrfEventFilter)) as unknown as Array<EventLog>;
-  if (vrfEvents && vrfEvents.length && vrfEvents[0].args) {
+  if (vrfEvents?.length && vrfEvents[0].args) {
     const subsriptionId = vrfEvents[0].args.subId;
     expect(subsriptionId).to.equal(1);
 

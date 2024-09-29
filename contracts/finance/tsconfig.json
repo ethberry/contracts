@@ -15,7 +15,7 @@
     "noUnusedParameters": false,
     "outDir": "./dist",
     "resolveJsonModule": true,
-    "rootDirs": ["./src", "./scripts"],
+    "rootDir": "./src",
     "skipLibCheck": true,
     "sourceMap": true,
     "strictBindCallApply": true,

@@ -1,8 +1,8 @@
 {
   "author": {
-    "email": "trejgun@gemunion.io",
+    "email": "trejgun@gmail.com",
     "name": "TrejGun",
-    "url": "https://gemunion.io/"
+    "url": "https://ethberry.io/"
   },
   "devDependencies": {
     "dotenv": "16.4.5",
@@ -17,14 +17,14 @@
   ],
   "license": "UNLICENSED",
   "main": "./dist/index.js",
-  "name": "@gemunion/contracts-constants",
+  "name": "@ethberry/contracts-constants",
   "publishConfig": {
     "access": "public",
     "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gemunion/contracts"
+    "url": "https://github.com/ethberry/contracts"
   },
   "scripts": {
     "build": "tsc",
@@ -35,7 +35,7 @@
     "test": "exit 0"
   },
   "sideEffects": false,
-  "title": "-=Gemun Ion Studio=-",
+  "title": "-=EthBerry Studio=-",
   "types": "./dist/index.d.ts",
   "version": "5.0.47"
 }

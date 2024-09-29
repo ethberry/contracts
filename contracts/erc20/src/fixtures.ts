@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 
-import { amount, tokenName, tokenSymbol } from "@gemunion/contracts-constants";
+import { amount, tokenName, tokenSymbol } from "@ethberry/contracts-constants";
 
 export async function deployERC20(name: string) {
   const erc20Factory = await ethers.getContractFactory(name);

@@ -8,7 +8,7 @@ import {
   tokenMaxAmount,
   tokenName,
   tokenSymbol,
-} from "@gemunion/contracts-constants";
+} from "@ethberry/contracts-constants";
 
 export async function deployERC721(name: string): Promise<any> {
   const erc721Factory = await ethers.getContractFactory(name);

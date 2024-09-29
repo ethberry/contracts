@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { TEMPLATE_ID, tokenId } from "@gemunion/contracts-constants";
+import { TEMPLATE_ID, tokenId } from "@ethberry/contracts-constants";
 
 export function shouldIsRecord(factory: () => Promise<any>) {
   describe("isRecord", function () {

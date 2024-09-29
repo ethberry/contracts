@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
 
 // Author: TrejGun
-// Email: trejgun@gemunion.io
-// Website: https://gemunion.io/
+// Email: trejgun@gmail.com
+// Website: https://ethberry.io/
 
 pragma solidity ^0.8.20;
 
 import { ERC1155, ERC1155Burnable } from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 
-import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "@gemunion/contracts-utils/contracts/roles.sol";
+import { DEFAULT_ADMIN_ROLE, MINTER_ROLE } from "@ethberry/contracts-utils/contracts/roles.sol";
 
 contract ERC1155Mock is AccessControl, ERC1155Burnable {
   constructor(string memory uri) ERC1155(uri) {

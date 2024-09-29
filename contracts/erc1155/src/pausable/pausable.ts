@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount, tokenId } from "@gemunion/contracts-constants";
-import { shouldBehaveLikePausable } from "@gemunion/contracts-utils";
+import { amount, tokenId } from "@ethberry/contracts-constants";
+import { shouldBehaveLikePausable } from "@ethberry/contracts-utils";
 
 export function shouldBehaveLikeERC1155Pausable(factory: () => Promise<any>) {
   shouldBehaveLikePausable(factory);

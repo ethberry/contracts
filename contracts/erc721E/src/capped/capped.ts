@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
-import { tokenMaxAmount } from "@gemunion/contracts-constants";
+import { tokenMaxAmount } from "@ethberry/contracts-constants";
 
 export function shouldBehaveLikeERC721Capped(factory: () => Promise<any>, options: IERC721EnumOptions = {}) {
   const { mint = defaultMintERC721 } = options;

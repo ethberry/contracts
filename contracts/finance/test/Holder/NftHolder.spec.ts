@@ -1,5 +1,5 @@
-import { deployContract, shouldSupportsInterface } from "@gemunion/contracts-utils";
-import { InterfaceId } from "@gemunion/contracts-constants";
+import { deployContract, shouldSupportsInterface } from "@ethberry/contracts-utils";
+import { InterfaceId } from "@ethberry/contracts-constants";
 
 import { shouldReceiveErc721 } from "./shared/erc721";
 

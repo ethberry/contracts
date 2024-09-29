@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 
 // Author: TrejGun
-// Email: trejgun@gemunion.io
-// Website: https://gemunion.io/
+// Email: trejgun@gmail.com
+// Website: https://ethberry.io/
 
 pragma solidity ^0.8.20;
 
@@ -12,8 +12,8 @@ import {
   AccessControlDefaultAdminRules
 } from "@openzeppelin/contracts/access/extensions/AccessControlDefaultAdminRules.sol";
 
-import { MINTER_ROLE } from "@gemunion/contracts-utils/contracts/roles.sol";
-import { ERC1363 } from "@gemunion/contracts-erc1363/contracts/extensions/ERC1363.sol";
+import { MINTER_ROLE } from "@ethberry/contracts-utils/contracts/roles.sol";
+import { ERC1363 } from "@ethberry/contracts-erc1363/contracts/extensions/ERC1363.sol";
 
 contract ERC20DB is AccessControlDefaultAdminRules, ERC20Burnable, ERC1363 {
   constructor(

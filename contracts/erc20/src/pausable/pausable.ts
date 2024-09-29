@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount, PAUSER_ROLE } from "@gemunion/contracts-constants";
+import { amount, PAUSER_ROLE } from "@ethberry/contracts-constants";
 import { defaultMintERC20, IERC20Options } from "../shared/defaultMint";
-import { shouldBehaveLikePausable } from "@gemunion/contracts-utils";
+import { shouldBehaveLikePausable } from "@ethberry/contracts-utils";
 
 export function shouldBehaveLikeERC20Pausable(factory: () => Promise<any>, options: IERC20Options = {}) {
   const { mint = defaultMintERC20, pauserRole = PAUSER_ROLE } = options;

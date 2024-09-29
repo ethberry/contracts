@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
-import { amount, tokenId } from "@gemunion/contracts-constants";
+import { amount, tokenId } from "@ethberry/contracts-constants";
 
 import type { IERC1155Options } from "../shared/defaultMint";
 import { defaultMintERC1155 } from "../shared/defaultMint";

@@ -1,6 +1,6 @@
-import { InterfaceId } from "@gemunion/contracts-constants";
-import { shouldBehaveLikeOwnable } from "@gemunion/contracts-access";
-import { shouldSupportsInterface } from "@gemunion/contracts-utils";
+import { InterfaceId } from "@ethberry/contracts-constants";
+import { shouldBehaveLikeOwnable } from "@ethberry/contracts-access";
+import { shouldSupportsInterface } from "@ethberry/contracts-utils";
 
 import { shouldBehaveLikeERC20, shouldBehaveLikeERC20Burnable, shouldBehaveLikeERC20Capped } from "../../src";
 import { deployERC20 } from "../../src/fixtures";

@@ -1,8 +1,0 @@
-dist/*
-coverage/*
-
-typechain-types/*
-cache/*
-artifacts/*
-/test
-/contracts/test

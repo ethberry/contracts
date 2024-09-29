@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { PAUSER_ROLE, tokenId } from "@gemunion/contracts-constants";
-import { shouldBehaveLikePausable } from "@gemunion/contracts-utils";
+import { PAUSER_ROLE, tokenId } from "@ethberry/contracts-constants";
+import { shouldBehaveLikePausable } from "@ethberry/contracts-utils";
 
 import type { IERC721Options } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";

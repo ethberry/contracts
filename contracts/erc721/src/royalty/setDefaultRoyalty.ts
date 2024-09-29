@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
-import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@gemunion/contracts-constants";
+import { DEFAULT_ADMIN_ROLE, InterfaceId } from "@ethberry/contracts-constants";
 
 import type { IERC721Options } from "../shared/defaultMint";
 

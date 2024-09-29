@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import type { IERC721Options } from "@gemunion/contracts-erc721";
+import type { IERC721Options } from "@ethberry/contracts-erc721";
 
 export function shouldBehaveLikeERC721Consecutive(factory: () => Promise<any>, options: IERC721Options = {}) {
   describe("consecutive", function () {

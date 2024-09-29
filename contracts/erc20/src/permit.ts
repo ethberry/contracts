@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { MaxUint256, Network, Signature, TypedDataEncoder } from "ethers";
 import { time } from "@openzeppelin/test-helpers";
 
-import { amount, tokenName } from "@gemunion/contracts-constants";
+import { amount, tokenName } from "@ethberry/contracts-constants";
 
 export function shouldBehaveLikeERC20Permit(factory: () => Promise<any>) {
   describe("permit", function () {

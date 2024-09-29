@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { amount } from "@gemunion/contracts-constants";
-import { deployERC1363Mock } from "@gemunion/contracts-mocks";
+import { amount } from "@ethberry/contracts-constants";
+import { deployERC1363Mock } from "@ethberry/contracts-mocks";
 
 export function shouldGetReleasable(factory: () => Promise<any>) {
   describe("releasable ETH ", function () {

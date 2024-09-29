@@ -2,8 +2,8 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
 
-import { tokenId } from "@gemunion/contracts-constants";
-import { deployERC721Mock } from "@gemunion/contracts-mocks";
+import { tokenId } from "@ethberry/contracts-constants";
+import { deployERC721Mock } from "@ethberry/contracts-mocks";
 
 export function shouldReceiveErc721(factory: () => Promise<any>) {
   describe("ERC721", function () {

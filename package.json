@@ -7,11 +7,11 @@
   "dependencies": {
     "@lerna/legacy-package-management": "8.1.8",
     "lerna": "8.1.8",
-    "nx": "19.8.0"
+    "nx": "19.8.2"
   },
   "devDependencies": {
     "@ethberry/eslint-config": "5.0.3",
-    "@types/node": "20.16.5",
+    "@types/node": "20.16.10",
     "husky": "4.3.8",
     "lint-staged": "15.2.10",
     "prettier": "3.3.3",

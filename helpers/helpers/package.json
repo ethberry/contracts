@@ -10,7 +10,7 @@
     "hardhat": "2.22.12"
   },
   "devDependencies": {
-    "ethers": "6.13.2",
+    "ethers": "6.13.3",
     "rimraf": "6.0.1"
   },
   "files": [

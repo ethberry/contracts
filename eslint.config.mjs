@@ -3,13 +3,23 @@ import mochaRules from "@ethberry/eslint-config/tests/mocha.mjs";
 
 export default [
   {
-    ignores: ["**/dist"],
+    ignores: [
+      "**/dist",
+      "**/artifacts",
+      "**/cache",
+      "**/coverage",
+      "**/typechain-types",
+    ],
   },
 
   {
     languageOptions: {
       parserOptions: {
-        project: ["./tsconfig.eslint.json", "./contracts/*tsconfig.eslint.json", "./helpers/*tsconfig.eslint.json"],
+        project: [
+          "./tsconfig.eslint.json",
+          "./contracts/*/tsconfig.eslint.json",
+          "./helpers/*/tsconfig.eslint.json",
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
     },

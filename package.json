@@ -12,7 +12,7 @@
   "devDependencies": {
     "@ethberry/eslint-config": "5.0.4",
     "@types/node": "20.16.10",
-    "husky": "4.3.8",
+    "husky": "9.1.6",
     "lint-staged": "15.2.10",
     "prettier": "3.3.3",
     "prettier-plugin-solidity": "1.4.1",
@@ -38,7 +38,8 @@
     "lint": "eslint . --fix",
     "precommit": "lint-staged",
     "prettier": "prettier . --write",
-    "test": "sh scripts/test.sh"
+    "test": "sh scripts/test.sh",
+    "prepare": "husky"
   },
   "version": "1.0.0"
 }

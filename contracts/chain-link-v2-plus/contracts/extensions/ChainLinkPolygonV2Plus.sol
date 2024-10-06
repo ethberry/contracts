@@ -15,7 +15,7 @@ abstract contract ChainLinkPolygonV2Plus is ChainLinkBaseV2Plus {
     uint32 numWords
   )
    ChainLinkBaseV2Plus(
-      address(0xec0Ed46f36576541C75739E915ADbCb3DE24bD77), // vrfCoordinator Polygon mainnet
+      address(0xec0Ed46f36576541C75739E915ADbCb3DE24bD77), // vrf
       0x0ffbbd0c1c18c0263dd778dadd1d64240d7bc338d95fec1cf0473928ca7eaf9e, // keyHash 200 gwei
       minReqConfs,
       callbackGasLimit,

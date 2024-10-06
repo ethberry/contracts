@@ -15,7 +15,7 @@ abstract contract ChainLinkBinanceV2 is ChainLinkBaseV2 {
     uint32 numWords
   )
     ChainLinkBaseV2(
-      address(0xc587d9053cd1118f25F645F9E08BB98c9712A4EE), // vrfCoordinatorV2 Binance mainnet
+      address(0xc587d9053cd1118f25F645F9E08BB98c9712A4EE), // vrf
       0x17cd473250a9a479dc7f234c64332ed4bc8af9e8ded7556aa6e66d83da49f470, // key hash 1000 gwei
       minReqConfs,
       callbackGasLimit,

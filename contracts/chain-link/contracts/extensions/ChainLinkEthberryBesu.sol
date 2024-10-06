@@ -8,7 +8,7 @@ pragma solidity ^0.8.20;
 
 import { ChainLinkBase } from "./ChainLinkBase.sol";
 
-abstract contract ChainLinkBesu is ChainLinkBase {
+abstract contract ChainLinkEthberryBesu is ChainLinkBase {
   constructor()
     ChainLinkBase(
       address(0xa50a51c09a5c451C52BB714527E1974b686D8e77), // vrfCoordinator

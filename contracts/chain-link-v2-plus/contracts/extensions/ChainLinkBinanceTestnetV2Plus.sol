@@ -15,7 +15,7 @@ abstract contract ChainLinkBinanceTestnetV2Plus is ChainLinkBaseV2Plus {
     uint32 numWords
   )
     ChainLinkBaseV2Plus(
-      address(0xDA3b641D438362C440Ac5458c57e00a712b66700), // vrfCoordinatorV2 Binance testnet
+      address(0xDA3b641D438362C440Ac5458c57e00a712b66700), // vrf
       0x8596b430971ac45bdf6088665b9ad8e8630c9d5049ab54b14dff711bee7c0e26, // key hash 50 gwei
       minReqConfs,
       callbackGasLimit,

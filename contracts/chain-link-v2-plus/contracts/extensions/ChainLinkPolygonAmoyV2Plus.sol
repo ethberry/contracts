@@ -15,7 +15,7 @@ abstract contract ChainLinkPolygonAmoyV2Plus is ChainLinkBaseV2Plus {
     uint32 numWords
   )
     ChainLinkBaseV2Plus(
-      address(0x343300b5d84D444B2ADc9116FEF1bED02BE49Cf2), // vrfCoordinator Polygon Amoy
+      address(0x343300b5d84D444B2ADc9116FEF1bED02BE49Cf2), // vrf
       0x816bedba8a50b294e5cbd47842baf240c2385f2eaf719edbd4f250a137a8c899, // keyHash 500 gwei
       minReqConfs,
       callbackGasLimit,

@@ -3,7 +3,6 @@ import { shouldMint } from "./mint";
 import { shouldBalanceOf } from "./balanceOf";
 import { shouldMintBatch } from "./mintBatch";
 import { shouldBalanceOfBatch } from "./balanceOfBatch";
-import { shouldURI } from "./uri";
 import { shouldSetApprovalForAll } from "./setApprovalForAll";
 import { shouldSafeTransferFrom } from "./safeTransferFrom";
 import { shouldSafeBatchTransferFrom } from "./safeBatchTransferFrom";
@@ -13,7 +12,6 @@ export function shouldBehaveLikeERC1155(factory: () => Promise<any>, options?: I
   shouldMintBatch(factory, options);
   shouldBalanceOf(factory, options);
   shouldBalanceOfBatch(factory, options);
-  shouldURI(factory);
   shouldSetApprovalForAll(factory, options);
   shouldSafeTransferFrom(factory, options);
   shouldSafeBatchTransferFrom(factory, options);
@@ -24,7 +22,6 @@ export {
   shouldBalanceOf,
   shouldMintBatch,
   shouldBalanceOfBatch,
-  shouldURI,
   shouldSetApprovalForAll,
   shouldSafeTransferFrom,
   shouldSafeBatchTransferFrom,

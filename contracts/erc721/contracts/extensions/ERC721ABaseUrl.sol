@@ -14,13 +14,12 @@ abstract contract ERC721ABaseUrl is AccessControl {
 
   event BaseURIUpdate(string baseTokenURI);
 
-
   constructor(string memory baseTokenURI) {
     _setBaseURI(baseTokenURI);
   }
 
   function _baseURI(string memory baseTokenURI) internal view virtual returns (string memory) {
-    return string(abi.encodePacked(baseTokenURI, "/", Strings.toHexString(uint160(address(this)), 20), "/"));
+    return string(abi.encodePacked(baseTokenURI, "/", Strings.toHexString(address(this)), "/"));
   }
 
   function _baseURI() internal view virtual returns (string memory) {

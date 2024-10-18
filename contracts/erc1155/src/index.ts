@@ -6,4 +6,4 @@ export * from "./capped";
 export * from "./royalty";
 export * from "./totalSupply";
 export * from "./pausable/pausable";
-export * from "./uri";
+export * from "./baseUrl";

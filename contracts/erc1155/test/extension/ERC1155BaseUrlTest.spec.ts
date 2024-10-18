@@ -6,7 +6,6 @@ import {
   shouldBalanceOf,
   shouldBalanceOfBatch,
   shouldBehaveLikeERC1155Burnable,
-  shouldCustomURI,
   shouldMint,
   shouldMintBatch,
   shouldSafeBatchTransferFrom,
@@ -14,6 +13,7 @@ import {
   shouldSetApprovalForAll,
 } from "../../src";
 import { deployErc1155Base } from "../../src/fixtures";
+import { shouldBehaveLikeERC1155BaseUrl } from "../../src";
 
 describe("ERC1155BaseUrlTest", function () {
   const factory = () => deployErc1155Base(this.title);
@@ -29,8 +29,7 @@ describe("ERC1155BaseUrlTest", function () {
   shouldSafeTransferFrom(factory);
   shouldSafeBatchTransferFrom(factory);
 
-  shouldCustomURI(factory);
-
+  shouldBehaveLikeERC1155BaseUrl(factory);
   shouldBehaveLikeERC1155Burnable(factory);
 
   shouldSupportsInterface(factory)([

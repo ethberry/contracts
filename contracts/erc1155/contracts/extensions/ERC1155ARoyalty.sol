@@ -20,7 +20,7 @@ abstract contract ERC1155ARoyalty is AccessControl, IERC1155Royalty, ERC2981 {
     address royaltyReceiver,
     uint96 royaltyNumerator
   ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
-    super._setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
+    _setDefaultRoyalty(royaltyReceiver, royaltyNumerator);
     emit DefaultRoyaltyInfo(royaltyReceiver, royaltyNumerator);
   }
 
@@ -29,7 +29,7 @@ abstract contract ERC1155ARoyalty is AccessControl, IERC1155Royalty, ERC2981 {
     address royaltyReceiver,
     uint96 royaltyNumerator
   ) public virtual override onlyRole(DEFAULT_ADMIN_ROLE) {
-    super._setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
+    _setTokenRoyalty(tokenId, royaltyReceiver, royaltyNumerator);
     emit TokenRoyaltyInfo(tokenId, royaltyReceiver, royaltyNumerator);
   }
 

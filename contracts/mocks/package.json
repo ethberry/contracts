@@ -5,9 +5,9 @@
     "url": "https://ethberry.io/"
   },
   "dependencies": {
-    "@ethberry/contracts-constants": "^5.0.49",
-    "@ethberry/contracts-erc1363": "^5.0.49",
-    "@ethberry/contracts-utils": "^5.0.49",
+    "@ethberry/contracts-constants": "^5.0.50",
+    "@ethberry/contracts-erc1363": "^5.0.50",
+    "@ethberry/contracts-utils": "^5.0.50",
     "@nomicfoundation/hardhat-ignition": "0.15.6",
     "@nomicfoundation/hardhat-ignition-ethers": "0.15.6",
     "@nomicfoundation/hardhat-toolbox": "5.0.0",
@@ -71,5 +71,5 @@
   "sideEffects": false,
   "title": "-=EthBerry Studio=-",
   "types": "./dist/index.d.ts",
-  "version": "5.0.49"
+  "version": "5.0.50"
 }

@@ -5,7 +5,7 @@
     "url": "https://ethberry.io/"
   },
   "dependencies": {
-    "@ethberry/utils": "1.6.0",
+    "@ethberry/utils": "1.6.1",
     "@nomicfoundation/hardhat-toolbox": "5.0.0",
     "hardhat": "2.22.15"
   },

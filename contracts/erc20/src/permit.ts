@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { MaxUint256, Network, Signature, TypedDataEncoder } from "ethers";
-import { time } from "@openzeppelin/test-helpers";
+import { time } from "@nomicfoundation/hardhat-network-helpers";
 
 import { amount, tokenName } from "@ethberry/contracts-constants";
 
@@ -170,7 +170,7 @@ export function shouldBehaveLikeERC20Permit(factory: () => Promise<any>) {
       const nonce = 0;
       // const deadline = (await time.latest()) - time.duration.weeks(1);
       const block = await ethers.provider.getBlock("latest");
-      const deadline = block!.timestamp - time.duration.weeks(1).toNumber();
+      const deadline = block!.timestamp - time.duration.weeks(1);
       const signature = await owner.signTypedData(
         // Domain
         {

@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { ethers, web3 } from "hardhat";
-import { time } from "@openzeppelin/test-helpers";
+import { ethers } from "hardhat";
+import { time } from "@nomicfoundation/hardhat-network-helpers";
 
 import { tokenId } from "@ethberry/contracts-constants";
 
@@ -18,7 +18,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
       await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current + 100;
 
       await contractInstance.setUser(tokenId, receiver, deadline.toString());
 
@@ -34,7 +34,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
       await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current + 100;
 
       await contractInstance.approve(receiver, tokenId);
       await contractInstance.setUser(tokenId, receiver, deadline.toString());
@@ -51,7 +51,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
       await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current + 100;
 
       await contractInstance.setApprovalForAll(receiver, true);
       await contractInstance.setUser(tokenId, receiver, deadline.toString());
@@ -68,7 +68,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
       await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current + 100;
 
       const tx = contractInstance.setUser(tokenId, receiver, deadline.toString());
 
@@ -82,7 +82,7 @@ export function shouldSetUser(factory: () => Promise<any>, options: IERC721Optio
       await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current + 100;
 
       const tx = contractInstance.connect(receiver).setUser(tokenId, receiver, deadline.toString());
       await expect(tx)

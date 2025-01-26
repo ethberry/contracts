@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { ethers, web3 } from "hardhat";
-import { time } from "@openzeppelin/test-helpers";
+import { ethers } from "hardhat";
+import { time } from "@nomicfoundation/hardhat-network-helpers";
 
 import type { IERC721EnumOptions } from "../shared/defaultMint";
 import { defaultMintERC721 } from "../shared/defaultMint";
@@ -16,7 +16,7 @@ export function shouldUserExprires(factory: () => Promise<any>, options: IERC721
       await mint(contractInstance, owner, owner);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(1000));
+      const deadline = current + 1000;
       // await time.increaseTo(current.add(web3.utils.toBN(2000)));
 
       await contractInstance.setUser(defaultTokenId, receiver, deadline.toString());

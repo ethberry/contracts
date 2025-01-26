@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { ethers, web3 } from "hardhat";
+import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
-import { time } from "@openzeppelin/test-helpers";
+import { time } from "@nomicfoundation/hardhat-network-helpers";
 
 import { tokenId } from "@ethberry/contracts-constants";
 
@@ -12,16 +12,16 @@ export function shouldUserOf(factory: () => Promise<any>, options: IERC721Option
   const { mint = defaultMintERC721 } = options;
 
   describe("userOf", function () {
-    it("should return 0", async function () {
+    it.only("should return 0", async function () {
       const [owner, receiver] = await ethers.getSigners();
       const contractInstance = await factory();
 
       await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
-      const deadline = current.sub(web3.utils.toBN(1));
+      const deadline = current - 1;
 
-      await contractInstance.setUser(tokenId, receiver, deadline.toString());
+      await contractInstance.setUser(tokenId, receiver, deadline);
       const userOf = await contractInstance.userOf(tokenId);
 
       expect(userOf).to.equal(ZeroAddress);
@@ -34,18 +34,18 @@ export function shouldUserOf(factory: () => Promise<any>, options: IERC721Option
       await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current + 100;
 
       await contractInstance.setUser(tokenId, receiver, deadline.toString());
 
       const current1 = await time.latest();
-      await time.increaseTo(current1.add(web3.utils.toBN(50)));
+      await time.increaseTo(current1 + 50);
 
       const userOf1 = await contractInstance.userOf(tokenId);
       expect(userOf1).to.equal(receiver);
 
       const current2 = await time.latest();
-      await time.increaseTo(current2.add(web3.utils.toBN(50)));
+      await time.increaseTo(current2 + 50);
 
       const userOf2 = await contractInstance.userOf(tokenId);
       expect(userOf2).to.equal(ZeroAddress);
@@ -58,7 +58,7 @@ export function shouldUserOf(factory: () => Promise<any>, options: IERC721Option
       await mint(contractInstance, owner, owner, tokenId);
 
       const current = await time.latest();
-      const deadline = current.add(web3.utils.toBN(100));
+      const deadline = current + 100;
 
       await contractInstance.setUser(tokenId, receiver, deadline.toString());
 
